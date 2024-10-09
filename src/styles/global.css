@@ -1,0 +1,49 @@
+
+.head-right{
+    width: 100%;
+    display: inline-flex;
+    justify-content: end;
+    min-height: 60px;
+    padding-right: 24px;
+    align-items: center;
+    /* background: linear-gradient(54deg, rgba(255, 255, 255, 1) 33%,
+     rgba(255, 195, 50, 1) 68%, rgba(255, 99, 0, 1) 100%); */
+}
+header .css-13n62e0-MuiToolbar-root{ padding: 0px;    padding-left: 24px;}
+
+.bdr-radius { border-radius: 45px; border: none; padding: 0 10px;}
+.payment-icon { width: 40px;height: 40px;min-width: 40px; border-radius: 45px;text-align: center;background-color: #e9f0ff;display: flex;justify-content: center;}
+.calender-icon { background-color: #f4fdf7; }
+.css-13xfq8m-MuiTabPanel-root { padding:10px 0px;}
+
+
+.dialog {
+    width: 100%; /* Make the dialog full width */
+    max-width: 600px; /* Optional: Set a max width for larger screens */
+    margin: 0 auto; /* Center the dialog */
+    padding: 20px; /* Add some padding */
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+
+
+@media (min-width: 600px) {
+    .dialog {
+        width: 80%; /* Adjust width for medium screens */
+    }
+}
+
+@media (min-width: 900px) {
+    .dialog {
+        width: 70%; /* Adjust width for larger screens */
+    }
+}
+
+.css-l3v5bq { padding: 0px;}
+.css-1pllgwt-MuiTableCell-root { padding: 5px 10px;}
+
+.button-proper {    display: block;
+    color: #000;
+    padding: 0;
+    min-width: auto;
+    width: 100%;}
