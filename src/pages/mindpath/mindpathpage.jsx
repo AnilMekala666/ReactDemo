@@ -18,11 +18,14 @@ import Divider, { dividerClasses } from '@mui/material/Divider';
 import Reconsilation from 'assets/images/Reconsilation.png';
 import CustomDrawer from 'components/payments/CustomDrawer';
 import { Box, Drawer, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 
 
 
 function MindPathPage() {
+  const navigate = useNavigate();
+
   const [depositeOpen, setDepositOpen] = useState(false);
   const [showDepositTable, setShowDepositTable] = useState(false);
   const [remittanceOpen, setRemittancetOpen] = useState(false);
@@ -40,6 +43,16 @@ function MindPathPage() {
   const [secondDrawerDepositOpen, setSecondDrawerDepositOpen] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
   const [depositUploadedFile, setDepositUploadedFile] = useState([]);
+
+  const [firstRemmitenceDrawerOpen, setFirstRemmitenceDrawerOpen] = useState(false);
+  const [secondRemmitenceDrawerOpen, setSecondRemmitenceDrawerOpen] = useState(false);
+  const [showRemmitenceSpinner, setShowRemmitenceSpinner] = useState(false);
+  const [RemmitenceUploadedFile, setRemmitenceUploadedFile] = useState([]);
+
+  const [firstPatientPaymentDrawerOpen, setFirstPatientPaymentDrawerOpen] = useState(false);
+  const [secondPatientPaymentDrawerOpen, setSecondPatientPaymentDrawerOpen] = useState(false);
+  const [showPatientPaymentSpinner, setShowPatientPaymentSpinner] = useState(false);
+  const [patientPaymentUploadedFile, setPatientPaymentUploadedFile] = useState([]);
 
 
 
@@ -301,6 +314,7 @@ function MindPathPage() {
   const filteredPatinetPaymentData = useMemo(() => patinetPaymentData.filter((item) => item.state_name === value), [patinetPaymentData, value]);
 
 
+  //Deposit drawer
   const handleCloseDepositDrawer = () => {
     setFirstDrawerDepositOpen(false);
     setSecondDrawerDepositOpen(false)
@@ -318,6 +332,50 @@ function MindPathPage() {
       }, 1000);
     }
   };
+
+  //Remitence drawer
+  const handleCloseRemmitenceDrawer = () => {
+    setFirstRemmitenceDrawerOpen(false);
+    setSecondRemmitenceDrawerOpen(false)
+    console.log('click')
+  }
+
+  const handleRemmitenceFileUpload = (event) => {
+    const files = Array.from(event.target.files);
+    if (files.length > 0) {
+      setShowRemmitenceSpinner(true);
+      setTimeout(() => {
+        setRemmitenceUploadedFile(files);
+        setShowRemmitenceSpinner(false);
+        setSecondRemmitenceDrawerOpen(true);
+      }, 1000);
+    }
+  };
+
+
+  //PatientPayment drawer
+
+  const handleClosePatientPaymentDrawer = () => {
+    setFirstPatientPaymentDrawerOpen(false);
+    setSecondPatientPaymentDrawerOpen(false)
+    console.log('click')
+  }
+
+  const handlePatientPaymentFileUpload = (event) => {
+    const files = Array.from(event.target.files);
+    if (files.length > 0) {
+      setShowPatientPaymentSpinner(true);
+      setTimeout(() => {
+        setPatientPaymentUploadedFile(files);
+        setShowPatientPaymentSpinner(false);
+        setSecondPatientPaymentDrawerOpen(true);
+      }, 1000);
+    }
+  };
+
+
+
+
   const handleClickDepositOpen = () => {
     setDepositLoading(true);
     setTimeout(() => {
@@ -357,17 +415,9 @@ function MindPathPage() {
     setShowPatinetPaymentTable(false);
   };
 
-  // const handleDepositFileUpload = () => {
-  //   setShowDepositTable(true);
-  // };
 
-  const handleRemmitenceFileUpload = () => {
-    setShowRemittanceTable(true);
-  };
 
-  const handlePatinetPaymentFileUpload = () => {
-    setShowPatinetPaymentTable(true);
-  };
+
 
 
   const firstDrawerDepositContent = (
@@ -377,7 +427,7 @@ function MindPathPage() {
           Upload File
           <input type="file" multiple hidden onChange={handleDepositFileUpload} />
         </Button>
-        
+
       ) : (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
           <CircularProgress />
@@ -386,14 +436,42 @@ function MindPathPage() {
     </Box>
   );
 
-  const secondDrawerDepositContent = (
-    <>
-      <Typography>Deposit data</Typography>
-      <CustomTable data={filteredDepositData} />
-      <Button onClick={handleCloseDepositDrawer}>Back</Button>
-    </>
+  const firstDrawerRemmitenceContent = (
+    <Box sx={{ p: 2 }}>
+      {!showRemmitenceSpinner ? (
+        <Button variant="contained" component="label">
+          Upload File
+          <input type="file" multiple hidden onChange={handleRemmitenceFileUpload} />
+        </Button>
+
+      ) : (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
+    </Box>
   );
 
+  const firstDrawerPatientPaymentContent = (
+    <Box sx={{ p: 2 }}>
+      {!showPatientPaymentSpinner ? (
+        <Button variant="contained" component="label">
+          Upload File
+          <input type="file" multiple hidden onChange={handlePatientPaymentFileUpload} />
+        </Button>
+
+      ) : (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
+    </Box>
+  );
+
+  const handleMovePatientMovement = () => {
+    console.log("click")
+    navigate('/patient/cash/posting')
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -405,7 +483,7 @@ function MindPathPage() {
               <Button className='button-proper' onClick={() => setFirstDrawerDepositOpen(true)}>
                 <img src={Deposit} alt="Deposit" style={{ width: '100%', height: 'auto' }} />
                 <Typography level='h3'>Deposit</Typography>
-                {depositLoading && (
+                {showSpinner && (
                   <Grid sx={{ textAlign: 'center', marginTop: '0px' }}>
                     <CircularProgress size={15} />
                   </Grid>
@@ -415,10 +493,10 @@ function MindPathPage() {
             <Divider sx={{ margin: '20px 0' }} />
 
             <Grid sx={{ textAlign: 'center' }}>
-              <Button className='button-proper' onClick={handleClickremitenceOpen}>
+              <Button className='button-proper' onClick={() => setFirstRemmitenceDrawerOpen(true)}>
                 <img src={Remittance} alt="Deposit" style={{ width: '100%', height: 'auto' }} />
                 <Typography level='h3'>Remitence</Typography>
-                {remittanceLoading && (
+                {showRemmitenceSpinner && (
                   <Grid sx={{ textAlign: 'center', marginTop: '0px' }}>
                     <CircularProgress size={15} />
                   </Grid>
@@ -429,10 +507,10 @@ function MindPathPage() {
             <Divider sx={{ margin: '20px 0' }} />
 
             <Grid sx={{ textAlign: 'center' }}>
-              <Button className='button-proper' onClick={handleClickPatientPaymentOpen}>
+              <Button className='button-proper' onClick={() => setFirstPatientPaymentDrawerOpen(true)}>
                 <img src={PatientPayment} alt="PatientPayment" style={{ width: '100%', height: 'auto' }} />
                 <Typography level='h3'>Patient <br /> Payments </Typography>
-                {patinetPaymentLoading && (
+                {showPatientPaymentSpinner && (
                   <Grid sx={{ textAlign: 'center', marginTop: '0px' }}>
                     <CircularProgress size={15} />
                   </Grid>
@@ -460,28 +538,31 @@ function MindPathPage() {
           <img src={ThreelineArrow} alt='ThreelineArrow' className='w-100h-100' />
         </Grid>
         <Grid item xs={12} md={2} lg={2} sm={2} style={{ marginLeft: '40px', maxWidth: '100px', marginTop: '140px', textAlign: 'center' }}>
-          <img src={CashPosting} alt='CashPosting' style={{ width: '100%', height: 'auto' }} />
-          <Typography level='h3'>Cash Posting Queue </Typography>
+          <Button style={{ display: "block", color: "black", padding: "0px" }} onClick={handleMovePatientMovement}>
+            <img src={CashPosting} alt='CashPosting' style={{ width: '100%', height: 'auto' }} />
+            <Typography level='h3'>Cash Posting Queue </Typography>
+          </Button>
+
         </Grid>
-        <Grid item xs={12} md={1} lg={1} sm={1} style={{ maxWidth: '4%', marginTop: '0%', marginLeft: '10px',display:'flex', alignItems:'center' }}>
+        <Grid item xs={12} md={1} lg={1} sm={1} style={{ maxWidth: '4%', marginTop: '0%', marginLeft: '10px', display: 'flex', alignItems: 'center' }}>
           <div style={{ display: 'flex' }}>
-            <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{marginLeft: '30px' }} />
+            <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{ marginLeft: '30px' }} />
           </div>
         </Grid>
         <Grid item xs={12} md={2} lg={2} sm={2} style={{ marginLeft: '70px', width: '90px', maxWidth: '90px', textAlign: 'center', marginTop: '150px', }}>
           <img src={PostingRecords} alt='PostingRecords' style={{ width: '100%', height: 'auto' }} />
           <Typography level='h3'>Posting Records </Typography>
         </Grid>
-        <Grid item xs={12} md={1} lg={1} sm={1} style={{ maxWidth: '4%', marginTop: '0%', marginLeft: '10px',display:'flex', alignItems:'center' }}>
+        <Grid item xs={12} md={1} lg={1} sm={1} style={{ maxWidth: '4%', marginTop: '0%', marginLeft: '10px', display: 'flex', alignItems: 'center' }}>
           <div style={{ display: 'flex' }}>
-            <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{marginLeft: '30px' }} />
+            <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{ marginLeft: '30px' }} />
           </div>
         </Grid>
         <Grid item xs={12} md={2} lg={2} sm={2} style={{ marginLeft: '70px', width: '110px', maxWidth: '110px', textAlign: 'center', marginTop: '140px', }}>
           <img src={Reconsilation} alt='Reconsilation' style={{ width: '100%', height: 'auto' }} />
           <Typography level='h3'>Reconsilation </Typography>
         </Grid>
-        
+
       </Grid>
 
 
@@ -526,7 +607,7 @@ function MindPathPage() {
         leftOffset={secondDrawerDepositOpen ? 705 : 0}
         top={250}
         content={
-         firstDrawerDepositContent
+          firstDrawerDepositContent
         }
       >
         {/* {firstDrawerDepositContent} */}
@@ -550,6 +631,76 @@ function MindPathPage() {
       >
         {/* {secondDrawerDepositContent} */}
       </CustomDrawer>
+
+
+
+      {/* Remmitence drawers */}
+
+      <CustomDrawer
+        open={firstRemmitenceDrawerOpen}
+        onClose={() => setFirstRemmitenceDrawerOpen(false)}
+        title="Upload a Remitence File"
+        width={300}
+        leftOffset={secondRemmitenceDrawerOpen ? 705 : 0}
+        top={250}
+        content={
+          firstDrawerRemmitenceContent
+        }
+      >
+        {/* {firstDrawerDepositContent} */}
+      </CustomDrawer>
+
+      {/* Second Drawer (appears on the right side of the first drawer) */}
+      <CustomDrawer
+        open={secondRemmitenceDrawerOpen}
+        onClose={handleCloseRemmitenceDrawer}
+        anchor="right"
+        width={700}
+        top={100}
+        leftOffset={firstRemmitenceDrawerOpen ? 0 : 410}
+        title="Remitence"
+        content={
+          <CustomTable data={filteredremmitenceData} />
+        }
+        button={
+          <Button onClick={handleCloseRemmitenceDrawer}>Back</Button>
+        }
+      >
+      </CustomDrawer>
+
+
+      {/* Patient payment drawers */}
+
+      <CustomDrawer
+        open={firstPatientPaymentDrawerOpen}
+        onClose={() => setFirstPatientPaymentDrawerOpen(false)}
+        title="Upload a Patient payment File"
+        width={300}
+        leftOffset={secondPatientPaymentDrawerOpen ? 705 : 0}
+        top={250}
+        content={
+          firstDrawerPatientPaymentContent
+        }
+      >
+      </CustomDrawer>
+
+      <CustomDrawer
+        open={secondPatientPaymentDrawerOpen}
+        onClose={handleClosePatientPaymentDrawer}
+        anchor="right"
+        width={700}
+        top={100}
+        leftOffset={firstPatientPaymentDrawerOpen ? 0 : 410}
+        title="Patient payment"
+        content={
+          <CustomTable data={filteredPatinetPaymentData} />
+        }
+        button={
+          <Button onClick={handleClosePatientPaymentDrawer}>Back</Button>
+        }
+      >
+      </CustomDrawer>
+
     </LocalizationProvider>
   );
 

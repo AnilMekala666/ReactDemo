@@ -124,6 +124,8 @@ const PricingPage = Loadable(lazy(() => import('pages/extra-pages/pricing')));
 
 const Mindpath = Loadable(lazy(() => import('pages/mindpath/mindpathpage')));
 
+const CashPostingPage = Loadable(lazy(() => import('pages/mindpath/cashPosting')))
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -150,23 +152,6 @@ const MainRoutes = {
             }
           ]
         },
-        {
-          path: 'patient',
-          children: [
-            // {
-            //   path: 'statistics',
-            //   element: <WidgetStatistics />
-            // },
-            {
-              path: 'payment',
-              element: <Mindpath />
-            }
-            // {
-            //   path: 'chart',
-            //   element: <WidgetChart />
-            // }
-          ]
-        },
         // Innoclique
         {
           path: 'patient',
@@ -174,9 +159,14 @@ const MainRoutes = {
             {
               path: 'payment',
               element: <Mindpath />
+            },
+            {
+              path: 'cash/posting',
+              element: <CashPostingPage/>
             }
           ]
         },
+       
         // Innoclique
         // {
         //   path: 'apps',
