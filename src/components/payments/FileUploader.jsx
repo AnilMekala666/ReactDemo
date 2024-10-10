@@ -20,6 +20,7 @@ const FileUploader = ({ onFileUpload }) => {
     <div>
       <p>Please upload a file to proceed.</p>
       <input type="file" onChange={handleFileUpload} />
+    
       {showSpinner && (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
           <CircularProgress size={24} />

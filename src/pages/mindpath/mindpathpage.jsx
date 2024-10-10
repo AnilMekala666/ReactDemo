@@ -341,6 +341,7 @@ import PostingRecords from 'assets/images/PostingRecords.png';
 import { LocalizationProvider, DesktopDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Divider, { dividerClasses } from '@mui/material/Divider';
+import Reconsilation from 'assets/images/Reconsilation.png';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -729,10 +730,25 @@ function MindPathPage() {
           <img src={CashPosting} alt='CashPosting' style={{ width: '100%', height: 'auto' }} />
           <Typography level='h3'>Cash Posting Queue </Typography>
         </Grid>
+        <Grid item xs={12} md={1} lg={1} sm={1} style={{ maxWidth: '4%', marginTop: '0%', marginLeft: '10px',display:'flex', alignItems:'center' }}>
+          <div style={{ display: 'flex' }}>
+            <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{marginLeft: '30px' }} />
+          </div>
+        </Grid>
         <Grid item xs={12} md={2} lg={2} sm={2} style={{ marginLeft: '70px', width: '90px', maxWidth: '90px', textAlign: 'center', marginTop: '150px', }}>
           <img src={PostingRecords} alt='PostingRecords' style={{ width: '100%', height: 'auto' }} />
           <Typography level='h3'>Posting Records </Typography>
         </Grid>
+        <Grid item xs={12} md={1} lg={1} sm={1} style={{ maxWidth: '4%', marginTop: '0%', marginLeft: '10px',display:'flex', alignItems:'center' }}>
+          <div style={{ display: 'flex' }}>
+            <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{marginLeft: '30px' }} />
+          </div>
+        </Grid>
+        <Grid item xs={12} md={2} lg={2} sm={2} style={{ marginLeft: '70px', width: '110px', maxWidth: '110px', textAlign: 'center', marginTop: '140px', }}>
+          <img src={Reconsilation} alt='Reconsilation' style={{ width: '100%', height: 'auto' }} />
+          <Typography level='h3'>Reconsilation </Typography>
+        </Grid>
+        
       </Grid>
           {/* deposit dialog */}
           <CustomDialog open={depositeOpen} onClose={handleDepositClose} title="Deposit">

@@ -17,10 +17,10 @@ const CustomDialog = ({ open, onClose,title, children }) => {
           maxWidth="lg"
           sx={{ '& .MuiDialog-paper': { width: '80%', maxWidth: 'none' } }}
           >
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className='dialog-head'>{title}</DialogTitle>
             <DialogContent>{children}</DialogContent>
             <DialogActions>
-                <Button variant="contained" onClick={onClose}>Cancel</Button>
+                <Button variant="contained" onClick={onClose}>Back</Button>
             </DialogActions>
         </Dialog>
     )
