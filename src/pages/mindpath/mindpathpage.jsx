@@ -42,7 +42,13 @@ import Remmitence from 'assets/images/Remmitence.png';
 import PatientPayment from 'assets/images/PatientPayment.png';
 import Slide from '@mui/material/Slide';
 import DialogContentText from '@mui/material/DialogContentText';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+// import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import ArrowRight from 'assets/images/ArrowRight.png';
+import iCanImg from 'assets/images/iCanImg.png';
+import ThreelineArrow from 'assets/images/ThreelineArrow.png';
+import CashPosting from 'assets/images/CashPosting.jpg';
+import PostingRecords from 'assets/images/PostingRecords.png';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -248,7 +254,6 @@ function MindPathPage() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Grid container>
-        
           <Grid item xs={12} md={1} lg={1} sm={1} marginTop={2}>
             <MainCard>
               <Grid sx={{ textAlign:'center'}}>
@@ -274,7 +279,31 @@ function MindPathPage() {
               </Grid>
             </MainCard>
           </Grid>
-        
+          <Grid item xs={12} md={1} lg={1} sm={1} style={{ maxWidth: '4%', marginTop:'4%',marginLeft:'10px'  }}>
+            <div style={{display:'flex'}}>
+              <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{marginTop:'20px', marginRight:'10px'}}/>
+              <img src={iCanImg} alt='iCanImg' className='w-100h-100'/>
+            </div>
+            <div  style={{marginTop:'80px',display:'flex'}}>
+              <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{marginRight:'10px', marginTop:'20px'}}/>
+              <img src={iCanImg} alt='iCanImg' className='w-100h-100'/>
+            </div>
+            <div style={{marginTop:'80px',display:'flex'}}>
+              <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{marginRight:'10px', marginTop:'20px'}}/>
+              <img src={iCanImg} alt='iCanImg' className='w-100h-100'/>
+            </div>
+          </Grid>
+          <Grid item xs={12} md={2} lg={2} sm={2} style={{marginLeft:'70px'}}>
+            <img src={ThreelineArrow} alt='ThreelineArrow' className='w-100h-100'/>
+          </Grid>
+          <Grid item xs={12} md={2} lg={2} sm={2} style={{marginLeft:'40px', maxWidth:'100px',marginTop:'140px', textAlign:'center'}}>
+            <img src={CashPosting} alt='CashPosting' style={{width:'100%', height:'auto'}}/>
+            <Typography level='h3'>Cash Posting Queue </Typography>
+          </Grid>
+          <Grid item xs={12} md={2} lg={2} sm={2} style={{marginLeft:'70px', width:'90px', maxWidth:'90px', textAlign:'center',marginTop:'150px',}}>
+            <img src={PostingRecords} alt='PostingRecords' style={{width:'100%', height:'auto'}}/>
+            <Typography level='h3'>Posting Records </Typography>
+          </Grid>
       </Grid>
 
       <Dialog
