@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Box, Drawer, Typography, CircularProgress, Button } from '@mui/material';
-import { styled } from '@mui/system';
+import { borderRadius, styled } from '@mui/system';
 
-const CustomDrawer = ({ open, onClose, children, anchor = 'right', width = 300, leftOffset = 0, top, title,
+const CustomDrawer = ({ open, onClose, children,borderRadius, anchor = 'right', width = 300, leftOffset = 0, top, title,
     content,
     button, }) => {
 
@@ -22,11 +22,12 @@ const CustomDrawer = ({ open, onClose, children, anchor = 'right', width = 300, 
                     transition: 'transform 0.3s ease, right 0.3s ease', // Smooth transition
                     maxHeight: '90vh', // Optional: limit max height
                     zIndex: 1300,
+                    borderRadius:borderRadius
                 }
             }}
         >
             <Box role="presentation" sx={{ p: 2 }}>
-                <Typography variant="h6">{title}</Typography>
+                <Typography variant="h6" className='popupheader'>{title}</Typography>
                 <Box>{content}</Box>
                 {button}
             </Box>

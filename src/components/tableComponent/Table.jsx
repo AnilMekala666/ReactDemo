@@ -377,7 +377,7 @@ function ReactTable({ data, columns }) {
               </TableHead>
               <TableBody>
                 {table.getRowModel().rows.map((row, index) => (
-                  <TableRow key={row.id}  sx={{ backgroundColor: index % 2 === 0 ? theme.palette.action.hover : 'inherit' }}>
+                  <TableRow key={row.id}  >
                     {row.getVisibleCells().map((cell) => (
                       <TableCellWithFilterComponent key={cell.id} {...cell.column.columnDef.meta}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

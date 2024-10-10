@@ -18,6 +18,11 @@ import Divider, { dividerClasses } from '@mui/material/Divider';
 import Reconsilation from 'assets/images/Reconsilation.png';
 import CustomDrawer from 'components/payments/CustomDrawer';
 import { Box, Drawer, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import UploadImg from 'assets/images/UploadImg.jpg';
+import AnimateButton from 'components/@extended/AnimateButton';
+import { borderRadius, fontSize, textAlign } from '@mui/system';
+import { UploadOutlined } from '@ant-design/icons';
+
 
 
 
@@ -33,6 +38,8 @@ function MindPathPage() {
   const [showPatinetPaymentTable, setShowPatinetPaymentTable] = useState(false);
   const [patinetPaymentLoading, setPatinetPaymentLoading] = useState(false);
   const [value] = useState('AZ');
+
+  const [uploadedFileName, setUploadedFileName] = useState('');
 
 
 
@@ -52,7 +59,8 @@ function MindPathPage() {
       batch_date: '2024-10-01',
       payer: 'ABC Health',
       payment_amount: 1500.50,
-      state_name: 'AZ'
+      state_name: 'AZ',
+      action:'1'
     },
     {
       file_name: 'Transaction_002.pdf',
@@ -60,7 +68,8 @@ function MindPathPage() {
       batch_date: '2024-09-28',
       payer: 'XYZ Insurance',
       payment_amount: 800.75,
-      state_name: 'AZ'
+      state_name: 'AZ',
+      action:'1'
     },
     {
       file_name: 'Transaction_003.pdf',
@@ -68,7 +77,8 @@ function MindPathPage() {
       batch_date: '2024-10-03',
       payer: 'John Doe',
       payment_amount: 120.00,
-      state_name: 'AZ'
+      state_name: 'AZ',
+      action:'1'
     },
     {
       file_name: 'Transaction_004.pdf',
@@ -76,7 +86,8 @@ function MindPathPage() {
       batch_date: '2024-09-30',
       payer: 'DEF Healthcare',
       payment_amount: 2000.00,
-      state_name: 'TX'
+      state_name: 'TX',
+      action:'1'
     },
     {
       file_name: 'Transaction_005.pdf',
@@ -84,7 +95,8 @@ function MindPathPage() {
       batch_date: '2024-10-02',
       payer: 'MNO Insurance',
       payment_amount: 500.00,
-      state_name: 'CA'
+      state_name: 'CA',
+      action:'1'
     },
     {
       file_name: 'Transaction_006.pdf',
@@ -92,7 +104,8 @@ function MindPathPage() {
       batch_date: '2024-09-29',
       payer: 'Jane Smith',
       payment_amount: 250.50,
-      state_name: 'TX'
+      state_name: 'TX',
+      action:'1'
     },
     {
       file_name: 'Transaction_007.pdf',
@@ -100,32 +113,9 @@ function MindPathPage() {
       batch_date: '2024-09-25',
       payer: 'GHI Medical',
       payment_amount: 1750.20,
-      state_name: 'AZ'
-    },
-    {
-      file_name: 'Transaction_008.pdf',
-      classification_type: 'Remittance',
-      batch_date: '2024-10-01',
-      payer: 'LMN Health Plan',
-      payment_amount: 600.90,
-      state_name: 'CA'
-    },
-    {
-      file_name: 'Transaction_009.pdf',
-      classification_type: 'Patient Payment',
-      batch_date: '2024-09-26',
-      payer: 'Mark Johnson',
-      payment_amount: 300.00,
-      state_name: 'AZ'
-    },
-    {
-      file_name: 'Transaction_010.pdf',
-      classification_type: 'Deposit',
-      batch_date: '2024-09-28',
-      payer: 'OPQ Healthcare',
-      payment_amount: 1800.75,
-      state_name: 'TX'
-    }
+      state_name: 'AZ',
+      action:'1'
+    } 
   ];
 
   const remmitenceData = [
@@ -307,17 +297,32 @@ function MindPathPage() {
     console.log('click')
   }
 
+  // const handleDepositFileUpload = (event) => {
+  //   const files = Array.from(event.target.files);
+  //   if (files.length > 0) {
+  //     setShowSpinner(true);
+  //     setTimeout(() => {
+  //       setDepositUploadedFile(files);
+  //       setShowSpinner(false);
+  //       setSecondDrawerDepositOpen(true); // Open the second drawer
+  //     }, 1000);
+  //   }
+  // };
+
   const handleDepositFileUpload = (event) => {
-    const files = Array.from(event.target.files);
-    if (files.length > 0) {
-      setShowSpinner(true);
+    const file = event.target.files[0];
+    if (file) {
+      setUploadedFileName(file.name); // Capture file name
+      setShowSpinner(true); // Show spinner on upload
+      // Simulate an upload process
       setTimeout(() => {
-        setDepositUploadedFile(files);
         setShowSpinner(false);
-        setSecondDrawerDepositOpen(true); // Open the second drawer
-      }, 1000);
+        setSecondDrawerDepositOpen(true);
+      }, 2000);
     }
   };
+
+
   const handleClickDepositOpen = () => {
     setDepositLoading(true);
     setTimeout(() => {
@@ -370,18 +375,53 @@ function MindPathPage() {
   };
 
 
+  // const firstDrawerDepositContent = (
+  //   <Box sx={{ p: 2, textAlign:'center' }}>
+  //     {!showSpinner ? (
+  //       <>
+  //         <img src={UploadImg} alt='UploadImg' className='w-100h-100' />
+  //         <AnimateButton type="slide">
+  //           <Button variant="contained" color="success" component="label" sx={{borderRadius:'40px', marginTop:'20px'}}>
+
+  //             Upload File
+  //             <input type="file" multiple hidden onChange={handleDepositFileUpload} /> <UploadOutlined style={{ fontSize: '20px', paddingLeft:'10px' }}/> 
+  //           </Button>
+  //         </AnimateButton>
+  //       </>
+        
+        
+  //     ) : (
+  //       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+  //         <CircularProgress />
+  //       </Box>
+  //     )}
+  //   </Box>
+  // );
+
   const firstDrawerDepositContent = (
-    <Box sx={{ p: 2 }}>
-      {!showSpinner ? (
-        <Button variant="contained" component="label">
+    <Box sx={{ p: 2, textAlign: 'center' }}>
+      {/* File Upload Image and Button */}
+      <img src={UploadImg} alt='UploadImg' className='w-100h-100' />
+      <AnimateButton type="slide">
+        <Button variant="contained" color="success" component="label" sx={{ borderRadius: '40px', marginTop: '20px' }}>
           Upload File
           <input type="file" multiple hidden onChange={handleDepositFileUpload} />
+          <UploadOutlined style={{ fontSize: '20px', paddingLeft: '10px' }} />
         </Button>
-        
-      ) : (
+      </AnimateButton>
+
+      {/* Show Spinner if Upload is in Progress */}
+      {showSpinner && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
           <CircularProgress />
         </Box>
+      )}
+
+      {/* Show Uploaded File Name */}
+      {uploadedFileName && !showSpinner && (
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          Uploaded File: {uploadedFileName}
+        </Typography>
       )}
     </Box>
   );
@@ -518,13 +558,15 @@ function MindPathPage() {
 
       {/* Deposite drawers */}
 
+
       <CustomDrawer
         open={firstDrawerDepositOpen}
         onClose={() => setFirstDrawerDepositOpen(false)}
-        title="Upload a File"
+        //title="Upload a File"
         width={300}
-        leftOffset={secondDrawerDepositOpen ? 705 : 0}
-        top={250}
+        borderRadius={8}
+        leftOffset={secondDrawerDepositOpen ? 910 : 0}
+        top={150}
         content={
          firstDrawerDepositContent
         }
@@ -537,16 +579,21 @@ function MindPathPage() {
         open={secondDrawerDepositOpen}
         onClose={handleCloseDepositDrawer}
         anchor="right"
-        width={700}
+        width={900}
+        borderRadius={8}
         top={100}
         leftOffset={firstDrawerDepositOpen ? 0 : 410}
-        title="Upload a File"
+        title="Deposit Data"
         content={
-          <CustomTable data={filteredDepositData} />
+          <>
+              <CustomTable data={filteredDepositData} />
+             <AnimateButton type="slide">
+              <Button variant="contained" color="success" component="label"  onClick={handleCloseDepositDrawer}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Back</Button>
+            </AnimateButton>
+          </>
+          
         }
-        button={
-          <Button onClick={handleCloseDepositDrawer}>Back</Button>
-        }
+        
       >
         {/* {secondDrawerDepositContent} */}
       </CustomDrawer>

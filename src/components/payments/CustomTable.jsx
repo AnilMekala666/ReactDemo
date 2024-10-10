@@ -16,7 +16,7 @@ const CustomTable = ({ data }) => {
             ),
           },
           {
-            header: 'Classification Type',
+            header: 'Status',
             accessorKey: 'classification_type',
           },
           {
@@ -31,6 +31,10 @@ const CustomTable = ({ data }) => {
             header: 'Payment Amount',
             accessorKey: 'payment_amount',
             cell: ({ getValue }) => `$${getValue().toFixed(2)}`,
+          },
+          {
+            header: 'Action',
+            accessorKey: 'action',
           },
         ],
         []
