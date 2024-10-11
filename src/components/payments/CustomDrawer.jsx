@@ -20,9 +20,10 @@ const CustomDrawer = ({ open, onClose, children,borderRadius, anchor = 'right', 
                     top: top,
                     transform: 'translateY(-50%)',
                     transition: 'transform 0.3s ease, right 0.3s ease', // Smooth transition
-                    maxHeight: '90vh', // Optional: limit max height
-                    zIndex: 1300,
-                    borderRadius:borderRadius
+                    maxHeight: '100vh', // Optional: limit max height
+                    // zIndex: 1300,
+                    borderRadius:borderRadius,
+                    minHeight:'100vh'
                 }
             }}
         >

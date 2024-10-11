@@ -63,7 +63,7 @@ function MindPathPage() {
 
 
 
-
+const [depositDrawerOpen, setDepositDrawerOpen] = useState(false)
 
   const depositData = [
     {
@@ -304,6 +304,11 @@ function MindPathPage() {
   const filteredPatinetPaymentData = useMemo(() => patinetPaymentData.filter((item) => item.state_name === value), [patinetPaymentData, value]);
 
 
+const handleDepositDrawerClose = () => {
+  setDepositDrawerOpen(False)
+}
+
+
   //Deposit drawer
   const handleCloseDepositDrawer = () => {
     setFirstDrawerDepositOpen(false);
@@ -311,17 +316,7 @@ function MindPathPage() {
     console.log('click')
   }
 
-  // const handleDepositFileUpload = (event) => {
-  //   const files = Array.from(event.target.files);
-  //   if (files.length > 0) {
-  //     setShowSpinner(true);
-  //     setTimeout(() => {
-  //       setDepositUploadedFile(files);
-  //       setShowSpinner(false);
-  //       setSecondDrawerDepositOpen(true); // Open the second drawer
-  //     }, 1000);
-  //   }
-  // };
+
 
   const handleDepositFileUpload = (event) => {
     const file = event.target.files[0];
@@ -367,16 +362,6 @@ function MindPathPage() {
   }
 
   const handlePatientPaymentFileUpload = (event) => {
-    // const files = Array.from(event.target.files);
-    // if (files.length > 0) {
-    //   setShowPatientPaymentSpinner(true);
-    //   setTimeout(() => {
-    //     setPatientPaymentUploadedFile(files);
-    //     setShowPatientPaymentSpinner(false);
-    //     setSecondPatientPaymentDrawerOpen(true);
-    //   }, 1000);
-    // }
-
     const file = event.target.files[0];
     if (file) {
     setPatientPaymentUploadedFile(file.name); // Capture file name
@@ -432,33 +417,6 @@ function MindPathPage() {
   };
 
 
-
-
-
-
-  // const firstDrawerDepositContent = (
-  //   <Box sx={{ p: 2, textAlign:'center' }}>
-  //     {!showSpinner ? (
-  //       <>
-  //         <img src={UploadImg} alt='UploadImg' className='w-100h-100' />
-  //         <AnimateButton type="slide">
-  //           <Button variant="contained" color="success" component="label" sx={{borderRadius:'40px', marginTop:'20px'}}>
-
-  //             Upload File
-  //             <input type="file" multiple hidden onChange={handleDepositFileUpload} /> <UploadOutlined style={{ fontSize: '20px', paddingLeft:'10px' }}/> 
-  //           </Button>
-  //         </AnimateButton>
-  //       </>
-        
-        
-  //     ) : (
-  //       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-  //         <CircularProgress />
-  //       </Box>
-  //     )}
-  //   </Box>
-  // );
-
   const firstDrawerDepositContent = (
     <Box sx={{ p: 2, textAlign: 'center' }}>
       {/* File Upload Image and Button */}
@@ -489,19 +447,6 @@ function MindPathPage() {
   );
 
   const firstDrawerRemmitenceContent = (
-    // <Box sx={{ p: 2 }}>
-    //   {!showRemmitenceSpinner ? (
-    //     <Button variant="contained" component="label">
-    //       Upload File
-    //       <input type="file" multiple hidden onChange={handleRemmitenceFileUpload} />
-    //     </Button>
-
-    //   ) : (
-    //     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-    //       <CircularProgress />
-    //     </Box>
-    //   )}
-    // </Box>
     <Box sx={{ p: 2, textAlign: 'center' }}>
       {/* File Upload Image and Button */}
       <img src={UploadImg} alt='UploadImg' className='w-100h-100' />
@@ -531,20 +476,6 @@ function MindPathPage() {
   );
 
   const firstDrawerPatientPaymentContent = (
-    // <Box sx={{ p: 2 }}>
-    //   {!showPatientPaymentSpinner ? (
-    //     <Button variant="contained" component="label">
-    //       Upload File
-    //       <input type="file" multiple hidden onChange={handlePatientPaymentFileUpload} />
-    //     </Button>
-
-    //   ) : (
-    //     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-    //       <CircularProgress />
-    //     </Box>
-    //   )}
-    // </Box>
-
     <Box sx={{ p: 2, textAlign: 'center' }}>
     {/* File Upload Image and Button */}
     <img src={UploadImg} alt='UploadImg' className='w-100h-100' />
@@ -585,7 +516,8 @@ function MindPathPage() {
 
           <MainCard>
             <Grid sx={{ textAlign: 'center' }}>
-              <Button className='button-proper' onClick={() => setFirstDrawerDepositOpen(true)}>
+              <Button className='button-proper' 
+              onClick={() => setDepositDrawerOpen(true)}>
                 <img src={Deposit} alt="Deposit" style={{ width: '100%', height: 'auto' }} />
                 <Typography level='h3'>Deposit</Typography>
                 {showSpinner && (
@@ -782,7 +714,6 @@ function MindPathPage() {
           </>
           
         }
-       
       >
       </CustomDrawer>
 
@@ -817,6 +748,33 @@ function MindPathPage() {
               <CustomTable data={filteredPatinetPaymentData} />
              <AnimateButton type="slide">
               <Button variant="contained" color="success" component="label"  onClick={handleClosePatientPaymentDrawer}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Back</Button>
+            </AnimateButton>
+          </>
+          
+        }
+      >
+      </CustomDrawer>
+
+
+
+
+      {/* Deposit drawer */}
+
+      <CustomDrawer
+        open={depositDrawerOpen}
+        onClose={handleDepositDrawerClose}
+        anchor="right"
+        // width={900}
+        // top={100}
+        // borderRadius={8}
+        // leftOffset={firstPatientPaymentDrawerOpen ? 0 : 410}
+        // height={'100%'}
+        title="Patient Payment"
+        content={
+          <>
+              {/* <CustomTable data={filteredPatinetPaymentData} /> */}
+             <AnimateButton type="slide">
+              <Button variant="contained" color="success" component="label"  onClick={handleDepositDrawerClose}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Back</Button>
             </AnimateButton>
           </>
           
