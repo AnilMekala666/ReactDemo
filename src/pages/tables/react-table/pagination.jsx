@@ -46,7 +46,7 @@ function ReactTable({ data, columns, top }) {
   );
 
   return (
-    <MainCard
+    <div
       title={top ? 'Pagination at Top' : 'Pagination at Bottom'}
       content={false}
       secondary={<CSVExport {...{ data, headers, filename: top ? 'pagination-top.csv' : 'pagination-bottom.csv' }} />}
@@ -66,9 +66,9 @@ function ReactTable({ data, columns, top }) {
             </Box>
           )}
 
-          <TableContainer>
+          <TableContainer style={{backgroundColor:"white"}}>
             <Table>
-              <TableHead>
+              <TableHead  style={{backgroundColor:"white"}}>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
@@ -110,7 +110,7 @@ function ReactTable({ data, columns, top }) {
           )}
         </Stack>
       </ScrollX>
-    </MainCard>
+    </div>
   );
 }
 
@@ -162,9 +162,7 @@ export default function PaginationTable() {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <ReactTable {...{ data, columns, top: true }} />
-      </Grid>
+
       <Grid item xs={12}>
         <ReactTable {...{ data, columns }} />
       </Grid>
