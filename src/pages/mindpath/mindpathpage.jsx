@@ -305,6 +305,7 @@ const [depositDrawerOpen, setDepositDrawerOpen] = useState(false)
 
 
 const handleDepositDrawerClose = () => {
+  console.log("click")
   setDepositDrawerOpen(False)
 }
 
@@ -774,7 +775,7 @@ const handleDepositDrawerClose = () => {
           <>
               {/* <CustomTable data={filteredPatinetPaymentData} /> */}
              <AnimateButton type="slide">
-              <Button variant="contained" color="success" component="label"  onClick={handleDepositDrawerClose}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Back</Button>
+              <Button variant="contained" color="success" component="label"    onClick={() => setDepositDrawerOpen(false)}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Back</Button>
             </AnimateButton>
           </>
           
