@@ -20,10 +20,12 @@ import CustomDrawer from 'components/payments/CustomDrawer';
 import { Box, Drawer, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import UploadImg from 'assets/images/UploadImg.jpg';
 import AnimateButton from 'components/@extended/AnimateButton';
-import { borderRadius, fontSize, textAlign } from '@mui/system';
+import { borderRadius, fontSize, textAlign, width } from '@mui/system';
 import { UploadOutlined } from '@ant-design/icons';
 
 import { useNavigate } from 'react-router';
+import RightArrow from 'assets/images/right-arrow.gif';
+import RightArrowStatic from 'assets/images/RightArrowStatic.png';
 
 
 
@@ -62,8 +64,24 @@ function MindPathPage() {
   const [patientPaymentUploadedFile, setPatientPaymentUploadedFile] = useState([]);
 
 
+  // Add the initial state for the image
+  const [isRightArrowActive, setIsRightArrowActive] = useState(false);
+
+
 
 const [depositDrawerOpen, setDepositDrawerOpen] = useState(false)
+const handleDepositClick = () => {
+  setIsRightArrowActive(true); // Show RightArrow image immediately
+  setShowSpinner(true); // Optionally, you can start showing the spinner
+
+  // After 3 seconds, revert back to the static RightArrow image
+  setTimeout(() => {
+      setIsRightArrowActive(false);
+      setShowSpinner(false);
+      setDepositDrawerOpen(true)
+  }, 3000);
+};
+
 
   const depositData = [
     {
@@ -516,16 +534,10 @@ const handleDepositDrawerClose = () => {
         <Grid item xs={12} md={1} lg={1} sm={1} marginTop={2}>
 
           <MainCard>
-            <Grid sx={{ textAlign: 'center' }}>
-              <Button className='button-proper' 
-              onClick={() => setDepositDrawerOpen(true)}>
+          <Grid sx={{ textAlign: 'center' }}>
+              <Button className='button-proper' onClick={handleDepositClick}>
                 <img src={Deposit} alt="Deposit" style={{ width: '100%', height: 'auto' }} />
-                <Typography level='h3'>Deposit</Typography>
-                {showSpinner && (
-                  <Grid sx={{ textAlign: 'center', marginTop: '0px' }}>
-                    <CircularProgress size={15} />
-                  </Grid>
-                )}
+                <Typography level="h3">Deposit</Typography>
               </Button>
             </Grid>
             <Divider sx={{ margin: '20px 0' }} />
@@ -559,10 +571,21 @@ const handleDepositDrawerClose = () => {
           </MainCard>
         </Grid>
         <Grid item xs={12} md={1} lg={1} sm={1} style={{ maxWidth: '4%', marginTop: '4%', marginLeft: '10px' }}>
-          <div style={{ display: 'flex' }}>
-            <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{ marginTop: '20px', marginRight: '10px' }} />
+          {/* <div style={{ display: 'flex' }}>
+           
+            <img src={RightArrow} alt="ArrowRight" className='w-100h-100'/>
+            <img src={RightArrowStatic} alt="RightArrowStatic" style={{width:'35px', height:'100%'}}/>
             <img src={iCanImg} alt='iCanImg' className='w-100h-100' />
-          </div>
+          </div> */}
+          <div style={{ display: 'flex' }}>
+          <img
+            src={isRightArrowActive ? RightArrow : RightArrowStatic}
+            alt="RightArrow"
+            style={isRightArrowActive ? { width: '35px', height: '100%' } : { width: '35px', height: '100%' }}
+            className='w-100h-100'
+          />
+          <img src={iCanImg} alt="iCanImg" className="w-100h-100"  style={{ marginLeft:'20px'}}/>
+        </div>
           <div style={{ marginTop: '80px', display: 'flex' }}>
             <img src={ArrowRight} alt="ArrowRight" className='w-100h-100' style={{ marginRight: '10px', marginTop: '20px' }} />
             <img src={iCanImg} alt='iCanImg' className='w-100h-100' />
@@ -770,13 +793,22 @@ const handleDepositDrawerClose = () => {
         // borderRadius={8}
         // leftOffset={firstPatientPaymentDrawerOpen ? 0 : 410}
         // height={'100%'}
-        title="Patient Payment"
+        title="Deposit"
         content={
           <>
-              {/* <CustomTable data={filteredPatinetPaymentData} /> */}
-             <AnimateButton type="slide">
-              <Button variant="contained" color="success" component="label"    onClick={() => setDepositDrawerOpen(false)}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Back</Button>
+            <img src={UploadImg} alt='UploadImg' className='w-100h-100' />
+            <AnimateButton type="slide">
+              <Button variant="contained" color="success" component="label" sx={{ borderRadius: '40px',position:'relative',top:'-57px', left:'84px' }}>
+                Upload File
+                <input type="file" multiple hidden onChange={handlePatientPaymentFileUpload} />
+                {/* <UploadOutlined style={{ fontSize: '20px', paddingLeft: '10px' }} /> */}
+              </Button>
             </AnimateButton>
+
+              {/* <CustomTable data={filteredPatinetPaymentData} /> */}
+             {/* <AnimateButton type="slide">
+              <Button variant="contained" color="success" component="label"    onClick={() => setDepositDrawerOpen(false)}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Back</Button>
+            </AnimateButton> */}
           </>
           
         }
