@@ -124,7 +124,8 @@ const PricingPage = Loadable(lazy(() => import('pages/extra-pages/pricing')));
 
 const Mindpath = Loadable(lazy(() => import('pages/mindpath/mindpathpage')));
 
-const CashPostingPage = Loadable(lazy(() => import('pages/mindpath/cashPosting')))
+const CashPostingPage = Loadable(lazy(() => import('pages/mindpath/cashPosting')));
+const DepositDataPage = Loadable(lazy(() => import('pages/mindpath/DepositData')))
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -163,6 +164,10 @@ const MainRoutes = {
             {
               path: 'cash/posting',
               element: <CashPostingPage/>
+            },
+            {
+              path: 'payment/deposit',
+              element: <DepositDataPage/>
             }
           ]
         },
