@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Grid, Button, CircularProgress, Typography, } from '@mui/material';
+import { Grid, Button, CircularProgress, Typography,Popover } from '@mui/material';
 import MainCard from 'components/MainCard';
 import FileUploader from 'components/payments/FileUploader';
 import CustomTable from 'components/payments/CustomTable';
@@ -93,6 +93,8 @@ function MindPathPage() {
   const [firstPatientPaymentDrawerOpen, setFirstPatientPaymentDrawerOpen] = useState(false);
   const [secondPatientPaymentDrawerOpen, setSecondPatientPaymentDrawerOpen] = useState(false);
   const [showPatientPaymentSpinner, setShowPatientPaymentSpinner] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
 
 
   // Add the initial state for the image
@@ -741,7 +743,16 @@ const handleDepositDrawerClose = () => {
   }
 
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget); // Set the clicked element as the anchor
+};
 
+const handleClose = () => {
+    setAnchorEl(null); // Close the popover
+};
+
+const open = Boolean(anchorEl); // Check if popover is open
+const id = open ? 'simple-popover' : undefined; // Give id if open
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -2446,16 +2457,41 @@ const handleDepositDrawerClose = () => {
               </div>
             </Grid> 
             <Grid container marginTop={2} position={'relative'}>
-              <Grid item className='bottom-logo' xs={12} md={5} lg={5} sm={5}>
-                <img src={AdvancedMd} alt="AdvancedMd" style={{ maxWidth:'100px'}}/>
+              {/* AdvancedMd Logo */}
+              <Grid item className='bottom-logo' xs={12} md={5} lg={5} sm={5} onClick={handleClick}>
+                  <img src={AdvancedMd} alt="AdvancedMd" style={{ maxWidth: '100px' }} />
               </Grid>
-              <Grid item className='bottom-logo' xs={12} md={5} lg={5} sm={5} style={{ position:'relative', left:'50px'}}>
-                <img src={NexGen} alt="NexGen" style={{ maxWidth:'100px'}}/>
+
+              {/* NexGen Logo */}
+              <Grid item className='bottom-logo' xs={12} md={5} lg={5} sm={5} style={{ position: 'relative', left: '50px' }}>
+                  <img src={NexGen} alt="NexGen" style={{ maxWidth: '100px' }} />
               </Grid>
+
               <Grid>
-                <img src={DotLine9} alt="DotLine9" className='rightbottomarrow'/>
+                  <img src={DotLine9} alt="DotLine9" className='rightbottomarrow' />
               </Grid>
-            </Grid>
+
+              {/* Popover for tooltip */}
+              <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                  }}
+                  transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                  }}
+              >
+                  <Typography sx={{ p: 2 }}>Choose an Option:</Typography>
+                  <Button onClick={() => alert('Option 1 Selected')}>Option 1</Button>
+                  <Button onClick={() => alert('Option 2 Selected')}>Option 2</Button>
+                  <Button onClick={() => alert('Option 3 Selected')}>Option 3</Button>
+              </Popover>
+          </Grid>
         </Grid>
 
 
