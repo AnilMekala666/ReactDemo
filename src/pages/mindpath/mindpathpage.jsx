@@ -741,7 +741,9 @@ const handleDepositDrawerClose = () => {
   }
 
 
-
+const handleNavigateDeposit = () => {
+  navigate('/patient/payment/deposit')
+}
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -2375,11 +2377,14 @@ const handleDepositDrawerClose = () => {
         <Grid item xs={12} md={2} lg={2} sm={2} marginTop={13} sx={{marginLeft:'-15px'}}>
           <div style={{ display: 'flex' }}>
             <img src={DotLine1} alt="DotLine1"  style={{ height:'8px', marginTop:'25px'}}/>
-            <Button onClick={() => { setDepositDialogOpen(true) }}>
+            <Button 
+            // onClick={() => { setDepositDialogOpen(true) }}
+            onClick = {handleNavigateDeposit}
+            >
               <img src={iCanImg} alt="iCanImg" className="w-100h-100 ican-bg" />
             </Button>
           </div>
-          <div style={{ marginTop: '25px', display: 'flex' }}>
+          <div style={{ marginTop: '25px', display: 'flex' }} >
             <img src={DotLine1} alt="DotLine1"  style={{ height:'8px',marginTop:'28px' }}/>
             <Button>
               <img src={iCanImg} alt="iCanImg" className="w-100h-100 ican-bg" />
@@ -2387,7 +2392,10 @@ const handleDepositDrawerClose = () => {
           </div>
           <div style={{display: 'flex', marginTop: '28px' }}>
             <img src={DotLine1} alt="DotLine1"  style={{ height:'8px',marginTop:'28px'  }}/>
-            <Button onClick={() => {setPatientPaymentDialogOpen(true)}}>
+            <Button 
+            // onClick={() => {setPatientPaymentDialogOpen(true)}}
+            onClick={() => navigate('/patient/payment/patientpayment')}
+            >
               <img src={iCanImg} alt='iCanImg' className='w-100h-100 ican-bg' />
             </Button>
           </div>

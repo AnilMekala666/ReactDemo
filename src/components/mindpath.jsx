@@ -1,6 +1,8 @@
 import React from 'react'
 
-function mindpath() {
+function mindpath({parsedData}) {
+
+  console.log('parsedData', parsedData)
   return (
     <div>mindpath</div>
   )
