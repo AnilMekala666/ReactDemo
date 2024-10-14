@@ -108,6 +108,7 @@
     "vite": "^5.3.5",
     "vite-jsconfig-paths": "^2.0.1",
     "web-vitals": "^4.2.2",
+    "xlsx": "^0.18.5",
     "yup": "^1.4.0"
   },
   "scripts": {

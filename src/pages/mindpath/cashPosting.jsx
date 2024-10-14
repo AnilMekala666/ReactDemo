@@ -79,9 +79,9 @@ StyledTreeItem.displayName = 'StyledTreeItem';
 const cashPosting = () => {
     const navigate = useNavigate();
     const [value] = useState('AZ');
-    const [expandedItem, setExpandedItem] = useState('1');
+    const [expandedItem, setExpandedItem] = useState(null);
     const handleToggle = (itemId) => {
-        setExpandedItem(itemId);
+        setExpandedItem(itemId === expandedItem ? null : itemId); 
     };
 
 
@@ -760,49 +760,41 @@ const cashPosting = () => {
                     </Button>
                 </AnimateButton>
             </Box>
-            <div >
-                <SimpleTreeView
-                    aria-label="customized"
-                    defaultExpandedItems={['1']}
-                    slots={{ collapseIcon: MinusSquare, expandIcon: PlusSquare, endIcon: CloseSquare }}
-                    onNodeSelect={(event, nodeId) => handleToggle(nodeId)}
-                    sx={{ backgroundColor: '#efeffd', p: 1, mb: 1, borderRadius:'10px' }}
-                >
-                    <StyledTreeItem itemId="1" label="Deposit Posting Queue">
-                        {/* Render the table only if the first tree item is expanded */}
-                        {expandedItem === '1' && (
-                            <CustomTable data={filteredDepositData} />
-                        )}
-                    </StyledTreeItem>
-                </SimpleTreeView>
-                <SimpleTreeView
-                    aria-label="customized"
-                    defaultExpandedItems={['2']}
-                    slots={{ collapseIcon: MinusSquare, expandIcon: PlusSquare, endIcon: CloseSquare }}
-                    onNodeSelect={(event, nodeId) => handleToggle(nodeId)}
-                    sx={{ backgroundColor: '#fdf6ef', p: 1, mb: 1, borderRadius:'10px' }}
-                >
-                    <StyledTreeItem itemId="1" label="Patient Posting Queue.">
-                        {expandedItem === '1' && (
-                            <CustomTable data={filteredPatientData} />
-                        )}
-                    </StyledTreeItem>
-                </SimpleTreeView>
+            <div>
+    <SimpleTreeView
+        aria-label="customized"
+        slots={{ collapseIcon: MinusSquare, expandIcon: PlusSquare, endIcon: CloseSquare }}
+        onNodeSelect={(event, nodeId) => handleToggle(nodeId)}
+        sx={{ backgroundColor: '#efeffd', p: 1, mb: 1, borderRadius: '10px' }}
+    >
+        <StyledTreeItem itemId="1" label="Deposit Posting Queue">
+            {/* Render the table only if the first tree item is expanded */}
+            {expandedItem === '1' && <CustomTable data={filteredDepositData} />}
+        </StyledTreeItem>
+    </SimpleTreeView>
 
-                <SimpleTreeView
-                    aria-label="customized"
-                    defaultExpandedItems={['3']}
-                    slots={{ collapseIcon: MinusSquare, expandIcon: PlusSquare, endIcon: CloseSquare }}
-                    onNodeSelect={(event, nodeId) => handleToggle(nodeId)}
-                    sx={{ backgroundColor: '#eef9fd', p: 1, mb: 1, borderRadius:'10px' }}
-                >
-                    <StyledTreeItem itemId="1" label="Zero Payments Posting Queue">
-                        {expandedItem === '1' && (
-                            <CustomTable data={filteredPaymenttData} />
-                        )}
-                    </StyledTreeItem>
-                </SimpleTreeView>
-            </div>
+    <SimpleTreeView
+        aria-label="customized"
+        slots={{ collapseIcon: MinusSquare, expandIcon: PlusSquare, endIcon: CloseSquare }}
+        onNodeSelect={(event, nodeId) => handleToggle(nodeId)}
+        sx={{ backgroundColor: '#fdf6ef', p: 1, mb: 1, borderRadius: '10px' }}
+    >
+        <StyledTreeItem itemId="2" label="Patient Posting Queue">
+            {expandedItem === '2' && <CustomTable data={filteredPatientData} />}
+        </StyledTreeItem>
+    </SimpleTreeView>
+
+    <SimpleTreeView
+        aria-label="customized"
+        slots={{ collapseIcon: MinusSquare, expandIcon: PlusSquare, endIcon: CloseSquare }}
+        onNodeSelect={(event, nodeId) => handleToggle(nodeId)}
+        sx={{ backgroundColor: '#eef9fd', p: 1, mb: 1, borderRadius: '10px' }}
+    >
+        <StyledTreeItem itemId="3" label="Zero Payments Posting Queue">
+            {expandedItem === '3' && <CustomTable data={filteredPaymenttData} />}
+        </StyledTreeItem>
+    </SimpleTreeView>
+</div>
         </div>
     );
 }

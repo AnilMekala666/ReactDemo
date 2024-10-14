@@ -4,7 +4,9 @@ import ReusableTable from 'components/tableComponent/Table';
 import { margin } from '@mui/system';
 
 
-const CustomTable = ({ data }) => {
+const CustomTable = ({ data, datacolumns }) => {
+
+    console.log(data, datacolumns)
     const [open, setOpen] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState(null);
 
@@ -20,52 +22,83 @@ const CustomTable = ({ data }) => {
 
     const columns = useMemo(
         () => [
+            // {
+            //     header: 'File Name',
+            //     accessorKey: 'file_name',
+            //     cell: ({ getValue }) => (
+            //         <Button style={{ color: 'black' }} onClick={() => alert(File clicked: ${getValue()})}>
+            //             {getValue()}
+            //         </Button>
+            //     ),
+            // },
+            // {
+            //     header: 'Classification Type',
+            //     accessorKey: 'classification_type',
+            // },
+            // {
+            //     header: 'Batch Date',
+            //     accessorKey: 'batch_date',
+            // },
+          
+            // {
+            //     header: 'Payment Amount',
+            //     accessorKey: 'payment_amount',
+            //     cell: ({ getValue }) => $${getValue().toFixed(2)},
+            // },
+            // {
+            //     header: 'Action',
+            //     accessorKey: 'actions',
+            //     cell: ({ getValue }) => (
+            //         <Button style={{ color: 'black' }} 
+            //         // onClick={() => handlePlayClick(row.original.file_name)}
+            //         onClick={() => setOpen(true)}
+            //         >
+            //             {getValue()}
+            //         </Button>
+            //     ),
+            // },
+
+
+            // Deposit
             {
-                header: 'File Name',
-                accessorKey: 'file_name',
-                cell: ({ getValue }) => (
-                    <Button style={{ color: 'black' }} onClick={() => alert(`File clicked: ${getValue()}`)}>
-                        {getValue()}
-                    </Button>
-                ),
+                header: 'Transaction Number',
+                accessorKey: 'transaction_number',
             },
             {
-                header: 'Classification Type',
-                accessorKey: 'classification_type',
+                header: 'State',
+                accessorKey: 'account_name',
             },
             {
-                header: 'Batch Date',
-                accessorKey: 'batch_date',
+                header: 'Bank Name',
+                accessorKey: 'bank_name',
             },
             {
-                header: 'Payor',
+                header: 'Payment Type',
+                accessorKey: 'payment_type',
+            },
+            {
+                header: 'Payer',
                 accessorKey: 'payer',
             },
             {
-                header: 'Payment Amount',
-                accessorKey: 'payment_amount',
-                cell: ({ getValue }) => `$${getValue().toFixed(2)}`,
+                header: 'Deposit Date',
+                accessorKey: 'deposit_date',
             },
             {
-                header: 'Action',
-                accessorKey: 'actions',
-                cell: ({ getValue }) => (
-                    <Button style={{ color: 'black' }} 
-                    // onClick={() => handlePlayClick(row.original.file_name)}
-                    onClick={() => setOpen(true)}
-                    >
-                        {getValue()}
-                    </Button>
-                ),
-            }
+                header: 'Amount',
+                accessorKey: 'amounts',
+            },
+            
         ],
         []
     );
 
     return (
         <div style={{marginTop:'10px'}} >
-            <ReusableTable data={data} columns={columns} />
-            <Dialog open={open} onClose={handleClose} maxWidth="lg">
+            {datacolumns && datacolumns.length > 0 ? 
+            <ReusableTable data={data} columns={datacolumns} />
+        :""}
+            <Dialog open={open} onClose={handleClose} maxWidth="100px">
                 <DialogContent>
                     <div>test</div>
                     {/* {selectedVideo ? (
