@@ -129,7 +129,7 @@ const handleDepositClick = () => {
       setIsRightArrowActive(false);
       setShowSpinner(false);
       setDepositDrawerOpen(true)
-  }, 3000);
+  }, 500);
 };
 
 const handleChange = (panel) => (event, isExpanded) => {
