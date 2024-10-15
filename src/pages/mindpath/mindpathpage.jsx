@@ -2422,7 +2422,7 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
         </Grid>
         {/* Pannel 4 */}
         <Grid item xs={12} md={2} lg={2} sm={2} marginTop={11} style={{position:'relative', left:'-30px'}}>
-          <img src={DotLine4} alt="DotLine4" style={{maxWidth: '209px', position:'relative', left:'90px' }} />
+          <img src={DotLine4} alt="DotLine4" style={{maxWidth: '209px', position:'relative', left:'130px' }} />
           <img src={DataBaseIcon} alt="DataBaseIcon" style={{maxWidth: '200px' }} />
           <img src={DotLine5} alt="DotLine5" style={{display:'flex', margin:'0 auto'}} />
           <Grid sx={{ textAlign: 'center', marginBottom:'40px' }}>
@@ -2445,8 +2445,8 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
                 <img src={CashPostingIcon} alt="CashPostingIcon" style={{ width: '20px', height: 'auto' }} />
                 <Typography level="h3" className='depositbox-text'>Cash Posting Queue</Typography>
               </Button>
-              <div style={{ position:'absolute', left:'-90px', top:'17px'}}>
-                <img src={DotLine1} alt="DotLine1" style={{ maxWidth:'100px'}}/>
+              <div style={{ position:'absolute', left:'-80px', top:'17px'}}>
+                <img src={DotLine1} alt="DotLine1" style={{ maxWidth:'140px'}}/>
               </div>
             </Grid>
             <Grid sx={{ textAlign: 'center', marginBottom:'40px' }}>
@@ -2527,14 +2527,14 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
         title="Deposit"
         content={
           <>
-            <img src={UploadImg} alt='UploadImg' className='w-100h-100' />
+            {/* <img src={UploadImg} alt='UploadImg' className='w-100h-100' />
             <AnimateButton type="slide">
               <Button variant="contained" color="success" component="label" sx={{ borderRadius: '40px',position:'relative',top:'-57px', left:'100px' }}>
                 {uploadFile}
                 <input type="file" multiple hidden onChange={handleDepositFilesUpload} />
-                {/* <UploadOutlined style={{ fontSize: '20px', paddingLeft: '10px' }} /> */}
+              <UploadOutlined style={{ fontSize: '20px', paddingLeft: '10px' }} /> 
               </Button>
-            </AnimateButton>
+            </AnimateButton> */}
             {loading && (
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>
                   <CircularProgress /> {/* Spinner */}
@@ -2560,21 +2560,21 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
                   // }}
                 >
                   <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}
-                    sx={{ backgroundColor: '#fff', borderRadius:'8px', marginBottom:'10px', borderBottom: '1px solid #ddd' }}
+                    sx={{ backgroundColor: '#fff', borderRadius:'10px', marginBottom:'10px', }}
                   >
                     <AccordionSummary aria-controls="panel4d-content" id="panel4d-header"
-                      sx={{ backgroundColor: '#fff', borderRadius:'8px',borderBottom: '1px solid #ddd'  }}
+                    sx={{ borderRadius:'10px',  minHeight:'40px', borderBottom: '1px solid #ddd', }}
                     >
                       <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Typography variant="h6" sx={{ fontSize:'14px', fontWeight:'600'}}>Properties</Typography>
+                        <Typography variant="h6" className='accordian-btn'>Properties</Typography>
                       </Stack>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Stack spacing={2}>
                         <Box>
-                        <FormControl sx={{ m: 0,width:'100%', marginBottom:'10px' }}>
-                          <FormHelperText sx={{ color:'#000'}}>File Type </FormHelperText>
-                          <Select sx={{ background:'#fff'}}>
+                        <FormControl sx={{ m: 0,width:'100%', marginBottom:'10px'}}>
+                          <FormHelperText sx={{ color:'#000', fontSize:'11px'}}>File Type </FormHelperText>
+                          <Select sx={{ background:'#fff', fontSize:'12px',height:'30px'}}>
                             <MenuItem value="Select" sx={{ color: 'text.secondary' }}></MenuItem>
                             <MenuItem value={10}>Excel</MenuItem>
                             <MenuItem value={20}>CSV</MenuItem>
@@ -2584,12 +2584,12 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
                         </FormControl>
                         <FormControl variant="standard" sx={{ m: 0,width:'100%', marginBottom:'10px' }}>
                           <Stack spacing={3}>
-                          <InputLabel sx={{ color:'#000', fontSize:'16px'}} shrink htmlFor="with-label-input">File Path</InputLabel>
-                            <TextField id="with-label-input" placeholder="File Path" />
+                          <InputLabel sx={{ color:'#000', fontSize:'15px', padding:'0px'}} shrink htmlFor="with-label-input">File Path</InputLabel>
+                            <TextField class='input-height'  id="with-label-input" placeholder="File Path" />
                           </Stack>
                         </FormControl>
                          
-                          <Button variant="outlined" color="warning" sx={{marginTop:'10px', float:'right'}} startIcon={<PlusCircleOutlined />}>Path</Button>
+                          <Button variant="outlined" color="warning" sx={{marginTop:'10px', float:'right', borderRadius:'45px',padding:'0px'}} startIcon={<PlusCircleOutlined />}>Path</Button>
                         </Box>
                       </Stack>
                     </AccordionDetails>
@@ -2598,13 +2598,13 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
 
 
                   <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}
-                    sx={{ backgroundColor: '#fff', borderRadius:'8px', marginBottom:'10px', borderBottom: '1px solid #ddd' }}
+                    sx={{ borderRadius:'10px',  minHeight:'40px',  marginBottom:'10px' }}
                   >
                     <AccordionSummary aria-controls="panel1d-content" id="panel1d-header"
-                      sx={{ backgroundColor: '#fff', borderRadius:'8px',borderBottom: '1px solid #ddd'  }}
+                    sx={{ borderRadius:'10px',  minHeight:'40px', borderBottom: '1px solid #ddd', }}
                     >
                       <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Typography variant="h6" sx={{ fontSize:'14px', fontWeight:'600'}}>Scheduling</Typography>
+                        <Typography variant="h6"  className='accordian-btn'>Scheduling</Typography>
                       </Stack>
                     </AccordionSummary>
                     <AccordionDetails>
@@ -2622,13 +2622,13 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
                   </Accordion>
 
                   <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}
-                    sx={{ backgroundColor: '#fff', borderRadius:'8px', marginBottom:'10px',}}
+                   sx={{ borderRadius:'10px',  minHeight:'40px',  marginBottom:'10px',}}
                   >
                     <AccordionSummary aria-controls="panel2d-content" id="panel2d-header"
-                      sx={{ backgroundColor: '#fff', borderRadius:'8px', borderBottom: '1px solid #ddd'  }}
+                     sx={{ borderRadius:'10px',  minHeight:'40px', borderBottom: '1px solid #ddd', }}
                     >
                       <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Typography variant="h6" sx={{ fontSize:'14px', fontWeight:'600'}}>Rules</Typography>
+                        <Typography variant="h6"  className='accordian-btn'>Rules</Typography>
                       </Stack>
                     </AccordionSummary>
                     <AccordionDetails>
@@ -2675,13 +2675,13 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
                   </Accordion>
 
                   <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}
-                    sx={{ backgroundColor: '#fff', borderRadius:'8px' }}
+                    sx={{ borderRadius:'10px',  minHeight:'40px',  marginBottom:'10px',}}
                   >
                     <AccordionSummary aria-controls="panel3d-content" id="panel3d-header"
-                      sx={{ backgroundColor: '#fff', borderRadius:'8px' }}
+                    sx={{ borderRadius:'10px',  minHeight:'40px', borderBottom: '1px solid #ddd', }}
                     >
                       <Stack direction="row" spacing={1.5} alignItems="center">
-                        <Typography variant="h6" sx={{ fontSize:'14px', fontWeight:'600'}}>Statistics</Typography>
+                        <Typography variant="h6"  className='accordian-btn'>Statistics</Typography>
                       </Stack>
                     </AccordionSummary>
                     <AccordionDetails>
@@ -2723,7 +2723,7 @@ const id = open ? 'simple-popover' : undefined; // Give id if open
 
               {/* <CustomTable data={filteredPatinetPaymentData} /> */}
              <AnimateButton type="slide">
-              <Button variant="contained" color="success" component="label"    onClick={() => setDepositDrawerOpen(false)}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Back</Button>
+              <Button variant="contained" color="success" component="label"    onClick={() => setDepositDrawerOpen(false)}  sx={{ borderRadius: '40px', marginTop: '20px', padding:'10px 30px', float:'right' }}>Cancel</Button>
             </AnimateButton>
           </>
           

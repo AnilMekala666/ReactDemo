@@ -4,6 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import CustomDialog from 'components/payments/CustomDialog';
 import CustomTable from 'components/payments/CustomTable';
 import { useNavigate } from 'react-router';
+import { LeftOutlined } from '@ant-design/icons';
 
 
 const initialStaticData = [
@@ -222,18 +223,12 @@ function DepositData() {
         variant="contained"
         color="primary"
         component="label"
-        sx={{ borderRadius: '40px', marginTop: '20px' }}
+        sx={{ borderRadius: '40px', marginTop: '20px', padding:'0px 0 0px 30px' }}
       >
-        Upload File
-        <input type="file" multiple hidden onChange={handleFileUpload} />
-        <UploadOutlined style={{ fontSize: '20px', paddingLeft: '10px' }} />
+        Get File
+        <input type="file" multiple hidden onChange={handleFileUpload} sx={{padding:'0px 10px 10px 0px' }}/>
+        <UploadOutlined style={{ fontSize: '20px', padding: '12px',marginLeft:'15px', borderRadius:'100%', background:'rgb(85 145 243)' }} />
       </Button>
-      <Button 
-       variant="contained"
-       color="success"
-       component="label"
-       sx={{ borderRadius: '40px', marginTop: '20px',float:"right" }}
-      onClick={() => navigate('/patient/payment')}>Back</Button>
 
       {loading ? (
         <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
@@ -246,16 +241,19 @@ function DepositData() {
               style={{
                 whiteSpace: 'pre-wrap',
                 wordWrap: 'break-word',
-                height: '400px',
+                height: '330px',
                 overflowY: 'auto',
                 backgroundColor: '#f0f0f0',
                 padding: '10px',
-                borderRadius: '4px',
+                borderRadius: '15px',
                 margin: 'auto',
                 padding: '25px',
                 borderRadius: '8px',
                 width: "70%",
-                fontSize: "20px"
+                fontSize: "16px",
+                marginTop:'30px',
+                border:'1px solid #ddd'
+                
               }}
             >
               {fileContent}
@@ -264,17 +262,24 @@ function DepositData() {
         )
       )}
 
+<Button 
+       variant="contained"
+       component="label"
+       className='back-btn'
+       color='success'
+      onClick={() => navigate('/patient/payment')}> <LeftOutlined style={{ fontSize: '17px', padding: '12px',marginRight:'15px', borderRadius:'100%', background:'rgb(174 219 152 / 55%)' }}/>Cancel</Button>
       {/* {fileContent && */}
-        <Button
+      <Button
           variant="contained"
           color="primary"
           component="label"
-          sx={{ borderRadius: '40px', marginTop: '20px', float: "right" }}
+          className='btn-border'
           onClick={() => setDepositDataDialogOpen(true)}
         >
           Processing
         </Button>
       {/* } */}
+     
 
 
       <CustomDialog
