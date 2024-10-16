@@ -151,7 +151,7 @@ function DepositData() {
   const [showFileContent, setShowFileContent] = useState(false);
 
   const handleDepositDataDialogClose = () => {
-    setShowFileContent(false);
+    setDepositDataDialogOpen(false);
   };
 
   const handleFileUpload = (event) => {
