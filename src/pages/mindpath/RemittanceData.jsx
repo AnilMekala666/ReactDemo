@@ -6,7 +6,7 @@ import CustomTable from 'components/payments/CustomTable';
 import { useNavigate } from 'react-router';
 import { LeftOutlined } from '@ant-design/icons';
 
-const remittance = new URL('src/assets/data/deposit_payment_queue.csv', import.meta.url).href;
+const remittance = new URL('src/assets/data/remittance.csv', import.meta.url).href;
 
 const initialStaticData = [
   {
