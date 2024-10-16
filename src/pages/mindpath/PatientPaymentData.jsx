@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomTable from 'components/payments/CustomTable';
 import CustomDialog from 'components/payments/CustomDialog';
@@ -61,24 +61,22 @@ function PatientPaymentData() {
 
   return (
     <div>
-      <Button
-        variant="contained"
-        color="primary"
-        component="label"sx={{ borderRadius: '40px', marginTop: '20px', padding: '0px 0 0px 30px' }}
-        >
-          Get File
-        <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
-        <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
-      </Button>
-      <Button
-        variant="contained"
-        color="success"
-        component="label"
-        className='back-btn'
-        onClick={() => navigate('/patient/payment')}
-      >
-        <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back 
-      </Button>
+      <Grid mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Grid >
+          <Typography variant="h4">Patient Payments</Typography>
+        </Grid>
+        <Grid >
+          <Button
+            variant="contained"
+            color="primary"
+            component="label"sx={{ borderRadius: '40px', marginTop: '20px', padding: '0px 0 0px 30px' }}
+            >
+              Get File
+            <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
+            <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+          </Button>
+        </Grid>
+      </Grid>
 
       {loading ? (
         <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
@@ -126,6 +124,16 @@ function PatientPaymentData() {
               </Grid>
               <Button
                 variant="contained"
+                color="success"
+                component="label"
+                className='back-btn'
+                onClick={() => navigate('/patient/payment')}
+                style={{ margin: '20px 0 10px 20px' }}
+              >
+                <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back 
+              </Button>
+              <Button
+                variant="contained"
                 color="primary"
                  className='btn-border'
                 onClick={() => setPatientPaymentDataDialogOpen(true)}
@@ -142,7 +150,7 @@ function PatientPaymentData() {
       <CustomDialog
         open={patientPaymentDataDialogOpen}
         onClose={handlePatientPaymentDataDataDialogClose}
-        title={"Deposit Data"}
+        title={"Patient Payments Data"}
       >
         <CustomTable data={parsedData} datacolumns={tableColumns} />
       </CustomDialog>
