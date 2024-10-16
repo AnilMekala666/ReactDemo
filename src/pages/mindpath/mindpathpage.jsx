@@ -584,6 +584,16 @@ function MindPathPage() {
     navigate('/patient/cash/posting')
   }
 
+  const handleMoveReconcileMovement = () => {
+    console.log("click")
+    navigate('/patient/reconcile')
+  }
+
+  const handleMovePostingReportMovement = () => {
+    console.log("click")
+    navigate('/patient/posting_report')
+  }
+
 
   const handleDepositFilesUpload = (event) => {
     const file = event.target.files[0];
@@ -748,8 +758,13 @@ function MindPathPage() {
   const handleNavigateDeposit = () => {
     navigate('/patient/payment/deposit')
   }
-  const handleClick = (event) => {
+  const handleNavigateRemittance = () => {
+    navigate('/patient/payment/remittance')
+  }
+  const [popType, setPopType] = useState("")
+  const handleClick = (event, type) => {
     setAnchorEl(event.currentTarget); // Set the clicked element as the anchor
+    setPopType(type);
   };
 
   const handleClose = () => {
@@ -764,7 +779,6 @@ function MindPathPage() {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'transparent',
-    border: '2px solid #000',
     boxShadow: 24,
     p: 1,
     border: 0,
@@ -778,13 +792,14 @@ function MindPathPage() {
         onClose={() => setVideoModalOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        style={{ width: '1000px', height: '800px', margin: '0 auto' }}
+        style={{ width: '100vw', height: '100vh', margin: '0 auto' }}
 
       >
         <Box sx={style} >
           <video
             src={videoUrl}
             controls
+            autoPlay
             style={{ width: '100%', height: '100%' }}
           />
         </Box>
@@ -2447,7 +2462,8 @@ function MindPathPage() {
           </div>
           <div style={{ marginTop: '25px', display: 'flex' }} >
             <img src={DotLine1} alt="DotLine1" style={{ height: '8px', marginTop: '28px' }} />
-            <Button>
+            <Button
+              onClick={handleNavigateRemittance}>
               <img src={iCanImg} alt="iCanImg" className="w-100h-100 ican-bg" />
             </Button>
           </div>
@@ -2475,7 +2491,7 @@ function MindPathPage() {
           <img src={DataBaseIcon} alt="DataBaseIcon" style={{ maxWidth: '200px' }} />
           <img src={DotLine5} alt="DotLine5" style={{ display: 'flex', margin: '0 auto' }} />
           <Grid sx={{ textAlign: 'center', marginBottom: '40px' }}>
-            <Button className='depositbox depositbox-green'>
+            <Button className='depositbox depositbox-green' onClick={handleMovePostingReportMovement}>
               <img src={PostingIcon} alt="PostingIcon" style={{ width: '20px', height: 'auto' }} />
               <Typography level="h3" className='depositbox-text'>Posting Reports </Typography>
             </Button>
@@ -2484,7 +2500,7 @@ function MindPathPage() {
         {/* Pannel 5 */}
         <Grid item xs={12} md={3} lg={3} sm={3} marginTop={8} marginLeft={6}>
           <Grid sx={{ textAlign: 'center', marginBottom: '40px' }}>
-            <Button className='depositbox deposit-recon'>
+            <Button className='depositbox deposit-recon' onClick={handleMoveReconcileMovement}>
               <img src={Recon} alt="Recon" style={{ width: '20px', height: 'auto' }} />
               <Typography level="h3" className='depositbox-text'>Reconciliation</Typography>
             </Button>
@@ -2516,12 +2532,12 @@ function MindPathPage() {
           </Grid>
           <Grid container marginTop={2} position={'relative'}>
             {/* AdvancedMd Logo */}
-            <Grid item className='bottom-logo' xs={12} md={5} lg={5} sm={5} onClick={handleClick}>
+            <Grid item className='bottom-logo' xs={12} md={5} lg={5} sm={5} onClick={(evt)=>handleClick(evt, "advanced")}>
               <img src={AdvancedMd} alt="AdvancedMd" style={{ maxWidth: '100px' }} />
             </Grid>
 
             {/* NexGen Logo */}
-            <Grid item className='bottom-logo' xs={12} md={5} lg={5} sm={5} style={{ position: 'relative', left: '50px' }}>
+            <Grid item className='bottom-logo'  onClick={(evt)=>handleClick(evt, "nexgen")} xs={12} md={5} lg={5} sm={5} style={{ position: 'relative', left: '50px' }}>
               <img src={NexGen} alt="NexGen" style={{ maxWidth: '100px' }} />
             </Grid>
 
@@ -2552,7 +2568,9 @@ function MindPathPage() {
               <div class="popover_in">
                 <Button onClick={() => videoModal("deposit")}>Deposit Posting</Button>
                 <Button onClick={() => videoModal('patient')}>Patient Posting</Button>
-                <Button onClick={() => videoModal('payment')}>Zero Payment Posting</Button>
+                {popType == "advanced" &&
+                  <Button onClick={() => videoModal('payment')}>Zero Payment Posting</Button>
+                }
               </div>
             </Popover>
           </Grid>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { UploadOutlined } from '@ant-design/icons';
 import CustomDialog from 'components/payments/CustomDialog';
@@ -32,16 +32,32 @@ const initialStaticData = [
   },
 ];
 
-function DepositData() {
+function RemittanceData() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [parsedData, setParsedData] = useState(initialStaticData);
-  const [depositDataDialogOpen, setDepositDataDialogOpen] = useState(false);
+  const [RemittanceDataDialogOpen, setRemittanceDataDialogOpen] = useState(false);
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
+  const [tableColumns, setTableColumns] = useState([]);
 
-  const handleDepositDataDialogClose = () => {
-    navigate('/patient/payment');
+  useEffect(()=>{
+    const headerKeys = Object.keys(Object.assign({}, ...initialStaticData));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      let o = {
+        id: index + 1,
+        header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+        accessorKey: header.replace("\r", "")
+      }
+      return o;
+    })
+    console.log("Columns", columns);
+    setTableColumns(columns);
+  }, [])
+
+  const handleRemittanceDataDialogClose = () => {
+    setRemittanceDataDialogOpen(false);
   };
 
   const handleFileUpload = (event) => {
@@ -64,110 +80,102 @@ function DepositData() {
   };
 
 
+  function splitCSVButIgnoreCommasInDoublequotes(str) {
+    //split the str first  
+    //then merge the elments between two double quotes  
+    var delimiter = ',';
+    var quotes = '"';
+    var elements = str.split(delimiter);
+    var newElements = [];
+    for (var i = 0; i < elements.length; ++i) {
+      if (elements[i].indexOf(quotes) >= 0) {//the left double quotes is found  
+        var indexOfRightQuotes = -1;
+        var tmp = elements[i];
+        //find the right double quotes  
+        for (var j = i + 1; j < elements.length; ++j) {
+          if (elements[j].indexOf(quotes) >= 0) {
+            indexOfRightQuotes = j;
+            break;
+          }
+        }
+        //found the right double quotes  
+        //merge all the elements between double quotes  
+        if (-1 != indexOfRightQuotes) {
+          for (var j = i + 1; j <= indexOfRightQuotes; ++j) {
+            tmp = tmp + delimiter + elements[j];
+          }
+          newElements.push(tmp);
+          i = indexOfRightQuotes;
+        }
+        else { //right double quotes is not found  
+          newElements.push(elements[i]);
+        }
+      }
+      else {//no left double quotes is found  
+        newElements.push(elements[i]);
+      }
+    }
 
+    return newElements;
+  }
   const parseBaiFile = (content) => {
-    const lines = content.split('\n');
-    const newParsedData = [];
-    let currentTransaction = null;
-    let bankName = '';
-
-    lines.forEach((line) => {
-      const parts = line.split(',');
-
-      // Bank Name (from line starting with '01')
-      if (parts[0].trim() === '01') {
-        bankName = parts[1] ? parts[1].trim() : '';
+    const csvHeader = content.slice(0, content.indexOf("\n")).split(",");
+    const csvRows = content.slice(content.indexOf("\n") + 1).split("\n");
+    // console.log(csvHeader)
+    const array = csvRows.map((i, x) => {
+      const values = splitCSVButIgnoreCommasInDoublequotes(i);
+      // console.log(x, values);
+      // let object = {
+      //   id: x
+      // }
+      const obj = csvHeader.reduce((object, header, index) => {
+        if (object !== undefined) {
+          console.log(object)
+          if (object["id"] == undefined) {
+            object["id"] = x + 1;
+          }
+          if (values[index]) {
+            object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index] || "";
+            return object;
+          }
+        }
+        return object;
+      }, {});
+      console.log("OBJ", obj)
+      return obj;
+    }).filter((val) => val != undefined && val.transaction_number != null);
+    const headerKeys = Object.keys(Object.assign({}, ...array));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      let o = {
+        id: index + 1,
+        header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+        accessorKey: header.replace("\r", "")
       }
-
-      // Transaction line (starting with '16')
-      if (parts[0].trim() === '16') {
-        const transactionDate = parts[4] ? parts[4].trim() : '';
-
-        // Format transactionDate as YY/MM/DD
-        let formattedDate = 'Invalid Date';
-        if (transactionDate.length === 6) {
-          const year = `20${transactionDate.slice(0, 2)}`; // '24' -> '2024'
-          const month = transactionDate.slice(2, 4); // '03' -> March
-          const day = transactionDate.slice(4, 6); // '28' -> 28th day
-          formattedDate = `${year}/${month}/${day}`; // Final format: YYYY/MM/DD
-        }
-
-        // Extract and format amount (e.g., 99860168 -> 998601.68)
-        let amount = parts[2] ? parts[2].trim() : '0';
-        if (amount.length > 2) {
-          const dollars = amount.slice(0, -2);
-          const cents = amount.slice(-2);
-          amount = `${dollars}.${cents}`;
-        }
-
-        // Check payment type: 164 -> '', 165 -> 'EFT credit'
-        let paymentType = parts[1] ? parts[1].trim() : '';
-        let formattedPaymentType = '';
-        if (paymentType === '165') {
-          formattedPaymentType = 'EFT credit'; // Show 'EFT credit' for 165
-        } else if (paymentType === '164') {
-          formattedPaymentType = ''; // Show empty for 164
-        }
-
-        currentTransaction = {
-          transaction_number: parts[2] ? parts[2].trim() : '',
-          bank_name: bankName || 'Unknown Bank', // Use bank name from line '01'
-          payment_type: formattedPaymentType,
-          payer: '', // To be filled from '88' line
-          deposit_date: formattedDate,
-          amounts: amount, // Formatted amount
-          additional_info: '',
-          indn: '',
-          des: '',
-        };
-
-        newParsedData.push(currentTransaction);
-      }
-
-      // Additional information line (starting with '88')
-      if (parts[0].trim() === '88' && currentTransaction) {
-        // Extract Payer (from line starting with '88')
-        const payerMatch = line.match(/^(?:88,)?(.*?)(?: DES:|$)/);
-        if (payerMatch) {
-          currentTransaction.payer = payerMatch[1].trim(); // Set payer name
-        }
-
-        // Extract INDN (Payer) and DES (Description)
-        const indnMatch = line.match(/INDN:([^ ]+)/);
-        if (indnMatch) {
-          currentTransaction.indn = indnMatch[1].trim();
-        }
-
-        const desMatch = line.match(/DES:([^ ]+)/);
-        if (desMatch) {
-          currentTransaction.des = desMatch[1].trim();
-        }
-
-        // Append additional info
-        currentTransaction.additional_info += parts.slice(1).join(',').trim() + ' ';
-      }
-    });
-
-    console.log("Parsed Data: ", newParsedData);
+      return o;
+    })
+    console.log("Columns", columns);
+    setTableColumns(columns);
+    console.log("Parsed Data: ", array);
     // Set the parsed data to the state or return it
-    setParsedData(newParsedData);
+    setParsedData(array);
   };
 
 
 
 
-  const tableColumns = useMemo(
-    () => [
-      { header: 'Transaction Number', accessorKey: 'transaction_number' },
-      // { header: 'EFT', accessorKey: 'account_name' },
-      { header: 'Bank Name', accessorKey: 'bank_name' },
-      { header: 'Payment Type', accessorKey: 'payment_type' },
-      { header: 'Payer', accessorKey: 'payer' },
-      { header: 'Deposit Date', accessorKey: 'deposit_date' },
-      { header: 'Amount', accessorKey: 'amounts' },
-    ],
-    []
-  );
+  // const tableColumns = useMemo(
+  //   () => [
+  //     { header: 'Transaction Number', accessorKey: 'transaction_number' },
+  //     // { header: 'EFT', accessorKey: 'account_name' },
+  //     { header: 'Bank Name', accessorKey: 'bank_name' },
+  //     { header: 'Payment Type', accessorKey: 'payment_type' },
+  //     { header: 'Payer', accessorKey: 'payer' },
+  //     { header: 'Deposit Date', accessorKey: 'deposit_date' },
+  //     { header: 'Amount', accessorKey: 'amounts' },
+  //   ],
+  //   []
+  // );
 
 
 
@@ -226,7 +234,7 @@ function DepositData() {
     //     </>
     //     )
     //     : (
-           
+
     //       <CustomTable data={parsedData} datacolumns={tableColumns} />
     //     )
     //   )}
@@ -252,9 +260,9 @@ function DepositData() {
     // </div>
 
     <div>
-      <Grid mt={2} sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+      <Grid mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Grid >
-          <Typography variant="h4">Deposit</Typography>
+          <Typography variant="h4">Remittance</Typography>
         </Grid>
         <Grid >
           <Button
@@ -264,9 +272,9 @@ function DepositData() {
             sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
           >
             Get File
-            <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
-            <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
-        </Button>
+            <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} />
+            <UploadOutlined style={{ fontSize: '20px', padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+          </Button>
         </Grid>
       </Grid>
 
@@ -297,34 +305,34 @@ function DepositData() {
                 </pre>
               </Grid>
               <Button
-        variant="contained"
-        color="success"
-        className='back-btn'
-        onClick={() => navigate('/patient/payment')}
-        style={{margin:'20px 0 10px 20px'}}
-      >
-        <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back 
-      </Button>
+                variant="contained"
+                color="success"
+                className='back-btn'
+                onClick={() => navigate('/patient/payment')}
+                style={{ margin: '20px 0 10px 20px' }}
+              >
+                <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
+              </Button>
               <Button
                 variant="contained"
                 color="primary"
                 className='btn-border'
-                onClick={() => setDepositDataDialogOpen(true)}
+                onClick={() => setRemittanceDataDialogOpen(true)}
               >
                 Processing
               </Button>
             </>
           ) : (
-           
+
             <CustomTable data={parsedData} datacolumns={tableColumns} />
           )}
         </>
       )}
 
       <CustomDialog
-        open={depositDataDialogOpen}
-        onClose={handleDepositDataDialogClose}
-        title={"Deposit Data"}
+        open={RemittanceDataDialogOpen}
+        onClose={handleRemittanceDataDialogClose}
+        title={"Remittance Data"}
       >
         <CustomTable data={parsedData} datacolumns={tableColumns} />
       </CustomDialog>
@@ -332,4 +340,4 @@ function DepositData() {
   );
 }
 
-export default DepositData;
+export default RemittanceData;

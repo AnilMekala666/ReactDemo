@@ -197,12 +197,7 @@ function ReactTable({ data, columns }) {
   );
 
   // const [activeTab, setActiveTab] = useState(groups[0]);
-  const [sorting, setSorting] = useState([
-    {
-      id: 'customer_name',
-      desc: false
-    }
-  ]);
+  const [sorting, setSorting] = useState([{}]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState('');
@@ -377,9 +372,9 @@ function ReactTable({ data, columns }) {
               </TableHead>
               <TableBody>
                 {table.getRowModel().rows.map((row, index) => (
-                  <TableRow key={row.id}  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCellWithFilterComponent key={cell.id} {...cell.column.columnDef.meta}>
+                  <TableRow key={index}  >
+                    {row.getVisibleCells().map((cell, i) => (
+                      <TableCellWithFilterComponent key={i} {...cell.column.columnDef.meta}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCellWithFilterComponent>
                     ))}

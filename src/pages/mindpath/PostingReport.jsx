@@ -26,9 +26,7 @@ import MainCard from 'components/MainCard';
 import Loader from 'components/Loader';
 
 
-const deposit_payment_queue = new URL('src/assets/data/deposit_payment_queue.csv', import.meta.url).href;
-const patient_payment_posting_queue = new URL('src/assets/data/patient_payment_posting_queue.csv', import.meta.url).href;
-const zero_payments_posting_queue = new URL('src/assets/data/zero_payments_posting_queue.csv', import.meta.url).href;
+const postingReport = new URL('src/assets/data/posting_report.csv', import.meta.url).href;
 
 
 function PlusSquare(props) {
@@ -86,7 +84,7 @@ const StyledTreeItem = styled((props) => <TreeItem {...props} slots={{ groupTran
 
 StyledTreeItem.displayName = 'StyledTreeItem';
 
-const cashPosting = () => {
+const PostingReport = () => {
     const navigate = useNavigate();
     const [value] = useState('AZ');
     const [expandedItem, setExpandedItem] = useState(null);
@@ -99,7 +97,7 @@ const cashPosting = () => {
     };
 
     useEffect(() => {
-        init(deposit_payment_queue)
+        init(postingReport)
     }, []);
 
     const handleClickbackBtn = () => {
@@ -226,47 +224,13 @@ const cashPosting = () => {
                 </AnimateButton>
             </Box>
             <div>
-            <Accordion sx={{border: 0}} expanded={expandedItem == deposit_payment_queue} onChange={()=>init(deposit_payment_queue)}>
+            <Accordion sx={{border: 0}} expanded={expandedItem == postingReport} onChange={()=>init(postingReport)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
                     sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
                 >
-                    Deposit Posting Queue
-                </AccordionSummary>
-                <AccordionDetails>
-                    {loading &&
-                        <Loader />
-                    }
-                    {!loading &&
-                        <CustomTable data={parsedData} datacolumns={tableColumns} />
-                    }
-                </AccordionDetails>
-            </Accordion>
-            <Accordion expanded={expandedItem == patient_payment_posting_queue} sx={{border: 0}} onChange={()=>init(patient_payment_posting_queue)}>
-                <AccordionSummary
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
-                >
-                    Patient Posting Queue
-                </AccordionSummary>
-                <AccordionDetails>
-                    {loading &&
-                        <Loader />
-                    }
-                    {!loading &&
-                        <CustomTable data={parsedData} datacolumns={tableColumns} />
-                    }
-                </AccordionDetails>
-            </Accordion>
-            <Accordion expanded={expandedItem == zero_payments_posting_queue} sx={{border: 0}} onChange={()=>init(zero_payments_posting_queue)}>
-                <AccordionSummary
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
-                >
-                    Zero Payments Posting Queue
+                    Posting Report
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
@@ -282,4 +246,4 @@ const cashPosting = () => {
     );
 }
 
-export default cashPosting
+export default PostingReport

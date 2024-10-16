@@ -1,0 +1,15 @@
+Transaction No,Transaction Type,Batch Owner,Account Name,Payor,Deposit Date,Bank Deposit,Remittance,EMR,Variance,Status
+24270B100001263100,EFT Credit,XYZ,North Carolina Deposits,NCB OF NC,10/1/2024,5308.81,$0.00,$0.00,"Pay +$5308.81, Post -$5308.81",Remit Missing
+2746754838TC,EFT Credit,XYZ,California Deposits,PATIENT PAYMENT,10/1/2024,20606.65,$0.00,$0.00,"Pay +$20606.65, Post -$20606.65",Remit Missing
+TZ94846936,EFT Credit,ZZ,Florida Deposits,UNITEDARABCARE,10/1/2024,12027.92,$0.00,$0.00,"Pay +$12027.92, Post -$12027.92",Remit Missing
+2746762356TC,EFT Credit,AM,South Carolina Deposits,PATIENT PAYMENT,10/1/2024,880.82,$0.00,$0.00,"Pay +$880.82, Post -$880.82",Remit Missing
+2300054274LB,EFT Credit,ZZ,Ohio Deposits,HBSC HOST,10/1/2024,150,$0.00,$0.00,"Pay +$150.00, Post -$150.00",Remit Missing
+C6175093,EFT Credit,ZZ,Texas Deposits,UNITEDBUHAN,10/1/2024,1752.96,$0.00,$0.00,"Pay +$1752.96, Post -$1752.96",Remit Missing
+2746754843TC,Patient Payment,AM,Ohio Deposits,PATIENT PAYMENT,10/1/2024,358.84,$0.00,$0.00,"Pay +$358.84, Post -$358.84",Remit Missing
+TZ94877084,EFT Credit,ZZ,Arizona Deposits,UNITEDARABCARE,10/1/2024,615.99,$0.00,$0.00,"Pay +$615.99, Post -$615.99",Remit Missing
+8.24E+14,EFT Credit,AM,Florida Deposits,RATNA A04,10/1/2024,2785.93,$0.00,$0.00,"Pay +$2785.93, Post -$2785.93",Remit Missing
+TZ94877077,Patient Payment,ZZ,Arizona Deposits,UNITEDARABCARE,10/1/2024,5109.4,$0.00,$0.00,"Pay +$5109.40, Post -$5109.40",Remit Missing
+2746754843TC,Patient Payment,AM,Minnesota Deposits,PATIENT PAYMENT,10/1/2024,3147.7,$0.00,$0.00,"Pay +$3147.70, Post -$3147.70",Remit Missing
+2746754838TC,Patient Payment,ZZ,North Carolina Deposits,PATIENT PAYMENT,10/1/2024,20606.65,$0.00,$0.00,"Pay +$20606.65, Post -$20606.65",Remit Missing
+2746987715TC,Patient Payment,AM,California Deposits,PATIENT PAYMENT,10/1/2024,80,$0.00,$0.00,"Pay +$80.00, Post -$80.00",Remit Missing
+24270B100012851000,EFT Credit,ZZ,North Carolina Deposits,HBSC HOST,10/1/2024,8507.82,$0.00,$0.00,"Pay +$8507.82, Post -$8507.82",Remit Missing

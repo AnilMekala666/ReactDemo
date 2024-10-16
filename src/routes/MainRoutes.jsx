@@ -127,6 +127,9 @@ const Mindpath = Loadable(lazy(() => import('pages/mindpath/mindpathpage')));
 const CashPostingPage = Loadable(lazy(() => import('pages/mindpath/cashPosting')));
 const DepositDataPage = Loadable(lazy(() => import('pages/mindpath/DepositData')))
 const PatientPaymentDataPage = Loadable(lazy(() => import('pages/mindpath/PatientPaymentData')))
+const RemittanceDataPage = Loadable(lazy(() => import('pages/mindpath/RemittanceData')))
+const ReconcilePage = Loadable(lazy(() => import('pages/mindpath/reconcile')))
+const PostingReport = Loadable(lazy(() => import('pages/mindpath/PostingReport')))
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -168,13 +171,25 @@ const MainRoutes = {
               element: <CashPostingPage/>
             },
             {
+              path: 'reconcile',
+              element: <ReconcilePage />
+            },
+            {
+              path: 'posting_report',
+              element: <PostingReport />
+            },
+            {
               path: 'payment/deposit',
               element: <DepositDataPage/>
             },
             {
               path: 'payment/patientpayment',
               element: <PatientPaymentDataPage/>
-            }
+            },
+            {
+              path: 'payment/remittance',
+              element: <RemittanceDataPage/>
+            },
           ]
         },
        

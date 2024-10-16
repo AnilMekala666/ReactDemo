@@ -1,0 +1,13 @@
+Transaction No,Transaction Type,Batch Owner,Account Name,Payor,Reconcile Date(Days),Deposit Date,Bank Deposit,Remittance,EMR
+2.41E+14,EFT Credit,XY,South Carolina Deposits,GANGA,10/1/2024(1),10/1/2024, $188.00 , $188.00 , $188.00 
+8.24E+14,EFT Credit,ZZ,Florida Deposits,RATNA AS01,10/1/2024(1),10/1/2024," $11,434.99 "," $11,434.99 "," $11,434.99 "
+1155155863,EFT Credit,AM,South Carolina Deposits,ECHO ECHO,10/1/2024(1),10/1/2024, $162.00 ,$0.00, $162.00 
+8.92E+14,EFT Credit,XY,Texas Deposits,RATNA AS01,10/1/2024(1),10/1/2024," $1,217.48 "," $1,217.48 "," $1,217.48 "
+TZ94877079,Patient Payment,ZZ,Arizona Deposits,PATIENT PAYMENT,10/1/2024(1),10/1/2024," $1,236.37 ",$0.00," $1,236.37 "
+2746754820TC,Patient Payment,AM,Arizona Deposits,PATIENT PAYMENT,10/1/2024(1),10/1/2024," $8,784.76 "," $8,784.76 "," $8,784.76 "
+2746762356TC,Patient Payment,XY,Minnesota Deposits,PATIENT PAYMENT,10/1/2024(1),10/1/2024, $59.00 , $59.00 , $59.00 
+2746987715TC,Patient Payment,ZZ,Texas Deposits,PATIENT PAYMENT,10/1/2024(1),10/1/2024," $3,206.70 "," $3,206.70 "," $3,206.70 "
+2746743291TC,Patient Payment,AM,California Deposits,PATIENT PAYMENT,10/1/2024(1),10/1/2024," $1,750.05 "," $1,750.05 "," $1,750.05 "
+24270B100008235800,EFT Credit,XY,North Carolina Deposits,HBSC HOST,10/1/2024(1),10/1/2024," $6,679.02 "," $6,679.02 "," $6,679.02 "
+2.41E+14,EFT Credit,ZZ,South Carolina Deposits,GANGA,10/1/2024(1),10/1/2024, $188.70 , $188.70 , $188.70 
+TZ94777136,Patient Payment,AM,Texas Deposits,PATIENT PAYMENT,10/1/2024(1),10/1/2024," $1,313.00 "," $1,313.00 "," $1,313.00 "
