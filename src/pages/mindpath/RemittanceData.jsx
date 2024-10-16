@@ -319,7 +319,7 @@ function RemittanceData() {
                 className='btn-border'
                 onClick={() => setRemittanceDataDialogOpen(true)}
               >
-                Processing
+                Process
               </Button>
             </>
           ) : (

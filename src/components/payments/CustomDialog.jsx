@@ -26,7 +26,7 @@ const CustomDialog = ({ open, onClose,title, children }) => {
                     variant="contained"
                     color="success"
                     className='back-btn'
-                    onClick={onClose}><LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back 
+                    onClick={onClose}><LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Close 
                 </Button>
             </DialogActions>
         </Dialog>

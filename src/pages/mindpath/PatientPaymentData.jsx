@@ -130,7 +130,7 @@ function PatientPaymentData() {
                  className='btn-border'
                 onClick={() => setPatientPaymentDataDialogOpen(true)}
               >
-                Processing
+                Process
               </Button>
             </>
           ) : (

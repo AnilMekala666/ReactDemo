@@ -7,7 +7,7 @@ import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import CustomTable from 'components/payments/CustomTable';
 import DenseTable from 'pages/tables/mui-table/dense';
 import PaginationTable from 'pages/tables/react-table/pagination';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -224,7 +224,7 @@ const Reconcile = () => {
                 </AnimateButton>
             </Box>
             <div>
-            <Accordion sx={{border: 0}} expanded={expandedItem == reconciled} onChange={()=>init(reconciled)}>
+            <Accordion sx={{border: 0, bgcolor: 'transparent'}} expanded={expandedItem == reconciled} onChange={()=>init(reconciled)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
@@ -234,24 +234,30 @@ const Reconcile = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
-                        <Loader />
+                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                            <CircularProgress /> {/* Spinner */}
+                            <p>Processing...</p>
+                        </div>
                     }
                     {!loading &&
                         <CustomTable data={parsedData} datacolumns={tableColumns} />
                     }
                 </AccordionDetails>
             </Accordion>
-            <Accordion expanded={expandedItem == unreconciled} sx={{border: 0}} onChange={()=>init(unreconciled)}>
+            <Accordion expanded={expandedItem == unreconciled} sx={{border: 0, bgcolor: 'transparent', mt: 2}} onChange={()=>init(unreconciled)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
-                    sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
+                    sx={{ backgroundColor: '#fdf6ef', p: 1, borderRadius: "10px", border: 0 }}
                 >
                     Unreceonciled
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
-                        <Loader />
+                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                            <CircularProgress /> {/* Spinner */}
+                            <p>Processing...</p>
+                        </div>
                     }
                     {!loading &&
                         <CustomTable data={parsedData} datacolumns={tableColumns} />

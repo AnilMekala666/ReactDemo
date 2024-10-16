@@ -7,7 +7,7 @@ import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import CustomTable from 'components/payments/CustomTable';
 import DenseTable from 'pages/tables/mui-table/dense';
 import PaginationTable from 'pages/tables/react-table/pagination';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -226,7 +226,7 @@ const cashPosting = () => {
                 </AnimateButton>
             </Box>
             <div>
-            <Accordion sx={{border: 0}} expanded={expandedItem == deposit_payment_queue} onChange={()=>init(deposit_payment_queue)}>
+            <Accordion sx={{border: 0, mt: 2, bgcolor: 'transparent',}} expanded={expandedItem == deposit_payment_queue} onChange={()=>init(deposit_payment_queue)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
@@ -236,41 +236,50 @@ const cashPosting = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
-                        <Loader />
+                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                            <CircularProgress /> {/* Spinner */}
+                            <p>Processing...</p>
+                        </div>
                     }
                     {!loading &&
                         <CustomTable data={parsedData} datacolumns={tableColumns} />
                     }
                 </AccordionDetails>
             </Accordion>
-            <Accordion expanded={expandedItem == patient_payment_posting_queue} sx={{border: 0}} onChange={()=>init(patient_payment_posting_queue)}>
+            <Accordion sx={{mt: 2, border: 0, bgcolor: 'transparent',}} expanded={expandedItem == patient_payment_posting_queue} onChange={()=>init(patient_payment_posting_queue)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
-                    sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
+                    sx={{ backgroundColor: '#fdf6ef', p: 1, borderRadius: "10px", border: 0 }}
                 >
                     Patient Posting Queue
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
-                        <Loader />
+                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                            <CircularProgress /> {/* Spinner */}
+                            <p>Processing...</p>
+                        </div>
                     }
                     {!loading &&
                         <CustomTable data={parsedData} datacolumns={tableColumns} />
                     }
                 </AccordionDetails>
             </Accordion>
-            <Accordion expanded={expandedItem == zero_payments_posting_queue} sx={{border: 0}} onChange={()=>init(zero_payments_posting_queue)}>
+            <Accordion expanded={expandedItem == zero_payments_posting_queue} sx={{border: 0, mt:2, bgcolor: 'transparent', }} onChange={()=>init(zero_payments_posting_queue)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
-                    sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
+                    sx={{ backgroundColor: '#eef9fd', p: 1, borderRadius: "10px", border: 0 }}
                 >
                     Zero Payments Posting Queue
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
-                        <Loader />
+                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                            <CircularProgress /> {/* Spinner */}
+                            <p>Processing...</p>
+                        </div>
                     }
                     {!loading &&
                         <CustomTable data={parsedData} datacolumns={tableColumns} />

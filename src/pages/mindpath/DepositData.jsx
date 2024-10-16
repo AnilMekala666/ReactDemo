@@ -30,6 +30,116 @@ const initialStaticData = [
     des: "Static DES 2",
     additional_info: "Static additional info 2",
   },
+  {
+    transaction_number: "1017382",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ANTHEM BCBS OF C",
+    deposit_date: "2024-10-01",
+    amounts: "1000.00",
+    indn: "Static INDN 1",
+    des: "Static DES 1",
+    additional_info: "Static additional info 1",
+  },
+  {
+    transaction_number: "16815",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ELEVANCE HLTH AP",
+    deposit_date: "2024-10-02",
+    amounts: "2000.00",
+    indn: "Static INDN 2",
+    des: "Static DES 2",
+    additional_info: "Static additional info 2",
+  },
+  {
+    transaction_number: "1017382",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ANTHEM BCBS OF C",
+    deposit_date: "2024-10-01",
+    amounts: "1000.00",
+    indn: "Static INDN 1",
+    des: "Static DES 1",
+    additional_info: "Static additional info 1",
+  },
+  {
+    transaction_number: "16815",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ELEVANCE HLTH AP",
+    deposit_date: "2024-10-02",
+    amounts: "2000.00",
+    indn: "Static INDN 2",
+    des: "Static DES 2",
+    additional_info: "Static additional info 2",
+  },
+  {
+    transaction_number: "1017382",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ANTHEM BCBS OF C",
+    deposit_date: "2024-10-01",
+    amounts: "1000.00",
+    indn: "Static INDN 1",
+    des: "Static DES 1",
+    additional_info: "Static additional info 1",
+  },
+  {
+    transaction_number: "16815",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ELEVANCE HLTH AP",
+    deposit_date: "2024-10-02",
+    amounts: "2000.00",
+    indn: "Static INDN 2",
+    des: "Static DES 2",
+    additional_info: "Static additional info 2",
+  },
+  {
+    transaction_number: "1017382",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ANTHEM BCBS OF C",
+    deposit_date: "2024-10-01",
+    amounts: "1000.00",
+    indn: "Static INDN 1",
+    des: "Static DES 1",
+    additional_info: "Static additional info 1",
+  },
+  {
+    transaction_number: "16815",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ELEVANCE HLTH AP",
+    deposit_date: "2024-10-02",
+    amounts: "2000.00",
+    indn: "Static INDN 2",
+    des: "Static DES 2",
+    additional_info: "Static additional info 2",
+  },
+  {
+    transaction_number: "1017382",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ANTHEM BCBS OF C",
+    deposit_date: "2024-10-01",
+    amounts: "1000.00",
+    indn: "Static INDN 1",
+    des: "Static DES 1",
+    additional_info: "Static additional info 1",
+  },
+  {
+    transaction_number: "16815",
+    bank_name: "Bank of America",
+    payment_type: "	EFT credit",
+    payer: "ELEVANCE HLTH AP",
+    deposit_date: "2024-10-02",
+    amounts: "2000.00",
+    indn: "Static INDN 2",
+    des: "Static DES 2",
+    additional_info: "Static additional info 2",
+  },
 ];
 
 function DepositData() {
@@ -41,7 +151,7 @@ function DepositData() {
   const [showFileContent, setShowFileContent] = useState(false);
 
   const handleDepositDataDialogClose = () => {
-    navigate('/patient/payment');
+    setShowFileContent(false);
   };
 
   const handleFileUpload = (event) => {
@@ -226,7 +336,7 @@ function DepositData() {
     //     </>
     //     )
     //     : (
-           
+
     //       <CustomTable data={parsedData} datacolumns={tableColumns} />
     //     )
     //   )}
@@ -252,7 +362,7 @@ function DepositData() {
     // </div>
 
     <div>
-      <Grid mt={2} sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+      <Grid mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Grid >
           <Typography variant="h4">Deposit</Typography>
         </Grid>
@@ -264,9 +374,9 @@ function DepositData() {
             sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
           >
             Get File
-            <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
-            <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
-        </Button>
+            <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} />
+            <UploadOutlined style={{ fontSize: '20px', padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+          </Button>
         </Grid>
       </Grid>
 
@@ -297,25 +407,25 @@ function DepositData() {
                 </pre>
               </Grid>
               <Button
-        variant="contained"
-        color="success"
-        className='back-btn'
-        onClick={() => navigate('/patient/payment')}
-        style={{margin:'20px 0 10px 20px'}}
-      >
-        <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back 
-      </Button>
+                variant="contained"
+                color="success"
+                className='back-btn'
+                onClick={() => navigate('/patient/payment')}
+                style={{ margin: '20px 0 10px 20px' }}
+              >
+                <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
+              </Button>
               <Button
                 variant="contained"
                 color="primary"
                 className='btn-border'
                 onClick={() => setDepositDataDialogOpen(true)}
               >
-                Processing
+                Process
               </Button>
             </>
           ) : (
-           
+
             <CustomTable data={parsedData} datacolumns={tableColumns} />
           )}
         </>

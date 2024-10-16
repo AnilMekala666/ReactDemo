@@ -7,7 +7,7 @@ import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import CustomTable from 'components/payments/CustomTable';
 import DenseTable from 'pages/tables/mui-table/dense';
 import PaginationTable from 'pages/tables/react-table/pagination';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -224,7 +224,7 @@ const PostingReport = () => {
                 </AnimateButton>
             </Box>
             <div>
-            <Accordion sx={{border: 0}} expanded={expandedItem == postingReport} onChange={()=>init(postingReport)}>
+            <Accordion sx={{border: 0, bgcolor: 'transparent'}} expanded={expandedItem == postingReport} onChange={()=>init(postingReport)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
@@ -234,7 +234,10 @@ const PostingReport = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
-                        <Loader />
+                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                            <CircularProgress /> {/* Spinner */}
+                            <p>Processing...</p>
+                        </div>
                     }
                     {!loading &&
                         <CustomTable data={parsedData} datacolumns={tableColumns} />
