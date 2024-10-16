@@ -6,7 +6,7 @@ import CustomTable from 'components/payments/CustomTable';
 import { useNavigate } from 'react-router';
 import { LeftOutlined } from '@ant-design/icons';
 
-const remittance = new URL('src/assets/data/remittance.csv', import.meta.url).href;
+const remittance = new URL('src/assets/data/deposit_payment_queue.csv', import.meta.url).href;
 
 const initialStaticData = [
   {
@@ -61,7 +61,7 @@ function RemittanceData() {
     setRemittanceDataDialogOpen(false);
   };
 
-  const handleFileUpload = async (event) => {
+  const fetchCSV = async() => {
     setTableColumns([]);
     // Set the parsed data to the state or return it
     setParsedData([]);
@@ -74,6 +74,25 @@ function RemittanceData() {
             parseBaiFile(text);
             setLoading(false);
         }, 2000);
+    }
+  }
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setLoading(true);
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const text = e.target.result;
+
+        setTimeout(() => {
+          setFileContent(text);
+          fetchCSV();
+          setLoading(false);
+          setShowFileContent(true);
+        }, 2000);
+      };
+      reader.readAsText(file);
     }
   };
 
