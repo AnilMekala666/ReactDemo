@@ -9,11 +9,10 @@ import { LeftOutlined } from '@ant-design/icons';
 
 const initialStaticData = [
   {
-    transaction_number: "00000000",
-    account_name: "Static Account 1",
+    transaction_number: "1017382",
     bank_name: "Bank of America",
-    payment_type: "Static Payment Type",
-    payer: "Static Payer 1",
+    payment_type: "	EFT credit",
+    payer: "ANTHEM BCBS OF C",
     deposit_date: "2024-10-01",
     amounts: "1000.00",
     indn: "Static INDN 1",
@@ -21,11 +20,10 @@ const initialStaticData = [
     additional_info: "Static additional info 1",
   },
   {
-    transaction_number: "11111111",
-    account_name: "Static Account 2",
+    transaction_number: "16815",
     bank_name: "Bank of America",
-    payment_type: "Static Payment Type",
-    payer: "Static Payer 2",
+    payment_type: "	EFT credit",
+    payer: "ELEVANCE HLTH AP",
     deposit_date: "2024-10-02",
     amounts: "2000.00",
     indn: "Static INDN 2",
@@ -36,30 +34,14 @@ const initialStaticData = [
 
 function DepositData() {
   const navigate = useNavigate();
-  const [rawData, setRawData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [parsedData, setParsedData] = useState(initialStaticData);
   const [depositDataDialogOpen, setDepositDataDialogOpen] = useState(false);
-  // const [fileContent, setFileContent] = useState('');
-  const [fileContent, setFileContent] = useState(`01,BANKOFAMERICA,yal82231,240328,0501,1,80,1,2/
-    02,yal82231,011900571,1,240328,0501,,3/
-    03,000000820772,USD/
-    16,164,99860168,Z,87008524078,000000000000/
-    88,ANTHEM BCBS OF C DES:E-PAYMENT  ID:EE52770016               
-    88,INDN:LAWRENCE & MEMOR        CO ID:1352145715 CTX           
-    88,ADDITIONAL INFORMATION IS AVAILABLE FOR THIS PMT.           
-    88,CONTACT A TREASURY SALES OFFICER FOR ASSISTANCE.
-    16,164,1017382,Z,87007838148,000000000000/
-    88,STATE OF CT      DES:VENDOR ACH ID:57437888                 
-    88,INDN:LAWRENCE AND MEM        CO ID:5066000798 CTX           
-    88,ADDITIONAL INFORMATION IS AVAILABLE FOR THIS PMT.           
-    88,CONTACT A TREASURY SALES OFFICER FOR ASSISTANCE.
-    16,164,16815,Z,87007845071,000000000000/`);
-    
+  const [fileContent, setFileContent] = useState(null);
+  const [showFileContent, setShowFileContent] = useState(false);
 
   const handleDepositDataDialogClose = () => {
-    // setDepositDataDialogOpen(false);
-    navigate('/patient/payment')
+    navigate('/patient/payment');
   };
 
   const handleFileUpload = (event) => {
@@ -70,217 +52,276 @@ function DepositData() {
       reader.onload = function (e) {
         const text = e.target.result;
 
-
         setTimeout(() => {
           setFileContent(text);
           parseBaiFile(text);
           setLoading(false);
+          setShowFileContent(true);
         }, 2000);
       };
       reader.readAsText(file);
     }
   };
 
-  // const parseBaiFile = (content) => {
-  //   const lines = content.split('\n');
-  //   const parsedData = [];
-  //   let currentTransaction = null;
 
-  //   // lines.forEach((line) => {
-  //   //   // Split the line by commas to get parts
-  //   //   const parts = line.split(',');
-
-  //   //   // Check if the first part starts with '16' indicating a transaction record
-  //   //   if (parts[0].trim() === '16') {
-  //   //     currentTransaction = {
-  //   //       transaction_number: parts[2] ? parts[2].trim() : '', 
-  //   //       account_name: parts[1] ? parts[1].trim() : '', 
-  //   //       bank_name: 'Bank of America', 
-  //   //       payment_type: parts[3] ? parts[3].trim() : '', 
-  //   //       payer: parts[4] ? parts[4].trim() : '',
-  //   //       deposit_date: '2024-10-10', 
-  //   //       amounts: parts[5] ? parts[5].trim() : '0',
-  //   //       additional_info: '', 
-  //   //     };
-  //   //     parsedData.push(currentTransaction); // Add the new transaction to parsedData
-  //   //   } else if (parts[0].trim() === '88' && currentTransaction) {
-  //   //     // Append the additional information from type 88 to the current transaction
-  //   //     currentTransaction.additional_info += parts.slice(1).join(',').trim() + ' '; // Append info and join rest of the line
-  //   //   }
-  //   // });
-
-  //   // Update the state with the parsed transactions
-
-  //   lines.forEach((line) => {
-  //     // Split the line by commas to get parts
-  //     const parts = line.split(',');
-
-  //     // Check if the first part starts with '16' indicating a transaction record
-  //     if (parts[0].trim() === '16') {
-  //       currentTransaction = {
-  //         transaction_number: parts[2] ? parts[2].trim() : '',
-  //         account_name: parts[1] ? parts[1].trim() : '',
-  //         bank_name: 'Bank of America', // Assuming a static bank name
-  //         payment_type: parts[3] ? parts[3].trim() : '',
-  //         payer: parts[4] ? parts[4].trim() : '',
-  //         deposit_date: '2024-10-10', // Static date, you may modify as needed
-  //         amounts: '0', // Amount not provided, set to a default or parse accordingly
-  //         additional_info: '', // To hold combined additional info
-  //         indn: '', // To hold INDN value
-  //         des: '', // To hold DES value
-  //       };
-  //       parsedData.push(currentTransaction); // Add the new transaction to parsedData
-  //     } else if (parts[0].trim() === '88' && currentTransaction) {
-  //       // Extract INDN and DES from the line
-  //       const indnMatch = line.match(/INDN:([^ ]+)/);
-  //       const desMatch = line.match(/DES:([^ ]+)/);
-
-  //       if (indnMatch) {
-  //         currentTransaction.indn = indnMatch[1].trim();
-  //       }
-
-  //       if (desMatch) {
-  //         currentTransaction.des = desMatch[1].trim();
-  //       }
-
-  //       // Append any additional information to the current transaction's additional_info
-  //       currentTransaction.additional_info += parts.slice(1).join(',').trim() + ' '; // Append rest of the line
-  //     }
-  //   });
-
-
-  //   setParsedData(parsedData);
-  // };
 
   const parseBaiFile = (content) => {
     const lines = content.split('\n');
     const newParsedData = [];
     let currentTransaction = null;
+    let bankName = '';
 
     lines.forEach((line) => {
       const parts = line.split(',');
-      if (parts[0].trim() === '16') {
 
-        const transactionDate = parts[1] ? parts[1].trim() : ''; // Assuming parts[1] contains the transaction date
-        const year = `20${transactionDate.slice(0, 2)}`; // Extracting year (e.g., "24" becomes "2024")
-        const month = transactionDate.slice(2, 4); // Extracting month (e.g., "03")
-        const day = transactionDate.slice(4, 6); // Extracting day (e.g., "28")
-        const formattedDate = `${month}/${day}/${year}`;
+      // Bank Name (from line starting with '01')
+      if (parts[0].trim() === '01') {
+        bankName = parts[1] ? parts[1].trim() : '';
+      }
+
+      // Transaction line (starting with '16')
+      if (parts[0].trim() === '16') {
+        const transactionDate = parts[4] ? parts[4].trim() : '';
+
+        // Format transactionDate as YY/MM/DD
+        let formattedDate = 'Invalid Date';
+        if (transactionDate.length === 6) {
+          const year = `20${transactionDate.slice(0, 2)}`; // '24' -> '2024'
+          const month = transactionDate.slice(2, 4); // '03' -> March
+          const day = transactionDate.slice(4, 6); // '28' -> 28th day
+          formattedDate = `${year}/${month}/${day}`; // Final format: YYYY/MM/DD
+        }
+
+        // Extract and format amount (e.g., 99860168 -> 998601.68)
+        let amount = parts[2] ? parts[2].trim() : '0';
+        if (amount.length > 2) {
+          const dollars = amount.slice(0, -2);
+          const cents = amount.slice(-2);
+          amount = `${dollars}.${cents}`;
+        }
+
+        // Check payment type: 164 -> '', 165 -> 'EFT credit'
+        let paymentType = parts[1] ? parts[1].trim() : '';
+        let formattedPaymentType = '';
+        if (paymentType === '165') {
+          formattedPaymentType = 'EFT credit'; // Show 'EFT credit' for 165
+        } else if (paymentType === '164') {
+          formattedPaymentType = ''; // Show empty for 164
+        }
 
         currentTransaction = {
           transaction_number: parts[2] ? parts[2].trim() : '',
-          account_name: parts[1] ? parts[1].trim() : '',
-          bank_name: 'Bank of America',
-          payment_type: parts[3] ? parts[3].trim() : '',
-          payer: parts[4] ? parts[4].trim() : '',
+          bank_name: bankName || 'Unknown Bank', // Use bank name from line '01'
+          payment_type: formattedPaymentType,
+          payer: '', // To be filled from '88' line
           deposit_date: formattedDate,
-          amounts: '0',
+          amounts: amount, // Formatted amount
           additional_info: '',
           indn: '',
           des: '',
         };
-        newParsedData.push(currentTransaction);
-      } else if (parts[0].trim() === '88' && currentTransaction) {
-        const indnMatch = line.match(/INDN:([^ ]+)/);
-        const desMatch = line.match(/DES:([^ ]+)/);
 
+        newParsedData.push(currentTransaction);
+      }
+
+      // Additional information line (starting with '88')
+      if (parts[0].trim() === '88' && currentTransaction) {
+        // Extract Payer (from line starting with '88')
+        const payerMatch = line.match(/^(?:88,)?(.*?)(?: DES:|$)/);
+        if (payerMatch) {
+          currentTransaction.payer = payerMatch[1].trim(); // Set payer name
+        }
+
+        // Extract INDN (Payer) and DES (Description)
+        const indnMatch = line.match(/INDN:([^ ]+)/);
         if (indnMatch) {
           currentTransaction.indn = indnMatch[1].trim();
         }
 
+        const desMatch = line.match(/DES:([^ ]+)/);
         if (desMatch) {
           currentTransaction.des = desMatch[1].trim();
         }
 
+        // Append additional info
         currentTransaction.additional_info += parts.slice(1).join(',').trim() + ' ';
       }
     });
 
-    setParsedData(newParsedData); 
+    console.log("Parsed Data: ", newParsedData);
+    // Set the parsed data to the state or return it
+    setParsedData(newParsedData);
   };
+
+
 
 
   const tableColumns = useMemo(
     () => [
       { header: 'Transaction Number', accessorKey: 'transaction_number' },
-      { header: 'EFT', accessorKey: 'account_name' },
+      // { header: 'EFT', accessorKey: 'account_name' },
       { header: 'Bank Name', accessorKey: 'bank_name' },
       { header: 'Payment Type', accessorKey: 'payment_type' },
       { header: 'Payer', accessorKey: 'payer' },
       { header: 'Deposit Date', accessorKey: 'deposit_date' },
       { header: 'Amount', accessorKey: 'amounts' },
-      // { header: 'INDN', accessorKey: 'indn' }, 
-      // { header: 'DES', accessorKey: 'des' },    
-      // { header: 'Additional Info', accessorKey: 'additional_info' },
     ],
     []
   );
 
 
+
   return (
+    // <div>
+    //   <Button
+    //     variant="contained"
+    //     color="primary"
+    //     component="label"
+    //     sx={{ borderRadius: '40px', marginTop: '20px', padding: '0px 0 0px 30px' }}
+    //   >
+    //     Get File
+    //     <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} />
+    //     <UploadOutlined style={{ fontSize: '20px', padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+    //   </Button>
+
+    //   {loading ? (
+    //     <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
+    //       <h3 style={{ margin: 'auto' }}>Loading...</h3>
+    //     </div>
+    //   ) : (
+    //     showFileContent && (
+    //       <>
+    //       <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
+    //         <pre
+    //           style={{
+    //             whiteSpace: 'pre-wrap',
+    //             wordWrap: 'break-word',
+    //             height: '330px',
+    //             overflowY: 'auto',
+    //             backgroundColor: '#f0f0f0',
+    //             padding: '10px',
+    //             borderRadius: '15px',
+    //             margin: 'auto',
+    //             padding: '25px',
+    //             borderRadius: '8px',
+    //             width: "70%",
+    //             fontSize: "16px",
+    //             marginTop: '30px',
+    //             border: '1px solid #ddd'
+
+    //           }}
+    //         >
+    //           {fileContent}
+    //         </pre>
+    //       </Grid>
+    //       <Button
+    //       variant="contained"
+    //       color="primary"
+    //       component="label"
+    //       className='btn-border'
+    //       onClick={() => setDepositDataDialogOpen(true)}
+    //     >
+    //       Processing
+    //     </Button>
+    //     </>
+    //     )
+    //     : (
+           
+    //       <CustomTable data={parsedData} datacolumns={tableColumns} />
+    //     )
+    //   )}
+
+    //   <Button
+    //     variant="contained"
+    //     component="label"
+    //     className='back-btn'
+    //     color='success'
+    //     onClick={() => navigate('/patient/payment')}> <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Cancel</Button>
+    //   {/* {fileContent && */}
+    //   {/* } */}
+
+
+
+    //   <CustomDialog
+    //     open={depositDataDialogOpen}
+    //     onClose={handleDepositDataDialogClose}
+    //     title={"Deposit Data"}
+    //   >
+    //     <CustomTable data={parsedData} datacolumns={tableColumns} />
+    //   </CustomDialog>
+    // </div>
+
     <div>
-      <Button
-        variant="contained"
-        color="primary"
-        component="label"
-        sx={{ borderRadius: '40px', marginTop: '20px', padding:'0px 0 0px 30px' }}
-      >
-        Get File
-        <input type="file" multiple hidden onChange={handleFileUpload} sx={{padding:'0px 10px 10px 0px' }}/>
-        <UploadOutlined style={{ fontSize: '20px', padding: '12px',marginLeft:'15px', borderRadius:'100%', background:'rgb(85 145 243)' }} />
-      </Button>
+      <Grid mt={2} sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        <Grid >
+          <Typography variant="h4">Deposit</Typography>
+        </Grid>
+        <Grid >
+          <Button
+            variant="contained"
+            color="primary"
+            component="label"
+            sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
+          >
+            Get File
+            <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
+            <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+        </Button>
+        </Grid>
+      </Grid>
 
       {loading ? (
         <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
           <h3 style={{ margin: 'auto' }}>Loading...</h3>
         </div>
       ) : (
-        fileContent && (
-          <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
-            <pre
-              style={{
-                whiteSpace: 'pre-wrap',
-                wordWrap: 'break-word',
-                height: '330px',
-                overflowY: 'auto',
-                backgroundColor: '#f0f0f0',
-                padding: '10px',
-                borderRadius: '15px',
-                margin: 'auto',
-                padding: '25px',
-                borderRadius: '8px',
-                width: "70%",
-                fontSize: "16px",
-                marginTop:'30px',
-                border:'1px solid #ddd'
-                
-              }}
-            >
-              {fileContent}
-            </pre>
-          </Grid>
-        )
+        <>
+          {showFileContent ? (
+            <>
+              <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
+                <pre
+                  style={{
+                    whiteSpace: 'pre-wrap',
+                    wordWrap: 'break-word',
+                    height: '400px',
+                    overflowY: 'auto',
+                    backgroundColor: '#f0f0f0',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    margin: 'auto',
+                    padding: '25px',
+                    borderRadius: '8px',
+                    width: "70%",
+                    fontSize: "20px"
+                  }}
+                >
+                  {fileContent}
+                </pre>
+              </Grid>
+              <Button
+        variant="contained"
+        color="success"
+        className='back-btn'
+        onClick={() => navigate('/patient/payment')}
+        style={{margin:'20px 0 10px 20px'}}
+      >
+        <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back 
+      </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className='btn-border'
+                onClick={() => setDepositDataDialogOpen(true)}
+              >
+                Processing
+              </Button>
+            </>
+          ) : (
+           
+            <CustomTable data={parsedData} datacolumns={tableColumns} />
+          )}
+        </>
       )}
-
-<Button 
-       variant="contained"
-       component="label"
-       className='back-btn'
-       color='success'
-      onClick={() => navigate('/patient/payment')}> <LeftOutlined style={{ fontSize: '17px', padding: '12px',marginRight:'15px', borderRadius:'100%', background:'rgb(174 219 152 / 55%)' }}/>Cancel</Button>
-      {/* {fileContent && */}
-      <Button
-          variant="contained"
-          color="primary"
-          component="label"
-          className='btn-border'
-          onClick={() => setDepositDataDialogOpen(true)}
-        >
-          Processing
-        </Button>
-      {/* } */}
-     
-
 
       <CustomDialog
         open={depositDataDialogOpen}

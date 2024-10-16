@@ -24,7 +24,7 @@ const CustomDrawer = ({ open, onClose, children,borderRadius, anchor = 'right', 
                     // zIndex: 1300,
                     borderRadius:borderRadius,
                     minHeight:'100vh',
-                    borderRadius:'15px',marginRight:'10px',border:'1px solid #ddd'
+                    borderRadius:'15px 0 0 15px',border:'1px solid #ddd'
                 }
             }}
         >
