@@ -442,13 +442,24 @@ function DepositData() {
           <CustomTabPanel value={value} index={1}>
             <CustomTable data={parsedData} datacolumns={tableColumns} />
           </CustomTabPanel>
+          
         </Box>
         : 
         <Box>
           <CustomTable data={parsedData} datacolumns={tableColumns} />
         </Box>
       )}
-
+      {!loading &&
+        <Button
+          variant="contained"
+          color="success"
+          className='back-btn'
+          onClick={() => navigate('/patient/payment')}
+          style={{ margin: '20px 0 10px 20px' }}
+        >
+          <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
+        </Button>
+      }
       {/* {loading ? (
         <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
           <h3 style={{ margin: 'auto' }}>Loading...</h3>

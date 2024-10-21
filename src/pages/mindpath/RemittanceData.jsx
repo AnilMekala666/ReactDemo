@@ -364,7 +364,17 @@ function RemittanceData() {
           <CustomTable data={parsedData} datacolumns={tableColumns} />
         </Box>
       )}
-
+      {!loading &&
+        <Button
+          variant="contained"
+          color="success"
+          className='back-btn'
+          onClick={() => navigate('/patient/payment')}
+          style={{ margin: '20px 0 10px 20px' }}
+        >
+          <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
+        </Button>
+      }
       <CustomDialog
         open={RemittanceDataDialogOpen}
         onClose={handleRemittanceDataDialogClose}
