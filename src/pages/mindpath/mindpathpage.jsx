@@ -909,10 +909,10 @@ function MindPathPage() {
             <img src={DotLine1} alt="DotLine1" style={{ position: 'relative', top: '-5px' }} />
           </div>
           <img src={DotLine3} alt="DotLine3" style={{ maxWidth: '119px' }} />
-          <img src={DotLine3} alt="DotLine4" style={{ maxWidth: '119px' }} />
+          <img src={DotLine3} alt="DotLine4" style={{position: 'relative', top: '-13px', maxWidth: '119px' }} />
         </Grid>
         {/* Pannel 4 */}
-        <Grid item xs={12} md={2} lg={2} sm={2} marginTop={11} style={{ position: 'relative', left: '-30px' }}>
+        <Grid item xs={12} md={2} lg={2} sm={2} marginTop={13} style={{ position: 'relative', left: '-30px' }}>
           <img src={DotLine4} alt="DotLine4" style={{ maxWidth: '209px', position: 'relative', left: '130px' }} />
           <img src={DataBaseIcon} alt="DataBaseIcon" style={{ maxWidth: '200px' }} />
           <img src={DotLine5} alt="DotLine5" style={{ display: 'flex', margin: '0 auto' }} />
@@ -924,7 +924,7 @@ function MindPathPage() {
           </Grid>
         </Grid>
         {/* Pannel 5 */}
-        <Grid item xs={12} md={3} lg={3} sm={3} marginTop={8} marginLeft={6}>
+        <Grid item xs={12} md={3} lg={3} sm={3} marginTop={10} marginLeft={6}>
           <Grid sx={{ textAlign: 'center', marginBottom: '40px' }}>
             <Button className='depositbox deposit-recon' onClick={handleMoveReconcileMovement}>
               <img src={Recon} alt="Recon" style={{ width: '20px', height: 'auto' }} />
