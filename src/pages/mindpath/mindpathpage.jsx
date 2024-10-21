@@ -825,7 +825,7 @@ function MindPathPage() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Grid container className='main-bg'>
         {/* Pannel 1 */}
-        <Grid item xs={12} md={2} lg={2} sm={2} marginTop={13}>
+        <Grid item xs={12} md={2} lg={2} sm={2} marginTop={9}>
           <Grid sx={{ textAlign: 'center', marginBottom: '40px' }}>
             <Button className='depositbox' onClick={handleDepositClick}>
               <img src={DepositIcon} alt="DepositIcon" style={{ width: '20px', height: 'auto' }} />
@@ -866,7 +866,7 @@ function MindPathPage() {
           </Grid>
         </Grid>
         {/* Pannel 2 */}
-        <Grid item xs={12} md={2} lg={2} sm={2} marginTop={13} sx={{ marginLeft: '-15px' }}>
+        <Grid item xs={12} md={2} lg={2} sm={2} marginTop={9} sx={{ marginLeft: '-15px' }}>
           <div style={{ display: 'flex' }}>
             <img src={DotLine1} alt="DotLine1" style={{ height: '8px', marginTop: '25px' }} />
             <Button
@@ -904,12 +904,12 @@ function MindPathPage() {
         </Grid>
         {/* Pannel 3 */}
         <Grid item xs={12} md={1} lg={1} sm={1} className='dotarrow2'>
-          <img src={DotLine2} alt="DotLine2" style={{ marginTop: '25px', maxWidth: '119px' }} />
+          <img src={DotLine2} alt="DotLine2" style={{ maxWidth: '119px' }} />
           <div>
             <img src={DotLine1} alt="DotLine1" style={{ position: 'relative', top: '-5px' }} />
           </div>
-          <img src={DotLine3} alt="DotLine3" style={{ marginTop: '0px', maxWidth: '119px' }} />
-          <img src={DotLine3} alt="DotLine4" style={{ marginTop: '0px', maxWidth: '119px' }} />
+          <img src={DotLine3} alt="DotLine3" style={{ maxWidth: '119px' }} />
+          <img src={DotLine3} alt="DotLine4" style={{ maxWidth: '119px' }} />
         </Grid>
         {/* Pannel 4 */}
         <Grid item xs={12} md={2} lg={2} sm={2} marginTop={11} style={{ position: 'relative', left: '-30px' }}>
