@@ -775,8 +775,8 @@ function MindPathPage() {
   const [videoUrl, setVideoUrl] = useState("");
   const style = {
     position: 'absolute',
-    top: '40%',
-    left: '50%',
+    top: '47%',
+    left: '40%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'transparent',
     boxShadow: 24,
@@ -792,7 +792,7 @@ function MindPathPage() {
         onClose={() => setVideoModalOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        style={{ width: '100vw', height: '100vh', margin: '0 auto' }}
+        style={{ width: '130vw', height: '100vh', margin: '0 auto' }}
 
       >
         <Box sx={style} >
@@ -802,6 +802,10 @@ function MindPathPage() {
             autoPlay
             style={{ width: '100%', height: '100%' }}
           />
+          <Button onClick={() => setVideoModalOpen(false)} variant='plain'
+            sx={{ position: 'absolute', top: -10, left: 'auto', background: "rgba(0,0,0,0.4)",
+              right: -10, zIndex: 999, p: 0, boxShadow: "0px 0px 10px #fff" }}>
+            <Typography sx={{ fontSize: 36, color: 'white', p: 0 }}>&times;</Typography></Button>
         </Box>
       </Modal>
     )
