@@ -775,8 +775,8 @@ function MindPathPage() {
   const [videoUrl, setVideoUrl] = useState("");
   const style = {
     position: 'absolute',
-    top: '47%',
-    left: '40%',
+    top: '50%',
+    left: '45%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'transparent',
     boxShadow: 24,
@@ -792,7 +792,7 @@ function MindPathPage() {
         onClose={() => setVideoModalOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        style={{ width: '130vw', height: '100vh', margin: '0 auto' }}
+        style={{ width: '110vw', height: '100vh', margin: '0 auto' }}
 
       >
         <Box sx={style} >
@@ -803,9 +803,9 @@ function MindPathPage() {
             style={{ width: '100%', height: '100%' }}
           />
           <Button onClick={() => setVideoModalOpen(false)} variant='plain'
-            sx={{ position: 'absolute', top: -10, left: 'auto', background: "rgba(0,0,0,0.4)",
-              right: -10, zIndex: 999, p: 0, boxShadow: "0px 0px 10px #fff" }}>
-            <Typography sx={{ fontSize: 36, color: 'white', p: 0 }}>&times;</Typography></Button>
+            sx={{ position: 'absolute',minWidth:'40px', top: -10, left: 'auto', background: "rgba(0,0,0,0.4)",
+              right: -8, zIndex: 999, p: 0, boxShadow: "0px 0px 10px #fff" }}>
+            <Typography sx={{ fontSize: 24, color: 'white', p: 0 }}>&times;</Typography></Button>
         </Box>
       </Modal>
     )
@@ -816,9 +816,9 @@ function MindPathPage() {
   const videoModal = (type) => {
     let videosUrl = "";
     switch (type?.toLowerCase()) {
-      case "deposit": videosUrl = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"; break;
-      case "patient": videosUrl = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"; break;
-      case "payment": videosUrl = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"; break;
+      case "deposit": videosUrl = new URL('src/assets/data/Demo_Videos/eft_secondary_posting_amd.mp4', import.meta.url).href; break;
+      case "patient": videosUrl = new URL('src/assets/data/Demo_Videos/PatientPosting_AMD.mp4', import.meta.url).href; break;
+      case "payment": videosUrl = new URL('src/assets/data/Demo_Videos/ZeroPosting_AMD.mp4', import.meta.url).href; break;
     }
     setVideoUrl(videosUrl);
     setVideoModalOpen(true);
