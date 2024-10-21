@@ -1,82 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-unused-vars */
-// import React, { useState } from 'react';
-// import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider, Stack } from '@mui/material';
-// import { useReactTable, getCoreRowModel, getPaginationRowModel } from '@tanstack/react-table';
-
-// import {
-//   CSVExport,
-//   DebouncedInput,
-//   HeaderSort,
-//   IndeterminateCheckbox,
-//   RowSelection,
-//   SelectColumnSorting,
-//   TablePagination
-// } from'components/third-party/react-table';
-
-// function ReusableTable({ data, columns }) {
-//   const [sorting, setSorting] = useState([]);
-//   const [pagination, setPagination] = useState({ pageSize: 10, pageIndex: 0 });
-
-
-//   const table = useReactTable({
-//     data,
-//     columns,
-//     state: { sorting, pagination },
-//     getCoreRowModel: getCoreRowModel(),
-//     getPaginationRowModel: getPaginationRowModel(),
-//     onPaginationChange: setPagination,
-//   });
-
-//   return (
-//     <Box>
-//       {/* Table */}
-//       <TableContainer>
-//         <Table>
-//           <TableHead>
-//             {table.getHeaderGroups().map((headerGroup) => (
-//               <TableRow key={headerGroup.id}>
-//                 {headerGroup.headers.map((header) => (
-//                   <TableCell key={header.id}>
-//                     {header.isPlaceholder ? null : header.column.columnDef.header}
-//                   </TableCell>
-//                 ))}
-//               </TableRow>
-//             ))}
-//           </TableHead>
-//           <TableBody>
-//             {table.getRowModel().rows.map((row) => (
-//               <TableRow key={row.id}>
-//                 {row.getVisibleCells().map((cell) => (
-//                   <TableCell key={cell.id}>
-//                     {cell.column.columnDef.cell(cell.getContext())}
-//                   </TableCell>
-//                 ))}
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
-
-//       <Grid item sx={{ mt: { xs: 2, sm: 0 } }}>
-//         <Pagination
-//           sx={{ '& .MuiPaginationItem-root': { my: 0.5 } }}
-//           count={getPageCount()}
-//           page={getState().pagination.pageIndex + 1}
-//           onChange={handleChangePagination}
-//           color="primary"
-//           variant="combined"
-//           showFirstButton
-//           showLastButton
-//         />
-//       </Grid>
-//     </Box>
-//   );
-// }
-
-// export default ReusableTable;
-
-
 
 import React from 'react';
 
@@ -103,6 +24,8 @@ import TableRow from '@mui/material/TableRow';
 import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandMoreRounded from '@mui/icons-material/ExpandMoreRounded';
 
 // third-party
 import {
@@ -148,6 +71,7 @@ import {
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import EditOutlined from '@ant-design/icons/EditOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 
 
 export const fuzzyFilter = (row, columnId, value, addMeta) => {
@@ -183,7 +107,7 @@ function ExactValueFilter({ column: { filterValue, setFilter } }) {
 
 // ==============================|| REACT TABLE - LIST ||============================== //
 
-function ReactTable({ data, columns }) {
+function ReactTable({ data, columns, expandedColumns }) {
   const navigation = useNavigate();
   const theme = useTheme();
   // const groups = ['All', ...new Set(data.map((item) => item.status))];
@@ -202,10 +126,22 @@ function ReactTable({ data, columns }) {
   const [columnFilters, setColumnFilters] = useState([]);
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState('');
-  const [expanded, setExpanded] = React.useState({})
+  const [expanded, setExpanded] = React.useState({});
+  const [tableData, setTableData] = useState(data);
+
+  useEffect(()=>{
+    setTableData((data) => data.map((row) => {
+      return({...row, active: false})
+    }));
+  }, [])
+
+  const handleClick = (id) => {
+    console.log("Called", data.map((row, index) => index === id ? {...row, active: !row.active} : row), id);
+    setTableData((data) => data.map((row, index) => index === id ? {...row, active: !row.active} : row));
+  };
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     state: {
       columnFilters,
@@ -327,7 +263,23 @@ function ReactTable({ data, columns }) {
 // ]
 
 
+  function getKey(arr, val) {
+    return [...arr].find(([key, value]) => val === value)[0];
+  }
 
+  const renderHeaderRow = (header, index) => {
+    // console.log(header)
+
+    return (
+      <TableCellWithFilterComponent
+        key={index}
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Box>{flexRender(header.header)}</Box>
+        </Stack>
+      </TableCellWithFilterComponent>
+    );
+  }
 
   return (
     <MainCard content={false}>
@@ -345,46 +297,54 @@ function ReactTable({ data, columns }) {
                   backgroundColor: theme.palette.background.paper, // Ensure the header has a background
                 }}
               >
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      if (header.column.columnDef.meta !== undefined && header.column.getCanSort()) {
-                        Object.assign(header.column.columnDef.meta, {
-                          className: header.column.columnDef.meta.className + ' cursor-pointer prevent-select'
-                        });
-                      }
+                <TableRow>
+                <TableCellWithFilterComponent
+                >
 
-                      return (
-                        <TableCellWithFilterComponent
-                          key={header.id}
-                          {...header.column.columnDef.meta}
-                          onClick={header.column.getToggleSortingHandler()}
-                          {...(header.column.getCanSort() &&
-                            header.column.columnDef.meta === undefined && {
-                            className: 'cursor-pointer prevent-select'
-                          })}
-                        >
-                          {header.isPlaceholder ? null : (
-                            <Stack direction="row" spacing={1} alignItems="center">
-                              <Box>{flexRender(header.column.columnDef.header, header.getContext())}</Box>
-                              {header.column.getCanSort() && <HeaderSort column={header.column} />}
-                            </Stack>
-                          )}
-                        </TableCellWithFilterComponent>
-                      );
-                    })}
-                  </TableRow>
-                ))}
+                </TableCellWithFilterComponent>
+                  {columns.map((header, index) => renderHeaderRow(header, index))}
+                </TableRow>
               </TableHead>
               <TableBody>
                 {table.getRowModel().rows.map((row, index) => (
-                  <TableRow key={index}  >
-                    {row.getVisibleCells().map((cell, i) => (
-                      <TableCellWithFilterComponent key={i} {...cell.column.columnDef.meta}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  <>
+                    <TableRow key={index}>
+                      <TableCellWithFilterComponent onClick={() => handleClick(index)}>
+                        {!row.original.active &&
+                          <ChevronRightIcon />
+                        }
+                        {row.original.active &&
+                          <ExpandMoreRounded />
+                        }
                       </TableCellWithFilterComponent>
-                    ))}
-                  </TableRow>
+                      {Object.keys(row.original).filter(k => k != "subRows" && k != "active" && k != "id").map((cell, i) => (
+                        <TableCellWithFilterComponent onClick={() => handleClick(index)} key={i}>
+                          {flexRender(row.original[cell])}
+                        </TableCellWithFilterComponent>
+                      ))}
+                    </TableRow>
+                    {row.original.active &&
+                      <>
+                        {row.originalSubRows && row.originalSubRows.map((row, ix) => {
+                          console.log("Row expanded")
+                          return (
+                            <>
+                              {Object.keys(row).map((key, xi) => {
+                                return (
+                                  <TableRow key={xi}>
+                                    <TableCell></TableCell>
+                                    <TableCell>{key}:</TableCell>
+                                    <TableCell colSpan={columns.length - 1}>{row[key]}</TableCell>
+                                  </TableRow>
+                                )})
+                              }
+                            </>
+                            )
+                          })
+                        }
+                      </>
+                    }
+                  </>
                 ))}
               </TableBody>
             </Table>
@@ -410,7 +370,7 @@ function ReactTable({ data, columns }) {
 
 // ==============================|| INVOICE LIST ||============================== //
 
-export default function ReusableTable({data, columns}) {
+export default function ReusableExpandableTable({data, columns, expandedColumns}) {
   const theme = useTheme();
   const navigation = useNavigate();
   const { invoiceLoading, invoice: list } = useGetInvoice();
@@ -426,7 +386,7 @@ export default function ReusableTable({data, columns}) {
         <Grid item xs={12}>
           <Grid item xs={12}>
             {data && data.length > 0 ? (
-              <ReactTable data={data} columns={columns} />
+              <ReactTable data={data} columns={columns} expandedColumns={expandedColumns} />
             ) : (
               <Typography>No data available</Typography>
             )}

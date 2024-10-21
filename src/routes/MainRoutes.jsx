@@ -130,6 +130,7 @@ const PatientPaymentDataPage = Loadable(lazy(() => import('pages/mindpath/Patien
 const RemittanceDataPage = Loadable(lazy(() => import('pages/mindpath/RemittanceData')))
 const ReconcilePage = Loadable(lazy(() => import('pages/mindpath/reconcile')))
 const PostingReport = Loadable(lazy(() => import('pages/mindpath/PostingReport')))
+const ClaimsDataPage = Loadable(lazy(() => import('pages/mindpath/ClaimsData')))
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -189,6 +190,10 @@ const MainRoutes = {
             {
               path: 'payment/remittance',
               element: <RemittanceDataPage/>
+            },
+            {
+              path: 'payment/claims',
+              element: <ClaimsDataPage/>
             },
           ]
         },

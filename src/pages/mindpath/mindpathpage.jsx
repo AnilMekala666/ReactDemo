@@ -853,6 +853,17 @@ function MindPathPage() {
               )}
             </Button>
           </Grid>
+          <Grid sx={{ textAlign: 'center', marginBottom: '40px' }}>
+            <Button className='depositbox depositbox-green' onClick={() => setPatientPaymentDrawerOpen(true)}>
+              <img src={PatientIcon} alt="PatientIcon" style={{ width: '20px', height: 'auto' }} />
+              <Typography level="h3" className='depositbox-text'>Claims </Typography>
+              {showPatientPaymentSpinner && (
+                <Grid sx={{ textAlign: 'center', marginTop: '0px' }}>
+                  <CircularProgress size={15} />
+                </Grid>
+              )}
+            </Button>
+          </Grid>
         </Grid>
         {/* Pannel 2 */}
         <Grid item xs={12} md={2} lg={2} sm={2} marginTop={13} sx={{ marginLeft: '-15px' }}>
@@ -881,6 +892,15 @@ function MindPathPage() {
               <img src={iCanImg} alt='iCanImg' className='w-100h-100 ican-bg' />
             </Button>
           </div>
+          <div style={{ display: 'flex', marginTop: '28px' }}>
+            <img src={DotLine1} alt="DotLine1" style={{ height: '8px', marginTop: '28px' }} />
+            <Button
+              // onClick={() => {setPatientPaymentDialogOpen(true)}}
+              onClick={() => navigate('/patient/payment/claims')}
+            >
+              <img src={iCanImg} alt='iCanImg' className='w-100h-100 ican-bg' />
+            </Button>
+          </div>
         </Grid>
         {/* Pannel 3 */}
         <Grid item xs={12} md={1} lg={1} sm={1} className='dotarrow2'>
@@ -889,6 +909,7 @@ function MindPathPage() {
             <img src={DotLine1} alt="DotLine1" style={{ position: 'relative', top: '-5px' }} />
           </div>
           <img src={DotLine3} alt="DotLine3" style={{ marginTop: '0px', maxWidth: '119px' }} />
+          <img src={DotLine3} alt="DotLine4" style={{ marginTop: '0px', maxWidth: '119px' }} />
         </Grid>
         {/* Pannel 4 */}
         <Grid item xs={12} md={2} lg={2} sm={2} marginTop={11} style={{ position: 'relative', left: '-30px' }}>
