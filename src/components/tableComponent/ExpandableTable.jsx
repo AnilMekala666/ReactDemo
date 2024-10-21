@@ -329,15 +329,17 @@ function ReactTable({ data, columns, expandedColumns }) {
                           console.log("Row expanded")
                           return (
                             <>
-                              {Object.keys(row).map((key, xi) => {
-                                return (
-                                  <TableRow key={xi}>
-                                    <TableCell></TableCell>
-                                    <TableCell>{key}:</TableCell>
-                                    <TableCell colSpan={columns.length - 1}>{row[key]}</TableCell>
-                                  </TableRow>
-                                )})
-                              }
+                              <TableRow key={ix}>
+                                <TableCell></TableCell>
+                                {Object.keys(row).map((key, xi) => {
+                                  return (
+                                    <>
+                                      <TableCell>{key}:</TableCell>
+                                      <TableCell>{row[key]}</TableCell>
+                                    </>
+                                  )})
+                                }
+                               </TableRow>
                             </>
                             )
                           })

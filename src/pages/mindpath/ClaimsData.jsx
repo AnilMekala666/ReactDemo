@@ -168,6 +168,85 @@ const initialStaticData = [
     "receiver_name": "HEALTH",
     "recevier_claim": "CLAIM"
   },
+  {
+    "Patient Name": "JAY RILL",
+    "Dob": "10/23/2001",
+    "Sex": "F",
+    "Address": "243 NW 110TH AVENUE, SUNRISE, FL 33322",
+    "Relation": 19,
+    "Insured Name": "GAL-LYN MER",
+    "Policy Number": "XJBH89019956",
+    "Ins Dob": "",
+    "Ins Sex": "",
+    "Insured Address": "",
+    "Payer": "BCBS OF FLORIDA",
+    "Payer ID": "PI:1414",
+    "Other Insured": "",
+    "Other Policy": "",
+    "Other Plan": "",
+    "Billing Provider": "XYZ Health",
+    "BP NPI": 1467477377,
+    "Encounter Number": "4796555A",
+    "Billed Amount": 530,
+    "TOB": 101,
+    "Rendering Provider": "VEY TIVA",
+    "RP NPI": 1366616688,
+    "Ill Onset": "",
+    "Initial Treatment": "",
+    "Accident": "",
+    "First Contact": "",
+    "Not Work Start": "",
+    "Not Work End": "",
+    "Hospital Start": "",
+    "Hospital End": "",
+    "Lab": "N",
+    "Lab Charge": "",
+    "Payer Ctrl No": "",
+    "Autho Code": "",
+    "Diagnosis 1": "F331",
+    "Diagnosis 2": "F411",
+    "Diagnosis 3": "F4010",
+    "Diagnosis 4": "",
+    "Diagnosis 5": "",
+    "ICD F": "",
+    "ICD G": "",
+    "ICD H": "",
+    "ICD I": "",
+    "ICD J": "",
+    "ICD K": "",
+    "ICD L": "",
+    "Line #": 2,
+    "Service Start": "10/9/2024",
+    "Service End": "",
+    "POS": "",
+    "EMG": "",
+    "Procedure  Code": 90833,
+    "Modifiers 1-4": 95,
+    "Amount": 201,
+    "Quantity": 1,
+    "DC Pointers": "1,2,3",
+    "Family": "",
+    "Line RP NPI": "",
+    "Drug": "",
+    "bp_tax_identification_number": 650836419,
+    "functional_id_gp": "HC",
+    "app_send_code": "007454760333",
+    "app_rec_code": "ECGCLAIMS",
+    "date_file_received": 20241013,
+    "time_file_received": 2212,
+    "grp_control_no": 646533554,
+    "responsible_agency_code": "X",
+    "realease_id_code": "005010X213A1",
+    "hierachical_start_code": "0019",
+    "tc_purpose_code": "00",
+    "ref_ident": 646533550,
+    "trancation_type_code": "CH",
+    "submitter_name": "MCK GRP",
+    "submitter_edi_contact_no": 3213298716,
+    "submitter_edi_name": "JENNY LEN",
+    "receiver_name": "HEALTH",
+    "recevier_claim": "CLAIM"
+  },
 ];
 
 function ClaimsData() {
@@ -223,7 +302,21 @@ function ClaimsData() {
         ]
       })
     })
-    setParsedData(arr);
+    const result = [];
+    for (var i = 0; i < arr.length; i++) {
+      var found = false;
+      for (var j = 0; j < result.length; j++) {
+        if (result[j]["Patient Name"] == arr[i]["Patient Name"] && result[j]['Policy Number'] == arr[i]['Policy Number']) {
+          found = true;
+          result[j].subRows = result[j].subRows.concat(arr[i].subRows);
+          break;
+        }
+      }
+      if (!found) {
+        result.push(arr[i]);
+      }
+    }
+    setParsedData(result);
   }, [])
 
   const handleclaimsDataDataDialogClose = () => {
@@ -395,7 +488,21 @@ function ClaimsData() {
         ]
       })
     })
-    setParsedData(arr);
+    const result = [];
+    for (var i = 0; i < arr.length; i++) {
+      var found = false;
+      for (var j = 0; j < result.length; j++) {
+        if (result[j]["Patient Name"] == arr[i]["Patient Name"] && result[j]['Policy Number'] == arr[i]['Policy Number']) {
+          found = true;
+          result[j].subRows = result[j].subRows.concat(arr[i].subRows);
+          break;
+        }
+      }
+      if (!found) {
+        result.push(arr[i]);
+      }
+    }
+    setParsedData(result);
   };
 
   return (
