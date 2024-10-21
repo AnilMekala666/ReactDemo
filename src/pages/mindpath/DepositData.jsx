@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { Grid, Button, Typography } from '@mui/material';
+import { Grid, Button, Typography, Tabs, Tab } from '@mui/material';
 import { UploadOutlined } from '@ant-design/icons';
 import CustomDialog from 'components/payments/CustomDialog';
 import CustomTable from 'components/payments/CustomTable';
 import { useNavigate } from 'react-router';
 import { LeftOutlined } from '@ant-design/icons';
+import { Box } from '@mui/system';
 
 
 const initialStaticData = [
@@ -149,6 +150,11 @@ function DepositData() {
   const [depositDataDialogOpen, setDepositDataDialogOpen] = useState(false);
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const handleDepositDataDialogClose = () => {
     setDepositDataDialogOpen(false);
@@ -279,7 +285,28 @@ function DepositData() {
     []
   );
 
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
 
+  function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      </div>
+    );
+  }
 
   return (
     // <div>
@@ -379,8 +406,50 @@ function DepositData() {
           </Button>
         </Grid>
       </Grid>
-
       {loading ? (
+        <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
+          <h3 style={{ margin: 'auto' }}>Loading...</h3>
+        </div>
+      ) : (
+        showFileContent ?
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="Raw Data" {...a11yProps(0)} />
+              <Tab label="Parsed Data" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
+              <pre
+                style={{
+                  whiteSpace: 'pre-wrap',
+                  wordWrap: 'break-word',
+                  height: '400px',
+                  overflowY: 'auto',
+                  backgroundColor: '#f0f0f0',
+                  margin: 'auto',
+                  padding: '25px',
+                  borderRadius: '8px',
+                  width: "70%",
+                  fontSize: "20px"
+                }}
+              >
+                {fileContent}
+              </pre>
+            </Grid>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <CustomTable data={parsedData} datacolumns={tableColumns} />
+          </CustomTabPanel>
+        </Box>
+        : 
+        <Box>
+          <CustomTable data={parsedData} datacolumns={tableColumns} />
+        </Box>
+      )}
+
+      {/* {loading ? (
         <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
           <h3 style={{ margin: 'auto' }}>Loading...</h3>
         </div>
@@ -429,7 +498,7 @@ function DepositData() {
             <CustomTable data={parsedData} datacolumns={tableColumns} />
           )}
         </>
-      )}
+      )} */}
 
       <CustomDialog
         open={depositDataDialogOpen}

@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, Tab, Tabs, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomExpandableTable from 'components/payments/CustomExpandableTable';
 import CustomDialog from 'components/payments/CustomDialog';
 import * as XLSX from 'xlsx'; 
 import { UploadOutlined } from '@ant-design/icons';
 import { LeftOutlined } from '@ant-design/icons';
+import { Box } from '@mui/system';
 
 const claimsCsv = new URL('src/assets/data/claims.csv', import.meta.url).href;
 
@@ -256,6 +257,11 @@ function ClaimsData() {
   const [claimsDataDialogOpen, setclaimsDataDialogOpen] = useState(false);
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const tableColumns = useMemo(
     () => [
@@ -349,7 +355,7 @@ function ClaimsData() {
         setTimeout(() => {
           setFileContent(text);
           fetchCSV();
-          setLoading(false);
+          // setLoading(false);
           setShowFileContent(true);
         }, 2000);
       };
@@ -505,6 +511,29 @@ function ClaimsData() {
     setParsedData(result);
   };
 
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+
+  function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      </div>
+    );
+  }
+
   return (
     <div>
       <Grid mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -529,49 +558,42 @@ function ClaimsData() {
           <h3 style={{ margin: 'auto' }}>Loading...</h3>
         </div>
       ) : (
-        <>
-          {showFileContent ? (
-            <>
-              <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
-                <pre
-                  style={{
-                    whiteSpace: 'pre-wrap',
-                    wordWrap: 'break-word',
-                    height: '400px',
-                    overflowY: 'auto',
-                    backgroundColor: '#f0f0f0',
-                    margin: 'auto',
-                    padding: '25px',
-                    borderRadius: '8px',
-                    width: "70%",
-                    fontSize: "20px"
-                  }}
-                >
-                  {fileContent}
-                </pre>
-              </Grid>
-              <Button
-                variant="contained"
-                color="success"
-                className='back-btn'
-                onClick={() => navigate('/patient/payment')}
-                style={{ margin: '20px 0 10px 20px' }}
+        showFileContent ?
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="Raw Data" {...a11yProps(0)} />
+              <Tab label="Parsed Data" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
+              <pre
+                style={{
+                  whiteSpace: 'pre-wrap',
+                  wordWrap: 'break-word',
+                  height: '400px',
+                  overflowY: 'auto',
+                  backgroundColor: '#f0f0f0',
+                  margin: 'auto',
+                  padding: '25px',
+                  borderRadius: '8px',
+                  width: "70%",
+                  fontSize: "20px"
+                }}
               >
-                <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                className='btn-border'
-                onClick={() => setShowFileContent(false)}
-              >
-                Process
-              </Button>
-            </>
-          ) : (
+                {fileContent}
+              </pre>
+            </Grid>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
             <CustomExpandableTable data={parsedData} datacolumns={tableColumns} />
-          )}
-        </>
+          </CustomTabPanel>
+        </Box>
+        : 
+        <Box>
+          <CustomExpandableTable data={parsedData} datacolumns={tableColumns} />
+        </Box>
       )}
 
       <CustomDialog

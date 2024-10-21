@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Grid, Button, Typography } from '@mui/material';
+import { Grid, Button, Typography, Tabs, Tab } from '@mui/material';
 import { UploadOutlined } from '@ant-design/icons';
 import CustomDialog from 'components/payments/CustomDialog';
 import CustomTable from 'components/payments/CustomTable';
 import { useNavigate } from 'react-router';
 import { LeftOutlined } from '@ant-design/icons';
+import { Box } from '@mui/system';
 
 const remittance = new URL('src/assets/data/remittance.csv', import.meta.url).href;
 
@@ -41,6 +42,11 @@ function RemittanceData() {
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
   const [tableColumns, setTableColumns] = useState([]);
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   useEffect(()=>{
     const headerKeys = Object.keys(Object.assign({}, ...initialStaticData));
@@ -179,7 +185,28 @@ function RemittanceData() {
   };
 
 
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
 
+  function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      </div>
+    );
+  }
 
   // const tableColumns = useMemo(
   //   () => [
@@ -300,50 +327,42 @@ function RemittanceData() {
           <h3 style={{ margin: 'auto' }}>Loading...</h3>
         </div>
       ) : (
-        <>
-          {showFileContent ? (
-            <>
-              <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
-                <pre
-                  style={{
-                    whiteSpace: 'pre-wrap',
-                    wordWrap: 'break-word',
-                    height: '400px',
-                    overflowY: 'auto',
-                    backgroundColor: '#f0f0f0',
-                    margin: 'auto',
-                    padding: '25px',
-                    borderRadius: '8px',
-                    width: "70%",
-                    fontSize: "20px"
-                  }}
-                >
-                  {fileContent}
-                </pre>
-              </Grid>
-              <Button
-                variant="contained"
-                color="success"
-                className='back-btn'
-                onClick={() => navigate('/patient/payment')}
-                style={{ margin: '20px 0 10px 20px' }}
+        showFileContent ?
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="Raw Data" {...a11yProps(0)} />
+              <Tab label="Parsed Data" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
+              <pre
+                style={{
+                  whiteSpace: 'pre-wrap',
+                  wordWrap: 'break-word',
+                  height: '400px',
+                  overflowY: 'auto',
+                  backgroundColor: '#f0f0f0',
+                  margin: 'auto',
+                  padding: '25px',
+                  borderRadius: '8px',
+                  width: "70%",
+                  fontSize: "20px"
+                }}
               >
-                <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                className='btn-border'
-                onClick={() => setRemittanceDataDialogOpen(true)}
-              >
-                Process
-              </Button>
-            </>
-          ) : (
-
+                {fileContent}
+              </pre>
+            </Grid>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
             <CustomTable data={parsedData} datacolumns={tableColumns} />
-          )}
-        </>
+          </CustomTabPanel>
+        </Box>
+        : 
+        <Box>
+          <CustomTable data={parsedData} datacolumns={tableColumns} />
+        </Box>
       )}
 
       <CustomDialog
