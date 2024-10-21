@@ -297,7 +297,7 @@ function ClaimsData() {
         "subRows": [
           {
             'Procedure  Code': x['Procedure  Code'],
-            "Amount": x["Billed Amount"]
+            "Amount": x["Amount"]
           }
         ]
       })
@@ -447,7 +447,7 @@ function ClaimsData() {
             object["id"] = x + 1;
           }
           if (values[index]) {
-            object[header] = values[index] || "";
+            object[header.trim()] = values[index] || "";
             return object;
           }
         }
@@ -460,7 +460,7 @@ function ClaimsData() {
     columns = headerKeys.map((header, index) => {
       let o = {
         id: index + 1,
-        header: header,
+        header: header.trim(),
         accessorKey: header
       }
       return o;
@@ -483,7 +483,7 @@ function ClaimsData() {
         "subRows": [
           {
             'Procedure  Code': x['Procedure  Code'],
-            "Amount": x["Billed Amount"]
+            "Amount": x["Amount"]
           }
         ]
       })
