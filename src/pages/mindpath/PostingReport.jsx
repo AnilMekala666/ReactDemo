@@ -228,7 +228,7 @@ const PostingReport = () => {
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
-                    sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
+                    sx={{ backgroundColor: '#efeffd', p: 0,m:0,minHeight:'40px', borderRadius: "10px", border: 0 }}
                 >
                     Posting Report
                 </AccordionSummary>
