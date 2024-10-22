@@ -83,7 +83,7 @@ function PatientPaymentData() {
         aria-labelledby={`simple-tab-${index}`}
         {...other}
       >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+        {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
       </div>
     );
   }
@@ -97,8 +97,17 @@ function PatientPaymentData() {
         <Grid >
           <Button
             variant="contained"
+            color="success"
+            className='back-btn'
+            onClick={() => navigate('/patient/payment')}
+            style={{ margin: '0px 0 0px 20px' }}
+          >
+            <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
+          </Button>
+          <Button
+            variant="contained"
             color="primary"
-            component="label"sx={{ borderRadius: '40px', marginTop: '20px', padding: '0px 0 0px 30px' }}
+            component="label"sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
             >
               Get File
             <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
@@ -121,7 +130,7 @@ function PatientPaymentData() {
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              <Grid container spacing={2} sx={{ marginTop: '20px', margin: 'auto' }}>
+              <Grid container spacing={2} sx={{padding:'0', marginTop: '20px', margin: 'auto' }}>
                 <pre
                   style={{
                     whiteSpace: 'pre-wrap',
@@ -149,18 +158,7 @@ function PatientPaymentData() {
             <CustomTable data={parsedData} datacolumns={tableColumns} />
           </Box>
       )}
-      {!loading &&
-        <Button
-          variant="contained"
-          color="success"
-          className='back-btn'
-          onClick={() => navigate('/patient/payment')}
-          style={{ margin: '20px 0 10px 20px' }}
-        >
-          <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
-        </Button>
-      }
-
+      
       {/* {loading ? (
         <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
           <h3 style={{ margin: 'auto' }}>Loading...</h3>

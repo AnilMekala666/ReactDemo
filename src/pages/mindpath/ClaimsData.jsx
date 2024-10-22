@@ -530,7 +530,7 @@ function ClaimsData() {
         aria-labelledby={`simple-tab-${index}`}
         {...other}
       >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+        {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
       </div>
     );
   }
@@ -542,10 +542,19 @@ function ClaimsData() {
           <Typography variant="h4">Claims</Typography>
         </Grid>
         <Grid >
+        <Button
+          variant="contained"
+          color="success"
+          className='back-btn'
+          onClick={() => navigate('/patient/payment')}
+          style={{ margin: '0px 0 0px 20px' }}
+        >
+          <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
+        </Button>
           <Button
             variant="contained"
             color="primary"
-            component="label"sx={{ borderRadius: '40px', marginTop: '20px', padding: '0px 0 0px 30px' }}
+            component="label"sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
             >
               Get File
             <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
@@ -596,17 +605,7 @@ function ClaimsData() {
           <CustomExpandableTable data={parsedData} datacolumns={tableColumns} />
         </Box>
       )}
-      {!loading &&
-        <Button
-          variant="contained"
-          color="success"
-          className='back-btn'
-          onClick={() => navigate('/patient/payment')}
-          style={{ margin: '20px 0 10px 20px' }}
-        >
-          <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
-        </Button>
-      }
+     
       <CustomDialog
         open={claimsDataDialogOpen}
         onClose={handleclaimsDataDataDialogClose}

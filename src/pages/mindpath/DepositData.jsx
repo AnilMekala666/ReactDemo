@@ -303,7 +303,7 @@ function DepositData() {
         aria-labelledby={`simple-tab-${index}`}
         {...other}
       >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+        {value === index && <Box sx={{ p:0 }}>{children}</Box>}
       </div>
     );
   }
@@ -394,6 +394,15 @@ function DepositData() {
           <Typography variant="h4">Deposit</Typography>
         </Grid>
         <Grid >
+        <Button
+          variant="contained"
+          color="success"
+          className='back-btn'
+          onClick={() => navigate('/patient/payment')}
+          style={{ margin: '0px 0 0px 20px' }}
+        >
+          <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
+        </Button>
           <Button
             variant="contained"
             color="primary"
@@ -449,17 +458,7 @@ function DepositData() {
           <CustomTable data={parsedData} datacolumns={tableColumns} />
         </Box>
       )}
-      {!loading &&
-        <Button
-          variant="contained"
-          color="success"
-          className='back-btn'
-          onClick={() => navigate('/patient/payment')}
-          style={{ margin: '20px 0 10px 20px' }}
-        >
-          <LeftOutlined style={{ fontSize: '17px', padding: '12px', marginRight: '15px', borderRadius: '100%', background: 'rgb(174 219 152 / 55%)' }} />Back
-        </Button>
-      }
+     
       {/* {loading ? (
         <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
           <h3 style={{ margin: 'auto' }}>Loading...</h3>
