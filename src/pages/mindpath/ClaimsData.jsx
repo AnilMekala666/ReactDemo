@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 import { UploadOutlined } from '@ant-design/icons';
 import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
+import { currencyFormat } from 'components/mindpath';
 
 const claimsCsv = new URL('src/assets/data/claims.csv', import.meta.url).href;
 
@@ -303,7 +304,7 @@ function ClaimsData() {
         "subRows": [
           {
             'Procedure  Code': x['Procedure  Code'],
-            "Amount": x["Amount"]
+            "Amount": currencyFormat(x["Billed Amount"])
           }
         ]
       })
@@ -489,7 +490,7 @@ function ClaimsData() {
         "subRows": [
           {
             'Procedure  Code': x['Procedure  Code'],
-            "Amount": x["Amount"]
+            "Amount": currencyFormat(x["Billed Amount"])
           }
         ]
       })
