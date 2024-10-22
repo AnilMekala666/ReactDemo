@@ -9,7 +9,10 @@ function mindpath({parsedData}) {
 }
 
 export function currencyFormat(num) {
-  return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  // if(num && typeof num == "number") {
+    return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  // }
+  // return "$0.00";
 }
 
 export default mindpath

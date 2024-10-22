@@ -325,30 +325,60 @@ function ReactTable({ data, columns, expandedColumns }) {
                     </TableRow>
                     {row.original.active &&
                       <>
-                        {row.originalSubRows && row.originalSubRows.map((row, ix) => {
-                          console.log("Row expanded")
-                          return (
-                            <>
-                              <TableRow key={ix}>
-                                <TableCell></TableCell>
-                                <TableCell></TableCell>
-                                {Object.keys(row).map((key, xi) => {
-                                  return (
-                                    <>
-                                      <TableCell sx={{border: `1px solid #999`,
-                                                borderBottom: "1px solid !important"}}>{key}:</TableCell>
-                                      <TableCell sx={{
-                                        border: `1px solid #999`,
-                                        borderBottom: "1px solid !important"
-                                      }}>{row[key]}</TableCell>
-                                    </>
-                                  )})
+                        <TableRow>
+                          <TableCell sx={{ p: 1 }} colSpan={Object.keys(row.original).filter(k => k != "subRows" && k != "active" && k != "id").length + 1}>
+                            <Table sx={{ width: '100%' }} aria-label="sticky table">
+                              {row.originalSubRows && row.originalSubRows.map((innerRow, ix) => {
+                                if(ix == 0) {
+                                  return (<>
+                                    <TableRow style={{ background: "#f1f7f9" }}>
+                                      <TableCell sx={{ background: '#fff', borderBottom: "0px !important" }}></TableCell>
+                                      {Object.keys(innerRow).map((key, xi) => {
+                                        console.log(key)
+                                        return (
+                                          <>
+                                            <TableCell sx={{
+                                                borderTopColor: 'divider',
+                                                p: 0,
+                                                pl: 1,
+                                                zIndex: 1,
+                                                fontWeight: 'bold',
+                                                border: `1px solid #999`,
+                                                borderBottom: "1px solid !important"
+                                              }}>{key}</TableCell>
+                                          </>
+                                        )})
+                                      }
+                                    </TableRow>
+                                    <TableRow key={ix}>
+                                      <TableCell></TableCell>
+                                      {Object.keys(innerRow).map((key, xi) => {
+                                        console.log(innerRow[key])
+                                        return (
+                                          <TableCell sx={{ p: 0, pl: 1, border: `1px solid #999`, borderBottom: "1px solid !important" }}>{innerRow[key]}</TableCell>
+                                        )})
+                                      }
+                                    </TableRow>
+                                  </>);
                                 }
-                               </TableRow>
-                            </>
-                            )
-                          })
-                        }
+                                return (
+                                  <>
+                                    <TableRow key={ix}>
+                                      <TableCell></TableCell>
+                                      {Object.keys(innerRow).map((key, xi) => {
+                                        console.log(innerRow[key])
+                                        return (
+                                          <TableCell sx={{ p: 0, pl: 1, border: `1px solid #999`, borderBottom: "1px solid !important" }}>{innerRow[key]}</TableCell>
+                                        )})
+                                      }
+                                    </TableRow>
+                                  </>
+                                  )
+                                })
+                              }
+                            </Table>
+                          </TableCell>
+                        </TableRow>
                       </>
                     }
                   </>
@@ -377,7 +407,7 @@ function ReactTable({ data, columns, expandedColumns }) {
 
 // ==============================|| INVOICE LIST ||============================== //
 
-export default function ReusableExpandableTable({data, columns, expandedColumns}) {
+export default function ReusableExpandableTableColumn({data, columns, expandedColumns}) {
   const theme = useTheme();
   const navigation = useNavigate();
   const { invoiceLoading, invoice: list } = useGetInvoice();

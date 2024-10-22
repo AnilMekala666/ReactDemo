@@ -8,6 +8,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
 import { currencyFormat } from 'components/mindpath';
+import CustomExpandableTableColumn from 'components/payments/CustomExpandableTableColumn';
 
 const claimsCsv = new URL('src/assets/data/claims.csv', import.meta.url).href;
 
@@ -259,33 +260,35 @@ function ClaimsData() {
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
   const [value, setValue] = React.useState(0);
+  const [tableColumns, setTableColumns] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const tableColumns = useMemo(
-    () => [
-      { header: 'Patient Name', accessorKey: 'Patient Name' },
-      { header: 'Policy Number', accessorKey: 'Policy Number' },
-      { header: 'Payer', accessorKey: 'Payer' },
-      { header: 'Encounter Number', accessorKey: 'Encounter Number' },
-      { header: 'Diagnosis 1', accessorKey: 'Diagnosis 1' },
-      { header: 'Diagnosis 2', accessorKey: 'Diagnosis 2' },
-      { header: 'Diagnosis 3', accessorKey: 'Diagnosis 3' },
-      { header: 'Diagnosis 4', accessorKey: 'Diagnosis 4' },
-      { header: 'Diagnosis 5', accessorKey: 'Diagnosis 5' },
-    ],
-    []
-  );
+  // const tableColumns = useMemo(
+  //   () => [
+  //     { header: 'Patient Name', accessorKey: 'Patient Name' },
+  //     { header: 'Policy Number', accessorKey: 'Policy Number' },
+  //     { header: 'Payer', accessorKey: 'Payer' },
+  //     { header: 'Billed Amount', accessorKey: 'Billed Amount' },
+  //     { header: 'Encounter Number', accessorKey: 'Encounter Number' },
+  //     { header: 'Diagnosis 1', accessorKey: 'Diagnosis 1' },
+  //     { header: 'Diagnosis 2', accessorKey: 'Diagnosis 2' },
+  //     { header: 'Diagnosis 3', accessorKey: 'Diagnosis 3' },
+  //     { header: 'Diagnosis 4', accessorKey: 'Diagnosis 4' },
+  //     { header: 'Diagnosis 5', accessorKey: 'Diagnosis 5' },
+  //   ],
+  //   []
+  // );
 
-  const expandedColumns = useMemo(
-    () => [
-      { header: 'Procedure  Code', accessorKey: 'Procedure  Code' },
-      { header: 'Amount', accessorKey: 'Amount' }
-    ],
-    []
-  );
+  // const expandedColumns = useMemo(
+  //   () => [
+  //     { header: 'Procedure  Code', accessorKey: 'Procedure  Code' },
+  //     { header: 'Amount', accessorKey: 'Amount' }
+  //   ],
+  //   []
+  // );
 
   useEffect(()=>{
     const arr = [];
@@ -295,6 +298,7 @@ function ClaimsData() {
         'Patient Name': x['Patient Name'],
         'Policy Number': x['Policy Number'],
         'Payer': x['Payer'],
+        'Billed Amount': currencyFormat(x['Billed Amount'] || 0),
         'Encounter Number': x['Encounter Number'],
         'Diagnosis 1': x['Diagnosis 1'],
         'Diagnosis 2': x['Diagnosis 2'],
@@ -304,7 +308,7 @@ function ClaimsData() {
         "subRows": [
           {
             'Procedure  Code': x['Procedure  Code'],
-            "Amount": currencyFormat(x["Billed Amount"])
+            "Amount": currencyFormat(x["Amount"] || "0")
           }
         ]
       })
@@ -323,6 +327,20 @@ function ClaimsData() {
         result.push(arr[i]);
       }
     }
+    const headerKeys = Object.keys(Object.assign({}, ...result));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      if(header != "subRows" && header != "id") {
+        let o = {
+          id: index + 1,
+          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          accessorKey: header.replace("\r", "")
+        }
+        return o;
+      }
+    }).filter((key) => key != "subRows" && key != undefined)
+    console.log("Columns", columns);
+    setTableColumns(columns);
     setParsedData(result);
   }, [])
 
@@ -462,17 +480,17 @@ function ClaimsData() {
       }, {});
       return obj;
     }).filter((val) => val != undefined);
-    const headerKeys = Object.keys(Object.assign({}, ...array));
-    let columns = [];
-    columns = headerKeys.map((header, index) => {
-      let o = {
-        id: index + 1,
-        header: header.trim(),
-        accessorKey: header
-      }
-      return o;
-    })
-    console.log("Columns", columns);
+    // const headerKeys = Object.keys(Object.assign({}, ...array));
+    // let columns = [];
+    // columns = headerKeys.map((header, index) => {
+    //   let o = {
+    //     id: index + 1,
+    //     header: header.trim(),
+    //     accessorKey: header
+    //   }
+    //   return o;
+    // })
+    // console.log("Columns", columns);
     console.log("Parsed Data: ", array);
     const arr = [];
     array.map((x)=>{
@@ -481,6 +499,7 @@ function ClaimsData() {
         'Patient Name': x['Patient Name'],
         'Policy Number': x['Policy Number'],
         'Payer': x['Payer'],
+        'Billed Amount': currencyFormat(parseInt(x['Billed Amount']) || 0),
         'Encounter Number': x['Encounter Number'],
         'Diagnosis 1': x['Diagnosis 1'],
         'Diagnosis 2': x['Diagnosis 2'],
@@ -490,7 +509,7 @@ function ClaimsData() {
         "subRows": [
           {
             'Procedure  Code': x['Procedure  Code'],
-            "Amount": currencyFormat(x["Billed Amount"])
+            "Amount": currencyFormat(parseInt(x["Amount"]) || 0)
           }
         ]
       })
@@ -509,6 +528,20 @@ function ClaimsData() {
         result.push(arr[i]);
       }
     }
+    const headerKeys = Object.keys(Object.assign({}, ...arr));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      if(header != "subRows" && header != "id") {
+        let o = {
+          id: index + 1,
+          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          accessorKey: header.replace("\r", "")
+        }
+        return o;
+      }
+    }).filter((key) => key != "subRows" && key != undefined)
+    console.log("Columns", columns);
+    setTableColumns(columns);
     setParsedData(result);
   };
 
@@ -597,12 +630,12 @@ function ClaimsData() {
             </Grid>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <CustomExpandableTable data={parsedData} datacolumns={tableColumns} />
+            <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
           </CustomTabPanel>
         </Box>
         : 
         <Box>
-          <CustomExpandableTable data={parsedData} datacolumns={tableColumns} />
+          <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
         </Box>
       )}
      
@@ -611,7 +644,7 @@ function ClaimsData() {
         onClose={handleclaimsDataDataDialogClose}
         title={"Patient Payments Data"}
       >
-        <CustomExpandableTable data={parsedData} datacolumns={tableColumns} expandedColumns={expandedColumns} />
+        <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
       </CustomDialog>
     </div>
   );

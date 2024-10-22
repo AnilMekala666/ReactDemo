@@ -6,6 +6,8 @@ import CustomTable from 'components/payments/CustomTable';
 import { useNavigate } from 'react-router';
 import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
+import CustomExpandableTableColumn from 'components/payments/CustomExpandableTableColumn';
+import { currencyFormat } from 'components/mindpath';
 
 const remittance = new URL('src/assets/data/remittance.csv', import.meta.url).href;
 
@@ -33,6 +35,19 @@ const initialStaticData = [
     additional_info: "Static additional info 2",
   },
 ];
+
+const claimEnum = {
+  1: "Processed as Primary",
+  2: "Processed as Secondary",
+  3: "Processed as Tertiary",
+  4: "Denied",
+  19: "Processed as Primary, Forwarded to Additional Payer",
+  20: "Processed as Secondary, Forwarded to Additional Payer",
+  21: "Processed as Tertiary, Forwarded to Additional Payer",
+  22: "Reversal of Previous Payment",
+  23: "Not our Claim, Forwarded to Additional Payer",
+  25: "Predetmination Pricing only - No Payment"
+}
 
 function RemittanceData() {
   const navigate = useNavigate();
@@ -144,7 +159,7 @@ function RemittanceData() {
   const parseBaiFile = (content) => {
     const csvHeader = content.slice(0, content.indexOf("\n")).split(",");
     const csvRows = content.slice(content.indexOf("\n") + 1).split("\n");
-    // console.log(csvHeader)
+    console.log(csvHeader)
     const array = csvRows.map((i, x) => {
       const values = splitCSVButIgnoreCommasInDoublequotes(i);
       // console.log(x, values);
@@ -153,12 +168,16 @@ function RemittanceData() {
       // }
       const obj = csvHeader.reduce((object, header, index) => {
         if (object !== undefined) {
-          console.log(object)
           if (object["id"] == undefined) {
             object["id"] = x + 1;
           }
           if (values[index]) {
-            object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index] || "";
+            if(header.replace(" ", "_").replace("\r", "").toLowerCase() == "claim_status") {
+              object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = claimEnum[values[index]] || "";
+            }
+            else {
+              object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index] || "";
+            }
             return object;
           }
         }
@@ -166,22 +185,58 @@ function RemittanceData() {
       }, {});
       console.log("OBJ", obj)
       return obj;
-    }).filter((val) => val != undefined && val.transaction_number != null);
-    const headerKeys = Object.keys(Object.assign({}, ...array));
+    }).filter((val) => val != undefined);
+    const arr = [];
+    array.map((x)=>{
+      arr.push({
+        "id": x["id"],
+        'Transaction Number': x['check/eft_no'],
+        'Deposit Date': x['chk_date'],
+        'Amount': currencyFormat(parseInt(x["chk_amount"]) || 0),
+        'Payer': x['payer'],
+        'Patient Name': x['patient_name'],
+        'Claim Status': x['claim_status'],
+        'Billed Amount': currencyFormat(parseInt(x["ln_claimed"]) || 0),
+        'Allowed Amount': currencyFormat(parseInt(x["ln_allowed"]) || 0),
+        'Patient Amount': currencyFormat(parseInt(x['patient_amt']) || 0),
+        'Paid Amount': currencyFormat(parseInt(x["ln_paid"]) || 0),
+        // 'Start DOS': x['svc_start'],
+        // 'End DOS': x['svc_end'],
+        "subRows": [
+          {
+            'Svc Start': x['svc_start'],
+            'Svc End': x['svc_end'],
+            'HCPCS': x['hcpcs'],
+            'Modifiers': x['modifiers'],
+            'Ln Claimed': currencyFormat(parseInt(x["ln_claimed"]) || 0),
+            'Ln Allowed': currencyFormat(parseInt(x["ln_allowed"]) || 0),
+            'Ln Paid': currencyFormat(parseInt(x["ln_paid"]) || 0),
+            'Ln Deductible': currencyFormat(parseInt(x["ln_deductible"]) || 0),
+            'Ln Co-Ins': currencyFormat(parseInt(x["ln_co-ins"]) || 0),
+            'Ln Co-Pay': currencyFormat(parseInt(x["ln_co-pay"]) || 0),
+            'Ln Denied': currencyFormat(parseInt(x["ln_denied"]) || 0),
+            'Ln More Adjustments': x['ln_more adjustments']
+          }
+        ]
+      })
+    })
+    const headerKeys = Object.keys(Object.assign({}, ...arr));
     let columns = [];
     columns = headerKeys.map((header, index) => {
-      let o = {
-        id: index + 1,
-        header: header.replace("_", " ").replace("\r", "").toUpperCase(),
-        accessorKey: header.replace("\r", "")
+      if(header != "subRows" && header != "id") {
+        let o = {
+          id: index + 1,
+          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          accessorKey: header.replace("\r", "")
+        }
+        return o;
       }
-      return o;
-    })
+    }).filter((key) => key != "subRows" && key != undefined)
     console.log("Columns", columns);
     setTableColumns(columns);
-    console.log("Parsed Data: ", array);
+    console.log("Parsed Data: ", arr);
     // Set the parsed data to the state or return it
-    setParsedData(array);
+    setParsedData(arr.filter(k=>k["Transaction Number"] != null));
   };
 
 
@@ -365,12 +420,12 @@ function RemittanceData() {
             </Grid>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <CustomTable data={parsedData} datacolumns={tableColumns} />
+            <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
           </CustomTabPanel>
         </Box>
         : 
         <Box>
-          <CustomTable data={parsedData} datacolumns={tableColumns} />
+          <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
         </Box>
       )}
        
@@ -379,7 +434,7 @@ function RemittanceData() {
         onClose={handleRemittanceDataDialogClose}
         title={"Remittance Data"}
       >
-        <CustomTable data={parsedData} datacolumns={tableColumns} />
+        <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
       </CustomDialog>
     </div>
   );
