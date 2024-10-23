@@ -10,6 +10,7 @@ import CustomExpandableTableColumn from 'components/payments/CustomExpandableTab
 import { currencyFormat } from 'components/mindpath';
 
 const remittance = new URL('src/assets/data/remittance.csv', import.meta.url).href;
+const remittanceDemo = new URL('src/assets/data/remittance.demo.csv', import.meta.url).href;
 
 const initialStaticData = [
   {
@@ -52,41 +53,45 @@ const claimEnum = {
 function RemittanceData() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [parsedData, setParsedData] = useState(initialStaticData);
+  const [parsedData, setParsedData] = useState([]);
   const [RemittanceDataDialogOpen, setRemittanceDataDialogOpen] = useState(false);
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
   const [tableColumns, setTableColumns] = useState([]);
   const [value, setValue] = React.useState(0);
 
+  useEffect(()=>{
+    fetchCSV(remittanceDemo)
+  }, [])
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  useEffect(()=>{
-    const headerKeys = Object.keys(Object.assign({}, ...initialStaticData));
-    let columns = [];
-    columns = headerKeys.map((header, index) => {
-      let o = {
-        id: index + 1,
-        header: header.replace("_", " ").replace("\r", "").toUpperCase(),
-        accessorKey: header.replace("\r", "")
-      }
-      return o;
-    })
-    console.log("Columns", columns);
-    setTableColumns(columns);
-  }, [])
+  // useEffect(()=>{
+  //   const headerKeys = Object.keys(Object.assign({}, ...initialStaticData));
+  //   let columns = [];
+  //   columns = headerKeys.map((header, index) => {
+  //     let o = {
+  //       id: index + 1,
+  //       header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+  //       accessorKey: header.replace("\r", "")
+  //     }
+  //     return o;
+  //   })
+  //   console.log("Columns", columns);
+  //   setTableColumns(columns);
+  // }, [])
 
   const handleRemittanceDataDialogClose = () => {
     setRemittanceDataDialogOpen(false);
   };
 
-  const fetchCSV = async() => {
+  const fetchCSV = async(url) => {
     setTableColumns([]);
     // Set the parsed data to the state or return it
     setParsedData([]);
-    const file = await fetch(remittance).then(res => res.text());
+    const file = await fetch(url ?? remittance).then(res => res.text());
     console.log(file)
     if (file) {
         setLoading(true);

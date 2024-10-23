@@ -300,15 +300,15 @@ function ClaimsData() {
         'Payer': x['Payer'],
         'Billed Amount': currencyFormat(x['Billed Amount'] || 0),
         'Encounter Number': x['Encounter Number'],
-        'Diagnosis 1': x['Diagnosis 1'],
-        'Diagnosis 2': x['Diagnosis 2'],
-        'Diagnosis 3': x['Diagnosis 3'],
-        'Diagnosis 4': x['Diagnosis 4'],
-        'Diagnosis 5': x['Diagnosis 5'],
         "subRows": [
           {
             'Procedure  Code': x['Procedure  Code'],
-            "Amount": currencyFormat(x["Amount"] || "0")
+            "Amount": currencyFormat(x["Amount"] || "0"),
+            'Diagnosis 1': x['Diagnosis 1'],
+            'Diagnosis 2': x['Diagnosis 2'],
+            'Diagnosis 3': x['Diagnosis 3'],
+            'Diagnosis 4': x['Diagnosis 4'],
+            'Diagnosis 5': x['Diagnosis 5'],
           }
         ]
       })
@@ -501,15 +501,15 @@ function ClaimsData() {
         'Payer': x['Payer'],
         'Billed Amount': currencyFormat(parseInt(x['Billed Amount']) || 0),
         'Encounter Number': x['Encounter Number'],
-        'Diagnosis 1': x['Diagnosis 1'],
-        'Diagnosis 2': x['Diagnosis 2'],
-        'Diagnosis 3': x['Diagnosis 3'],
-        'Diagnosis 4': x['Diagnosis 4'],
-        'Diagnosis 5': x['Diagnosis 5'],
         "subRows": [
           {
             'Procedure  Code': x['Procedure  Code'],
-            "Amount": currencyFormat(parseInt(x["Amount"]) || 0)
+            "Amount": currencyFormat(parseInt(x["Amount"]) || 0),
+            'Diagnosis 1': x['Diagnosis 1'],
+            'Diagnosis 2': x['Diagnosis 2'],
+            'Diagnosis 3': x['Diagnosis 3'],
+            'Diagnosis 4': x['Diagnosis 4'],
+            'Diagnosis 5': x['Diagnosis 5'],
           }
         ]
       })

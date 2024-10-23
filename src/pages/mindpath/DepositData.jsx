@@ -6,6 +6,7 @@ import CustomTable from 'components/payments/CustomTable';
 import { useNavigate } from 'react-router';
 import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
+import { currencyFormat } from 'components/mindpath';
 
 
 const initialStaticData = [
@@ -14,8 +15,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ANTHEM BCBS OF C",
-    deposit_date: "2024-10-01",
-    amounts: "1000.00",
+    deposit_date: "10-01-2024",
+    amounts: "$1000.00",
     indn: "Static INDN 1",
     des: "Static DES 1",
     additional_info: "Static additional info 1",
@@ -25,8 +26,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ELEVANCE HLTH AP",
-    deposit_date: "2024-10-02",
-    amounts: "2000.00",
+    deposit_date: "10-02-2024",
+    amounts: "$2000.00",
     indn: "Static INDN 2",
     des: "Static DES 2",
     additional_info: "Static additional info 2",
@@ -36,8 +37,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ANTHEM BCBS OF C",
-    deposit_date: "2024-10-01",
-    amounts: "1000.00",
+    deposit_date: "10-01-2024",
+    amounts: "$1000.00",
     indn: "Static INDN 1",
     des: "Static DES 1",
     additional_info: "Static additional info 1",
@@ -47,8 +48,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ELEVANCE HLTH AP",
-    deposit_date: "2024-10-02",
-    amounts: "2000.00",
+    deposit_date: "10-02-2024",
+    amounts: "$2000.00",
     indn: "Static INDN 2",
     des: "Static DES 2",
     additional_info: "Static additional info 2",
@@ -58,8 +59,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ANTHEM BCBS OF C",
-    deposit_date: "2024-10-01",
-    amounts: "1000.00",
+    deposit_date: "10-01-2024",
+    amounts: "$1000.00",
     indn: "Static INDN 1",
     des: "Static DES 1",
     additional_info: "Static additional info 1",
@@ -69,8 +70,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ELEVANCE HLTH AP",
-    deposit_date: "2024-10-02",
-    amounts: "2000.00",
+    deposit_date: "10-02-2024",
+    amounts: "$2000.00",
     indn: "Static INDN 2",
     des: "Static DES 2",
     additional_info: "Static additional info 2",
@@ -80,8 +81,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ANTHEM BCBS OF C",
-    deposit_date: "2024-10-01",
-    amounts: "1000.00",
+    deposit_date: "10-01-2024",
+    amounts: "$1000.00",
     indn: "Static INDN 1",
     des: "Static DES 1",
     additional_info: "Static additional info 1",
@@ -91,8 +92,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ELEVANCE HLTH AP",
-    deposit_date: "2024-10-02",
-    amounts: "2000.00",
+    deposit_date: "10-02-2024",
+    amounts: "$2000.00",
     indn: "Static INDN 2",
     des: "Static DES 2",
     additional_info: "Static additional info 2",
@@ -102,8 +103,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ANTHEM BCBS OF C",
-    deposit_date: "2024-10-01",
-    amounts: "1000.00",
+    deposit_date: "10-01-2024",
+    amounts: "$1000.00",
     indn: "Static INDN 1",
     des: "Static DES 1",
     additional_info: "Static additional info 1",
@@ -113,8 +114,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ELEVANCE HLTH AP",
-    deposit_date: "2024-10-02",
-    amounts: "2000.00",
+    deposit_date: "10-02-2024",
+    amounts: "$2000.00",
     indn: "Static INDN 2",
     des: "Static DES 2",
     additional_info: "Static additional info 2",
@@ -124,8 +125,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ANTHEM BCBS OF C",
-    deposit_date: "2024-10-01",
-    amounts: "1000.00",
+    deposit_date: "10-01-2024",
+    amounts: "$1000.00",
     indn: "Static INDN 1",
     des: "Static DES 1",
     additional_info: "Static additional info 1",
@@ -135,8 +136,8 @@ const initialStaticData = [
     bank_name: "Bank of America",
     payment_type: "	EFT credit",
     payer: "ELEVANCE HLTH AP",
-    deposit_date: "2024-10-02",
-    amounts: "2000.00",
+    deposit_date: "10-02-2024",
+    amounts: "$2000.00",
     indn: "Static INDN 2",
     des: "Static DES 2",
     additional_info: "Static additional info 2",
@@ -186,7 +187,7 @@ function DepositData() {
     const newParsedData = [];
     let currentTransaction = null;
     let bankName = '';
-
+    let formattedDate = 'Invalid Date';
     lines.forEach((line) => {
       const parts = line.split(',');
 
@@ -194,26 +195,27 @@ function DepositData() {
       if (parts[0].trim() === '01') {
         bankName = parts[1] ? parts[1].trim() : '';
       }
-
-      // Transaction line (starting with '16')
-      if (parts[0].trim() === '16') {
-        const transactionDate = parts[4] ? parts[4].trim() : '';
-
+      
+      if (parts[0].trim() === '02') {
+        const transactionDate = parts[4] ? parts[4].trim() : ''
         // Format transactionDate as YY/MM/DD
-        let formattedDate = 'Invalid Date';
         if (transactionDate.length === 6) {
           const year = `20${transactionDate.slice(0, 2)}`; // '24' -> '2024'
           const month = transactionDate.slice(2, 4); // '03' -> March
           const day = transactionDate.slice(4, 6); // '28' -> 28th day
-          formattedDate = `${year}/${month}/${day}`; // Final format: YYYY/MM/DD
+          formattedDate = `${month}/${day}/${year}`; // Final format: YYYY/MM/DD
         }
-
+      }
+      // Transaction line (starting with '16')
+      if (parts[0].trim() === '16') {
+        const transactionDate = parts[4] ? parts[4].trim() : '';
+        console.log("Date", transactionDate);
         // Extract and format amount (e.g., 99860168 -> 998601.68)
         let amount = parts[2] ? parts[2].trim() : '0';
         if (amount.length > 2) {
           const dollars = amount.slice(0, -2);
           const cents = amount.slice(-2);
-          amount = `${dollars}.${cents}`;
+          amount = currencyFormat(parseInt(`${dollars}.${cents}`));
         }
 
         // Check payment type: 164 -> '', 165 -> 'EFT credit'

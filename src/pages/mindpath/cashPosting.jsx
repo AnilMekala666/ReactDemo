@@ -24,6 +24,7 @@ import { useSpring, animated } from 'react-spring';
 // project import
 import MainCard from 'components/MainCard';
 import Loader from 'components/Loader';
+import { currencyFormat } from 'components/mindpath';
 
 
 const deposit_payment_queue = new URL('src/assets/data/deposit_payment_queue.csv', import.meta.url).href;
@@ -178,9 +179,17 @@ const cashPosting = () => {
                     if (object["id"] == undefined) {
                         object["id"] = x + 1;
                     }
-                    if (values[index]) {
-                        object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index] || "";
-                        return object;
+                    if(header.toLowerCase().includes("amount")) {
+                        if (values[index]) {
+                            object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = currencyFormat(parseFloat(values[index] || 0));
+                            return object;
+                        }
+                    }
+                    else {
+                        if (values[index]) {
+                            object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index] || "";
+                            return object;
+                        }
                     }
                 }
                 return object;
