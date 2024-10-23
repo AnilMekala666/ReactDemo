@@ -9,8 +9,8 @@ import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
 
 const initialStaticData = [
-  { 'Payment ID': '001', 'Transaction Number': 'TN001', 'Patient ID': 'PID001', 'Amount': '100.00', 'State Name': 'New York' },
-  { 'Payment ID': '002', 'Transaction Number': 'TN002', 'Patient ID': 'PID002', 'Amount': '200.00', 'State Name': 'California' },
+  { 'Payment ID': '001', 'Transaction Number': 'TN001', 'Patient ID': 'PID001', 'Amount': '$100.00', 'State Name': 'New York' },
+  { 'Payment ID': '002', 'Transaction Number': 'TN002', 'Patient ID': 'PID002', 'Amount': '$200.00', 'State Name': 'California' },
   
 ];
 
