@@ -265,7 +265,7 @@ const Reconcile = () => {
                     id="panel1-header"
                     sx={{ backgroundColor: '#fdf6ef', p: 1, borderRadius: "10px", border: 0 }}
                 >
-                    Unreceonciled
+                    Unreconciled
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
