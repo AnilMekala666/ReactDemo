@@ -195,6 +195,7 @@ function RemittanceData() {
         'Amount': currencyFormat(parseInt(x["chk_amount"]) || 0),
         'Payer': x['payer'],
         'Patient Name': x['patient_name'],
+        'Patient Id': x['patient_control'],
         'Claim Status': x['claim_status'],
         'Billed Amount': currencyFormat(parseInt(x["ln_claimed"]) || 0),
         'Allowed Amount': currencyFormat(parseInt(x["ln_allowed"]) || 0),
