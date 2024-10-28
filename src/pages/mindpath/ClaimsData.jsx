@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Button, Grid, Tab, Tabs, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomExpandableTable from 'components/payments/CustomExpandableTable';
@@ -9,6 +9,7 @@ import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
 import { currencyFormat } from 'components/mindpath';
 import CustomExpandableTableColumn from 'components/payments/CustomExpandableTableColumn';
+import AnimatedProcess from './AnimatedProcess';
 
 const claimsCsv = new URL('src/assets/data/claims.csv', import.meta.url).href;
 
@@ -261,6 +262,62 @@ function ClaimsData() {
   const [showFileContent, setShowFileContent] = useState(false);
   const [value, setValue] = React.useState(0);
   const [tableColumns, setTableColumns] = useState([]);
+  const [step, setStep] = useState("1");
+  const [countFiles, setCountFiles] = useState([]);
+
+    useEffect(() =>  {
+      if(loading) {
+        setTimeout(() => {
+        if(step.startsWith("1")) {
+          switch(step) {
+            case "1": setStep("1.1"); return;
+            case "1.1": setStep("1.2"); return;
+            case "1.2": setStep("2"); return;
+          }
+        }
+        if(step.startsWith("2")) {
+          switch(step) {
+            case "2": setStep("2.1"); return;
+            case "2.1": setStep("2.2"); return;
+            case "2.2": setStep("2.3"); return;
+            case "2.3": setStep("3"); return;
+          }
+        }
+        if(step.startsWith("3")) {
+          switch(step) {
+            case "3": setStep("3.1"); return;
+            case "3.1": setStep("3.2"); return;
+            case "3.2": setStep("3.3"); return;
+            case "3.3": setStep("4"); return;
+          }
+        }
+        if(step.startsWith("4")) {
+          switch(step) {
+            case "4": setStep("4.1"); return;
+            case "4.1": setStep("4.2"); return;
+            case "4.2": setStep("4.3"); return;
+            case "4.3": setStep("5"); return;
+          }
+        }
+        if(step.startsWith("5")) {
+          let f = [...countFiles];
+          switch(step) {
+            case "5": setStep("5.1"); f.push(5000); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.2"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5.2": setStep("5.3"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5.3": setStep("6.1"); return;
+          }
+        }
+        waitLoad();
+        setStep("6.1");
+        return;
+      }, 1000)
+    }
+  }, [step, loading])
+
+  const waitLoad = () => {
+    setTimeout(()=>setLoading(false), 5000);
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -355,11 +412,12 @@ function ClaimsData() {
     console.log(file)
     if (file) {
         setLoading(true);
+        load()
         const text = file;
         setTimeout(() => {
             parseCsvFile(text);
             setLoading(false);
-        }, 2000);
+        }, 18000);
     }
   }
 
@@ -568,6 +626,8 @@ function ClaimsData() {
     );
   }
 
+  
+
   return (
     <div>
       <Grid mt={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -597,9 +657,9 @@ function ClaimsData() {
       </Grid>
 
       {loading ? (
-        <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
-          <h3 style={{ margin: 'auto' }}>Loading...</h3>
-        </div>
+        <Box sx={{ width: '100%' }}>
+          <AnimatedProcess currentStep={step} countFiles={countFiles} />
+        </Box>
       ) : (
         showFileContent ?
         <Box sx={{ width: '100%' }}>
