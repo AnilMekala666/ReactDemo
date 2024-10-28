@@ -265,9 +265,9 @@ function ClaimsData() {
   const [step, setStep] = useState("1");
   const [countFiles, setCountFiles] = useState([]);
 
-    useEffect(() =>  {
-      if(loading) {
-        setTimeout(() => {
+  useEffect(() =>  {
+    if(loading) {
+      setTimeout(() => {
         if(step.startsWith("1")) {
           switch(step) {
             case "1": setStep("1.1"); return;
@@ -280,7 +280,7 @@ function ClaimsData() {
             case "2": setStep("2.1"); return;
             case "2.1": setStep("2.2"); return;
             case "2.2": setStep("2.3"); return;
-            case "2.3": setStep("3"); return;
+            case "2.3": setStep("4"); return;
           }
         }
         if(step.startsWith("3")) {

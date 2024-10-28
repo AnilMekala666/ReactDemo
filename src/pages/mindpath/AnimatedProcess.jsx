@@ -3,7 +3,7 @@ import react from 'react';
 import "./AnimatedProcess.css";
 import { Check } from '@mui/icons-material';
 
-const AnimatedProcess = ({currentStep, countFiles}) => {
+const AnimatedProcess = ({currentStep, countFiles, type}) => {
     if(currentStep == null) {
         return <></>;
     }
@@ -64,40 +64,42 @@ const AnimatedProcess = ({currentStep, countFiles}) => {
                     </div>
                 </div>
             </div>
-            <div className={["step", currentStep > 3.3 ? "step-complete" : currentStep.startsWith("3") ? "step-active" : ""].join(" ")}>
-                <div>
-                    <div className="circle">{currentStep > 3.3 ? <Check color='#000' sx={{ width: 10, height: 10 }} /> : "3"}</div>
-                </div>
-                <div>
-                <div className="title">Applying Rules</div>
-                    <div className="caption">
-                        <div className={["sub-step", currentStep > 3.1 ? "step-complete" : currentStep == "3.1" ? "step-active" : ""].join(" ")}>
-                            <div>
-                                <div className="title">
-                                    Processing only transactions with BAI Code-165.
+            {type == "deposit" &&
+                <div className={["step", currentStep > 3.3 ? "step-complete" : currentStep.startsWith("3") ? "step-active" : ""].join(" ")}>
+                    <div>
+                        <div className="circle">{currentStep > 3.3 ? <Check color='#000' sx={{ width: 10, height: 10 }} /> : "3"}</div>
+                    </div>
+                    <div>
+                    <div className="title">Applying Rules</div>
+                        <div className="caption">
+                            <div className={["sub-step", currentStep > 3.1 ? "step-complete" : currentStep == "3.1" ? "step-active" : ""].join(" ")}>
+                                <div>
+                                    <div className="title">
+                                        Processing only transactions with BAI Code-165.
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className={["sub-step", currentStep > 3.2 ? "step-complete" : currentStep == "3.2" ? "step-active" : ""].join(" ")}>
-                            <div>
-                                <div className="title">
-                                    Eliminating duplicate entries.
+                            <div className={["sub-step", currentStep > 3.2 ? "step-complete" : currentStep == "3.2" ? "step-active" : ""].join(" ")}>
+                                <div>
+                                    <div className="title">
+                                        Eliminating duplicate entries.
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className={["sub-step", currentStep > 3.3 ? "step-complete" : currentStep == "3.3" ? "step-active" : ""].join(" ")}>
-                            <div>
-                                <div className="title">
-                                    Excluding transactions that include Fees.
+                            <div className={["sub-step", currentStep > 3.3 ? "step-complete" : currentStep == "3.3" ? "step-active" : ""].join(" ")}>
+                                <div>
+                                    <div className="title">
+                                        Excluding transactions that include Fees.
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
             <div className={["step", currentStep > 4.3 ? "step-complete" : currentStep.startsWith("4") ? "step-active" : ""].join(" ")}>
                 <div>
-                    <div className="circle">{currentStep > 4.3 ? <Check color='#000' sx={{ width: 10, height: 10 }} /> : "4"}</div>
+                    <div className="circle">{currentStep > 4.3 ? <Check color='#000' sx={{ width: 10, height: 10 }} /> : type == "deposit" ? "4" : "3"}</div>
                 </div>
                 <div>
                 <div className="title">Inserting Data</div>
@@ -128,7 +130,7 @@ const AnimatedProcess = ({currentStep, countFiles}) => {
             </div>
             <div className={["step", currentStep > 5.3 ? "step-complete" : currentStep.startsWith("5") ? "step-active" : ""].join(" ")}>
                 <div>
-                    <div className="circle">{currentStep > 5.3 ? <Check color='#000' sx={{ width: 10, height: 10 }} /> : "5"}</div>
+                    <div className="circle">{currentStep > 5.3 ? <Check color='#000' sx={{ width: 10, height: 10 }} /> : type == "deposit" ? "5" : "4"}</div>
                 </div>
                 <div>
                 <div className="title">Verifying Data</div>

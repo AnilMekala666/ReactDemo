@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Grid, Button, Typography, Tabs, Tab } from '@mui/material';
+import { Grid, Button, Typography, Tabs, Tab, TableCell } from '@mui/material';
 import { UploadOutlined } from '@ant-design/icons';
 import CustomDialog from 'components/payments/CustomDialog';
 import CustomTable from 'components/payments/CustomTable';
@@ -8,6 +8,8 @@ import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
 import CustomExpandableTableColumn from 'components/payments/CustomExpandableTableColumn';
 import { currencyFormat } from 'components/mindpath';
+import AnimatedProcess from './AnimatedProcess';
+import { flexRender } from '@tanstack/react-table';
 
 const remittance = new URL('src/assets/data/remittance.csv', import.meta.url).href;
 const remittanceDemo = new URL('src/assets/data/remittance.demo.csv', import.meta.url).href;
@@ -59,6 +61,63 @@ function RemittanceData() {
   const [showFileContent, setShowFileContent] = useState(false);
   const [tableColumns, setTableColumns] = useState([]);
   const [value, setValue] = React.useState(0);
+  const [step, setStep] = useState("1");
+  const [countFiles, setCountFiles] = useState([]);
+  const [outsideData, setOutsideData] = useState([]);
+
+  useEffect(() =>  {
+    if(loading) {
+      setTimeout(() => {
+        if(step.startsWith("1")) {
+          switch(step) {
+            case "1": setStep("1.1"); return;
+            case "1.1": setStep("1.2"); return;
+            case "1.2": setStep("2"); return;
+          }
+        }
+        if(step.startsWith("2")) {
+          switch(step) {
+            case "2": setStep("2.1"); return;
+            case "2.1": setStep("2.2"); return;
+            case "2.2": setStep("2.3"); return;
+            case "2.3": setStep("4"); return;
+          }
+        }
+        if(step.startsWith("3")) {
+          switch(step) {
+            case "3": setStep("3.1"); return;
+            case "3.1": setStep("3.2"); return;
+            case "3.2": setStep("3.3"); return;
+            case "3.3": setStep("4"); return;
+          }
+        }
+        if(step.startsWith("4")) {
+          switch(step) {
+            case "4": setStep("4.1"); return;
+            case "4.1": setStep("4.2"); return;
+            case "4.2": setStep("4.3"); return;
+            case "4.3": setStep("5"); return;
+          }
+        }
+        if(step.startsWith("5")) {
+          let f = [...countFiles];
+          switch(step) {
+            case "5": setStep("5.1"); f.push(5000); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.2"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5.2": setStep("5.3"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5.3": setStep("6.1"); return;
+          }
+        }
+        waitLoad();
+        setStep("6.1");
+        return;
+      }, 1000)
+    }
+  }, [step, loading])
+
+  const waitLoad = () => {
+    setTimeout(()=>setLoading(false), 5000);
+  }
 
   useEffect(()=>{
     fetchCSV(remittanceDemo)
@@ -94,12 +153,9 @@ function RemittanceData() {
     const file = await fetch(url ?? remittance).then(res => res.text());
     console.log(file)
     if (file) {
-        setLoading(true);
+        // setLoading(true);
         const text = file;
-        setTimeout(() => {
-            parseBaiFile(text);
-            setLoading(false);
-        }, 2000);
+        parseBaiFile(text);
     }
   }
 
@@ -114,7 +170,6 @@ function RemittanceData() {
         setTimeout(() => {
           setFileContent(text);
           fetchCSV();
-          setLoading(false);
           setShowFileContent(true);
         }, 2000);
       };
@@ -192,13 +247,18 @@ function RemittanceData() {
       return obj;
     }).filter((val) => val != undefined);
     const arr = [];
-    array.map((x)=>{
+    let out = {};
+    array.map((x, i)=>{
+      if(i == 0) {
+        out={
+          "Transaction Number": x['check/eft_no'],
+          'Deposit Date': x['chk_date'],
+          'Amount': currencyFormat(parseInt(x["chk_amount"]) || 0),
+          'Payer': x['payer']
+        }
+      }
       arr.push({
         "id": x["id"],
-        'Transaction Number': x['check/eft_no'],
-        'Deposit Date': x['chk_date'],
-        'Amount': currencyFormat(parseInt(x["chk_amount"]) || 0),
-        'Payer': x['payer'],
         'Patient Name': x['patient_name'],
         'Patient Id': x['patient_control'],
         'Claim Status': x['claim_status'],
@@ -206,12 +266,10 @@ function RemittanceData() {
         'Allowed Amount': currencyFormat(parseInt(x["ln_allowed"]) || 0),
         'Patient Amount': currencyFormat(parseInt(x['patient_amt']) || 0),
         'Paid Amount': currencyFormat(parseInt(x["ln_paid"]) || 0),
-        // 'Start DOS': x['svc_start'],
-        // 'End DOS': x['svc_end'],
+        'Start DOS': x['svc_start'],
+        'End DOS': x['svc_end'],
         "subRows": [
           {
-            'Svc Start': x['svc_start'],
-            'Svc End': x['svc_end'],
             'HCPCS': x['hcpcs'],
             'Modifiers': x['modifiers'],
             'Ln Claimed': currencyFormat(parseInt(x["ln_claimed"]) || 0),
@@ -226,6 +284,7 @@ function RemittanceData() {
         ]
       })
     })
+    setOutsideData(out);
     const headerKeys = Object.keys(Object.assign({}, ...arr));
     let columns = [];
     columns = headerKeys.map((header, index) => {
@@ -242,7 +301,7 @@ function RemittanceData() {
     setTableColumns(columns);
     console.log("Parsed Data: ", arr);
     // Set the parsed data to the state or return it
-    setParsedData(arr.filter(k=>k["Transaction Number"] != null));
+    setParsedData(arr.filter(k=>k["Patient Name"] != null));
   };
 
 
@@ -393,9 +452,9 @@ function RemittanceData() {
       </Grid>
 
       {loading ? (
-        <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
-          <h3 style={{ margin: 'auto' }}>Loading...</h3>
-        </div>
+        <Box sx={{ width: '100%' }}>
+          <AnimatedProcess currentStep={step} countFiles={countFiles} />
+        </Box>
       ) : (
         showFileContent ?
         <Box sx={{ width: '100%' }}>
@@ -426,11 +485,21 @@ function RemittanceData() {
             </Grid>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
+            {Object.keys(outsideData).map((cell, i) => (
+              <TableCell onClick={() => handleClick(index)} key={i}>
+                {flexRender(cell)}: {flexRender(outsideData[cell])}
+              </TableCell>
+            ))}
             <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
           </CustomTabPanel>
         </Box>
         : 
         <Box>
+          {Object.keys(outsideData).map((cell, i) => (
+            <TableCell onClick={() => handleClick(index)} key={i}>
+              {flexRender(cell)}: {flexRender(outsideData[cell])}
+            </TableCell>
+          ))}
           <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
         </Box>
       )}

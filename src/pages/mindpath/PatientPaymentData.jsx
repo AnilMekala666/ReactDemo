@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button, Grid, Tab, Tabs, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomTable from 'components/payments/CustomTable';
@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 import { UploadOutlined } from '@ant-design/icons';
 import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
+import AnimatedProcess from './AnimatedProcess';
 
 const initialStaticData = [
   { 'Payment ID': '001', 'Transaction Number': 'TN001', 'Patient ID': 'PID001', 'Amount': '$100.00', 'State Name': 'New York' },
@@ -22,6 +23,62 @@ function PatientPaymentData() {
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
   const [value, setValue] = React.useState(0);
+  const [step, setStep] = useState("1");
+  const [countFiles, setCountFiles] = useState([]);
+
+  useEffect(() =>  {
+    if(loading) {
+      setTimeout(() => {
+        if(step.startsWith("1")) {
+          switch(step) {
+            case "1": setStep("1.1"); return;
+            case "1.1": setStep("1.2"); return;
+            case "1.2": setStep("2"); return;
+          }
+        }
+        if(step.startsWith("2")) {
+          switch(step) {
+            case "2": setStep("2.1"); return;
+            case "2.1": setStep("2.2"); return;
+            case "2.2": setStep("2.3"); return;
+            case "2.3": setStep("4"); return;
+          }
+        }
+        if(step.startsWith("3")) {
+          switch(step) {
+            case "3": setStep("3.1"); return;
+            case "3.1": setStep("3.2"); return;
+            case "3.2": setStep("3.3"); return;
+            case "3.3": setStep("4"); return;
+          }
+        }
+        if(step.startsWith("4")) {
+          switch(step) {
+            case "4": setStep("4.1"); return;
+            case "4.1": setStep("4.2"); return;
+            case "4.2": setStep("4.3"); return;
+            case "4.3": setStep("5"); return;
+          }
+        }
+        if(step.startsWith("5")) {
+          let f = [...countFiles];
+          switch(step) {
+            case "5": setStep("5.1"); f.push(5000); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.2"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5.2": setStep("5.3"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5.3": setStep("6.1"); return;
+          }
+        }
+        waitLoad();
+        setStep("6.1");
+        return;
+      }, 1000)
+    }
+  }, [step, loading])
+
+  const waitLoad = () => {
+    setTimeout(()=>setLoading(false), 5000);
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -47,7 +104,7 @@ function PatientPaymentData() {
 
         setFileContent(jsonData); // Save parsed data for displaying
         setParsedData(jsonData); // Save parsed data for the dialog
-        setLoading(false);
+        // setLoading(false);
         setShowFileContent(true); // Show uploaded content
       };
       reader.readAsArrayBuffer(file); // Read file as ArrayBuffer
@@ -117,9 +174,9 @@ function PatientPaymentData() {
       </Grid>
 
       {loading ? (
-        <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
-          <h3 style={{ margin: 'auto' }}>Loading...</h3>
-        </div>
+        <Box sx={{ width: '100%' }}>
+          <AnimatedProcess currentStep={step} countFiles={countFiles} />
+        </Box>
       ) : (
         showFileContent ?
           <Box sx={{ width: '100%' }}>

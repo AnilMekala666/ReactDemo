@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Grid, Button, Typography, Tabs, Tab } from '@mui/material';
 import { UploadOutlined } from '@ant-design/icons';
 import CustomDialog from 'components/payments/CustomDialog';
@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router';
 import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
 import { currencyFormat } from 'components/mindpath';
-
+import AnimatedProcess from './AnimatedProcess';
+const depositDataBai = new URL('src/assets/data/deposit.bai', import.meta.url).href;
 
 const initialStaticData = [
   {
@@ -147,11 +148,68 @@ const initialStaticData = [
 function DepositData() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [parsedData, setParsedData] = useState(initialStaticData);
+  const [parsedData, setParsedData] = useState([]);
   const [depositDataDialogOpen, setDepositDataDialogOpen] = useState(false);
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
   const [value, setValue] = React.useState(0);
+  const [step, setStep] = useState("1");
+  const [countFiles, setCountFiles] = useState([]);
+  const [fileMessage, setFileMessage] = useState("File Available to Process");
+
+  useEffect(() =>  {
+    if(loading) {
+      setTimeout(() => {
+        if(step.startsWith("1")) {
+          switch(step) {
+            case "1": setStep("1.1"); return;
+            case "1.1": setStep("1.2"); return;
+            case "1.2": setStep("2"); return;
+          }
+        }
+        if(step.startsWith("2")) {
+          switch(step) {
+            case "2": setStep("2.1"); return;
+            case "2.1": setStep("2.2"); return;
+            case "2.2": setStep("2.3"); return;
+            case "2.3": setStep("3"); return;
+          }
+        }
+        if(step.startsWith("3")) {
+          switch(step) {
+            case "3": setStep("3.1"); return;
+            case "3.1": setStep("3.2"); return;
+            case "3.2": setStep("3.3"); return;
+            case "3.3": setStep("4"); return;
+          }
+        }
+        if(step.startsWith("4")) {
+          switch(step) {
+            case "4": setStep("4.1"); return;
+            case "4.1": setStep("4.2"); return;
+            case "4.2": setStep("4.3"); return;
+            case "4.3": setStep("5"); return;
+          }
+        }
+        if(step.startsWith("5")) {
+          let f = [...countFiles];
+          switch(step) {
+            case "5": setStep("5.1"); f.push(5000); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.2"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5.2": setStep("5.3"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5.3": setStep("6.1"); return;
+          }
+        }
+        waitLoad();
+        setStep("6.1");
+        return;
+      }, 1000)
+    }
+  }, [step, loading])
+
+  const waitLoad = () => {
+    setTimeout(()=>setLoading(false), 5000);
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -161,26 +219,16 @@ function DepositData() {
     setDepositDataDialogOpen(false);
   };
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = async(event) => {
+    const file = await fetch(depositDataBai).then(res => res.text());
     if (file) {
+      setFileContent(file);
+      parseBaiFile(file);
+      setShowFileContent(true);
       setLoading(true);
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const text = e.target.result;
-
-        setTimeout(() => {
-          setFileContent(text);
-          parseBaiFile(text);
-          setLoading(false);
-          setShowFileContent(true);
-        }, 2000);
-      };
-      reader.readAsText(file);
+      setFileMessage("No File Available to Process");
     }
   };
-
-
 
   const parseBaiFile = (content) => {
     const lines = content.split('\n');
@@ -269,6 +317,7 @@ function DepositData() {
     console.log("Parsed Data: ", newParsedData);
     // Set the parsed data to the state or return it
     setParsedData(newParsedData);
+    
   };
 
 
@@ -409,18 +458,22 @@ function DepositData() {
             variant="contained"
             color="primary"
             component="label"
-            sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
+            disabled={showFileContent}
+            onClick={handleFileUpload}
+            sx={{ borderRadius: '40px', marginTop: '0px', padding: '12px 30px 12px 30px' }}
           >
-            Get File
-            <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} />
-            <UploadOutlined style={{ fontSize: '20px', padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+            {fileMessage}
+            {/* <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} /> */}
+            {!showFileContent &&
+             <UploadOutlined style={{ fontSize: '20px', marginLeft: '15px', borderRadius: '100%', background: 'transparent' }} />
+            }
           </Button>
         </Grid>
       </Grid>
       {loading ? (
-        <div style={{ position: 'absolute', top: '10%', left: '50%' }}>
-          <h3 style={{ margin: 'auto' }}>Loading...</h3>
-        </div>
+        <Box sx={{ width: '100%' }}>
+          <AnimatedProcess currentStep={step} countFiles={countFiles} type="deposit" />
+        </Box>
       ) : (
         showFileContent ?
         <Box sx={{ width: '100%' }}>
