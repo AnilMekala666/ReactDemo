@@ -8,11 +8,97 @@ import { UploadOutlined } from '@ant-design/icons';
 import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
 import AnimatedProcess from './AnimatedProcess';
+import CustomExpandableTableColumn from 'components/payments/CustomExpandableTableColumn';
+import moment from 'moment';
 
 const initialStaticData = [
-  { 'Payment ID': '001', 'Transaction Number': 'TN001', 'Patient ID': 'PID001', 'Amount': '$100.00', 'State Name': 'New York' },
-  { 'Payment ID': '002', 'Transaction Number': 'TN002', 'Patient ID': 'PID002', 'Amount': '$200.00', 'State Name': 'California' },
-  
+  {
+    "File Process Date": "28-01-2024",
+    "# files received": "3",
+    "# files processed": "3",
+    "# Total Transactions": "1100",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+    ],
+  },
+  {
+    "File Process Date": "27-01-2024",
+    "# files received": "4",
+    "# files processed": "4",
+    "# Total Transactions": "1454",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "354",
+        "# total transactions recorded": "208",
+        "File Status": "Processed",
+      },
+    ],
+  },
+  {
+    "File Process Date": "28-01-2024",
+    "# files received": "5",
+    "# files processed": "5",
+    "# Total Transactions": "1100",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+    ],
+  },
 ];
 
 function PatientPaymentData() {
@@ -25,6 +111,33 @@ function PatientPaymentData() {
   const [value, setValue] = React.useState(0);
   const [step, setStep] = useState("1");
   const [countFiles, setCountFiles] = useState([]);
+  const [fileMessage, setFileMessage] = useState("File Available to Process");
+  const [transactionsCount, setTransactionsCount] = useState([]);
+  const [tableColumns, setTableColumns] = useState([]);
+
+  useEffect(()=>{
+    const staticData = initialStaticData.map((x, i) => {
+      var today = new Date();
+      today.setDate(today.getDate() - (i + 1));
+      
+      x["File Process Date"] = moment(today).format("DD-MM-YYYY");
+      return x;
+    })
+    setParsedData(staticData);
+    const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      if(header != "subRows" && header != "id") {
+        let o = {
+          id: index + 1,
+          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          accessorKey: header.replace("\r", "")
+        }
+        return o;
+      }
+    }).filter((key) => key != "subRows" && key != undefined)
+    setTableColumns(columns);
+  }, [])
 
   useEffect(() =>  {
     if(loading) {
@@ -63,10 +176,9 @@ function PatientPaymentData() {
         if(step.startsWith("5")) {
           let f = [...countFiles];
           switch(step) {
-            case "5": setStep("5.1"); f.push(5000); console.log(f); setCountFiles([...f]); return;
-            case "5.1": setStep("5.2"); f.push(3030); console.log(f); setCountFiles([...f]); return;
-            case "5.2": setStep("5.3"); f.push(3030); console.log(f); setCountFiles([...f]); return;
-            case "5.3": setStep("6.1"); return;
+            case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.2"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); console.log(f); setCountFiles([...f]); return;
+            case "5.3": setStep("6.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); console.log(f); setCountFiles([...f]); return;
           }
         }
         waitLoad();
@@ -104,23 +216,23 @@ function PatientPaymentData() {
 
         setFileContent(jsonData); // Save parsed data for displaying
         setParsedData(jsonData); // Save parsed data for the dialog
+        let columns = [
+          { header: 'Payment ID', accessorKey: 'Payment ID' },
+          { header: 'Transaction Number', accessorKey: 'Transaction Number' },
+          { header: 'Patient ID', accessorKey: 'Patient ID' },
+          { header: 'Amount', accessorKey: 'Amount' },
+          { header: 'State Name', accessorKey: 'State Name' },
+        ];
+        
+        console.log("Columns", columns);
+        setTableColumns(columns);
         // setLoading(false);
         setShowFileContent(true); // Show uploaded content
       };
       reader.readAsArrayBuffer(file); // Read file as ArrayBuffer
+      
     }
   };
-
-  const tableColumns = useMemo(
-    () => [
-      { header: 'Payment ID', accessorKey: 'Payment ID' },
-      { header: 'Transaction Number', accessorKey: 'Transaction Number' },
-      { header: 'Patient ID', accessorKey: 'Patient ID' },
-      { header: 'Amount', accessorKey: 'Amount' },
-      { header: 'State Name', accessorKey: 'State Name' },
-    ],
-    []
-  );
 
   function a11yProps(index) {
     return {
@@ -207,12 +319,12 @@ function PatientPaymentData() {
               </Grid>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              <CustomTable data={parsedData} datacolumns={tableColumns} />
+              <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
             </CustomTabPanel>
           </Box>
         : 
           <Box>
-            <CustomTable data={parsedData} datacolumns={tableColumns} />
+            <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
           </Box>
       )}
       
@@ -290,7 +402,7 @@ function PatientPaymentData() {
         onClose={handlePatientPaymentDataDataDialogClose}
         title={"Patient Payments Data"}
       >
-        <CustomTable data={parsedData} datacolumns={tableColumns} />
+        <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
       </CustomDialog>
     </div>
   );

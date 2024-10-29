@@ -10,32 +10,98 @@ import CustomExpandableTableColumn from 'components/payments/CustomExpandableTab
 import { currencyFormat } from 'components/mindpath';
 import AnimatedProcess from './AnimatedProcess';
 import { flexRender } from '@tanstack/react-table';
+import moment from 'moment';
 
 const remittance = new URL('src/assets/data/remittance.csv', import.meta.url).href;
 const remittanceDemo = new URL('src/assets/data/remittance.demo.csv', import.meta.url).href;
 
 const initialStaticData = [
   {
-    transaction_number: "1017382",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ANTHEM BCBS OF C",
-    deposit_date: "2024-10-01",
-    amounts: "1000.00",
-    indn: "Static INDN 1",
-    des: "Static DES 1",
-    additional_info: "Static additional info 1",
+    "File Process Date": "28-01-2024",
+    "# files received": "3",
+    "# files processed": "3",
+    "# Total Transactions": "1100",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+    ],
   },
   {
-    transaction_number: "16815",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ELEVANCE HLTH AP",
-    deposit_date: "2024-10-02",
-    amounts: "2000.00",
-    indn: "Static INDN 2",
-    des: "Static DES 2",
-    additional_info: "Static additional info 2",
+    "File Process Date": "27-01-2024",
+    "# files received": "4",
+    "# files processed": "4",
+    "# Total Transactions": "1454",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "354",
+        "# total transactions recorded": "208",
+        "File Status": "Processed",
+      },
+    ],
+  },
+  {
+    "File Process Date": "28-01-2024",
+    "# files received": "5",
+    "# files processed": "5",
+    "# Total Transactions": "1100",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+    ],
   },
 ];
 
@@ -64,6 +130,8 @@ function RemittanceData() {
   const [step, setStep] = useState("1");
   const [countFiles, setCountFiles] = useState([]);
   const [outsideData, setOutsideData] = useState([]);
+  const [fileMessage, setFileMessage] = useState("File Available to Process");
+  const [transactionsCount, setTransactionsCount] = useState([]);
 
   useEffect(() =>  {
     if(loading) {
@@ -102,10 +170,9 @@ function RemittanceData() {
         if(step.startsWith("5")) {
           let f = [...countFiles];
           switch(step) {
-            case "5": setStep("5.1"); f.push(5000); console.log(f); setCountFiles([...f]); return;
-            case "5.1": setStep("5.2"); f.push(3030); console.log(f); setCountFiles([...f]); return;
-            case "5.2": setStep("5.3"); f.push(3030); console.log(f); setCountFiles([...f]); return;
-            case "5.3": setStep("6.1"); return;
+            case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.3"); transactionsCount.length > 1 ? f.push(transactionsCount[1]) : f.push(756); console.log(f); setCountFiles([...f]); return;
+            case "5.3": setStep("6.1"); transactionsCount.length > 2 ? f.push(transactionsCount[2]) : f.push(443); console.log(f); setCountFiles([...f]); return;
           }
         }
         waitLoad();
@@ -120,7 +187,27 @@ function RemittanceData() {
   }
 
   useEffect(()=>{
-    fetchCSV(remittanceDemo)
+    const staticData = initialStaticData.map((x, i) => {
+      var today = new Date();
+      today.setDate(today.getDate() - (i + 1));
+      
+      x["File Process Date"] = moment(today).format("DD-MM-YYYY");
+      return x;
+    })
+    setParsedData(staticData);
+    const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      if(header != "subRows" && header != "id") {
+        let o = {
+          id: index + 1,
+          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          accessorKey: header.replace("\r", "")
+        }
+        return o;
+      }
+    }).filter((key) => key != "subRows" && key != undefined)
+    setTableColumns(columns);
   }, [])
 
   const handleChange = (event, newValue) => {
@@ -159,21 +246,14 @@ function RemittanceData() {
     }
   }
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = async (event) => {
+    const file = await fetch(remittance).then(res => res.text());
     if (file) {
+      setFileContent(file);
+      parseBaiFile(file);
+      setShowFileContent(true);
       setLoading(true);
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const text = e.target.result;
-
-        setTimeout(() => {
-          setFileContent(text);
-          fetchCSV();
-          setShowFileContent(true);
-        }, 2000);
-      };
-      reader.readAsText(file);
+      setFileMessage("No File Available to Process");
     }
   };
 
@@ -219,7 +299,6 @@ function RemittanceData() {
   const parseBaiFile = (content) => {
     const csvHeader = content.slice(0, content.indexOf("\n")).split(",");
     const csvRows = content.slice(content.indexOf("\n") + 1).split("\n");
-    console.log(csvHeader)
     const array = csvRows.map((i, x) => {
       const values = splitCSVButIgnoreCommasInDoublequotes(i);
       // console.log(x, values);
@@ -253,7 +332,7 @@ function RemittanceData() {
         out={
           "Transaction Number": x['check/eft_no'],
           'Deposit Date': x['chk_date'],
-          'Amount': currencyFormat(parseInt(x["chk_amount"]) || 0),
+          'Amount': currencyFormat(parseFloat(x["chk_amount"]) || 0),
           'Payer': x['payer']
         }
       }
@@ -262,23 +341,23 @@ function RemittanceData() {
         'Patient Name': x['patient_name'],
         'Patient Id': x['patient_control'],
         'Claim Status': x['claim_status'],
-        'Billed Amount': currencyFormat(parseInt(x["ln_claimed"]) || 0),
-        'Allowed Amount': currencyFormat(parseInt(x["ln_allowed"]) || 0),
-        'Patient Amount': currencyFormat(parseInt(x['patient_amt']) || 0),
-        'Paid Amount': currencyFormat(parseInt(x["ln_paid"]) || 0),
+        'Billed Amount': currencyFormat(parseFloat(x["ln_claimed"]) || 0),
+        'Allowed Amount': currencyFormat(parseFloat(x["ln_allowed"]) || 0),
+        'Patient Amount': currencyFormat(parseFloat(x['patient_amt']) || 0),
+        'Paid Amount': currencyFormat(parseFloat(x["ln_paid"]) || 0),
         'Start DOS': x['svc_start'],
         'End DOS': x['svc_end'],
         "subRows": [
           {
             'HCPCS': x['hcpcs'],
             'Modifiers': x['modifiers'],
-            'Ln Claimed': currencyFormat(parseInt(x["ln_claimed"]) || 0),
-            'Ln Allowed': currencyFormat(parseInt(x["ln_allowed"]) || 0),
-            'Ln Paid': currencyFormat(parseInt(x["ln_paid"]) || 0),
-            'Ln Deductible': currencyFormat(parseInt(x["ln_deductible"]) || 0),
-            'Ln Co-Ins': currencyFormat(parseInt(x["ln_co-ins"]) || 0),
-            'Ln Co-Pay': currencyFormat(parseInt(x["ln_co-pay"]) || 0),
-            'Ln Denied': currencyFormat(parseInt(x["ln_denied"]) || 0),
+            'Ln Claimed': currencyFormat(parseFloat(x["ln_claimed"]) || 0),
+            'Ln Allowed': currencyFormat(parseFloat(x["ln_allowed"]) || 0),
+            'Ln Paid': currencyFormat(parseFloat(x["ln_paid"]) || 0),
+            'Ln Deductible': currencyFormat(parseFloat(x["ln_deductible"]) || 0),
+            'Ln Co-Ins': currencyFormat(parseFloat(x["ln_co-ins"]) || 0),
+            'Ln Co-Pay': currencyFormat(parseFloat(x["ln_co-pay"]) || 0),
+            'Ln Denied': currencyFormat(parseFloat(x["ln_denied"]) || 0),
             'Ln More Adjustments': x['ln_more adjustments']
           }
         ]
@@ -302,6 +381,7 @@ function RemittanceData() {
     console.log("Parsed Data: ", arr);
     // Set the parsed data to the state or return it
     setParsedData(arr.filter(k=>k["Patient Name"] != null));
+    setFileMessage("No File Available to Process");
   };
 
 
@@ -442,11 +522,13 @@ function RemittanceData() {
             variant="contained"
             color="primary"
             component="label"
+            disabled={showFileContent}
+            onClick={handleFileUpload}
             sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
           >
-            Get File
-            <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} />
-            <UploadOutlined style={{ fontSize: '20px', padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+            {fileMessage}
+            {/* <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} /> */}
+            <UploadOutlined style={{ fontSize: '20px', padding: '12px', marginLeft: '15px', borderRadius: '100%' }} />
           </Button>
         </Grid>
       </Grid>
@@ -487,7 +569,7 @@ function RemittanceData() {
           <CustomTabPanel value={value} index={1}>
             {Object.keys(outsideData).map((cell, i) => (
               <TableCell onClick={() => handleClick(index)} key={i}>
-                {flexRender(cell)}: {flexRender(outsideData[cell])}
+                <Typography variant='p' sx={{ fontWeight: 'bold', fontSize: 16 }}>{flexRender(cell)}: {flexRender(outsideData[cell])}</Typography>
               </TableCell>
             ))}
             <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
@@ -496,8 +578,8 @@ function RemittanceData() {
         : 
         <Box>
           {Object.keys(outsideData).map((cell, i) => (
-            <TableCell onClick={() => handleClick(index)} key={i}>
-              {flexRender(cell)}: {flexRender(outsideData[cell])}
+            <TableCell key={i}>
+              <Typography variant='p' sx={{ fontWeight: 'bold', fontSize: 16 }}>{flexRender(cell)}: {flexRender(outsideData[cell])}</Typography>
             </TableCell>
           ))}
           <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />

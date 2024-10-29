@@ -8,140 +8,105 @@ import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
 import { currencyFormat } from 'components/mindpath';
 import AnimatedProcess from './AnimatedProcess';
+import moment from 'moment';
 const depositDataBai = new URL('src/assets/data/deposit.bai', import.meta.url).href;
 
 const initialStaticData = [
   {
-    transaction_number: "1017382",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ANTHEM BCBS OF C",
-    deposit_date: "10-01-2024",
-    amounts: "$1000.00",
-    indn: "Static INDN 1",
-    des: "Static DES 1",
-    additional_info: "Static additional info 1",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI1",
+    "# Total Transactions": "756",
+    "# Transactions after applying rules": "756",
+    "# Transactions recorded": "407",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "16815",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ELEVANCE HLTH AP",
-    deposit_date: "10-02-2024",
-    amounts: "$2000.00",
-    indn: "Static INDN 2",
-    des: "Static DES 2",
-    additional_info: "Static additional info 2",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI2",
+    "# Total Transactions": "788",
+    "# Transactions after applying rules": "788",
+    "# Transactions recorded": "488",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "1017382",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ANTHEM BCBS OF C",
-    deposit_date: "10-01-2024",
-    amounts: "$1000.00",
-    indn: "Static INDN 1",
-    des: "Static DES 1",
-    additional_info: "Static additional info 1",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI3",
+    "# Total Transactions": "750",
+    "# Transactions after applying rules": "750",
+    "# Transactions recorded": "395",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "16815",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ELEVANCE HLTH AP",
-    deposit_date: "10-02-2024",
-    amounts: "$2000.00",
-    indn: "Static INDN 2",
-    des: "Static DES 2",
-    additional_info: "Static additional info 2",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI4",
+    "# Total Transactions": "740",
+    "# Transactions after applying rules": "740",
+    "# Transactions recorded": "455",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "1017382",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ANTHEM BCBS OF C",
-    deposit_date: "10-01-2024",
-    amounts: "$1000.00",
-    indn: "Static INDN 1",
-    des: "Static DES 1",
-    additional_info: "Static additional info 1",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI5",
+    "# Total Transactions": "858",
+    "# Transactions after applying rules": "858",
+    "# Transactions recorded": "544",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "16815",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ELEVANCE HLTH AP",
-    deposit_date: "10-02-2024",
-    amounts: "$2000.00",
-    indn: "Static INDN 2",
-    des: "Static DES 2",
-    additional_info: "Static additional info 2",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI6",
+    "# Total Transactions": "765",
+    "# Transactions after applying rules": "765",
+    "# Transactions recorded": "334",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "1017382",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ANTHEM BCBS OF C",
-    deposit_date: "10-01-2024",
-    amounts: "$1000.00",
-    indn: "Static INDN 1",
-    des: "Static DES 1",
-    additional_info: "Static additional info 1",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI7",
+    "# Total Transactions": "767",
+    "# Transactions after applying rules": "767",
+    "# Transactions recorded": "443",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "16815",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ELEVANCE HLTH AP",
-    deposit_date: "10-02-2024",
-    amounts: "$2000.00",
-    indn: "Static INDN 2",
-    des: "Static DES 2",
-    additional_info: "Static additional info 2",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI8",
+    "# Total Transactions": "678",
+    "# Transactions after applying rules": "678",
+    "# Transactions recorded": "265",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "1017382",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ANTHEM BCBS OF C",
-    deposit_date: "10-01-2024",
-    amounts: "$1000.00",
-    indn: "Static INDN 1",
-    des: "Static DES 1",
-    additional_info: "Static additional info 1",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI9",
+    "# Total Transactions": "756",
+    "# Transactions after applying rules": "756",
+    "# Transactions recorded": "345",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "16815",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ELEVANCE HLTH AP",
-    deposit_date: "10-02-2024",
-    amounts: "$2000.00",
-    indn: "Static INDN 2",
-    des: "Static DES 2",
-    additional_info: "Static additional info 2",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI10",
+    "# Total Transactions": "766",
+    "# Transactions after applying rules": "766",
+    "# Transactions recorded": "354",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "1017382",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ANTHEM BCBS OF C",
-    deposit_date: "10-01-2024",
-    amounts: "$1000.00",
-    indn: "Static INDN 1",
-    des: "Static DES 1",
-    additional_info: "Static additional info 1",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI11",
+    "# Total Transactions": "754",
+    "# Transactions after applying rules": "754",
+    "# Transactions recorded": "455",
+    "File Status": "Processed",
   },
   {
-    transaction_number: "16815",
-    bank_name: "Bank of America",
-    payment_type: "	EFT credit",
-    payer: "ELEVANCE HLTH AP",
-    deposit_date: "10-02-2024",
-    amounts: "$2000.00",
-    indn: "Static INDN 2",
-    des: "Static DES 2",
-    additional_info: "Static additional info 2",
+    "File Process Date": "29-01-2024",
+    "File Name": "BAI12",
+    "# Total Transactions": "737",
+    "# Transactions after applying rules": "737",
+    "# Transactions recorded": "406",
+    "File Status": "Processed",
   },
 ];
 
@@ -149,6 +114,7 @@ function DepositData() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [parsedData, setParsedData] = useState(initialStaticData);
+  const [tablecColumns, setTablecColumns] = useState([]);
   const [depositDataDialogOpen, setDepositDataDialogOpen] = useState(false);
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
@@ -156,6 +122,32 @@ function DepositData() {
   const [step, setStep] = useState("1");
   const [countFiles, setCountFiles] = useState([]);
   const [fileMessage, setFileMessage] = useState("File Available to Process");
+  const [transactionsCount, setTransactionsCount] = useState([]);
+
+  useEffect(() => {
+    const staticData = initialStaticData.map((x, i) => {
+      var today = new Date();
+      today.setDate(today.getDate() - (i + 1));
+      
+      x["File Process Date"] = moment(today).format("DD-MM-YYYY");
+      return x;
+    })
+    setParsedData(staticData);
+    const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      if(header != "subRows" && header != "id") {
+        let o = {
+          id: index + 1,
+          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          accessorKey: header.replace("\r", "")
+        }
+        return o;
+      }
+    }).filter((key) => key != "subRows" && key != undefined)
+    console.log("Columns", columns);
+    setTablecColumns(columns);
+  }, [])
 
   useEffect(() =>  {
     if(loading) {
@@ -194,9 +186,9 @@ function DepositData() {
         if(step.startsWith("5")) {
           let f = [...countFiles];
           switch(step) {
-            case "5": setStep("5.1"); f.push(5000); console.log(f); setCountFiles([...f]); return;
-            case "5.1": setStep("5.2"); f.push(3030); console.log(f); setCountFiles([...f]); return;
-            case "5.2": setStep("5.3"); f.push(3030); console.log(f); setCountFiles([...f]); return;
+            case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.2"); transactionsCount.length > 1 ? f.push(transactionsCount[1]) : f.push(756); console.log(f); setCountFiles([...f]); return;
+            case "5.2": setStep("5.3"); transactionsCount.length > 2 ? f.push(transactionsCount[2]) : f.push(443); console.log(f); setCountFiles([...f]); return;
             case "5.3": setStep("6.1"); return;
           }
         }
@@ -251,7 +243,7 @@ function DepositData() {
           const year = `20${transactionDate.slice(0, 2)}`; // '24' -> '2024'
           const month = transactionDate.slice(2, 4); // '03' -> March
           const day = transactionDate.slice(4, 6); // '28' -> 28th day
-          formattedDate = `${month}/${day}/${year}`; // Final format: YYYY/MM/DD
+          formattedDate = `${month}/${day}/${year}`; // Final format: MM/DD/YYYY
         }
       }
       // Transaction line (starting with '16')
@@ -263,7 +255,7 @@ function DepositData() {
         if (amount.length > 2) {
           const dollars = amount.slice(0, -2);
           const cents = amount.slice(-2);
-          amount = currencyFormat(parseInt(`${dollars}.${cents}`));
+          amount = currencyFormat(parseFloat(`${dollars}.${cents}`));
         }
 
         // Check payment type: 164 -> '', 165 -> 'EFT credit'
@@ -317,6 +309,20 @@ function DepositData() {
     console.log("Parsed Data: ", newParsedData);
     // Set the parsed data to the state or return it
     setParsedData(newParsedData);
+    const headerKeys = Object.keys(Object.assign({}, ...arr));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      if(header != "subRows" && header != "id") {
+        let o = {
+          id: index + 1,
+          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          accessorKey: header.replace("\r", "")
+        }
+        return o;
+      }
+    }).filter((key) => key != "subRows" && key != undefined)
+    console.log("Columns", columns);
+    setTablecColumns(columns);
     
   };
 
@@ -510,7 +516,7 @@ function DepositData() {
         </Box>
         : 
         <Box>
-          <CustomTable data={parsedData} datacolumns={tableColumns} />
+          <CustomTable data={parsedData} datacolumns={tablecColumns} />
         </Box>
       )}
      
@@ -570,7 +576,7 @@ function DepositData() {
         onClose={handleDepositDataDialogClose}
         title={"Deposit Data"}
       >
-        <CustomTable data={parsedData} datacolumns={tableColumns} />
+        <CustomTable data={parsedData} datacolumns={tablecColumns} />
       </CustomDialog>
     </div>
   );

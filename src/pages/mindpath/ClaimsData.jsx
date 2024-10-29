@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { Button, Grid, Tab, Tabs, Typography } from '@mui/material';
+import { Button, Grid, Tab, TableCell, Tabs, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomExpandableTable from 'components/payments/CustomExpandableTable';
 import CustomDialog from 'components/payments/CustomDialog';
@@ -10,246 +10,98 @@ import { Box } from '@mui/system';
 import { currencyFormat } from 'components/mindpath';
 import CustomExpandableTableColumn from 'components/payments/CustomExpandableTableColumn';
 import AnimatedProcess from './AnimatedProcess';
+import { flexRender } from '@tanstack/react-table';
+import moment from 'moment';
 
 const claimsCsv = new URL('src/assets/data/claims.csv', import.meta.url).href;
 
 const initialStaticData = [
   {
-    "Patient Name": "JAY RILL",
-    "Dob": "10/23/2001",
-    "Sex": "F",
-    "Address": "243 NW 110TH AVENUE, SUNRISE, FL 33322",
-    "Relation": 19,
-    "Insured Name": "GAL-LYN MER",
-    "Policy Number": "XJBH89019956",
-    "Ins Dob": "",
-    "Ins Sex": "",
-    "Insured Address": "",
-    "Payer": "BCBS OF FLORIDA",
-    "Payer ID": "PI:1414",
-    "Other Insured": "",
-    "Other Policy": "",
-    "Other Plan": "",
-    "Billing Provider": "XYZ Health",
-    "BP NPI": 1467477377,
-    "Encounter Number": "4796555A",
-    "Billed Amount": 530,
-    "TOB": 101,
-    "Rendering Provider": "VEY TIVA",
-    "RP NPI": 1366616688,
-    "Ill Onset": "",
-    "Initial Treatment": "",
-    "Accident": "",
-    "First Contact": "",
-    "Not Work Start": "",
-    "Not Work End": "",
-    "Hospital Start": "",
-    "Hospital End": "",
-    "Lab": "N",
-    "Lab Charge": "",
-    "Payer Ctrl No": "",
-    "Autho Code": "",
-    "Diagnosis 1": "F331",
-    "Diagnosis 2": "F411",
-    "Diagnosis 3": "F4010",
-    "Diagnosis 4": "",
-    "Diagnosis 5": "",
-    "ICD F": "",
-    "ICD G": "",
-    "ICD H": "",
-    "ICD I": "",
-    "ICD J": "",
-    "ICD K": "",
-    "ICD L": "",
-    "Line #": 1,
-    "Service Start": "10/9/2024",
-    "Service End": "",
-    "POS": "",
-    "EMG": "",
-    "Procedure  Code": 99214,
-    "Modifiers 1-4": 95,
-    "Amount": 329,
-    "Quantity": 1,
-    "DC Pointers": "1,2,3",
-    "Family": "",
-    "Line RP NPI": "",
-    "Drug": "",
-    "bp_tax_identification_number": 650836419,
-    "functional_id_gp": "HC",
-    "app_send_code": "007454760333",
-    "app_rec_code": "ECGCLAIMS",
-    "date_file_received": 20241013,
-    "time_file_received": 2212,
-    "grp_control_no": 646533554,
-    "responsible_agency_code": "X",
-    "realease_id_code": "005010X213A1",
-    "hierachical_start_code": "0019",
-    "tc_purpose_code": "00",
-    "ref_ident": 646533550,
-    "trancation_type_code": "CH",
-    "submitter_name": "MCK GRP",
-    "submitter_edi_contact_no": 3213298716,
-    "submitter_edi_name": "JENNY LEN",
-    "receiver_name": "HEALTH",
-    "recevier_claim": "CLAIM"
+    "File Process Date": "28-01-2024",
+    "# files received": "3",
+    "# files processed": "3",
+    "# Total Transactions": "1100",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+    ],
   },
   {
-    "Patient Name": "MIRI MATAL",
-    "Dob": "12/27/1997",
-    "Sex": "F",
-    "Address": "2541 NE 10TH AVE, POMPANO BEACH, FL 33064",
-    "Relation": 19,
-    "Insured Name": "TOM MATAL",
-    "Policy Number": "VMYH37234984",
-    "Ins Dob": "",
-    "Ins Sex": "",
-    "Insured Address": "",
-    "Payer": "BCBS OF FLORIDA",
-    "Payer ID": "PI:1414",
-    "Other Insured": "",
-    "Other Policy": "",
-    "Other Plan": "",
-    "Billing Provider": "XYZ Health",
-    "BP NPI": 1467477377,
-    "Encounter Number": "4886185A",
-    "Billed Amount": 250,
-    "TOB": 101,
-    "Rendering Provider": "SCOT LIN",
-    "RP NPI": 1326154562,
-    "Ill Onset": "",
-    "Initial Treatment": "",
-    "Accident": "",
-    "First Contact": "",
-    "Not Work Start": "",
-    "Not Work End": "",
-    "Hospital Start": "",
-    "Hospital End": "",
-    "Lab": "N",
-    "Lab Charge": "",
-    "Payer Ctrl No": "",
-    "Autho Code": "",
-    "Diagnosis 1": "F411",
-    "Diagnosis 2": "",
-    "Diagnosis 3": "",
-    "Diagnosis 4": "",
-    "Diagnosis 5": "",
-    "ICD F": "",
-    "ICD G": "",
-    "ICD H": "",
-    "ICD I": "",
-    "ICD J": "",
-    "ICD K": "",
-    "ICD L": "",
-    "Line #": 1,
-    "Service Start": "10/12/2024",
-    "Service End": "",
-    "POS": "",
-    "EMG": "",
-    "Procedure  Code": 90834,
-    "Modifiers 1-4": 95,
-    "Amount": 250,
-    "Quantity": 1,
-    "DC Pointers": 1,
-    "Family": "",
-    "Line RP NPI": "",
-    "Drug": "",
-    "bp_tax_identification_number": 650836419,
-    "functional_id_gp": "HC",
-    "app_send_code": "007454760333",
-    "app_rec_code": "ECGCLAIMS",
-    "date_file_received": 20241013,
-    "time_file_received": 2212,
-    "grp_control_no": 646533554,
-    "responsible_agency_code": "X",
-    "realease_id_code": "005010X213A1",
-    "hierachical_start_code": "0019",
-    "tc_purpose_code": "00",
-    "ref_ident": 646533550,
-    "trancation_type_code": "CH",
-    "submitter_name": "MCK GRP",
-    "submitter_edi_contact_no": 3213298716,
-    "submitter_edi_name": "JENNY LEN",
-    "receiver_name": "HEALTH",
-    "recevier_claim": "CLAIM"
+    "File Process Date": "27-01-2024",
+    "# files received": "4",
+    "# files processed": "4",
+    "# Total Transactions": "1454",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "354",
+        "# total transactions recorded": "208",
+        "File Status": "Processed",
+      },
+    ],
   },
   {
-    "Patient Name": "JAY RILL",
-    "Dob": "10/23/2001",
-    "Sex": "F",
-    "Address": "243 NW 110TH AVENUE, SUNRISE, FL 33322",
-    "Relation": 19,
-    "Insured Name": "GAL-LYN MER",
-    "Policy Number": "XJBH89019956",
-    "Ins Dob": "",
-    "Ins Sex": "",
-    "Insured Address": "",
-    "Payer": "BCBS OF FLORIDA",
-    "Payer ID": "PI:1414",
-    "Other Insured": "",
-    "Other Policy": "",
-    "Other Plan": "",
-    "Billing Provider": "XYZ Health",
-    "BP NPI": 1467477377,
-    "Encounter Number": "4796555A",
-    "Billed Amount": 530,
-    "TOB": 101,
-    "Rendering Provider": "VEY TIVA",
-    "RP NPI": 1366616688,
-    "Ill Onset": "",
-    "Initial Treatment": "",
-    "Accident": "",
-    "First Contact": "",
-    "Not Work Start": "",
-    "Not Work End": "",
-    "Hospital Start": "",
-    "Hospital End": "",
-    "Lab": "N",
-    "Lab Charge": "",
-    "Payer Ctrl No": "",
-    "Autho Code": "",
-    "Diagnosis 1": "F331",
-    "Diagnosis 2": "F411",
-    "Diagnosis 3": "F4010",
-    "Diagnosis 4": "",
-    "Diagnosis 5": "",
-    "ICD F": "",
-    "ICD G": "",
-    "ICD H": "",
-    "ICD I": "",
-    "ICD J": "",
-    "ICD K": "",
-    "ICD L": "",
-    "Line #": 2,
-    "Service Start": "10/9/2024",
-    "Service End": "",
-    "POS": "",
-    "EMG": "",
-    "Procedure  Code": 90833,
-    "Modifiers 1-4": 95,
-    "Amount": 201,
-    "Quantity": 1,
-    "DC Pointers": "1,2,3",
-    "Family": "",
-    "Line RP NPI": "",
-    "Drug": "",
-    "bp_tax_identification_number": 650836419,
-    "functional_id_gp": "HC",
-    "app_send_code": "007454760333",
-    "app_rec_code": "ECGCLAIMS",
-    "date_file_received": 20241013,
-    "time_file_received": 2212,
-    "grp_control_no": 646533554,
-    "responsible_agency_code": "X",
-    "realease_id_code": "005010X213A1",
-    "hierachical_start_code": "0019",
-    "tc_purpose_code": "00",
-    "ref_ident": 646533550,
-    "trancation_type_code": "CH",
-    "submitter_name": "MCK GRP",
-    "submitter_edi_contact_no": 3213298716,
-    "submitter_edi_name": "JENNY LEN",
-    "receiver_name": "HEALTH",
-    "recevier_claim": "CLAIM"
+    "File Process Date": "28-01-2024",
+    "# files received": "5",
+    "# files processed": "5",
+    "# Total Transactions": "1100",
+    "# transactions recorded": "636",
+    "subRows": [
+      {
+        "File Name": "CSV1",
+        "# total transactions": "356",
+        "# total transactions recorded": "203",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV2",
+        "# total transactions": "370",
+        "# total transactions recorded": "215",
+        "File Status": "Processed",
+      },
+      {
+        "File Name": "CSV3",
+        "# total transactions": "374",
+        "# total transactions recorded": "218",
+        "File Status": "Processed",
+      },
+    ],
   },
 ];
 
@@ -264,6 +116,9 @@ function ClaimsData() {
   const [tableColumns, setTableColumns] = useState([]);
   const [step, setStep] = useState("1");
   const [countFiles, setCountFiles] = useState([]);
+  const [outsideData, setOutsideData] = useState([]);
+  const [fileMessage, setFileMessage] = useState("File Available to Process");
+  const [transactionsCount, setTransactionsCount] = useState([]);
 
   useEffect(() =>  {
     if(loading) {
@@ -302,10 +157,9 @@ function ClaimsData() {
         if(step.startsWith("5")) {
           let f = [...countFiles];
           switch(step) {
-            case "5": setStep("5.1"); f.push(5000); console.log(f); setCountFiles([...f]); return;
-            case "5.1": setStep("5.2"); f.push(3030); console.log(f); setCountFiles([...f]); return;
-            case "5.2": setStep("5.3"); f.push(3030); console.log(f); setCountFiles([...f]); return;
-            case "5.3": setStep("6.1"); return;
+            case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.3"); transactionsCount.length > 1 ? f.push(transactionsCount[1]) : f.push(756); setCountFiles([...f]); return;
+            case "5.3": setStep("6.1"); transactionsCount.length > 2 ? f.push(transactionsCount[2]) : f.push(443); console.log(f); return;
           }
         }
         waitLoad();
@@ -348,43 +202,15 @@ function ClaimsData() {
   // );
 
   useEffect(()=>{
-    const arr = [];
-    initialStaticData.map((x, index)=>{
-      arr.push({
-        "id": index,
-        'Patient Name': x['Patient Name'],
-        'Policy Number': x['Policy Number'],
-        'Payer': x['Payer'],
-        'Billed Amount': currencyFormat(x['Billed Amount'] || 0),
-        'Encounter Number': x['Encounter Number'],
-        "subRows": [
-          {
-            'Procedure  Code': x['Procedure  Code'],
-            "Amount": currencyFormat(x["Amount"] || "0"),
-            'Diagnosis 1': x['Diagnosis 1'],
-            'Diagnosis 2': x['Diagnosis 2'],
-            'Diagnosis 3': x['Diagnosis 3'],
-            'Diagnosis 4': x['Diagnosis 4'],
-            'Diagnosis 5': x['Diagnosis 5'],
-          }
-        ]
-      })
+    const staticData = initialStaticData.map((x, i) => {
+      var today = new Date();
+      today.setDate(today.getDate() - (i + 1));
+      
+      x["File Process Date"] = moment(today).format("DD-MM-YYYY");
+      return x;
     })
-    const result = [];
-    for (var i = 0; i < arr.length; i++) {
-      var found = false;
-      for (var j = 0; j < result.length; j++) {
-        if (result[j]["Patient Name"] == arr[i]["Patient Name"] && result[j]['Policy Number'] == arr[i]['Policy Number']) {
-          found = true;
-          result[j].subRows = result[j].subRows.concat(arr[i].subRows);
-          break;
-        }
-      }
-      if (!found) {
-        result.push(arr[i]);
-      }
-    }
-    const headerKeys = Object.keys(Object.assign({}, ...result));
+    setParsedData(staticData);
+    const headerKeys = Object.keys(Object.assign({}, ...staticData));
     let columns = [];
     columns = headerKeys.map((header, index) => {
       if(header != "subRows" && header != "id") {
@@ -398,7 +224,6 @@ function ClaimsData() {
     }).filter((key) => key != "subRows" && key != undefined)
     console.log("Columns", columns);
     setTableColumns(columns);
-    setParsedData(result);
   }, [])
 
   const handleclaimsDataDataDialogClose = () => {
@@ -420,57 +245,14 @@ function ClaimsData() {
     }
   }
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = async (event) => {
+    const file = await fetch(claimsCsv).then(res => res.text());
     if (file) {
+      setFileContent(file);
+      parseCsvFile(file);
+      setShowFileContent(true);
       setLoading(true);
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const text = e.target.result;
-
-        setTimeout(() => {
-          setFileContent(text);
-          fetchCSV();
-          // setLoading(false);
-          setShowFileContent(true);
-        }, 2000);
-      };
-      reader.readAsText(file);
-      // reader.onload = function (e) {
-      //   const data = new Uint8Array(e.target.result);
-      //   const workbook = XLSX.read(data, { type: 'array' });
-      //   const firstSheetName = workbook.SheetNames[0];
-      //   const worksheet = workbook.Sheets[firstSheetName];
-
-      //   // Convert the sheet to JSON format
-      //   const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-      //   setFileContent(jsonData); // Save parsed data for displaying
-      //   const arr = [];
-      //   jsonData.map((x)=>{
-      //     arr.push({
-      //       'Patient Name': x['Patient Name'],
-      //       'Policy Number': x['Policy Number'],
-      //       'Payor': x['Payor'],
-      //       'Encounter Number': x['Encounter Number'],
-      //       'Diagnosis 1': x['Diagnosis 1'],
-      //       'Diagnosis 2': x['Diagnosis 2'],
-      //       'Diagnosis 3': x['Diagnosis 3'],
-      //       'Diagnosis 4': x['Diagnosis 4'],
-      //       'Diagnosis 5': x['Diagnosis 5'],
-      //       "subRows": [
-      //         {
-      //           'Procedure  Code': x['Procedure  Code'],
-      //           "Amount": x["Amount"]
-      //         }
-      //       ]
-      //     })
-      //   })
-      //   setParsedData(arr);
-      //   setLoading(false);
-      //   setShowFileContent(true); // Show uploaded content
-      // };
-      // reader.readAsArrayBuffer(file); // Read file as ArrayBuffer
+      setFileMessage("No File Available to Process");
     }
   };
 
@@ -550,12 +332,18 @@ function ClaimsData() {
     // console.log("Columns", columns);
     console.log("Parsed Data: ", array);
     const arr = [];
-    array.map((x)=>{
+    let out = {};
+    array.map((x, i)=>{
+      if(i == 0) {
+        out={
+          'Payer': x['Payer'],
+          'Billing Provider Name': x['Billing Provider'],
+          'Submitter Name': x['submitter_name']
+        }
+      }
       arr.push({
         "id": x["id"],
         'Patient Name': x['Patient Name'],
-        'Policy Number': x['Policy Number'],
-        'Payer': x['Payer'],
         'Billed Amount': currencyFormat(parseInt(x['Billed Amount']) || 0),
         'Encounter Number': x['Encounter Number'],
         "subRows": [
@@ -571,6 +359,8 @@ function ClaimsData() {
         ]
       })
     })
+    console.log("Outside", out);
+    setOutsideData(out);
     const result = [];
     for (var i = 0; i < arr.length; i++) {
       var found = false;
@@ -600,6 +390,7 @@ function ClaimsData() {
     console.log("Columns", columns);
     setTableColumns(columns);
     setParsedData(result);
+    setFileMessage("No File Available to Process");
   };
 
   function a11yProps(index) {
@@ -646,11 +437,13 @@ function ClaimsData() {
           <Button
             variant="contained"
             color="primary"
+            disabled={showFileContent}
+            onClick={handleFileUpload}
             component="label"sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
             >
-              Get File
-            <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
-            <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+              {fileMessage}
+            {/* <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/> */}
+            <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%' }} />
           </Button>
         </Grid>
       </Grid>
@@ -689,6 +482,11 @@ function ClaimsData() {
             </Grid>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
+            {Object.keys(outsideData).map((cell, i) => (
+              <TableCell key={i}>
+                <Typography variant='p' sx={{ fontWeight: 'bold', fontSize: 16 }}>{flexRender(cell)}: {flexRender(outsideData[cell])}</Typography>
+              </TableCell>
+            ))}
             <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
           </CustomTabPanel>
         </Box>
