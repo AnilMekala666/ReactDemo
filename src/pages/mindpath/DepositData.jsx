@@ -148,7 +148,7 @@ const initialStaticData = [
 function DepositData() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [parsedData, setParsedData] = useState([]);
+  const [parsedData, setParsedData] = useState(initialStaticData);
   const [depositDataDialogOpen, setDepositDataDialogOpen] = useState(false);
   const [fileContent, setFileContent] = useState(null);
   const [showFileContent, setShowFileContent] = useState(false);
