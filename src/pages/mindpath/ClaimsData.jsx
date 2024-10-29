@@ -412,7 +412,6 @@ function ClaimsData() {
     console.log(file)
     if (file) {
         setLoading(true);
-        load()
         const text = file;
         setTimeout(() => {
             parseCsvFile(text);
