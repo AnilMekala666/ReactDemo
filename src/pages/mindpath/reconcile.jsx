@@ -99,7 +99,7 @@ const Reconcile = () => {
     };
 
     useEffect(() => {
-        init(reconciled)
+        init("reconciled")
     }, []);
 
     const handleClickbackBtn = () => {
@@ -111,16 +111,18 @@ const Reconcile = () => {
         // Set the parsed data to the state or return it
         setParsedData([]);
         setExpandedItem(url);
-        const file = await fetch(url).then(res => res.text());
-        console.log(file)
-        if (file) {
-            setLoading(true);
-            const text = file;
-            setTimeout(() => {
-                parseBaiFile(text);
-                setLoading(false);
-            }, 2000);
-        }
+        setLoading(true);
+        setTimeout(()=>setLoading(false), 2000)
+        // const file = await fetch(url).then(res => res.text());
+        // console.log(file)
+        // if (file) {
+        //     setLoading(true);
+        //     const text = file;
+        //     setTimeout(() => {
+        //         parseBaiFile(text);
+        //         setLoading(false);
+        //     }, 2000);
+        // }
       };
 
     function splitCSVButIgnoreCommasInDoublequotes(str) {
@@ -239,7 +241,7 @@ const Reconcile = () => {
                 </AnimateButton>
             </Box>
             <div>
-            <Accordion sx={{border: 0, bgcolor: 'transparent'}} expanded={expandedItem == reconciled} onChange={()=>init(reconciled)}>
+            <Accordion sx={{border: 0, bgcolor: 'transparent'}} expanded={expandedItem == "reconciled"} onChange={()=>init("reconciled")}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
@@ -255,11 +257,11 @@ const Reconcile = () => {
                         </div>
                     }
                     {!loading &&
-                        <CustomTable data={parsedData} datacolumns={tableColumns} />
+                        <iframe width={"100%"} style={{ border: 0 }} height={500} onload={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue" />
                     }
                 </AccordionDetails>
             </Accordion>
-            <Accordion expanded={expandedItem == unreconciled} sx={{border: 0, bgcolor: 'transparent', mt: 2}} onChange={()=>init(unreconciled)}>
+            <Accordion expanded={expandedItem == "unreconciled"} sx={{border: 0, bgcolor: 'transparent', mt: 2}} onChange={()=>init("unreconciled")}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
@@ -275,7 +277,7 @@ const Reconcile = () => {
                         </div>
                     }
                     {!loading &&
-                        <CustomTable data={parsedData} datacolumns={tableColumns} />
+                        <iframe width={"100%"} style={{ border: 0 }} height={500} onload={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue" />
                     }
                 </AccordionDetails>
             </Accordion>
