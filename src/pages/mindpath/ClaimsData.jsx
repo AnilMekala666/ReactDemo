@@ -165,12 +165,12 @@ function ClaimsData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 1000)
+      }, 100)
     }
   }, [step, loading])
 
   const waitLoad = () => {
-    setTimeout(()=>setLoading(false), 5000);
+    setTimeout(()=>setLoading(false), 2000);
   }
 
   const handleChange = (event, newValue) => {
@@ -330,7 +330,7 @@ function ClaimsData() {
     //   return o;
     // })
     // console.log("Columns", columns);
-    console.log("Parsed Data: ", array);
+    // console.log("Parsed Data: ", array);
     const arr = [];
     let out = {};
     array.map((x, i)=>{
@@ -341,23 +341,37 @@ function ClaimsData() {
           'Submitter Name': x['submitter_name']
         }
       }
-      arr.push({
-        "id": x["id"],
-        'Patient Name': x['Patient Name'],
-        'Billed Amount': currencyFormat(parseInt(x['Billed Amount']) || 0),
-        'Encounter Number': x['Encounter Number'],
-        "subRows": [
-          {
-            'Procedure  Code': x['Procedure  Code'],
-            "Amount": currencyFormat(parseInt(x["Amount"]) || 0),
-            'Diagnosis 1': x['Diagnosis 1'],
-            'Diagnosis 2': x['Diagnosis 2'],
-            'Diagnosis 3': x['Diagnosis 3'],
-            'Diagnosis 4': x['Diagnosis 4'],
-            'Diagnosis 5': x['Diagnosis 5'],
-          }
-        ]
-      })
+      let formattedDate = '';
+      if(x['Patient Name']) {
+        if (x['date_file_received'].length === 8) {
+          const year = `${x['date_file_received'].slice(0, 4)}`; // '24' -> '2024'
+          const month = x['date_file_received'].slice(4, 6); // '03' -> March
+          const day = x['date_file_received'].slice(6, 8); // '28' -> 28th day
+          formattedDate = `${month}/${day}/${year}`; // Final format: MM/DD/YYYY
+        }
+        console.log(x['date_file_received'], formattedDate);
+      
+        arr.push({
+          "id": x["id"],
+          'Patient Name': x['Patient Name'],
+          'Billed Amount': currencyFormat(parseInt(x['Billed Amount']) || 0),
+          'Encounter Number': x['Encounter Number'],
+          'Date of submission': formattedDate,
+          'Start DOS': x['Service Start'],
+          'End DOS': x['Service End'] || x['Service Start'],
+          "subRows": [
+            {
+              'Procedure  Code': x['Procedure  Code'],
+              "Amount": currencyFormat(parseInt(x["Amount"]) || 0),
+              'Diagnosis 1': x['Diagnosis 1'],
+              'Diagnosis 2': x['Diagnosis 2'],
+              'Diagnosis 3': x['Diagnosis 3'],
+              'Diagnosis 4': x['Diagnosis 4'],
+              'Diagnosis 5': x['Diagnosis 5'],
+            }
+          ]
+        })
+      }
     })
     console.log("Outside", out);
     setOutsideData(out);

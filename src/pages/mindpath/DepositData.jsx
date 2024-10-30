@@ -14,7 +14,7 @@ const depositDataBai = new URL('src/assets/data/deposit.bai', import.meta.url).h
 const initialStaticData = [
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI1",
+    "File Name": "BAI10.bai",
     "# Total Transactions": "756",
     "# Transactions after applying rules": "756",
     "# Transactions recorded": "407",
@@ -22,7 +22,7 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI2",
+    "File Name": "BAI9.bai",
     "# Total Transactions": "788",
     "# Transactions after applying rules": "788",
     "# Transactions recorded": "488",
@@ -30,7 +30,7 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI3",
+    "File Name": "BAI8.bai",
     "# Total Transactions": "750",
     "# Transactions after applying rules": "750",
     "# Transactions recorded": "395",
@@ -38,7 +38,7 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI4",
+    "File Name": "BAI7.bai",
     "# Total Transactions": "740",
     "# Transactions after applying rules": "740",
     "# Transactions recorded": "455",
@@ -46,7 +46,7 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI5",
+    "File Name": "BAI6.bai",
     "# Total Transactions": "858",
     "# Transactions after applying rules": "858",
     "# Transactions recorded": "544",
@@ -54,7 +54,7 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI6",
+    "File Name": "BAI5.bai",
     "# Total Transactions": "765",
     "# Transactions after applying rules": "765",
     "# Transactions recorded": "334",
@@ -62,7 +62,7 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI7",
+    "File Name": "BAI4.bai",
     "# Total Transactions": "767",
     "# Transactions after applying rules": "767",
     "# Transactions recorded": "443",
@@ -70,7 +70,7 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI8",
+    "File Name": "BAI3.bai",
     "# Total Transactions": "678",
     "# Transactions after applying rules": "678",
     "# Transactions recorded": "265",
@@ -78,7 +78,7 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI9",
+    "File Name": "BAI2.bai",
     "# Total Transactions": "756",
     "# Transactions after applying rules": "756",
     "# Transactions recorded": "345",
@@ -86,26 +86,10 @@ const initialStaticData = [
   },
   {
     "File Process Date": "29-01-2024",
-    "File Name": "BAI10",
+    "File Name": "BAI1.bai",
     "# Total Transactions": "766",
     "# Transactions after applying rules": "766",
     "# Transactions recorded": "354",
-    "File Status": "Processed",
-  },
-  {
-    "File Process Date": "29-01-2024",
-    "File Name": "BAI11",
-    "# Total Transactions": "754",
-    "# Transactions after applying rules": "754",
-    "# Transactions recorded": "455",
-    "File Status": "Processed",
-  },
-  {
-    "File Process Date": "29-01-2024",
-    "File Name": "BAI12",
-    "# Total Transactions": "737",
-    "# Transactions after applying rules": "737",
-    "# Transactions recorded": "406",
     "File Status": "Processed",
   },
 ];
@@ -309,7 +293,7 @@ function DepositData() {
     console.log("Parsed Data: ", newParsedData);
     // Set the parsed data to the state or return it
     setParsedData(newParsedData);
-    const headerKeys = Object.keys(Object.assign({}, ...arr));
+    const headerKeys = Object.keys(Object.assign({}, ...newParsedData));
     let columns = [];
     columns = headerKeys.map((header, index) => {
       if(header != "subRows" && header != "id") {

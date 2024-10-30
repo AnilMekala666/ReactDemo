@@ -6,7 +6,7 @@ import ReusableExpandableTableColumn from 'components/tableComponent/ExpandableT
 
 const CustomExpandableTableColumn = ({ data, datacolumns, expandedColumns }) => {
 
-    console.log(data, datacolumns)
+    // console.log(data, datacolumns)
     const [open, setOpen] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState(null);
 

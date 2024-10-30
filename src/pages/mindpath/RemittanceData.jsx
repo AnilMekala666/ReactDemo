@@ -24,19 +24,19 @@ const initialStaticData = [
     "# transactions recorded": "636",
     "subRows": [
       {
-        "File Name": "CSV1",
+        "File Name": "EDI3.edi",
         "# total transactions": "356",
         "# total transactions recorded": "203",
         "File Status": "Processed",
       },
       {
-        "File Name": "CSV2",
+        "File Name": "EDI2.edi",
         "# total transactions": "370",
         "# total transactions recorded": "215",
         "File Status": "Processed",
       },
       {
-        "File Name": "CSV3",
+        "File Name": "EDI1.edi",
         "# total transactions": "374",
         "# total transactions recorded": "218",
         "File Status": "Processed",
@@ -51,25 +51,25 @@ const initialStaticData = [
     "# transactions recorded": "636",
     "subRows": [
       {
-        "File Name": "CSV1",
+        "File Name": "EDI4.edi",
         "# total transactions": "356",
         "# total transactions recorded": "203",
         "File Status": "Processed",
       },
       {
-        "File Name": "CSV2",
+        "File Name": "EDI3.edi",
         "# total transactions": "370",
         "# total transactions recorded": "215",
         "File Status": "Processed",
       },
       {
-        "File Name": "CSV3",
+        "File Name": "EDI2.edi",
         "# total transactions": "374",
         "# total transactions recorded": "218",
         "File Status": "Processed",
       },
       {
-        "File Name": "CSV3",
+        "File Name": "EDI1.edi",
         "# total transactions": "354",
         "# total transactions recorded": "208",
         "File Status": "Processed",
@@ -84,19 +84,19 @@ const initialStaticData = [
     "# transactions recorded": "636",
     "subRows": [
       {
-        "File Name": "CSV1",
+        "File Name": "EDI3.edi",
         "# total transactions": "356",
         "# total transactions recorded": "203",
         "File Status": "Processed",
       },
       {
-        "File Name": "CSV2",
+        "File Name": "EDI2.edi",
         "# total transactions": "370",
         "# total transactions recorded": "215",
         "File Status": "Processed",
       },
       {
-        "File Name": "CSV3",
+        "File Name": "EDI1.edi",
         "# total transactions": "374",
         "# total transactions recorded": "218",
         "File Status": "Processed",
