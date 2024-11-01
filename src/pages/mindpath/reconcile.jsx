@@ -27,8 +27,8 @@ import Loader from 'components/Loader';
 import { currencyFormat } from 'components/mindpath';
 
 
-const reconciled = new URL('src/assets/data/reconciled.csv', import.meta.url).href;
-const unreconciled = new URL('src/assets/data/unreconciled.csv', import.meta.url).href;
+const reconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue';
+const unreconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue';
 
 
 function PlusSquare(props) {
@@ -99,7 +99,7 @@ const Reconcile = () => {
     };
 
     useEffect(() => {
-        init("reconciled")
+        // init(reconciled)
     }, []);
 
     const handleClickbackBtn = () => {
@@ -107,21 +107,25 @@ const Reconcile = () => {
     }
 
     const init = async (url) => {
-        setTableColumns([]);
-        // Set the parsed data to the state or return it
-        setParsedData([]);
-        setExpandedItem(url);
         setLoading(true);
-        setTimeout(()=>setLoading(false), 2000)
+        setExpandedItem(url);
+        setTimeout(() => {
+            // setParsedData({__html: file})
+            setLoading(false);
+        }, 2000);
+        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+            width=0,height=0,left=-1000,top=-1000`
+        window.open(url, "Test", params);
+        // setTableColumns([]);
+        // // Set the parsed data to the state or return it
+        // setParsedData([]);
+        // setExpandedItem(url);
+        // setLoading(true);
+        // // setTimeout(()=>setLoading(false), 2000)
         // const file = await fetch(url).then(res => res.text());
-        // console.log(file)
+        // // console.log(file)
         // if (file) {
-        //     setLoading(true);
-        //     const text = file;
-        //     setTimeout(() => {
-        //         parseBaiFile(text);
-        //         setLoading(false);
-        //     }, 2000);
+            
         // }
       };
 
@@ -241,7 +245,7 @@ const Reconcile = () => {
                 </AnimateButton>
             </Box>
             <div>
-            <Accordion sx={{border: 0, bgcolor: 'transparent'}} expanded={expandedItem == "reconciled"} onChange={()=>init("reconciled")}>
+            <Accordion sx={{border: 0, bgcolor: 'transparent'}} expanded={expandedItem == reconciled} onChange={()=>init(reconciled)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
@@ -256,12 +260,13 @@ const Reconcile = () => {
                             <p>Processing...</p>
                         </div>
                     }
-                    {!loading &&
-                        <iframe width={"100%"} style={{ border: 0 }} height={500} onload={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue" />
-                    }
+                    {/* {!loading &&
+                        // <div dangerouslySetInnerHTML={parsedData} />
+                        <iframe type="text/html" width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue" />
+                    } */}
                 </AccordionDetails>
             </Accordion>
-            <Accordion expanded={expandedItem == "unreconciled"} sx={{border: 0, bgcolor: 'transparent', mt: 2}} onChange={()=>init("unreconciled")}>
+            <Accordion expanded={expandedItem == unreconciled} sx={{border: 0, bgcolor: 'transparent', mt: 2}} onChange={()=>init(unreconciled)}>
                 <AccordionSummary
                     aria-controls="panel1-content"
                     id="panel1-header"
@@ -276,9 +281,9 @@ const Reconcile = () => {
                             <p>Processing...</p>
                         </div>
                     }
-                    {!loading &&
-                        <iframe width={"100%"} style={{ border: 0 }} height={500} onload={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue" />
-                    }
+                    {/* {!loading &&
+                        <iframe width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue" />
+                    } */}
                 </AccordionDetails>
             </Accordion>
             </div>
