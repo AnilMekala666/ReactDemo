@@ -109,13 +109,29 @@ const Reconcile = () => {
     const init = async (url) => {
         setLoading(true);
         setExpandedItem(url);
-        setTimeout(() => {
-            // setParsedData({__html: file})
+        // setTimeout(() => {
+        //     // setParsedData({__html: file})
+        //     setLoading(false);
+        // }, 2000);
+        const params = `directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,
+            width=1200,height=500,left=300,top=350`
+        const newWindow = open(url, "Test", params);
+        newWindow.window.addEventListener("load", () => {
             setLoading(false);
-        }, 2000);
-        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
-            width=0,height=0,left=-1000,top=-1000`
-        window.open(url, "Test", params);
+            newWindow.window.addEventListener("unload", () => {
+                setLoading(false);
+                setExpandedItem("");
+            })
+        })
+       
+        // newWindow.onload = function() {
+        //     setLoading(false);
+        // };
+        // newWindow.onbeforeunload = function(){
+        //     // set warning message
+        //     setExpandedItem("");
+        //     setLoading(false);
+        // };
         // setTableColumns([]);
         // // Set the parsed data to the state or return it
         // setParsedData([]);
@@ -255,15 +271,15 @@ const Reconcile = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
-                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                        <div style={{ marginTop: '20px', minHeight: 550, textAlign: 'center' }}>
                             <CircularProgress /> {/* Spinner */}
                             <p>Processing...</p>
                         </div>
                     }
-                    {/* {!loading &&
-                        // <div dangerouslySetInnerHTML={parsedData} />
-                        <iframe type="text/html" width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue" />
-                    } */}
+                    {!loading &&
+                        <div style={{ minHeight: 550 }}></div>
+                        // <iframe type="text/html" width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue" />
+                    }
                 </AccordionDetails>
             </Accordion>
             <Accordion expanded={expandedItem == unreconciled} sx={{border: 0, bgcolor: 'transparent', mt: 2}} onChange={()=>init(unreconciled)}>
@@ -276,14 +292,15 @@ const Reconcile = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                     {loading &&
-                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                        <div style={{ marginTop: '20px', minHeight: 550, textAlign: 'center' }}>
                             <CircularProgress /> {/* Spinner */}
                             <p>Processing...</p>
                         </div>
                     }
-                    {/* {!loading &&
-                        <iframe width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue" />
-                    } */}
+                    {!loading &&
+                        <div style={{ minHeight: 550 }}></div>
+                        // <iframe width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue" />
+                    }
                 </AccordionDetails>
             </Accordion>
             </div>
