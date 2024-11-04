@@ -114,7 +114,7 @@ const Reconcile = () => {
         //     setLoading(false);
         // }, 2000);
         const params = `directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,
-            width=1200,height=500,left=300,top=350`
+            width=0,height=0,left=-1000,top=-1000`
         const newWindow = open(url, "Test", params);
         newWindow.window.addEventListener("load", () => {
             setLoading(false);
