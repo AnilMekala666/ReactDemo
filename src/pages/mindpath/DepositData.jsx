@@ -291,6 +291,8 @@ function DepositData() {
     });
 
     console.log("Parsed Data: ", newParsedData);
+    const t = [ newParsedData.length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length ];
+    setTransactionsCount(t);
     // Set the parsed data to the state or return it
     setParsedData(newParsedData);
     const headerKeys = Object.keys(Object.assign({}, ...newParsedData));
