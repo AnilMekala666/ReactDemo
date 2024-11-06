@@ -170,9 +170,9 @@ function RemittanceData() {
         if(step.startsWith("5")) {
           let f = [...countFiles];
           switch(step) {
-            case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); setCountFiles([...f]); return;
-            case "5.1": setStep("5.3"); transactionsCount.length > 1 ? f.push(transactionsCount[1]) : f.push(756); console.log(f); setCountFiles([...f]); return;
-            case "5.3": setStep("6.1"); transactionsCount.length > 2 ? f.push(transactionsCount[2]) : f.push(443); console.log(f); setCountFiles([...f]); return;
+            case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(3); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.3"); transactionsCount.length > 1 ? f.push(transactionsCount[1]) : f.push(3); console.log(f); setCountFiles([...f]); return;
+            case "5.3": setStep("6.1"); transactionsCount.length > 2 ? f.push(transactionsCount[2]) : f.push(3); console.log(f); setCountFiles([...f]); return;
           }
         }
         waitLoad();

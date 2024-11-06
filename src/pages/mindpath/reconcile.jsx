@@ -109,10 +109,11 @@ const Reconcile = () => {
     const init = async (url) => {
         setLoading(true);
         setExpandedItem(url);
-        // setTimeout(() => {
-        //     // setParsedData({__html: file})
-        //     setLoading(false);
-        // }, 2000);
+        setTimeout(() => {
+            // setParsedData({__html: file})
+            setLoading(false);
+            setExpandedItem("");
+        }, 2000);
         const params = `directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,
             width=0,height=0,left=-1000,top=-1000`
         const newWindow = open(url, "Test", params);

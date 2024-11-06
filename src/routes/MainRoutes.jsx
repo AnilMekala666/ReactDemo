@@ -10,6 +10,7 @@ import SimpleLayout from 'layout/Simple';
 
 import { SimpleLayoutType } from 'config';
 import { loader as productsLoader, productLoader } from 'api/products';
+import NewUI from 'pages/mindpath/NewUI';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
@@ -158,6 +159,10 @@ const MainRoutes = {
               element: <AppInvoiceDashboard />
             }
           ]
+        },
+        {
+          path: "newUI",
+          element: <NewUI />
         },
         // Innoclique
         {
