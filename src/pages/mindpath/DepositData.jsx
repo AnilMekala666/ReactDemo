@@ -12,7 +12,7 @@ import Slide from '@mui/material/Slide';
 import moment from 'moment';
 import { MemoryOutlined } from '@mui/icons-material';
 import { BASE_PATH } from 'config';
-const depositDataBai = new URL('src/assets/data/deposit.bai', import.meta.url).href;
+import { randomIntFromInterval } from 'utils/axios';
 
 const initialStaticData = [
   {
@@ -229,7 +229,9 @@ function DepositData() {
   };
 
   const handleFileUpload = async(event) => {
+    const depositDataBai = `/src/assets/data/deposit${randomIntFromInterval(1, 4)}.bai`;
     const file = await fetch(depositDataBai).then(res => res.text());
+    console.log(file);
     if (file) {
       setFileContent(file);
       parseBaiFile(file);

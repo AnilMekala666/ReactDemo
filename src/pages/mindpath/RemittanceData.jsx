@@ -13,9 +13,10 @@ import { flexRender } from '@tanstack/react-table';
 import moment from 'moment';
 import { MemoryOutlined } from '@mui/icons-material';
 import { BASE_PATH } from 'config';
+import { randomIntFromInterval } from 'utils/axios';
 
-const remittance = new URL('src/assets/data/remittance1.csv', import.meta.url).href;
-const remittanceDemo = new URL('src/assets/data/remittance.demo.csv', import.meta.url).href;
+// const remittance = new URL('src/assets/data/remittance1.csv', import.meta.url).href;
+// const remittanceDemo = new URL('src/assets/data/remittance.demo.csv', import.meta.url).href;
 
 const initialStaticData = [
   {
@@ -295,8 +296,10 @@ function RemittanceData() {
     console.log("Save Response", content);
     return content;
   }
+  
 
   const handleFileUpload = async (event) => {
+    const remittance = new URL(`src/assets/data/remittance${randomIntFromInterval(1, 4)}.csv`, import.meta.url).href;
     const file = await fetch(remittance).then(res => res.text());
     if (file) {
       setFileContent(file);

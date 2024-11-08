@@ -15,7 +15,7 @@ import moment from 'moment';
 import { MemoryOutlined } from '@mui/icons-material';
 import { BASE_PATH } from 'config';
 
-const claimsCsv = new URL('src/assets/data/claims.csv', import.meta.url).href;
+
 
 const initialStaticData = [
   {
@@ -272,6 +272,7 @@ function ClaimsData() {
   }
 
   const handleFileUpload = async (event) => {
+    const claimsCsv = new URL(`src/assets/data/claims${randomIntFromInterval(1, 4)}.csv`, import.meta.url).href;
     const file = await fetch(claimsCsv).then(res => res.text());
     if (file) {
       setFileContent(file);
