@@ -12,6 +12,8 @@ import CustomExpandableTableColumn from 'components/payments/CustomExpandableTab
 import AnimatedProcess from './AnimatedProcess';
 import { flexRender } from '@tanstack/react-table';
 import moment from 'moment';
+import { MemoryOutlined } from '@mui/icons-material';
+import { BASE_PATH } from 'config';
 
 const claimsCsv = new URL('src/assets/data/claims.csv', import.meta.url).href;
 
@@ -119,6 +121,7 @@ function ClaimsData() {
   const [outsideData, setOutsideData] = useState([]);
   const [fileMessage, setFileMessage] = useState("File Available to Process");
   const [transactionsCount, setTransactionsCount] = useState([]);
+  const [openAlert, setOpenAlert] = useState(true);
 
   useEffect(() =>  {
     if(loading) {
@@ -202,13 +205,36 @@ function ClaimsData() {
   // );
 
   useEffect(()=>{
-    const staticData = initialStaticData.map((x, i) => {
-      var today = new Date();
-      today.setDate(today.getDate() - (i + 1));
+    fetchInitial()
+    // const staticData = initialStaticData.map((x, i) => {
+    //   var today = new Date();
+    //   today.setDate(today.getDate() - (i + 1));
       
-      x["File Process Date"] = moment(today).format("DD-MM-YYYY");
-      return x;
-    })
+    //   x["File Process Date"] = moment(today).format("DD-MM-YYYY");
+    //   return x;
+    // })
+    // setParsedData(staticData);
+    // const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    // let columns = [];
+    // columns = headerKeys.map((header, index) => {
+    //   if(header != "subRows" && header != "id") {
+    //     let o = {
+    //       id: index + 1,
+    //       header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+    //       accessorKey: header.replace("\r", "")
+    //     }
+    //     return o;
+    //   }
+    // }).filter((key) => key != "subRows" && key != undefined)
+    // console.log("Columns", columns);
+    // setTableColumns(columns);
+  }, [])
+
+  const fetchInitial = async () => {
+    console.log("Fetch Called");
+    const data = await fetch(`${BASE_PATH}/getClaimsDataForLastWeek/1`);
+    // console.log("Data API", await data.json());
+    const staticData = await data.json();
     setParsedData(staticData);
     const headerKeys = Object.keys(Object.assign({}, ...staticData));
     let columns = [];
@@ -216,7 +242,7 @@ function ClaimsData() {
       if(header != "subRows" && header != "id") {
         let o = {
           id: index + 1,
-          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          header: header.replace("_", " ").replace("\r", "").replace(/([A-Z])/g, ' $1').trim().toUpperCase(),
           accessorKey: header.replace("\r", "")
         }
         return o;
@@ -224,7 +250,7 @@ function ClaimsData() {
     }).filter((key) => key != "subRows" && key != undefined)
     console.log("Columns", columns);
     setTableColumns(columns);
-  }, [])
+  }
 
   const handleclaimsDataDataDialogClose = () => {
     navigate('/patient/payment');
@@ -252,6 +278,7 @@ function ClaimsData() {
       parseCsvFile(file);
       setShowFileContent(true);
       setLoading(true);
+      setOpenAlert(false);
       setFileMessage("No File Available to Process");
     }
   };
@@ -373,7 +400,6 @@ function ClaimsData() {
         })
       }
     })
-    console.log("Outside", out);
     setOutsideData(out);
     const result = [];
     for (var i = 0; i < arr.length; i++) {
@@ -438,6 +464,11 @@ function ClaimsData() {
         <Grid >
           <Typography variant="h4">Claims</Typography>
         </Grid>
+        {openAlert &&
+          <Grid>
+            <Typography className='blink_me' color="#080" variant="h4">{fileMessage}</Typography>
+          </Grid>
+        }
         <Grid >
         <Button
           variant="contained"
@@ -453,11 +484,13 @@ function ClaimsData() {
             color="primary"
             disabled={showFileContent}
             onClick={handleFileUpload}
-            component="label"sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
+            component="label"sx={{ borderRadius: '40px', marginTop: '0px', padding: '12px 30px 12px 30px' }}
             >
-              {fileMessage}
+              {openAlert ? "Process" : fileMessage}
             {/* <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/> */}
-            <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%' }} />
+            {!showFileContent &&
+              <MemoryOutlined style={{ fontSize: '20px', marginLeft: '15px', borderRadius: '100%', background: 'transparent' }} />
+            }
           </Button>
         </Grid>
       </Grid>

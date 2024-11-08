@@ -94,4 +94,14 @@ display: flex; align-items: center; justify-content: center;}
 .popover_in { padding: 15px;border-radius: 16px; border: 1px solid #ddd;background-color: #fff;}
 .popover .css-16oh8wq-MuiPaper-root-MuiPopover-paper {border-radius: 16px; background: none; box-shadow: none;}
 .css-1xfftyy-MuiAccordionDetails-root { padding: 10px;}
+
+.blink_me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
  

@@ -114,6 +114,7 @@ function PatientPaymentData() {
   const [fileMessage, setFileMessage] = useState("File Available to Process");
   const [transactionsCount, setTransactionsCount] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
+  const [openAlert, setOpenAlert] = useState(false);
 
   useEffect(()=>{
     const staticData = initialStaticData.map((x, i) => {
@@ -204,6 +205,7 @@ function PatientPaymentData() {
     const file = event.target.files[0];
     if (file) {
       setLoading(true);
+      setOpenAlert(false);
       const reader = new FileReader();
       reader.onload = function (e) {
         const data = new Uint8Array(e.target.result);
@@ -263,6 +265,11 @@ function PatientPaymentData() {
         <Grid >
           <Typography variant="h4">Patient Payments</Typography>
         </Grid>
+        {openAlert &&
+          <Grid>
+            <Typography className='blink_me' color="#080" variant="h4">{fileMessage}</Typography>
+          </Grid>
+        }
         <Grid >
           <Button
             variant="contained"

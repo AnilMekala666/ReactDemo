@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Grid, Button, Typography, Tabs, Tab } from '@mui/material';
-import { UploadOutlined } from '@ant-design/icons';
+import { Grid, Button, Typography, Tabs, Tab, Snackbar, IconButton } from '@mui/material';
+import { CloseCircleOutlined, UploadOutlined } from '@ant-design/icons';
 import CustomDialog from 'components/payments/CustomDialog';
 import CustomTable from 'components/payments/CustomTable';
 import { useNavigate } from 'react-router';
@@ -8,88 +8,91 @@ import { LeftOutlined } from '@ant-design/icons';
 import { Box } from '@mui/system';
 import { currencyFormat } from 'components/mindpath';
 import AnimatedProcess from './AnimatedProcess';
+import Slide from '@mui/material/Slide';
 import moment from 'moment';
+import { MemoryOutlined } from '@mui/icons-material';
+import { BASE_PATH } from 'config';
 const depositDataBai = new URL('src/assets/data/deposit.bai', import.meta.url).href;
 
 const initialStaticData = [
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI10.bai",
-    "# Total Transactions": "756",
-    "# Transactions after applying rules": "756",
-    "# Transactions recorded": "407",
+    "# Total Transactions": "43",
+    "# Transactions after applying rules": "41",
+    "# Transactions recorded": "41",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI9.bai",
-    "# Total Transactions": "788",
-    "# Transactions after applying rules": "788",
-    "# Transactions recorded": "488",
+    "# Total Transactions": "46",
+    "# Transactions after applying rules": "42",
+    "# Transactions recorded": "42",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI8.bai",
-    "# Total Transactions": "750",
-    "# Transactions after applying rules": "750",
-    "# Transactions recorded": "395",
+    "# Total Transactions": "49",
+    "# Transactions after applying rules": "45",
+    "# Transactions recorded": "45",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI7.bai",
-    "# Total Transactions": "740",
-    "# Transactions after applying rules": "740",
-    "# Transactions recorded": "455",
+    "# Total Transactions": "46",
+    "# Transactions after applying rules": "42",
+    "# Transactions recorded": "42",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI6.bai",
-    "# Total Transactions": "858",
-    "# Transactions after applying rules": "858",
-    "# Transactions recorded": "544",
+    "# Total Transactions": "54",
+    "# Transactions after applying rules": "49",
+    "# Transactions recorded": "49",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI5.bai",
-    "# Total Transactions": "765",
-    "# Transactions after applying rules": "765",
-    "# Transactions recorded": "334",
+    "# Total Transactions": "56",
+    "# Transactions after applying rules": "48",
+    "# Transactions recorded": "48",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI4.bai",
-    "# Total Transactions": "767",
-    "# Transactions after applying rules": "767",
-    "# Transactions recorded": "443",
+    "# Total Transactions": "65",
+    "# Transactions after applying rules": "58",
+    "# Transactions recorded": "58",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI3.bai",
-    "# Total Transactions": "678",
-    "# Transactions after applying rules": "678",
-    "# Transactions recorded": "265",
+    "# Total Transactions": "41",
+    "# Transactions after applying rules": "33",
+    "# Transactions recorded": "33",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI2.bai",
-    "# Total Transactions": "756",
-    "# Transactions after applying rules": "756",
-    "# Transactions recorded": "345",
+    "# Total Transactions": "38",
+    "# Transactions after applying rules": "34",
+    "# Transactions recorded": "34",
     "File Status": "Processed",
   },
   {
     "File Process Date": "29-01-2024",
     "File Name": "BAI1.bai",
-    "# Total Transactions": "766",
-    "# Transactions after applying rules": "766",
-    "# Transactions recorded": "354",
+    "# Total Transactions": "39",
+    "# Transactions after applying rules": "36",
+    "# Transactions recorded": "36",
     "File Status": "Processed",
   },
 ];
@@ -107,15 +110,40 @@ function DepositData() {
   const [countFiles, setCountFiles] = useState([]);
   const [fileMessage, setFileMessage] = useState("File Available to Process");
   const [transactionsCount, setTransactionsCount] = useState([]);
+  const [openAlert, setOpenAlert] = useState(false);
 
   useEffect(() => {
-    const staticData = initialStaticData.map((x, i) => {
-      var today = new Date();
-      today.setDate(today.getDate() - (i + 1));
+    fetchInitial();
+    // const staticData = initialStaticData.map((x, i) => {
+    //   var today = new Date();
+    //   today.setDate(today.getDate() - (i + 1));
       
-      x["File Process Date"] = moment(today).format("DD-MM-YYYY");
-      return x;
-    })
+    //   x["File Process Date"] = moment(today).format("DD-MM-YYYY");
+    //   return x;
+    // })
+    // setParsedData(staticData);
+    // const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    // let columns = [];
+    // columns = headerKeys.map((header, index) => {
+    //   if(header != "subRows" && header != "id") {
+    //     let o = {
+    //       id: index + 1,
+    //       header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+    //       accessorKey: header.replace("\r", "")
+    //     }
+    //     return o;
+    //   }
+    // }).filter((key) => key != "subRows" && key != undefined)
+    // console.log("Columns", columns);
+    // setTablecColumns(columns);
+    setOpenAlert(true)
+  }, [])
+
+  const fetchInitial = async () => {
+    console.log("Fetch Called");
+    const data = await fetch(`${BASE_PATH}/getLastWeekFilesData/1`);
+    // console.log("Data API", await data.json());
+    const staticData = await data.json();
     setParsedData(staticData);
     const headerKeys = Object.keys(Object.assign({}, ...staticData));
     let columns = [];
@@ -123,7 +151,7 @@ function DepositData() {
       if(header != "subRows" && header != "id") {
         let o = {
           id: index + 1,
-          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          header: header.replace("_", " ").replace("\r", "").replace(/([A-Z])/g, ' $1').trim().toUpperCase(),
           accessorKey: header.replace("\r", "")
         }
         return o;
@@ -131,7 +159,12 @@ function DepositData() {
     }).filter((key) => key != "subRows" && key != undefined)
     console.log("Columns", columns);
     setTablecColumns(columns);
-  }, [])
+  }
+
+  const handleClose = () => {
+    console.log("Close called")
+    setOpenAlert(false)
+  }
 
   useEffect(() =>  {
     if(loading) {
@@ -170,9 +203,9 @@ function DepositData() {
         if(step.startsWith("5")) {
           let f = [...countFiles];
           switch(step) {
-            case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); setCountFiles([...f]); return;
-            case "5.1": setStep("5.2"); transactionsCount.length > 1 ? f.push(transactionsCount[1]) : f.push(756); console.log(f); setCountFiles([...f]); return;
-            case "5.2": setStep("5.3"); transactionsCount.length > 2 ? f.push(transactionsCount[2]) : f.push(443); console.log(f); setCountFiles([...f]); return;
+            case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(40); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.2"); transactionsCount.length > 1 ? f.push(transactionsCount[1]) : f.push(38); console.log(f); setCountFiles([...f]); return;
+            case "5.2": setStep("5.3"); transactionsCount.length > 2 ? f.push(transactionsCount[2]) : f.push(38); console.log(f); setCountFiles([...f]); return;
             case "5.3": setStep("6.1"); return;
           }
         }
@@ -202,11 +235,36 @@ function DepositData() {
       parseBaiFile(file);
       setShowFileContent(true);
       setLoading(true);
+      setOpenAlert(false);
       setFileMessage("No File Available to Process");
     }
   };
 
-  const parseBaiFile = (content) => {
+  const saveFileToDb = async (transaction) => {
+    var today = new Date();
+    const data = {
+      "file_process_date ":moment(today).format("MM-DD-YYYY"),
+      "total_transactions" : transaction.total,
+      "transactions_after_rules" : transaction.rules,
+      "transactions_recorded": transaction.recorded,
+      "fileName" : transaction.fileName,
+      "file_status": "Processed"
+    }
+    const rawResponse = await fetch(`${BASE_PATH}/saveFileData`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    const content = await rawResponse.json();
+  
+    console.log("Save Response", content);
+    return content;
+  }
+
+  const parseBaiFile = async (content) => {
     const lines = content.split('\n');
     const newParsedData = [];
     let currentTransaction = null;
@@ -293,6 +351,18 @@ function DepositData() {
     console.log("Parsed Data: ", newParsedData);
     const t = [ newParsedData.length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length ];
     setTransactionsCount(t);
+    await saveFileToDb({
+      total: newParsedData.length,
+      rules: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
+      recorded: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
+      fileName: `${(new Date().toJSON().slice(0,10))}_deposit.bai`
+    });
+    console.log({
+      total: newParsedData.length,
+      rules: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
+      recorded: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
+      fileName: `${(new Date().toJSON().slice(0,10))}_deposit.bai`
+    });
     // Set the parsed data to the state or return it
     setParsedData(newParsedData);
     const headerKeys = Object.keys(Object.assign({}, ...newParsedData));
@@ -350,6 +420,22 @@ function DepositData() {
       </div>
     );
   }
+
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        CLOSE
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseCircleOutlined fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     // <div>
@@ -436,6 +522,11 @@ function DepositData() {
         <Grid >
           <Typography variant="h4">Deposit</Typography>
         </Grid>
+        {openAlert &&
+          <Grid>
+            <Typography className='blink_me' color="#080" variant="h4">{fileMessage}</Typography>
+          </Grid>
+        }
         <Grid >
         <Button
           variant="contained"
@@ -454,10 +545,10 @@ function DepositData() {
             onClick={handleFileUpload}
             sx={{ borderRadius: '40px', marginTop: '0px', padding: '12px 30px 12px 30px' }}
           >
-            {fileMessage}
+            {openAlert ? "Process" : fileMessage}
             {/* <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} /> */}
             {!showFileContent &&
-             <UploadOutlined style={{ fontSize: '20px', marginLeft: '15px', borderRadius: '100%', background: 'transparent' }} />
+             <MemoryOutlined style={{ fontSize: '20px', marginLeft: '15px', borderRadius: '100%', background: 'transparent' }} />
             }
           </Button>
         </Grid>
@@ -564,8 +655,21 @@ function DepositData() {
       >
         <CustomTable data={parsedData} datacolumns={tablecColumns} />
       </CustomDialog>
+      {/* <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={openAlert}
+        onClose={handleClose}
+        message={fileMessage}
+        TransitionComponent={SlideTransition}
+        action={action}
+        sx={{ backgroundColor: 'teal', color: 'coral' }}
+      /> */}
     </div>
   );
+}
+
+function SlideTransition(props) {
+  return <Slide {...props} direction="up" />;
 }
 
 export default DepositData;

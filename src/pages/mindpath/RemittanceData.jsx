@@ -11,8 +11,10 @@ import { currencyFormat } from 'components/mindpath';
 import AnimatedProcess from './AnimatedProcess';
 import { flexRender } from '@tanstack/react-table';
 import moment from 'moment';
+import { MemoryOutlined } from '@mui/icons-material';
+import { BASE_PATH } from 'config';
 
-const remittance = new URL('src/assets/data/remittance.csv', import.meta.url).href;
+const remittance = new URL('src/assets/data/remittance1.csv', import.meta.url).href;
 const remittanceDemo = new URL('src/assets/data/remittance.demo.csv', import.meta.url).href;
 
 const initialStaticData = [
@@ -132,6 +134,7 @@ function RemittanceData() {
   const [outsideData, setOutsideData] = useState([]);
   const [fileMessage, setFileMessage] = useState("File Available to Process");
   const [transactionsCount, setTransactionsCount] = useState([]);
+  const [openAlert, setOpenAlert] = useState(true);
 
   useEffect(() =>  {
     if(loading) {
@@ -187,13 +190,35 @@ function RemittanceData() {
   }
 
   useEffect(()=>{
-    const staticData = initialStaticData.map((x, i) => {
-      var today = new Date();
-      today.setDate(today.getDate() - (i + 1));
+    fetchInitial()
+    // const staticData = initialStaticData.map((x, i) => {
+    //   var today = new Date();
+    //   today.setDate(today.getDate() - (i + 1));
       
-      x["File Process Date"] = moment(today).format("DD-MM-YYYY");
-      return x;
-    })
+    //   x["File Process Date"] = moment(today).format("DD-MM-YYYY");
+    //   return x;
+    // })
+    // setParsedData(staticData);
+    // const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    // let columns = [];
+    // columns = headerKeys.map((header, index) => {
+    //   if(header != "subRows" && header != "id") {
+    //     let o = {
+    //       id: index + 1,
+    //       header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+    //       accessorKey: header.replace("\r", "")
+    //     }
+    //     return o;
+    //   }
+    // }).filter((key) => key != "subRows" && key != undefined)
+    // setTableColumns(columns);
+  }, [])
+
+  const fetchInitial = async () => {
+    console.log("Fetch Called");
+    const data = await fetch(`${BASE_PATH}/getRemitDataForLastWeek/1`);
+    // console.log("Data API", await data.json());
+    const staticData = await data.json();
     setParsedData(staticData);
     const headerKeys = Object.keys(Object.assign({}, ...staticData));
     let columns = [];
@@ -201,14 +226,15 @@ function RemittanceData() {
       if(header != "subRows" && header != "id") {
         let o = {
           id: index + 1,
-          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+          header: header.replace("_", " ").replace("\r", "").replace(/([A-Z])/g, ' $1').trim().toUpperCase(),
           accessorKey: header.replace("\r", "")
         }
         return o;
       }
     }).filter((key) => key != "subRows" && key != undefined)
+    console.log("Columns", columns);
     setTableColumns(columns);
-  }, [])
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -246,6 +272,30 @@ function RemittanceData() {
     }
   }
 
+  const saveFileToDb = async (transaction) => {
+    var today = new Date();
+    const data = {
+      "file_process_date ":moment(today).format("MM-DD-YYYY"),
+      "total_transactions" : transaction.total,
+      "transactions_after_rules" : transaction.rules,
+      "transactions_recorded": transaction.recorded,
+      "fileName" : transaction.fileName,
+      "file_status": "Processed"
+    }
+    const rawResponse = await fetch(`${BASE_PATH}/saveFileData`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    const content = await rawResponse.json();
+  
+    console.log("Save Response", content);
+    return content;
+  }
+
   const handleFileUpload = async (event) => {
     const file = await fetch(remittance).then(res => res.text());
     if (file) {
@@ -253,6 +303,7 @@ function RemittanceData() {
       parseBaiFile(file);
       setShowFileContent(true);
       setLoading(true);
+      setOpenAlert(false)
       setFileMessage("No File Available to Process");
     }
   };
@@ -508,6 +559,11 @@ function RemittanceData() {
         <Grid >
           <Typography variant="h4">Remittance</Typography>
         </Grid>
+        {openAlert &&
+          <Grid>
+            <Typography className='blink_me' color="#080" variant="h4">{fileMessage}</Typography>
+          </Grid>
+        }
         <Grid >
         <Button
           variant="contained"
@@ -524,11 +580,13 @@ function RemittanceData() {
             component="label"
             disabled={showFileContent}
             onClick={handleFileUpload}
-            sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
+            sx={{ borderRadius: '40px', marginTop: '0px', padding: '12px 30px 12px 30px' }}
           >
-            {fileMessage}
+            {openAlert ? "Process" : fileMessage}
             {/* <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} /> */}
-            <UploadOutlined style={{ fontSize: '20px', padding: '12px', marginLeft: '15px', borderRadius: '100%' }} />
+            {!showFileContent &&
+              <MemoryOutlined style={{ fontSize: '20px', marginLeft: '15px', borderRadius: '100%', background: 'transparent' }} />
+            }
           </Button>
         </Grid>
       </Grid>
