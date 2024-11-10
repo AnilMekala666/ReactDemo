@@ -13,6 +13,7 @@ import moment from 'moment';
 import { MemoryOutlined } from '@mui/icons-material';
 import { BASE_PATH } from 'config';
 import { randomIntFromInterval } from 'utils/axios';
+import AnimatedProcessNew from './AnimatedProcessNew';
 
 const initialStaticData = [
   {
@@ -99,7 +100,7 @@ const initialStaticData = [
 
 function DepositData() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [parsedData, setParsedData] = useState(initialStaticData);
   const [tablecColumns, setTablecColumns] = useState([]);
   const [depositDataDialogOpen, setDepositDataDialogOpen] = useState(false);
@@ -218,7 +219,7 @@ function DepositData() {
   }, [step, loading])
 
   const waitLoad = () => {
-    setTimeout(()=>setLoading(false), 5000);
+    // setTimeout(()=>setLoading(false), 5000);
   }
 
   const handleChange = (event, newValue) => {
@@ -566,7 +567,7 @@ function DepositData() {
       </Grid>
       {loading ? (
         <Box sx={{ width: '100%' }}>
-          <AnimatedProcess currentStep={step} countFiles={countFiles} type="deposit" />
+          <AnimatedProcessNew currentStep={step} countFiles={countFiles} type="deposit" />
         </Box>
       ) : (
         showFileContent ?

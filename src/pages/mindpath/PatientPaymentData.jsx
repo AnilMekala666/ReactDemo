@@ -10,6 +10,7 @@ import { Box } from '@mui/system';
 import AnimatedProcess from './AnimatedProcess';
 import CustomExpandableTableColumn from 'components/payments/CustomExpandableTableColumn';
 import moment from 'moment';
+import AnimatedProcessNew from './AnimatedProcessNew';
 
 const initialStaticData = [
   {
@@ -294,7 +295,7 @@ function PatientPaymentData() {
 
       {loading ? (
         <Box sx={{ width: '100%' }}>
-          <AnimatedProcess currentStep={step} countFiles={countFiles} />
+          <AnimatedProcessNew currentStep={step} countFiles={countFiles} />
         </Box>
       ) : (
         showFileContent ?

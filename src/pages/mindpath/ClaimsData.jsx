@@ -15,6 +15,7 @@ import moment from 'moment';
 import { MemoryOutlined } from '@mui/icons-material';
 import { BASE_PATH } from 'config';
 import { randomIntFromInterval } from 'utils/axios';
+import AnimatedProcessNew from './AnimatedProcessNew';
 
 
 
@@ -544,7 +545,7 @@ function ClaimsData() {
 
       {loading ? (
         <Box sx={{ width: '100%' }}>
-          <AnimatedProcess currentStep={step} countFiles={countFiles} />
+          <AnimatedProcessNew currentStep={step} countFiles={countFiles} />
         </Box>
       ) : (
         showFileContent ?

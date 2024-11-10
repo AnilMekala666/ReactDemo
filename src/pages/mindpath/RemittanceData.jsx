@@ -14,6 +14,7 @@ import moment from 'moment';
 import { MemoryOutlined } from '@mui/icons-material';
 import { BASE_PATH } from 'config';
 import { randomIntFromInterval } from 'utils/axios';
+import AnimatedProcessNew from './AnimatedProcessNew';
 
 // const remittance = new URL('src/assets/data/remittance1.csv', import.meta.url).href;
 // const remittanceDemo = new URL('src/assets/data/remittance.demo.csv', import.meta.url).href;
@@ -614,7 +615,7 @@ function RemittanceData() {
 
       {loading ? (
         <Box sx={{ width: '100%' }}>
-          <AnimatedProcess currentStep={step} countFiles={countFiles} />
+          <AnimatedProcessNew currentStep={step} countFiles={countFiles} />
         </Box>
       ) : (
         showFileContent ?
