@@ -154,7 +154,7 @@ const AnimatedProcess = ({currentStep, countFiles, type}) => {
                                 <div className={["sub-step", currentStep > 5.3 ? "step-complete" : currentStep == "5.3" ? "step-active" : ""].join(" ")}>
                                     <div>
                                         <div className="title">
-                                            Amount of Transactions Recorded: {countFiles.length > 3 && countFiles[3]}
+                                            Amount of Transactions Recorded: {countFiles.length > 2 && countFiles[2]}
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +163,7 @@ const AnimatedProcess = ({currentStep, countFiles, type}) => {
                         <div className={["sub-step", currentStep > 5.4 ? "step-complete" : currentStep == "5.4" ? "step-active" : ""].join(" ")}>
                             <div>
                                 <div className="title">
-                                    Count of Data Updated in the Database: {type == "deposit" ? countFiles.length > 2 && countFiles[2] : countFiles.length > 1 && countFiles[1]}
+                                    Count of Data Updated in the Database: {type == "deposit" ? countFiles.length > 3 && countFiles[3] : countFiles.length > 1 && countFiles[1]}
                                 </div>
                             </div>
                         </div>

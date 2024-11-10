@@ -206,7 +206,8 @@ function DepositData() {
             case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(40); console.log(f); setCountFiles([...f]); return;
             case "5.1": setStep("5.2"); transactionsCount.length > 1 ? f.push(transactionsCount[1]) : f.push(38); console.log(f); setCountFiles([...f]); return;
             case "5.2": setStep("5.3"); transactionsCount.length > 2 ? f.push(transactionsCount[2]) : f.push(38); console.log(f); setCountFiles([...f]); return;
-            case "5.3": setStep("6.1"); return;
+            case "5.3": setStep("5.4"); transactionsCount.length > 3 ? f.push(transactionsCount[3]) : f.push(380); console.log(f); setCountFiles([...f]); return;
+            case "5.4": setStep("6.1"); return;
           }
         }
         waitLoad();
@@ -266,12 +267,17 @@ function DepositData() {
     return content;
   }
 
+  function getPosition(string, subString, index) {
+    return string.split(subString, index).join(subString).length;
+  }
+
   const parseBaiFile = async (content) => {
     const lines = content.split('\n');
     const newParsedData = [];
     let currentTransaction = null;
     let bankName = '';
     let formattedDate = 'Invalid Date';
+    let transactionNumber = "";
     let amt = 0;
     lines.forEach((line) => {
       const parts = line.split(',');
@@ -291,6 +297,10 @@ function DepositData() {
           formattedDate = `${month}/${day}/${year}`; // Final format: MM/DD/YYYY
         }
       }
+      if((parts[0].trim() === '88' && parts[1].trim().includes("PMT INFO:TRN*1*"))) {
+        let trn = parts[1].trim().split("*");
+        transactionNumber = trn.length > 2 ? trn[2] : "";
+      }
       // Transaction line (starting with '16')
       if (parts[0].trim() === '16') {
         const transactionDate = parts[4] ? parts[4].trim() : '';
@@ -306,15 +316,18 @@ function DepositData() {
         // Check payment type: 164 -> '', 165 -> 'EFT credit'
         let paymentType = parts[1] ? parts[1].trim() : '';
         let formattedPaymentType = '';
+        let a = parts[2] ? parts[2].trim() : '0';
         if (paymentType === '165') {
           formattedPaymentType = 'EFT credit'; // Show 'EFT credit' for 165
-          amt += parseFloat(`${amount.slice(0, -2)}.${amount.slice(-2)}`);
+          if (a.length > 2) {
+            amt += parseFloat(`${a.slice(0, -2)}.${a.slice(-2)}`);
+          }
         } else if (paymentType === '164') {
           formattedPaymentType = ''; // Show empty for 164
         }
 
         currentTransaction = {
-          transaction_number: parts[2] ? parts[2].trim() : '',
+          transaction_number: transactionNumber ? transactionNumber : '',
           bank_name: bankName || 'Unknown Bank', // Use bank name from line '01'
           payment_type: formattedPaymentType,
           payer: '', // To be filled from '88' line
@@ -353,9 +366,9 @@ function DepositData() {
     });
 
     console.log("Parsed Data: ", newParsedData);
-    const t = [ newParsedData.length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length, amt ];
+    const t = [ newParsedData.length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length, amt.toFixed(2), newParsedData.filter((x) => x["payment_type"] == "EFT credit").length ];
     setTransactionsCount(t);
-    
+    console.log("trnx", t);    
     // Set the parsed data to the state or return it
     setParsedData(newParsedData);
     const headerKeys = Object.keys(Object.assign({}, ...newParsedData));
