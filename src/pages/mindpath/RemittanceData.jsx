@@ -276,14 +276,21 @@ function RemittanceData() {
   const saveFileToDb = async (transaction) => {
     var today = new Date();
     const data = {
-      "file_process_date ":moment(today).format("MM-DD-YYYY"),
-      "total_transactions" : transaction.total,
-      "transactions_after_rules" : transaction.rules,
-      "transactions_recorded": transaction.recorded,
-      "fileName" : transaction.fileName,
-      "file_status": "Processed"
+      "file_process_date": moment(today).format("YYYY-MM-DD"),
+      "filesReceived": transaction.files,
+      "filesProcessed": transaction.filesProcessed,
+      "totalTransactions": transaction.total,
+      "transactionsRecorded": transaction.recorded,
+      "subRows": [
+          {
+              "file_name": transaction.fileName,
+              "total_transactions": transaction.total,
+              "total_transactions_recorded": transaction.recorded,
+              "file_status": "Processed"
+          }        
+      ]
     }
-    const rawResponse = await fetch(`${BASE_PATH}/saveFileData`, {
+    const rawResponse = await fetch(`${BASE_PATH}/saveRemitFileInfo`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -291,7 +298,7 @@ function RemittanceData() {
       },
       body: JSON.stringify(data)
     });
-    const content = await rawResponse.json();
+    const content = await rawResponse.text();
   
     console.log("Save Response", content);
     return content;
@@ -299,7 +306,7 @@ function RemittanceData() {
   
 
   const handleFileUpload = async (event) => {
-    const remittance = new URL(`src/assets/data/remittance${randomIntFromInterval(1, 4)}.csv`, import.meta.url).href;
+    const remittance = `/src/assets/data/remittance${randomIntFromInterval(1, 4)}.csv`;
     const file = await fetch(remittance).then(res => res.text());
     if (file) {
       setFileContent(file);
@@ -350,7 +357,7 @@ function RemittanceData() {
 
     return newElements;
   }
-  const parseBaiFile = (content) => {
+  const parseBaiFile = async (content) => {
     const csvHeader = content.slice(0, content.indexOf("\n")).split(",");
     const csvRows = content.slice(content.indexOf("\n") + 1).split("\n");
     const array = csvRows.map((i, x) => {
@@ -376,7 +383,6 @@ function RemittanceData() {
         }
         return object;
       }, {});
-      console.log("OBJ", obj)
       return obj;
     }).filter((val) => val != undefined);
     const arr = [];
@@ -430,12 +436,24 @@ function RemittanceData() {
         return o;
       }
     }).filter((key) => key != "subRows" && key != undefined)
-    console.log("Columns", columns);
     setTableColumns(columns);
-    console.log("Parsed Data: ", arr);
     // Set the parsed data to the state or return it
     setParsedData(arr.filter(k=>k["Patient Name"] != null));
     setFileMessage("No File Available to Process");
+    await saveFileToDb({
+      total: arr.length,
+      recorded: arr.length,
+      fileName: `${(new Date().toJSON().slice(0,10))}_remits.edi`,
+      files: "1",
+      filesProcessed: "1"
+    });
+    console.log({
+      total: arr.length,
+      recorded: arr.length,
+      fileName: `${(new Date().toJSON().slice(0,10))}_remits.edi`,
+      files: "1",
+      filesProcessed: "1"
+    });
   };
 
 

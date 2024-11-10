@@ -245,7 +245,7 @@ function DepositData() {
   const saveFileToDb = async (transaction) => {
     var today = new Date();
     const data = {
-      "file_process_date ":moment(today).format("MM-DD-YYYY"),
+      "file_process_date":moment(today).format("YYYY-MM-DD"),
       "total_transactions" : transaction.total,
       "transactions_after_rules" : transaction.rules,
       "transactions_recorded": transaction.recorded,
@@ -260,7 +260,7 @@ function DepositData() {
       },
       body: JSON.stringify(data)
     });
-    const content = await rawResponse.json();
+    const content = await rawResponse.text();
   
     console.log("Save Response", content);
     return content;
@@ -272,6 +272,7 @@ function DepositData() {
     let currentTransaction = null;
     let bankName = '';
     let formattedDate = 'Invalid Date';
+    let amt = 0;
     lines.forEach((line) => {
       const parts = line.split(',');
 
@@ -293,7 +294,7 @@ function DepositData() {
       // Transaction line (starting with '16')
       if (parts[0].trim() === '16') {
         const transactionDate = parts[4] ? parts[4].trim() : '';
-        console.log("Date", transactionDate);
+        // console.log("Date", transactionDate);
         // Extract and format amount (e.g., 99860168 -> 998601.68)
         let amount = parts[2] ? parts[2].trim() : '0';
         if (amount.length > 2) {
@@ -307,6 +308,7 @@ function DepositData() {
         let formattedPaymentType = '';
         if (paymentType === '165') {
           formattedPaymentType = 'EFT credit'; // Show 'EFT credit' for 165
+          amt += parseFloat(`${amount.slice(0, -2)}.${amount.slice(-2)}`);
         } else if (paymentType === '164') {
           formattedPaymentType = ''; // Show empty for 164
         }
@@ -351,20 +353,9 @@ function DepositData() {
     });
 
     console.log("Parsed Data: ", newParsedData);
-    const t = [ newParsedData.length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length ];
+    const t = [ newParsedData.length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length, newParsedData.filter((x) => x["payment_type"] == "EFT credit").length, amt ];
     setTransactionsCount(t);
-    await saveFileToDb({
-      total: newParsedData.length,
-      rules: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
-      recorded: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
-      fileName: `${(new Date().toJSON().slice(0,10))}_deposit.bai`
-    });
-    console.log({
-      total: newParsedData.length,
-      rules: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
-      recorded: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
-      fileName: `${(new Date().toJSON().slice(0,10))}_deposit.bai`
-    });
+    
     // Set the parsed data to the state or return it
     setParsedData(newParsedData);
     const headerKeys = Object.keys(Object.assign({}, ...newParsedData));
@@ -381,7 +372,12 @@ function DepositData() {
     }).filter((key) => key != "subRows" && key != undefined)
     console.log("Columns", columns);
     setTablecColumns(columns);
-    
+    await saveFileToDb({
+      total: newParsedData.length,
+      rules: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
+      recorded: newParsedData.filter((x) => x["payment_type"] == "EFT credit").length,
+      fileName: `${(new Date().toJSON().slice(0,10))}_deposit.bai`
+    });
   };
 
 

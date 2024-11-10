@@ -14,6 +14,7 @@ import { flexRender } from '@tanstack/react-table';
 import moment from 'moment';
 import { MemoryOutlined } from '@mui/icons-material';
 import { BASE_PATH } from 'config';
+import { randomIntFromInterval } from 'utils/axios';
 
 
 
@@ -168,7 +169,7 @@ function ClaimsData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 100)
+      }, 1000)
     }
   }, [step, loading])
 
@@ -272,7 +273,7 @@ function ClaimsData() {
   }
 
   const handleFileUpload = async (event) => {
-    const claimsCsv = new URL(`src/assets/data/claims${randomIntFromInterval(1, 4)}.csv`, import.meta.url).href;
+    const claimsCsv = `/src/assets/data/claims${randomIntFromInterval(1, 4)}.csv`;
     const file = await fetch(claimsCsv).then(res => res.text());
     if (file) {
       setFileContent(file);
@@ -283,6 +284,37 @@ function ClaimsData() {
       setFileMessage("No File Available to Process");
     }
   };
+
+  const saveFileToDb = async (transaction) => {
+    var today = new Date();
+    const data = {
+      "file_process_date": moment(today).format("YYYY-MM-DD"),
+      "filesReceived": transaction.files,
+      "filesProcessed": transaction.filesProcessed,
+      "totalTransactions": transaction.total,
+      "transactionsRecorded": transaction.recorded,
+      "subRows": [
+          {
+              "file_name": transaction.fileName,
+              "total_transactions": transaction.total,
+              "total_transactions_recorded": transaction.recorded,
+              "file_status": "Processed"
+          }        
+      ]
+    }
+    const rawResponse = await fetch(`${BASE_PATH}/saveClaimsFileInfo`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    const content = await rawResponse.text();
+  
+    console.log("Save Response", content);
+    return content;
+  }
 
   function splitCSVButIgnoreCommasInDoublequotes(str) {
     //split the str first  
@@ -323,7 +355,7 @@ function ClaimsData() {
     return newElements;
   }
 
-  const parseCsvFile = (content) => {
+  const parseCsvFile = async (content) => {
     const csvHeader = content.slice(0, content.indexOf("\n")).split(",");
     const csvRows = content.slice(content.indexOf("\n") + 1).split("\n");
     // console.log(csvHeader)
@@ -432,6 +464,20 @@ function ClaimsData() {
     setTableColumns(columns);
     setParsedData(result);
     setFileMessage("No File Available to Process");
+    await saveFileToDb({
+      total: arr.length,
+      recorded: arr.length,
+      fileName: `${(new Date().toJSON().slice(0,10))}_remits.edi`,
+      files: "1",
+      filesProcessed: "1"
+    });
+    console.log({
+      total: arr.length,
+      recorded: arr.length,
+      fileName: `${(new Date().toJSON().slice(0,10))}_remits.edi`,
+      files: "1",
+      filesProcessed: "1"
+    });
   };
 
   function a11yProps(index) {

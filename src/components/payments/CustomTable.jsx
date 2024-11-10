@@ -6,7 +6,7 @@ import { margin } from '@mui/system';
 
 const CustomTable = ({ data, datacolumns }) => {
 
-    console.log(data, datacolumns)
+    // console.log(data, datacolumns)
     const [open, setOpen] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState(null);
 
