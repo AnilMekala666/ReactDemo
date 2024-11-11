@@ -441,6 +441,8 @@ function RemittanceData() {
     // Set the parsed data to the state or return it
     setParsedData(arr.filter(k=>k["Patient Name"] != null));
     setFileMessage("No File Available to Process");
+    const t = [ arr.filter(k=>k["Patient Name"] != null).length, arr.filter(k=>k["Patient Name"] != null).length, arr.filter(k=>k["Patient Name"] != null).length ];
+    setTransactionsCount(t);
     await saveFileToDb({
       total: arr.length,
       recorded: arr.length,

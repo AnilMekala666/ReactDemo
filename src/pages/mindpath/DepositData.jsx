@@ -231,9 +231,8 @@ function DepositData() {
   };
 
   const handleFileUpload = async(event) => {
-    const depositDataBai = `/src/assets/data/deposit${randomIntFromInterval(1, 4)}.bai`;
+    const depositDataBai = `/src/assets/data/deposit${randomIntFromInterval(1, 6)}.bai`;
     const file = await fetch(depositDataBai).then(res => res.text());
-    console.log(file);
     if (file) {
       setFileContent(file);
       parseBaiFile(file);
@@ -323,23 +322,20 @@ function DepositData() {
           if (a.length > 2) {
             amt += parseFloat(`${a.slice(0, -2)}.${a.slice(-2)}`);
           }
-        } else if (paymentType === '164') {
-          formattedPaymentType = ''; // Show empty for 164
+          currentTransaction = {
+            transaction_number: transactionNumber ? transactionNumber : '',
+            bank_name: bankName || 'Unknown Bank', // Use bank name from line '01'
+            payment_type: formattedPaymentType,
+            payer: '', // To be filled from '88' line
+            deposit_date: formattedDate,
+            amounts: amount, // Formatted amount
+            additional_info: '',
+            indn: '',
+            des: '',
+          };
+  
+          newParsedData.push(currentTransaction);
         }
-
-        currentTransaction = {
-          transaction_number: transactionNumber ? transactionNumber : '',
-          bank_name: bankName || 'Unknown Bank', // Use bank name from line '01'
-          payment_type: formattedPaymentType,
-          payer: '', // To be filled from '88' line
-          deposit_date: formattedDate,
-          amounts: amount, // Formatted amount
-          additional_info: '',
-          indn: '',
-          des: '',
-        };
-
-        newParsedData.push(currentTransaction);
       }
 
       // Additional information line (starting with '88')

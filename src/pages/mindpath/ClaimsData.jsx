@@ -449,6 +449,8 @@ function ClaimsData() {
         result.push(arr[i]);
       }
     }
+    const t = [ arr.length, arr.length, arr.length ];
+    setTransactionsCount(t);
     const headerKeys = Object.keys(Object.assign({}, ...arr));
     let columns = [];
     columns = headerKeys.map((header, index) => {

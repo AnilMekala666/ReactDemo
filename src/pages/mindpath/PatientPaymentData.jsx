@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Button, Grid, Tab, Tabs, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import CustomTable from 'components/payments/CustomTable';
 import CustomDialog from 'components/payments/CustomDialog';
 import * as XLSX from 'xlsx'; 
@@ -11,6 +11,7 @@ import AnimatedProcess from './AnimatedProcess';
 import CustomExpandableTableColumn from 'components/payments/CustomExpandableTableColumn';
 import moment from 'moment';
 import AnimatedProcessNew from './AnimatedProcessNew';
+import { BASE_PATH } from 'config';
 
 const initialStaticData = [
   {
@@ -118,27 +119,28 @@ function PatientPaymentData() {
   const [openAlert, setOpenAlert] = useState(false);
 
   useEffect(()=>{
-    const staticData = initialStaticData.map((x, i) => {
-      var today = new Date();
-      today.setDate(today.getDate() - (i + 1));
+    fetchInitial();
+    // const staticData = initialStaticData.map((x, i) => {
+    //   var today = new Date();
+    //   today.setDate(today.getDate() - (i + 1));
       
-      x["File Process Date"] = moment(today).format("DD-MM-YYYY");
-      return x;
-    })
-    setParsedData(staticData);
-    const headerKeys = Object.keys(Object.assign({}, ...staticData));
-    let columns = [];
-    columns = headerKeys.map((header, index) => {
-      if(header != "subRows" && header != "id") {
-        let o = {
-          id: index + 1,
-          header: header.replace("_", " ").replace("\r", "").toUpperCase(),
-          accessorKey: header.replace("\r", "")
-        }
-        return o;
-      }
-    }).filter((key) => key != "subRows" && key != undefined)
-    setTableColumns(columns);
+    //   x["File Process Date"] = moment(today).format("DD-MM-YYYY");
+    //   return x;
+    // })
+    // setParsedData(staticData);
+    // const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    // let columns = [];
+    // columns = headerKeys.map((header, index) => {
+    //   if(header != "subRows" && header != "id") {
+    //     let o = {
+    //       id: index + 1,
+    //       header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+    //       accessorKey: header.replace("\r", "")
+    //     }
+    //     return o;
+    //   }
+    // }).filter((key) => key != "subRows" && key != undefined)
+    // setTableColumns(columns);
   }, [])
 
   useEffect(() =>  {
@@ -208,7 +210,7 @@ function PatientPaymentData() {
       setLoading(true);
       setOpenAlert(false);
       const reader = new FileReader();
-      reader.onload = function (e) {
+      reader.onload = async function (e) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheetName = workbook.SheetNames[0];
@@ -231,6 +233,22 @@ function PatientPaymentData() {
         setTableColumns(columns);
         // setLoading(false);
         setShowFileContent(true); // Show uploaded content
+        const t = [ jsonData.length, jsonData.length, jsonData.length ];
+        setTransactionsCount(t);
+        await saveFileToDb({
+          total: jsonData.length,
+          recorded: jsonData.length,
+          fileName: `${(new Date().toJSON().slice(0,10))}_patient_payment.edi`,
+          files: "1",
+          filesProcessed: "1"
+        });
+        console.log({
+          total: jsonData.length,
+          recorded: jsonData.length,
+          fileName: `${(new Date().toJSON().slice(0,10))}_patient_payment.edi`,
+          files: "1",
+          filesProcessed: "1"
+        });
       };
       reader.readAsArrayBuffer(file); // Read file as ArrayBuffer
       
@@ -258,6 +276,59 @@ function PatientPaymentData() {
         {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
       </div>
     );
+  }
+
+  const fetchInitial = async () => {
+    console.log("Fetch Called");
+    const data = await fetch(`${BASE_PATH}/getPatientPaymentDataForLastWeek/1`);
+    // console.log("Data API", await data.json());
+    const staticData = await data.json();
+    setParsedData(staticData);
+    const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    let columns = [];
+    columns = headerKeys.map((header, index) => {
+      if(header != "subRows" && header != "id") {
+        let o = {
+          id: index + 1,
+          header: header.replace("_", " ").replace("\r", "").replace(/([A-Z])/g, ' $1').trim().toUpperCase(),
+          accessorKey: header.replace("\r", "")
+        }
+        return o;
+      }
+    }).filter((key) => key != "subRows" && key != undefined)
+    console.log("Columns", columns);
+    setTableColumns(columns);
+  }
+
+  const saveFileToDb = async (transaction) => {
+    var today = new Date();
+    const data = {
+      "file_process_date": moment(today).format("YYYY-MM-DD"),
+      "filesReceived": transaction.files,
+      "filesProcessed": transaction.filesProcessed,
+      "totalTransactions": transaction.total,
+      "transactionsRecorded": transaction.recorded,
+      "subRows": [
+          {
+              "file_name": transaction.fileName,
+              "total_transactions": transaction.total,
+              "total_transactions_recorded": transaction.recorded,
+              "file_status": "Processed"
+          }        
+      ]
+    }
+    const rawResponse = await fetch(`${BASE_PATH}/saveRemitFileInfo`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    const content = await rawResponse.text();
+  
+    console.log("Save Response", content);
+    return content;
   }
 
   return (
