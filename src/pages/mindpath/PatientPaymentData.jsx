@@ -238,14 +238,14 @@ function PatientPaymentData() {
         await saveFileToDb({
           total: jsonData.length,
           recorded: jsonData.length,
-          fileName: `${(new Date().toJSON().slice(0,10))}_patient_payment.edi`,
+          fileName: `${(new Date().toJSON().slice(0,10))}_patient_payment.xlsx`,
           files: "1",
           filesProcessed: "1"
         });
         console.log({
           total: jsonData.length,
           recorded: jsonData.length,
-          fileName: `${(new Date().toJSON().slice(0,10))}_patient_payment.edi`,
+          fileName: `${(new Date().toJSON().slice(0,10))}_patient_payment.xlsx`,
           files: "1",
           filesProcessed: "1"
         });
