@@ -100,7 +100,7 @@ const initialStaticData = [
 
 function DepositData() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [parsedData, setParsedData] = useState(initialStaticData);
   const [tablecColumns, setTablecColumns] = useState([]);
   const [depositDataDialogOpen, setDepositDataDialogOpen] = useState(false);
@@ -219,7 +219,7 @@ function DepositData() {
   }, [step, loading])
 
   const waitLoad = () => {
-    // setTimeout(()=>setLoading(false), 5000);
+    setTimeout(()=>setLoading(false), 5000);
   }
 
   const handleChange = (event, newValue) => {
