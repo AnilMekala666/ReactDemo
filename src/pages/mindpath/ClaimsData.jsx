@@ -415,7 +415,7 @@ function ClaimsData() {
         arr.push({
           "id": x["id"],
           'Patient Name': x['Patient Name'],
-          'Billed Amount': currencyFormat(parseInt(x['Billed Amount']) || 0),
+          'Billed Amount': currencyFormat(parseFloat(x['Billed Amount']) || 0),
           'Encounter Number': x['Encounter Number'],
           'Date of submission': formattedDate,
           'Start DOS': x['Service Start'],
@@ -423,7 +423,7 @@ function ClaimsData() {
           "subRows": [
             {
               'Procedure  Code': x['Procedure  Code'],
-              "Amount": currencyFormat(parseInt(x["Amount"]) || 0),
+              "Amount": currencyFormat(parseFloat(x["Amount"]) || 0),
               'Diagnosis 1': x['Diagnosis 1'],
               'Diagnosis 2': x['Diagnosis 2'],
               'Diagnosis 3': x['Diagnosis 3'],

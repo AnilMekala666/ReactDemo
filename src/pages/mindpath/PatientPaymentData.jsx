@@ -12,6 +12,9 @@ import CustomExpandableTableColumn from 'components/payments/CustomExpandableTab
 import moment from 'moment';
 import AnimatedProcessNew from './AnimatedProcessNew';
 import { BASE_PATH } from 'config';
+import { randomIntFromInterval } from 'utils/axios';
+import { MemoryOutlined } from '@mui/icons-material';
+import { currencyFormat } from 'components/mindpath';
 
 const initialStaticData = [
   {
@@ -181,8 +184,8 @@ function PatientPaymentData() {
           let f = [...countFiles];
           switch(step) {
             case "5": setStep("5.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); console.log(f); setCountFiles([...f]); return;
-            case "5.1": setStep("5.2"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); console.log(f); setCountFiles([...f]); return;
-            case "5.3": setStep("6.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); console.log(f); setCountFiles([...f]); return;
+            case "5.1": setStep("5.4"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); console.log(f); setCountFiles([...f]); return;
+            case "5.4": setStep("6.1"); transactionsCount.length > 0 ? f.push(transactionsCount[0]) : f.push(756); console.log(f); console.log(f); setCountFiles([...f]); return;
           }
         }
         waitLoad();
@@ -204,8 +207,10 @@ function PatientPaymentData() {
     navigate('/patient/payment');
   };
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = async (event) => {
+    const patientlXlsx = `/src/assets/data/patient_payments${randomIntFromInterval(1, 3)}.xlsx`;
+    const file = await fetch(patientlXlsx).then(res => res.blob());
+    console.log(file)
     if (file) {
       setLoading(true);
       setOpenAlert(false);
@@ -220,14 +225,29 @@ function PatientPaymentData() {
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
         setFileContent(jsonData); // Save parsed data for displaying
+        jsonData.map(data=>data["Amount"] = currencyFormat(parseFloat(data['Amount']) || 0));
         setParsedData(jsonData); // Save parsed data for the dialog
-        let columns = [
-          { header: 'Payment ID', accessorKey: 'Payment ID' },
-          { header: 'Transaction Number', accessorKey: 'Transaction Number' },
-          { header: 'Patient ID', accessorKey: 'Patient ID' },
-          { header: 'Amount', accessorKey: 'Amount' },
-          { header: 'State Name', accessorKey: 'State Name' },
-        ];
+        const headerKeys = Object.keys(Object.assign({}, ...jsonData));
+        let columns = [];
+        columns = headerKeys.map((header, index) => {
+          if(header != "subRows" && header != "id") {
+            let o = {
+              id: index + 1,
+              header: header.replace("_", " ").replace("\r", "").toUpperCase(),
+              accessorKey: header.replace("\r", "")
+            }
+            return o;
+          }
+        }).filter((key) => key != "subRows" && key != undefined)
+        console.log("Columns", columns);
+        setTableColumns(columns);
+        // let columns = [
+        //   { header: 'Payment ID', accessorKey: 'Payment ID' },
+        //   { header: 'Transaction Number', accessorKey: 'Transaction Number' },
+        //   { header: 'Patient ID', accessorKey: 'Patient ID' },
+        //   { header: 'Amount', accessorKey: 'Amount' },
+        //   { header: 'State Name', accessorKey: 'State Name' },
+        // ];
         
         console.log("Columns", columns);
         setTableColumns(columns);
@@ -251,7 +271,7 @@ function PatientPaymentData() {
         });
       };
       reader.readAsArrayBuffer(file); // Read file as ArrayBuffer
-      
+      setFileMessage("No File Available to Process");
     }
   };
 
@@ -355,11 +375,15 @@ function PatientPaymentData() {
           <Button
             variant="contained"
             color="primary"
-            component="label"sx={{ borderRadius: '40px', marginTop: '0px', padding: '0px 0 0px 30px' }}
+            onClick={handleFileUpload}
+            disabled={showFileContent}
+            component="label"sx={{ borderRadius: '40px', marginTop: '0px', padding: '12px 30px 12px 30px' }}
             >
-              Get File
-            <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/>
-            <UploadOutlined style={{ fontSize: '20px',padding: '12px', marginLeft: '15px', borderRadius: '100%', background: 'rgb(85 145 243)' }} />
+              {openAlert ? "Process" : fileMessage}
+            {/* <input type="file" hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }}/> */}
+            {!showFileContent &&
+              <MemoryOutlined style={{ fontSize: '20px', marginLeft: '15px', borderRadius: '100%', background: 'transparent' }} />
+            }
           </Button>
         </Grid>
       </Grid>
@@ -398,7 +422,7 @@ function PatientPaymentData() {
               </Grid>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              <CustomExpandableTableColumn data={parsedData} datacolumns={tableColumns} />
+              <CustomTable data={parsedData} datacolumns={tableColumns} />
             </CustomTabPanel>
           </Box>
         : 
