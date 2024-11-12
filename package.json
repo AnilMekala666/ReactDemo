@@ -35,6 +35,7 @@
     "@mui/material": "^5.16.7",
     "@mui/system": "^5.16.6",
     "@mui/x-charts": "^7.8.0",
+    "@mui/x-data-grid": "^7.22.2",
     "@mui/x-date-pickers": "^7.18.0",
     "@mui/x-tree-view": "^7.12.0",
     "@react-pdf/renderer": "^3.4.4",

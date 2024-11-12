@@ -133,6 +133,12 @@ const ReconcilePage = Loadable(lazy(() => import('pages/mindpath/reconcile')))
 const PostingReport = Loadable(lazy(() => import('pages/mindpath/PostingReport')))
 const ClaimsDataPage = Loadable(lazy(() => import('pages/mindpath/ClaimsData')))
 
+//correspondence 
+
+const DashBoard= Loadable(lazy(() => import('pages/correspondence/DashBoard')))
+const DocumentsList = Loadable(lazy(() => import('pages/correspondence/DocumentsList')))
+const DocumentDetails = Loadable(lazy(() => import('pages/correspondence/documentDetails/DocumentDetails')))
+
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -202,7 +208,23 @@ const MainRoutes = {
             },
           ]
         },
-       
+        {
+          path: 'correspndence',
+          children: [
+            {
+              path: 'dashboard',
+              element: <DashBoard />
+            },
+            {
+              path:'documentsList/:docName',
+              element:<DocumentsList/>
+            },
+            {
+              path:'documentsDetails/:docName/:fileName/:docId/:checkId',
+              element:<DocumentDetails/>
+            }
+          ]
+        },
         // Innoclique
         // {
         //   path: 'apps',

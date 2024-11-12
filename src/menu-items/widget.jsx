@@ -5,17 +5,18 @@ import { FormattedMessage } from 'react-intl';
 import LineChartOutlined from '@ant-design/icons/LineChartOutlined';
 import IdcardOutlined from '@ant-design/icons/IdcardOutlined';
 import DatabaseOutlined from '@ant-design/icons/DatabaseOutlined';
+import { Mail } from '@mui/icons-material';
 
 // type
 
 // icons
-const icons = { LineChartOutlined, IdcardOutlined, DatabaseOutlined };
+const icons = { LineChartOutlined, IdcardOutlined, DatabaseOutlined, Mail };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
 
 const widget = {
   id: 'group-widget',
-  title: <FormattedMessage id="widgets" />,
+  title: <FormattedMessage id="Widgets" />,
   icon: icons.IdcardOutlined,
   type: 'group',
   children: [
@@ -32,6 +33,13 @@ const widget = {
       type: 'item',
       url: '/cognito/mindpath',
       icon: icons.DatabaseOutlined
+    },
+    {
+      id: 'Correspondance',
+      title: <FormattedMessage id="Correspondance" />,
+      type: 'item',
+      url: '/correspndence/dashboard',
+      icon: icons.Mail
     }
     // {
     //   id: 'chart',

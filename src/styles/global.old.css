@@ -1,0 +1,107 @@
+
+.head-right{
+    width: 100%;
+    display: inline-flex;
+    justify-content: end;
+    min-height: 60px;
+    padding-right: 24px;
+    align-items: center;
+    /* background: linear-gradient(54deg, rgba(255, 255, 255, 1) 33%,
+     rgba(255, 195, 50, 1) 68%, rgba(255, 99, 0, 1) 100%); */
+}
+header .css-13n62e0-MuiToolbar-root{ padding: 0px;    padding-left: 24px;}
+
+.bdr-radius { border-radius: 45px; border: none; padding: 0 10px;}
+.payment-icon { width: 40px;height: 40px;min-width: 40px; border-radius: 45px;text-align: center;background-color: #e9f0ff;display: flex;justify-content: center;}
+.calender-icon { background-color: #f4fdf7; }
+.css-13xfq8m-MuiTabPanel-root { padding:10px 0px;}
+
+
+.dialog {
+    width: 100%; /* Make the dialog full width */
+    max-width: 600px; /* Optional: Set a max width for larger screens */
+    margin: 0 auto; /* Center the dialog */
+    padding: 20px; /* Add some padding */
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+
+
+@media (min-width: 600px) {
+    .dialog {
+        width: 70%; /* Adjust width for medium screens */
+    }
+}
+
+@media (min-width: 900px) {
+    .dialog {
+        width: 90%; /* Adjust width for larger screens */
+    }
+}
+
+.css-l3v5bq { padding: 0px;}
+.css-1pllgwt-MuiTableCell-root { padding: 5px 10px;}
+
+
+.w-100h-100 { width: 100%;height: 100%;}
+/* .dialog-head { } */
+.popupheader { color: #000;font-weight: 600;margin-bottom: 15px;margin-top: 10px;font-size: 14px;}
+.css-dwz9he-MuiTableHead-root th { background-color: #f1f7f9;}
+.css-d5a4cy-MuiTreeItem-content.Mui-selected { background-color: inherit;}
+.css-d5a4cy-MuiTreeItem-content.Mui-selected:hover { background-color: inherit !important;;}
+.css-d5a4cy-MuiTreeItem-content.Mui-selected.Mui-focused { background-color: inherit !important;}
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse; /* Ensures borders don't have space between cells */
+  }
+
+  .table th, .table td {
+    border: 0px solid #ddd; /* Adds border to table cells */
+    padding: 2px 8px; /* Adds padding to the cells */
+    text-align: left;
+    font-weight: normal;
+    font-size: 13px;
+  }
+  .css-121pzzt-MuiModal-root-MuiDialog-root .MuiDialog-paper { width: 90%;}
+  .css-71agcl-MuiPaper-root-MuiDrawer-paper { width: 350px;}
+
+/* New */
+.main-bg { background: url(../assets/images/new-images/MainBg.png) no-repeat;width: 100%;height: 100%;background-size: contain;}
+.depositbox-text { font-size: 14px; line-height: 16px;color: #000; margin-left: 10px;}
+.depositbox {width: 180px;height: 60px; border-radius: 16px; border: 1px solid #F7E398;background: #FFF4CA; box-shadow: 0 2px 8px 0 rgb(130 107 22 / 0.2);}
+.depositbox-blue {border: 1px solid #B0C5FB;background: #D1DEFF;box-shadow: 0px 2px 8px 0px #35477433;}
+.depositbox-green {background: #CCFFDC;border: 1px solid #9CEBB4;box-shadow: 0px 2px 8px 0px #74A44E33;}
+.deposit-recon {background: #FECEF3;border: 1px solid #DF98CF;box-shadow: 0px 4px 16px 0px #0000001A;}
+.deposit-cashpost {background: #FCCCCC;border: 1px solid #EC9D9D;box-shadow: 0px 4px 16px 0px #0000001A;}
+.ican-bg {width: 60px;height: 60px;background: #fff;border-radius: 16px;padding: 10px;position: relative;top: -5px;left: -5px;box-shadow: 0px 4px 16px 0px #0000001A;}
+.dotarrow2 { position: relative; top: 101px; left: -50px;}
+.bottom-logo { width: 160px; height: 50px; border-radius: 16px;text-align: center;box-shadow: 0px 2px 8px 0px #0000001A;    background: #fff;
+display: flex; align-items: center; justify-content: center;}
+.rightbottomarrow {position: absolute; left: -90px; top: 20px; max-width: 90px;}
+.uploadbtn {background:#f3f4f6;}
+.btn-border { font-size: 14px; float:right;padding: 10px 35px; background: #dbeafe; border: 1px solid #5183ef;color: #2865eb; border-radius: 45px;margin-top: 20px;}
+.btn-border:hover { color: #fff; background-color: rgb(85 145 243);}
+.back-btn {border-radius: 45px;padding: 2px 28px 1px 0px;float:right;margin-top: 20px;margin-right: 20px;  }
+.accordian-btn { font-size:12px; font-weight:400; background:#f7f7f8;}
+.input-height .css-1u40o6b-MuiInputBase-input-MuiOutlinedInput-input { height: 35px; padding: 0px 10px;font-size: 12px;}
+.MuiTableCell-head  { font-size: 12px;padding: 5px 12px; font-weight: 600;}
+.MuiTableCell-body { font-size: 13px;}
+.popover { background-color: none;}
+.popover Button { display: block; background: #f7f7f8; color: #000;border-radius: 10px;width: 100%;    font-size: 11px;
+    padding: 7px 10px;margin-bottom: 10px; }
+.popover_in { padding: 15px;border-radius: 16px; border: 1px solid #ddd;background-color: #fff;}
+.popover .css-16oh8wq-MuiPaper-root-MuiPopover-paper {border-radius: 16px; background: none; box-shadow: none;}
+.css-1xfftyy-MuiAccordionDetails-root { padding: 10px;}
+
+.blink_me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+ 
