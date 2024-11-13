@@ -16,6 +16,7 @@ import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import ReUsableTable from 'components/correspndence/ReUsableTable';
 
 import AIDrawer from './documentList/AIDrawer';
+import { display, textAlign } from '@mui/system';
 
 const rows1 = [
   {
@@ -128,6 +129,7 @@ const DocumentsList = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [aiEobTableData, setAiEobTableData] = useState([]);
   const [aiMedicalRequestTableData, setAiMedicalRequestTableData] = useState([])
+  const [isTableLoading, setIsTableLoading] = useState(false)
 
 
   console.log(docName)
@@ -145,11 +147,11 @@ const DocumentsList = () => {
           <Box display="flex" alignItems="center">
             <img src={pdfIcon} alt="pdf icon" style={{ width: '30px', height: '30px', marginRight: '20px' }} />
             <Box
-              onClick={() =>(
+              onClick={() => (
                 navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}`, {
                   state: { row: params.row },
                 })
-              ) }
+              )}
               sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}
             >
               <Typography variant="body2" sx={{ fontSize: '14px', color: "#1677ff" }}>
@@ -182,7 +184,14 @@ const DocumentsList = () => {
       sortable: true,
       valueFormatter: (params) => `${params ? params : '-'}`
     },
-
+    {
+      field: 'fileDate',
+      headerName: 'File Date',
+      width: 150,
+      //type: 'date',
+      sortable: true,
+      valueFormatter: (params) => `${params ? params : '-'}`
+    },
     {
       field: 'openSince',
       headerName: 'Open Since',
@@ -200,14 +209,7 @@ const DocumentsList = () => {
       }
 
     },
-    {
-      field: 'fileDate',
-      headerName: 'File Date',
-      width: 150,
-      //type: 'date',
-      sortable: true,
-      valueFormatter: (params) => `${params ? params : '-'}`
-    },
+
 
     {
       field: 'status',
@@ -326,7 +328,7 @@ const DocumentsList = () => {
       });
       console.log(response)
       let processedData = response.data.map((item, index) => {
-        const { id, checkAmount, checkNumber, depositDate, documentAge, letterName, payerName, statusName, checkId } =
+        const { id, checkAmount, checkNumber, depositDate, documentAge, letterName, payerName, statusName, checkId, fileDate } =
           item;
         const shortDocumentName = letterName ? letterName.split('_').pop() : '-';
 
@@ -340,10 +342,11 @@ const DocumentsList = () => {
           openSince: documentAge ? documentAge : '-',
           status: statusName ? statusName : '-',
           checkId: checkId ? checkId : '-',
-          // fileDate:fileDate?fileDate : '-'
+          fileDate:fileDate?fileDate : '-'
         };
       });
-      setRows(processedData);
+      // setRows(processedData);
+      setAiEobTableData(processedData);
     } catch (err) {
       setLoader(false);
       setError('Failed to fetch data');
@@ -378,7 +381,8 @@ const DocumentsList = () => {
           checkId: checkId ? checkId : '-'
         };
       });
-      setRows(processedData);
+      // setRows(processedData);
+      setAiMedicalRequestTableData(processedData)
     } catch (err) {
       setLoader(false);
       setError('Failed to fetch data');
@@ -402,13 +406,22 @@ const DocumentsList = () => {
   };
 
   const handleSetAIEobTableData = (data) => {
-    console.log("AI", data)
-    setAiEobTableData(data);
+    console.log("handleSetAIEobTableData", data)
+
+    setIsTableLoading(true)
+    setTimeout(() => {
+      setAiEobTableData(data);
+      setIsTableLoading(false)
+    }, 1000);
   };
 
   const handleSetAIMedicalRequestTableData = (data) => {
-    console.log("MedicalRequest", data)
-    setAiMedicalRequestTableData(data);
+    console.log("data", data)
+    setIsTableLoading(true)
+    setTimeout(() => {
+      setAiMedicalRequestTableData(data);
+      setIsTableLoading(false)
+    }, 1000)
   };
 
   const handleEOBRefresh = () => {
@@ -461,7 +474,7 @@ const DocumentsList = () => {
               background: '#F8F8FF'
             }}
           >
-            {rows.length}
+            {aiData.length}
           </Grid>
           <Grid item xs>
           </Grid>
@@ -518,7 +531,13 @@ const DocumentsList = () => {
         </Grid>
 
         {/* <ReUsableTable rows={rows} columns={columns1} /> */}
-        <ReusableDataGrid rows={aiData?.length > 0 ? aiData : rows} columns={columns} />
+        {/* <ReusableDataGrid rows={aiData?.length > 0 ? aiData : rows} columns={columns} /> */}
+        {/* {!isTableLoading ?
+          <ReusableDataGrid rows={aiData?.length > 0 ? aiData : rows} columns={columns} />
+          : ""} */}
+           {!isTableLoading ?
+          <ReusableDataGrid rows={aiData} columns={columns} />
+          : <h4 sx={{textAlign:"center", alignItems:"center", display:"flex"}}>Loading...</h4>}
 
         {console.log(aiData)}
         {console.log(rows)}

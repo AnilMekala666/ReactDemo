@@ -85,7 +85,7 @@ const AIDrawer = ({ isDrawerOpen, toggleDrawer, onSetAIEobTableData, setIsDrawer
             console.log("AI prompt response", response)
             let processedData = response.data.map((item, index) => {
                 const { check_amount, check_number, deposit_date, document_age,
-                    letter_name, payer_name, status_name } = item;
+                    letter_name, payer_name, status, claim_number, patient_name } = item;
                 const shortDocumentName = letter_name ? letter_name.split('_').pop() : '-';
 
                 return {
@@ -96,7 +96,9 @@ const AIDrawer = ({ isDrawerOpen, toggleDrawer, onSetAIEobTableData, setIsDrawer
                     chequeAmount: check_amount ? check_amount : '-',
                     depositDate: deposit_date ? deposit_date : '-',
                     openSince: document_age ? document_age : '-',
-                    status: status_name ? status_name : '-'
+                    status: status ? status : '-',
+                    patientName: patient_name ? patient_name : '-',
+                    claimNumber: claim_number ? claim_number : '-',
                 };
             });
 
