@@ -224,15 +224,18 @@ import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
+import GradingIcon from '@mui/icons-material/Grading';
+import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 
 export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus }) => {
-  console.log(receivedStatus)
+  console.log("receivedStatus", receivedStatus)
   console.log("patientsData", patientsData)
   const [patientLevelTable, setPatientLevelTable] = useState([]);
   const [lineLevelTable, setLineLevelTable] = useState([]);
   const [patient, setPatient] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState([]);
+  const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
 
 
   // const handleSelectedPatient = (e) => {
@@ -324,21 +327,26 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
           allowedAmount: patient.allowedAmount,
           paidAmount: patient.paidAmount,
         };
-  
+
         console.log("Payload to update:", payload);
-  
+
         // Send each patient's data individually
         const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
         console.log("Update response:", response.data);
       }
-  
+
       // Set editing mode off and refresh data if needed
       setIsEditing(false);
     } catch (error) {
       console.error("Update failed:", error);
     }
   };
-  
+
+  const handleUserValidation = () => {
+    // Enable the submit button when User Validation is clicked
+    setIsSubmitEnabled(true);
+  };
+
   return (
     <Box sx={{ padding: 2 }}>
       {/* Patient Selection Input */}
@@ -392,7 +400,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
             </Box> */}
             <Box sx={{ display: 'flex', gap: 1 }}>
 
-              {receivedStatus === "Need Attention" && (
+              {receivedStatus === 2 && (
                 <>
                   <Button
                     variant="outlined"
@@ -414,6 +422,22 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
                       Cancel
                     </Button>
                   )}
+
+                  <Button variant="outlined"
+                    startIcon={<GradingIcon />}
+                    onClick={handleUserValidation}
+                    sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+                  >
+                    User Validation
+                  </Button>
+                  <Button
+                   variant="outlined"
+                   sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+                   startIcon={<AddToPhotosIcon/>}
+                   disabled={!isSubmitEnabled} 
+                   >
+                    Submit
+                  </Button>
                 </>
               )}
 

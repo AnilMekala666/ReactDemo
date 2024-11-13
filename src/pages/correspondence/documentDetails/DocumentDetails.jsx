@@ -55,9 +55,9 @@ const DocumentPage = () => {
 
   const location = useLocation();
   const row = location.state?.row;
-  const receivedStatus = row.status
+  const receivedStatus = row.statusId
 
-  console.log("Received row data:", row.status);
+  console.log("Received row data:", row.statusId);
   const sourceUrl = `https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showLabelingpdf?id=${docId}`;
   // Tab Change Handler
   const handleTabChange = (event, newValue) => {
@@ -276,14 +276,14 @@ const StepTitleContainer = styled('div')(({ isLast }) => ({
             </Box> */}
 
             {/* Cancel and Save & Submit buttons */}
-            <Box sx={{ display: 'flex', gap: 1 }}>
+            {/* <Box sx={{ display: 'flex', gap: 1 }}>
               <Button variant="outlined" sx={{ borderRadius: '8px' }}>
                 Cancel
               </Button>
               <Button variant="contained" color="primary" sx={{ borderRadius: '8px', background: '#3A63D2' }}>
                 Save & Submit
               </Button>
-            </Box>
+            </Box> */}
           </Box>
         </Paper>
       </Box>
