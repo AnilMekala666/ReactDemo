@@ -183,7 +183,7 @@ function RemittanceData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 1000)
+      }, 2000)
     }
   }, [step, loading])
 
@@ -307,10 +307,12 @@ function RemittanceData() {
   
 
   const handleFileUpload = async (event) => {
-    const remittance = `/src/assets/data/remittance${randomIntFromInterval(1, 4)}.csv`;
+    const remittance = `/src/assets/data/newData/remittance${randomIntFromInterval(1, 2)}.csv`;
+    const remittanceTxt = `/src/assets/data/newData/remittance${randomIntFromInterval(1, 2)}.txt`;
     const file = await fetch(remittance).then(res => res.text());
+    const fileTxt = await fetch(remittanceTxt).then(res => res.text());
     if (file) {
-      setFileContent(file);
+      setFileContent(fileTxt);
       parseBaiFile(file);
       setShowFileContent(true);
       setLoading(true);

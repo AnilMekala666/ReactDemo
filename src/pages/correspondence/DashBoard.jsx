@@ -121,7 +121,7 @@ const DashBoard = () => {
     },
     {
       id: 'inProgress',
-      label: 'In Progress',
+      label: 'Ready to Process',
       // minWidth: 170,
       align: 'right',
       format: (value) => value.toLocaleString(),

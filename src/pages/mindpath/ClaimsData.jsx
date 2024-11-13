@@ -170,7 +170,7 @@ function ClaimsData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 1000)
+      }, 2000)
     }
   }, [step, loading])
 
@@ -274,10 +274,12 @@ function ClaimsData() {
   }
 
   const handleFileUpload = async (event) => {
-    const claimsCsv = `/src/assets/data/claims${randomIntFromInterval(1, 4)}.csv`;
+    const claimsCsv = `/src/assets/data/newData/claims${randomIntFromInterval(1, 2)}.csv`;
+    const claimsTxt = `/src/assets/data/newData/claims${randomIntFromInterval(1, 2)}.txt`;
     const file = await fetch(claimsCsv).then(res => res.text());
+    const fileTxt = await fetch(claimsTxt).then(res => res.text());
     if (file) {
-      setFileContent(file);
+      setFileContent(fileTxt);
       parseCsvFile(file);
       setShowFileContent(true);
       setLoading(true);

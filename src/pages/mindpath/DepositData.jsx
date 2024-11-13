@@ -190,7 +190,10 @@ function DepositData() {
             case "3": setStep("3.1"); return;
             case "3.1": setStep("3.2"); return;
             case "3.2": setStep("3.3"); return;
-            case "3.3": setStep("4"); return;
+            case "3.3": setStep("3.4"); return;
+            case "3.4": setStep("3.5"); return;
+            case "3.5": setStep("3.6"); return;
+            case "3.6": setStep("4"); return;
           }
         }
         if(step.startsWith("4")) {
@@ -214,7 +217,7 @@ function DepositData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 1000)
+      }, 2000)
     }
   }, [step, loading])
 
@@ -231,7 +234,7 @@ function DepositData() {
   };
 
   const handleFileUpload = async(event) => {
-    const depositDataBai = `/src/assets/data/deposit${randomIntFromInterval(1, 6)}.bai`;
+    const depositDataBai = `/src/assets/data/newData/deposit1.bai`;
     const file = await fetch(depositDataBai).then(res => res.text());
     if (file) {
       setFileContent(file);
@@ -297,10 +300,7 @@ function DepositData() {
           formattedDate = `${month}/${day}/${year}`; // Final format: MM/DD/YYYY
         }
       }
-      if((parts[0].trim() === '88' && parts[1].trim().includes("PMT INFO:TRN*1*"))) {
-        let trn = parts[1].trim().split("*");
-        transactionNumber = trn.length > 2 ? trn[2] : "";
-      }
+      
       // Transaction line (starting with '16')
       if (parts[0].trim() === '16') {
         const transactionDate = parts[4] ? parts[4].trim() : '';
@@ -317,16 +317,35 @@ function DepositData() {
         let paymentType = parts[1] ? parts[1].trim() : '';
         let formattedPaymentType = '';
         let a = parts[2] ? parts[2].trim() : '0';
-        if (paymentType === '165') {
-          formattedPaymentType = 'EFT credit'; // Show 'EFT credit' for 165
+        if (paymentType === '165'
+          || paymentType === '115'
+          || paymentType === '142'
+          || paymentType === '168'
+          || paymentType === '175'
+          || paymentType === '295'
+          || paymentType === '475'
+          || paymentType === '631'
+          || paymentType === '699') {
+            switch(paymentType) {
+              case "165": formattedPaymentType = 'EFT credit'; break; // Show 'EFT credit' for 165
+              case "115": formattedPaymentType = 'Electronic Lockbox CR'; break;
+              case "142": formattedPaymentType = 'ACH Credit Received'; break;
+              case "168": formattedPaymentType = 'ACH RETURNED CREDITS'; break;
+              case "175": formattedPaymentType = 'Remote Online Dep'; break;
+              case "295": formattedPaymentType = 'ATM CHECK DEPOSIT'; break;
+              case "475": formattedPaymentType = 'CHECK'; break;
+              case "631": formattedPaymentType = 'RESEARCH ADJUSTMENT'; break;
+              case "699": formattedPaymentType = 'RETURNED CHECK'; break;
+            }
+          
           if (a.length > 2) {
             amt += parseFloat(`${a.slice(0, -2)}.${a.slice(-2)}`);
           }
           currentTransaction = {
-            transaction_number: transactionNumber ? transactionNumber : '',
+            transaction_number: '',
             bank_name: bankName || 'Unknown Bank', // Use bank name from line '01'
             payment_type: formattedPaymentType,
-            payer: '', // To be filled from '88' line
+            payer: 'Self Pay', // To be filled from '88' line
             deposit_date: formattedDate,
             amounts: amount, // Formatted amount
             additional_info: '',
@@ -359,6 +378,10 @@ function DepositData() {
 
         // Append additional info
         currentTransaction.additional_info += parts.slice(1).join(',').trim() + ' ';
+        if((parts[1].trim().includes("PMT INFO:TRN*1*"))) {
+          let trn = parts[1].trim().split("*");
+          currentTransaction.transaction_number = trn.length > 2 ? trn[2] : "";
+        }
       }
     });
 

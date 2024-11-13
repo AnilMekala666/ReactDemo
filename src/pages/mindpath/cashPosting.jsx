@@ -27,9 +27,9 @@ import Loader from 'components/Loader';
 import { currencyFormat } from 'components/mindpath';
 
 
-const deposit_payment_queue = new URL('src/assets/data/deposit_payment_queue.csv', import.meta.url).href;
-const patient_payment_posting_queue = new URL('src/assets/data/patient_payment_posting_queue.csv', import.meta.url).href;
-const zero_payments_posting_queue = new URL('src/assets/data/zero_payments_posting_queue.csv', import.meta.url).href;
+const deposit_payment_queue = new URL('src/assets/data/newData/deposit_payment_queue.csv', import.meta.url).href;
+const patient_payment_posting_queue = new URL('src/assets/data/newData/patient_payment_posting_queue.csv', import.meta.url).href;
+const zero_payments_posting_queue = new URL('src/assets/data/newData/zero_payments_posting_queue.csv', import.meta.url).href;
 
 
 function PlusSquare(props) {
@@ -199,7 +199,7 @@ const cashPosting = () => {
                 return obj;
             }
             return null;
-        }).filter((val) => val != undefined);
+        }).filter((val) => val != undefined && Object.keys(val).length > 1);
         const headerKeys = Object.keys(Object.assign({}, ...array));
         let columns = [];
         columns = headerKeys.map((header, index) => {

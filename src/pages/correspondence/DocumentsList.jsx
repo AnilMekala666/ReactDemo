@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import ReusableDataGrid from 'components/correspndence/ReusableDataGrid';
-import { Paper, Typography } from '@mui/material';
+import { Paper, Typography, Dialog, DialogTitle, DialogContent, DialogActions,Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 import { Box, Tooltip, Grid, Button, IconButton } from '@mui/material';
 // import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useNavigate, useParams } from 'react-router';
@@ -14,110 +15,14 @@ import Loader from 'components/Loader';
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import ReUsableTable from 'components/correspndence/ReUsableTable';
+import InfoIcon from '@mui/icons-material/Info'; // Import the icon
+
+
 
 import AIDrawer from './documentList/AIDrawer';
+import { display, textAlign } from '@mui/system';
 
-const rows1 = [
-  {
-    id: 1,
-    documentName: 'Report2021.pdf',
-    documentSize: '1.2 MB',
-    payerName: 'John Doe',
-    chequeNumber: 'xxxxxxxxx84783',
-    chequeAmount: '$12,239',
-    depositDate: '02/11/2021',
-    openSince: '5 days ago',
-    status: 'Need attention'
-  },
-  {
-    id: 2,
-    documentName: 'Invoice2021.pdf',
-    documentSize: '800 KB',
-    payerName: 'Jane Smith',
-    chequeNumber: 'xxxxxxxxx12345',
-    chequeAmount: '$8,750',
-    depositDate: '06/21/2021',
-    openSince: '10 days ago',
-    status: 'In-Progress'
-  },
-  {
-    id: 3,
-    documentName: 'Receipt2022.pdf',
-    documentSize: '450 KB',
-    payerName: 'Alice Cooper',
-    chequeNumber: 'xxxxxxxxx98765',
-    chequeAmount: '$5,430',
-    depositDate: '03/15/2022',
-    openSince: '15 days ago',
-    status: 'Need attention'
-  },
-  {
-    id: 4,
-    documentName: 'Invoice2022.pdf',
-    documentSize: '2.3 MB',
-    payerName: 'Bob Martin',
-    chequeNumber: 'xxxxxxxxx23456',
-    chequeAmount: '$15,670',
-    depositDate: '05/19/2022',
-    openSince: '12 days ago',
-    status: 'In-Progress'
-  },
-  {
-    id: 5,
-    documentName: 'Report2020.pdf',
-    documentSize: '1.5 MB',
-    payerName: 'Charlie Brown',
-    chequeNumber: 'xxxxxxxxx45678',
-    chequeAmount: '$9,540',
-    depositDate: '07/10/2020',
-    openSince: '20 days ago',
-    status: 'Need attention'
-  },
-  {
-    id: 6,
-    documentName: 'Receipt2023.pdf',
-    documentSize: '1.1 MB',
-    payerName: 'David Clark',
-    chequeNumber: 'xxxxxxxxx87654',
-    chequeAmount: '$6,890',
-    depositDate: '09/03/2023',
-    openSince: '8 days ago',
-    status: 'In-Progress'
-  },
-  {
-    id: 7,
-    documentName: 'Invoice2023.pdf',
-    documentSize: '950 KB',
-    payerName: 'Eva Thomas',
-    chequeNumber: 'xxxxxxxxx56789',
-    chequeAmount: '$10,220',
-    depositDate: '01/12/2023',
-    openSince: '3 days ago',
-    status: 'Need attention'
-  },
-  {
-    id: 8,
-    documentName: 'Statement2022.pdf',
-    documentSize: '2.1 MB',
-    payerName: 'Frank White',
-    chequeNumber: 'xxxxxxxxx34567',
-    chequeAmount: '$7,890',
-    depositDate: '10/21/2022',
-    openSince: '18 days ago',
-    status: 'In-Progress'
-  },
-  {
-    id: 9,
-    documentName: 'Report2021.pdf',
-    documentSize: '1.8 MB',
-    payerName: 'Grace Green',
-    chequeNumber: 'xxxxxxxxx23478',
-    chequeAmount: '$13,100',
-    depositDate: '11/30/2021',
-    openSince: '7 days ago',
-    status: 'Need attention'
-  }
-];
+
 
 const DocumentsList = () => {
   const navigate = useNavigate();
@@ -128,12 +33,15 @@ const DocumentsList = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [aiEobTableData, setAiEobTableData] = useState([]);
   const [aiMedicalRequestTableData, setAiMedicalRequestTableData] = useState([])
-
+  const [patientDetails, setPatientDetails] = useState(null);
+  const [isPatientInfoOpen, setIsPatientInfoOpen] = useState(false);
 
   console.log(docName)
 
 
   const originalDocName = docName.replace(/-/g, ' ');
+
+
   const Eobcolumns = [
     {
       field: 'documentName',
@@ -149,7 +57,7 @@ const DocumentsList = () => {
                 navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}`, {
                   state: { row: params.row },
                 })
-              ) }
+              )}
               sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}
             >
               <Typography variant="body2" sx={{ fontSize: '14px', color: "#1677ff" }}>
@@ -165,7 +73,7 @@ const DocumentsList = () => {
     {
       field: 'chequeNumber',
       headerName: 'Cheque Number',
-      width: 130,
+      width: 110,
       valueFormatter: (params) => `${params ? params : '-'}`
     },
     {
@@ -177,16 +85,23 @@ const DocumentsList = () => {
     {
       field: 'depositDate',
       headerName: 'Deposit Date',
+      width: 110,
+      //type: 'date',
+      sortable: true,
+      valueFormatter: (params) => `${params ? params : '-'}`
+    },
+    {
+      field: 'fileDate',
+      headerName: 'File Date',
       width: 150,
       //type: 'date',
       sortable: true,
       valueFormatter: (params) => `${params ? params : '-'}`
     },
-
     {
       field: 'openSince',
       headerName: 'Open Since',
-      width: 130,
+      width: 100,
       renderHeader: () => (
         <Box display="flex" alignItems="center">
           Open Since
@@ -203,12 +118,40 @@ const DocumentsList = () => {
     {
       field: 'fileDate',
       headerName: 'File Date',
-      width: 150,
+      width: 100,
       //type: 'date',
       sortable: true,
       valueFormatter: (params) => `${params ? params : '-'}`
     },
-
+    {
+      field: 'patientInfo',
+      headerName: 'Patient Info',
+      width: 100,
+      renderCell: (params) => {
+        const handleMouseEnter = async () => {
+          try {
+            // Fetch patient details from the backend using POST
+            const response = await axios.post(CORRESPONDENCE_ENDPOINTS.FETCH_PATIENT_LEVEL_DATA, {
+              eobCheckId: params.row.checkId // Send checkId as payload
+            });
+            // Assuming response.data contains the patient details
+            setPatientDetails(response.data); // Store the patient details in state
+            setIsPatientInfoOpen(true); // Open the popup
+          } catch (error) {
+            console.error("Error fetching patient details:", error);
+            // Handle error (e.g., show a notification)
+          }
+        };
+  
+        return (
+          <Tooltip title="View Patient Info" arrow>
+            <IconButton onMouseEnter={handleMouseEnter}>
+              <InfoIcon />
+            </IconButton>
+          </Tooltip>
+        );
+      }
+    },
     {
       field: 'status',
       headerName: 'Status',
@@ -293,6 +236,36 @@ const DocumentsList = () => {
         return `${params ? params : '-'} ${params > 1 ? 'days ago' : 'day ago'}`
       }
     },
+    // {
+    //   id: 'patientInfo',
+    //   field: 'patientInfo',
+    //   headerName: 'Patient Info',
+    //   width: 150,
+    //   renderCell: (params) => {
+    //     const handleMouseEnter = async () => {
+    //       try {
+    //         // Fetch patient details from the backend using POST
+    //         const response = await axios.post(CORRESPONDENCE_ENDPOINTS.FETCH_PATIENT_LEVEL_DATA, {
+    //           checkId: params.row.checkId // Send checkId as payload
+    //         });
+    //         // Assuming response.data contains the patient details
+    //         setPatientDetails(response.data); // Store the patient details in state
+    //         setIsPatientInfoOpen(true); // Open the popup
+    //       } catch (error) {
+    //         console.error("Error fetching patient details:", error);
+    //         // Handle error (e.g., show a notification)
+    //       }
+    //     };
+  
+    //     return (
+    //       <Tooltip title="View Patient Info" arrow>
+    //         <IconButton onMouseEnter={handleMouseEnter}>
+    //           <InfoIcon />
+    //         </IconButton>
+    //       </Tooltip>
+    //     );
+    //   }
+    // },
     {
       id: 'status',
       field: 'status',
@@ -317,7 +290,11 @@ const DocumentsList = () => {
       )
     }
   ];
+
+
   const columns = docName == "EOB" ? Eobcolumns : MedicalRequestColumns;
+
+
   const fetchData = async () => {
     try {
       setLoader(true);
@@ -344,7 +321,8 @@ const DocumentsList = () => {
           // fileDate:fileDate?fileDate : '-'
         };
       });
-      setRows(processedData);
+      // setRows(processedData);
+      setAiEobTableData(processedData);
     } catch (err) {
       setLoader(false);
       setError('Failed to fetch data');
@@ -406,19 +384,33 @@ const DocumentsList = () => {
   };
 
   const handleSetAIEobTableData = (data) => {
-    console.log("AI", data)
-    setAiEobTableData(data);
+    console.log("handleSetAIEobTableData", data)
+
+    setIsTableLoading(true)
+    setTimeout(() => {
+      setAiEobTableData(data);
+      setIsTableLoading(false)
+    }, 1000);
   };
 
   const handleSetAIMedicalRequestTableData = (data) => {
-    console.log("MedicalRequest", data)
-    setAiMedicalRequestTableData(data);
+    console.log("data", data)
+    setIsTableLoading(true)
+    setTimeout(() => {
+      setAiMedicalRequestTableData(data);
+      setIsTableLoading(false)
+    }, 1000)
   };
 
   const handleEOBRefresh = () => {
     setAiEobTableData([]);
     fetchData();
   }
+
+// Function to close the popup
+const handleClosePatientInfo = () => {
+  setIsPatientInfoOpen(false);
+};
 
   const handleMedicalRequestRefresh = () => {
     setAiMedicalRequestTableData([]);
@@ -465,7 +457,7 @@ const DocumentsList = () => {
               background: '#F8F8FF'
             }}
           >
-            {rows.length}
+            {aiData.length}
           </Grid>
           <Grid item xs>
           </Grid>
@@ -479,11 +471,12 @@ const DocumentsList = () => {
                 sx={{
                   minWidth: '100px',
                   fontWeight: 'bold',
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  textTransform:'none'
                 }}
                 onClick={() => toggleDrawer(true)}
               >
-                ICan Assistence
+                iCAN Assistance
               </Button>
               :
               <Button
@@ -492,11 +485,12 @@ const DocumentsList = () => {
                 sx={{
                   minWidth: '100px',
                   fontWeight: 'bold',
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  textTransform:'none'
                 }}
                 onClick={() => toggleDrawer(true)}
               >
-                ICan Assistence
+                iCAN Assistance
               </Button>
 
             }
@@ -521,7 +515,56 @@ const DocumentsList = () => {
 
         {/* <ReUsableTable rows={rows} columns={columns1} /> */}
         <ReusableDataGrid rows={aiData?.length > 0 ? aiData : rows} columns={columns} />
+        {isPatientInfoOpen && (
+  <Dialog open={isPatientInfoOpen} onClose={handleClosePatientInfo} fullWidth>
+    <DialogTitle>Patient Details</DialogTitle>
+    <DialogContent>
+      {patientDetails && patientDetails.patient_level_data.length > 0 ? (
+            <Box sx={{ border: '1px solid #ccc', borderRadius: '4px', overflow: 'hidden' }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ width: '20px' }}>Patient</TableCell>
+              <TableCell sx={{ width: '15px' }}>Charge Amount</TableCell>
+              <TableCell sx={{ width: '10px' }}>Paid Amount</TableCell>
+              <TableCell sx={{ width: '15px' }}>Allowed Amount</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {patientDetails.patient_level_data.map((patient) => (
+              <TableRow key={patient.id}>
+                <TableCell>{patient.patientName}</TableCell>
+                <TableCell>
+                  {patientDetails.line_level_data
+                    .filter(line => line.checkPatientLevelDataId === patient.id)
+                    .map(line => line.chargeAmount).join(', ')}
+                </TableCell>
+                <TableCell>
+                  {patientDetails.line_level_data
+                    .filter(line => line.checkPatientLevelDataId === patient.id)
+                    .map(line => line.paidAmount).join(', ')}
+                </TableCell>
+                <TableCell>
+                {patientDetails.line_level_data
+                    .filter(line => line.checkPatientLevelDataId === patient.id)
+                    .map(line => line.allowedAmount).join(', ')}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
+            </Box>
+
+      ) : (
+        <Typography>No patient data available.</Typography>
+      )}
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleClosePatientInfo}>Close</Button>
+    </DialogActions>
+  </Dialog>
+)}
         {console.log(aiData)}
         {console.log(rows)}
 

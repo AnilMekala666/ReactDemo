@@ -27,8 +27,11 @@ import Loader from 'components/Loader';
 import { currencyFormat } from 'components/mindpath';
 
 
-const reconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue';
-const unreconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue';
+// const reconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue';
+// const unreconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue';
+
+const reconciled = `/src/assets/data/newData/reconciled.csv`;
+const unreconciled = `/src/assets/data/newData/unreconciled.csv`;
 
 
 function PlusSquare(props) {
@@ -99,7 +102,7 @@ const Reconcile = () => {
     };
 
     useEffect(() => {
-        // init(reconciled)
+        init(reconciled)
     }, []);
 
     const handleClickbackBtn = () => {
@@ -107,24 +110,23 @@ const Reconcile = () => {
     }
 
     const init = async (url) => {
-        setLoading(true);
         setExpandedItem(url);
-        setTimeout(() => {
-            // setParsedData({__html: file})
-            setLoading(false);
-            setExpandedItem("");
-        }, 2000);
-        const params = `directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,
-            width=0,height=0,left=-1000,top=-1000`
-        const newWindow = open(url, "Test", params);
-        newWindow.window.addEventListener("load", () => {
-            setLoading(false);
-            newWindow.window.addEventListener("unload", () => {
-                setLoading(false);
-                setExpandedItem("");
-            })
-        })
-       
+        // setTimeout(() => {
+        //     // setParsedData({__html: file})
+        //     setLoading(false);
+        //     setExpandedItem("");
+        // }, 2000);
+        // const params = `directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,
+        //     width=0,height=0,left=-1000,top=-1000`
+        // const newWindow = open(url, "Test", params);
+        // newWindow.window.addEventListener("load", () => {
+        //     setLoading(false);
+        //     newWindow.window.addEventListener("unload", () => {
+        //         setLoading(false);
+        //         setExpandedItem("");
+        //     })
+        // })
+
         // newWindow.onload = function() {
         //     setLoading(false);
         // };
@@ -133,18 +135,18 @@ const Reconcile = () => {
         //     setExpandedItem("");
         //     setLoading(false);
         // };
-        // setTableColumns([]);
-        // // Set the parsed data to the state or return it
-        // setParsedData([]);
-        // setExpandedItem(url);
-        // setLoading(true);
-        // // setTimeout(()=>setLoading(false), 2000)
-        // const file = await fetch(url).then(res => res.text());
-        // // console.log(file)
-        // if (file) {
-            
-        // }
-      };
+        setTableColumns([]);
+        // Set the parsed data to the state or return it
+        setParsedData([]);
+        setExpandedItem(url);
+        // setTimeout(()=>setLoading(false), 2000)
+        const file = await fetch(url).then(res => res.text());
+        // console.log(file)
+        if (file) {
+            setLoading(true);
+            parseBaiFile(file);
+        }
+    };
 
     function splitCSVButIgnoreCommasInDoublequotes(str) {
         //split the str first  
@@ -197,17 +199,16 @@ const Reconcile = () => {
             // }
             const obj = csvHeader.reduce((object, header, index) => {
                 if (object !== undefined) {
-                    console.log(object)
                     if (object["id"] == undefined) {
                         object["id"] = x + 1;
                     }
-                    if(header.toLowerCase().includes("amount")) {
+                    if (header.toLowerCase().includes("amount")) {
                         if (values[index]) {
                             object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = currencyFormat(parseFloat(values[index].replaceAll("\"", "").replaceAll(" ", "") || 0));
                             return object;
                         }
                     }
-                    else if(header.toLowerCase().includes("variance")) {
+                    else if (header.toLowerCase().includes("variance")) {
                         if (values[index]) {
                             object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index].replaceAll("\"", "").replaceAll(" ", "").replaceAll(",", ",\n");
                             return object;
@@ -222,11 +223,11 @@ const Reconcile = () => {
                 }
                 return object;
             }, {});
-            if(Object.keys(obj).length > 1) {
+            if (Object.keys(obj).length > 1) {
                 return obj;
             }
             return null;
-        }).filter((val) => val != undefined);
+        }).filter((val) => val != undefined && Object.keys(val).length > 0);
         const headerKeys = Object.keys(Object.assign({}, ...array));
         let columns = [];
         columns = headerKeys.map((header, index) => {
@@ -237,13 +238,15 @@ const Reconcile = () => {
             }
             return o;
         })
+        setLoading(false);
         console.log("Columns", columns);
         setTableColumns(columns);
         console.log("Parsed Data: ", array);
         // Set the parsed data to the state or return it
         setParsedData(array);
+        
     };
-
+    console.log(loading);
     return (
         <div>
             {/* <Button onClick={handleClickbackBtn}>Back</Button> */}
@@ -262,48 +265,48 @@ const Reconcile = () => {
                 </AnimateButton>
             </Box>
             <div>
-            <Accordion sx={{border: 0, bgcolor: 'transparent'}} expanded={expandedItem == reconciled} onChange={()=>init(reconciled)}>
-                <AccordionSummary
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
-                >
-                    Reconciled
-                </AccordionSummary>
-                <AccordionDetails>
-                    {loading &&
-                        <div style={{ marginTop: '20px', minHeight: 550, textAlign: 'center' }}>
-                            <CircularProgress /> {/* Spinner */}
-                            <p>Processing...</p>
-                        </div>
-                    }
-                    {!loading &&
-                        <div style={{ minHeight: 550 }}></div>
-                        // <iframe type="text/html" width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue" />
-                    }
-                </AccordionDetails>
-            </Accordion>
-            <Accordion expanded={expandedItem == unreconciled} sx={{border: 0, bgcolor: 'transparent', mt: 2}} onChange={()=>init(unreconciled)}>
-                <AccordionSummary
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{ backgroundColor: '#fdf6ef', p: 1, borderRadius: "10px", border: 0 }}
-                >
-                    Unreconciled
-                </AccordionSummary>
-                <AccordionDetails>
-                    {loading &&
-                        <div style={{ marginTop: '20px', minHeight: 550, textAlign: 'center' }}>
-                            <CircularProgress /> {/* Spinner */}
-                            <p>Processing...</p>
-                        </div>
-                    }
-                    {!loading &&
-                        <div style={{ minHeight: 550 }}></div>
-                        // <iframe width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue" />
-                    }
-                </AccordionDetails>
-            </Accordion>
+                <Accordion sx={{ border: 0, bgcolor: 'transparent' }} expanded={expandedItem == reconciled} onChange={() => init(reconciled)}>
+                    <AccordionSummary
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        sx={{ backgroundColor: '#efeffd', p: 1, borderRadius: "10px", border: 0 }}
+                    >
+                        Reconciled
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {loading &&
+                            <div style={{ marginTop: '20px', minHeight: 550, textAlign: 'center' }}>
+                                <CircularProgress /> {/* Spinner */}
+                                <p>Processing...</p>
+                            </div>
+                        }
+                        {!loading &&
+                            <CustomTable data={parsedData} datacolumns={tableColumns} />
+                            // <iframe type="text/html" width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue" />
+                        }
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expandedItem == unreconciled} sx={{ border: 0, bgcolor: 'transparent', mt: 2 }} onChange={() => init(unreconciled)}>
+                    <AccordionSummary
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        sx={{ backgroundColor: '#fdf6ef', p: 1, borderRadius: "10px", border: 0 }}
+                    >
+                        Unreconciled
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {loading &&
+                            <div style={{ marginTop: '20px', minHeight: 550, textAlign: 'center' }}>
+                                <CircularProgress /> {/* Spinner */}
+                                <p>Processing...</p>
+                            </div>
+                        }
+                        {!loading &&
+                            <CustomTable data={parsedData} datacolumns={tableColumns} />
+                            // <iframe width={"100%"} style={{ border: 0 }} height={500} onLoad={()=>setLoading(false)} src="https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue" />
+                        }
+                    </AccordionDetails>
+                </Accordion>
             </div>
         </div>
     );

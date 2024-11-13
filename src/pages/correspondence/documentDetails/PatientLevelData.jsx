@@ -221,15 +221,20 @@ import {
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
+import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 
-export const PatientLevelData = ({ patients, patientsData,docName,receivedStatus }) => {
+export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus }) => {
   console.log(receivedStatus)
+  console.log("patientsData", patientsData)
   const [patientLevelTable, setPatientLevelTable] = useState([]);
   const [lineLevelTable, setLineLevelTable] = useState([]);
   const [patient, setPatient] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState([]);
-  
+
+
   // const handleSelectedPatient = (e) => {
   //   const id = e.target.value;
   //   setPatient(id);
@@ -241,21 +246,26 @@ export const PatientLevelData = ({ patients, patientsData,docName,receivedStatus
   //   setLineLevelTable(_lineData);
   //   setEditableData(_patientData);
   // };
+  console.log("patientLevelTable", patientLevelTable)
 
   useEffect(() => {
     // Check if there are patients and set the first one by default
     if (patients && patients.length > 0) {
       const defaultPatient = patients[0].id;
       setPatient(defaultPatient);
-  
+
       const _patientData = patientsData.patient_level_data?.filter((patient) => patient.id === defaultPatient);
       const _lineData = patientsData.line_level_data?.filter((line) => line.checkPatientLevelDataId === defaultPatient);
-  
+
       setPatientLevelTable(_patientData);
       setLineLevelTable(_lineData);
       setEditableData(_patientData);
     }
   }, [patients, patientsData]);
+
+
+
+
 
   const handleSelectedPatient = (e) => {
     const id = e.target.value;
@@ -268,15 +278,67 @@ export const PatientLevelData = ({ patients, patientsData,docName,receivedStatus
   };
 
   const handleEditToggle = () => {
+    console.log()
+    console.log("handleEditToggle click")
     setIsEditing((prev) => !prev);
   };
 
-  const handleChange = (index, field, value) => {
-    const updatedData = [...editableData];
+
+  const handleInputChange = (index, field, value) => {
+    const updatedData = [...patientLevelTable];
     updatedData[index][field] = value;
-    setEditableData(updatedData);
+    setPatientLevelTable(updatedData);
   };
 
+  // const updatePatientLevelData = async () => {
+  //   const payload = patientLevelTable.map((patient) => (
+  //     {
+  //     id: patient.id,
+  //     claimNumber: patient.claimNumber,
+  //     claimedAmount: patient.claimAmount,
+  //     allowedAmount: patient.allowedAmount,
+  //     paidAmount: patient.paidAmount,
+  //   }));
+
+
+  //   console.log("Payload to update:",payload);
+
+  //   // try {
+  //   //   const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
+  //   //   console.log("Update response:", response.data);
+  //   //   setPatientLevelTable(response.data);
+  //   //   setIsEditing(false);
+  //   // } catch (error) {
+  //   //   console.error("Update failed:", error);
+  //   // }
+  // };
+
+
+  const updatePatientLevelData = async () => {
+    try {
+      for (const patient of patientLevelTable) {
+        const payload = {
+          id: patient.id,
+          claimNumber: patient.claimNumber,
+          claimedAmount: patient.claimAmount,
+          allowedAmount: patient.allowedAmount,
+          paidAmount: patient.paidAmount,
+        };
+  
+        console.log("Payload to update:", payload);
+  
+        // Send each patient's data individually
+        const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
+        console.log("Update response:", response.data);
+      }
+  
+      // Set editing mode off and refresh data if needed
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Update failed:", error);
+    }
+  };
+  
   return (
     <Box sx={{ padding: 2 }}>
       {/* Patient Selection Input */}
@@ -304,20 +366,20 @@ export const PatientLevelData = ({ patients, patientsData,docName,receivedStatus
             sx={{ fontWeight: '600' }}
             onChange={handleSelectedPatient}
             // defaultValue="select"
-            value={patient || 'select'} 
+            value={patient || 'select'}
           >
             <MenuItem value="select" disabled style={{ padding: '4px 6px', fontWeight: '500', color: 'gray' }}>
               Select Patient
             </MenuItem>
             {patients && patients.length > 0
               ? patients.map((patient) => {
-                  const { id, patientName } = patient;
-                  return (
-                    <MenuItem key={id} value={id} style={{ padding: '4px 6px', fontWeight: '500' }}>
-                      {patientName}
-                    </MenuItem>
-                  );
-                })
+                const { id, patientName } = patient;
+                return (
+                  <MenuItem key={id} value={id} style={{ padding: '4px 6px', fontWeight: '500' }}>
+                    {patientName}
+                  </MenuItem>
+                );
+              })
               : null}
           </Select>
         </Box>
@@ -329,19 +391,32 @@ export const PatientLevelData = ({ patients, patientsData,docName,receivedStatus
               <label style={{ fontWeight: '600', fontSize: '16px' }}>Capture Info - 66%</label>
             </Box> */}
             <Box sx={{ display: 'flex', gap: 1 }}>
-              
-              {receivedStatus=="Need Attention" ?(
-                <Button
-                  variant="outlined"
-                  startIcon={<AppRegistrationOutlinedIcon />}
-                  sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
-                  onClick={handleEditToggle}
-                > 
 
-                  {isEditing ? 'Save' : 'Edit Column'}
-                  
-                </Button>
-              ):''}
+              {receivedStatus === "Need Attention" && (
+                <>
+                  <Button
+                    variant="outlined"
+                    startIcon={<AppRegistrationOutlinedIcon />}
+                    sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+                    // onClick={handleEditToggle}
+                    onClick={isEditing ? () => updatePatientLevelData() : handleEditToggle}
+                  >
+                    {isEditing ? 'Save' : 'Edit Column'}
+                  </Button>
+
+                  {isEditing && (
+                    <Button
+                      variant="outlined"
+                      startIcon={<AppRegistrationOutlinedIcon />}
+                      sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+                    // onClick={handleCancelEdit}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </>
+              )}
+
               {/* <Button
                 variant="outlined"
                 startIcon={<PermIdentityOutlinedIcon />}
@@ -380,11 +455,21 @@ export const PatientLevelData = ({ patients, patientsData,docName,receivedStatus
                 </TableRow>
               </TableHead>
               <TableBody>
-                {patientLevelTable?.map((patient, index) => (
+                {Array.isArray(patientLevelTable) && patientLevelTable.map((patient, index) => (
                   <TableRow key={index}>
                     <TableCell>{patient.patientName}</TableCell>
                     <TableCell>{patient.insuranceName}</TableCell>
-                    <TableCell>{patient.claimNumber}</TableCell>
+                    {/* <TableCell>{patient.claimNumber}</TableCell> */}
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.claimNumber}
+                          onChange={(e) => handleInputChange(index, 'claimNumber', e.target.value)}
+                        />
+                      ) : (
+                        `  $${patient.claimNumber}`
+                      )}
+                    </TableCell>
                     <TableCell>{patient.patientLevelServiceDate}</TableCell>
                     <TableCell>
                       {isEditing ? (
@@ -393,7 +478,7 @@ export const PatientLevelData = ({ patients, patientsData,docName,receivedStatus
                           onChange={(e) => handleInputChange(index, 'claimAmount', e.target.value)}
                         />
                       ) : (
-                      `  $${patient.claimAmount}`
+                        `  $${patient.claimAmount}`
                       )}
                     </TableCell>
                     <TableCell>

@@ -191,7 +191,7 @@ function PatientPaymentData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 1000)
+      }, 2000)
     }
   }, [step, loading])
 
@@ -208,7 +208,7 @@ function PatientPaymentData() {
   };
 
   const handleFileUpload = async (event) => {
-    const patientlXlsx = `/src/assets/data/patient_payments${randomIntFromInterval(1, 3)}.xlsx`;
+    const patientlXlsx = `/src/assets/data/newData/patient_payments1.xlsx`;
     const file = await fetch(patientlXlsx).then(res => res.blob());
     console.log(file)
     if (file) {
@@ -337,7 +337,7 @@ function PatientPaymentData() {
           }        
       ]
     }
-    const rawResponse = await fetch(`${BASE_PATH}/saveRemitFileInfo`, {
+    const rawResponse = await fetch(`${BASE_PATH}/savePatientPaymentFileInfo`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
