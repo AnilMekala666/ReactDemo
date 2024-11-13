@@ -1,0 +1,31 @@
+Transaction No,Transaction Type,Batch Owner,Account Name,Payor,Deposit Date,Bank Deposit,Remittance,EMR,Variance,Status
+91048537282,EFT Credit,XYZ,North Carolina Deposits,NCB OF NC,10-01-2024,2168.97,$0.00,$0.00,"Pay +$2168.97, Post -$2168.97",Remit Missing
+8.24092E+14,EFT Credit,XYZ,California Deposits,PATIENT PAYMENT,10-01-2024,1535.48,$0.00,$0.00,"Pay +$1535.48, Post -$1535.48",Remit Missing
+472712901,EFT Credit,ZZ,Florida Deposits,UNITEDARABCARE,10-01-2024,1130.94,$0.00,$0.00,"Pay +$1130.94, Post -$1130.94",Remit Missing
+C6782141,EFT Credit,AM,South Carolina Deposits,PATIENT PAYMENT,10-01-2024,874.21,$0.00,$0.00,"Pay +$874.21, Post -$874.21",Remit Missing
+472703834,EFT Credit,ZZ,Ohio Deposits,HBSC HOST,10-01-2024,733.9,$0.00,$0.00,"Pay +$733.9, Post -$733.9",Remit Missing
+473125422,EFT Credit,ZZ,Texas Deposits,UNITEDBUHAN,10-01-2024,609.8,$0.00,$0.00,"Pay +$609.8, Post -$609.8",Remit Missing
+2300842574,Patient Payment,AM,Ohio Deposits,PATIENT PAYMENT,10-01-2024,349.5,$0.00,$0.00,"Pay +$349.5, Post -$349.5",Remit Missing
+1131525313,EFT Credit,ZZ,Arizona Deposits,UNITEDARABCARE,10-01-2024,301.72,$0.00,$0.00,"Pay +$301.72, Post -$301.72",Remit Missing
+473124414,EFT Credit,AM,Florida Deposits,RATNA A04,10-01-2024,299.04,$0.00,$0.00,"Pay +$299.04, Post -$299.04",Remit Missing
+8.82409E+14,Patient Payment,ZZ,Arizona Deposits,UNITEDARABCARE,10-01-2024,271.05,$0.00,$0.00,"Pay +$271.05, Post -$271.05",Remit Missing
+7004275413,Patient Payment,AM,Minnesota Deposits,PATIENT PAYMENT,10-01-2024,240.89,$0.00,$0.00,"Pay +$240.89, Post -$240.89",Remit Missing
+1131525314,Patient Payment,ZZ,North Carolina Deposits,PATIENT PAYMENT,10-01-2024,218.64,$0.00,$0.00,"Pay +$218.64, Post -$218.64",Remit Missing
+1000240589,Patient Payment,AM,California Deposits,PATIENT PAYMENT,10-01-2024,174.75,$0.00,$0.00,"Pay +$174.75, Post -$174.75",Remit Missing
+1001213709,EFT Credit,ZZ,North Carolina Deposits,HBSC HOST,10-01-2024,170.01,$0.00,$0.00,"Pay +$170.01, Post -$170.01",Remit Missing
+2300849731,EFT Credit,XYZ,North Carolina Deposits,NCB OF NC,10-01-2024,122.7,$0.00,$0.00,"Pay +$122.7, Post -$122.7",Remit Missing
+472946011,EFT Credit,XYZ,California Deposits,PATIENT PAYMENT,10-01-2024,93.7,$0.00,$0.00,"Pay +$93.7, Post -$93.7",Remit Missing
+1131525312,EFT Credit,ZZ,Florida Deposits,UNITEDARABCARE,10-01-2024,63.99,$0.00,$0.00,"Pay +$63.99, Post -$63.99",Remit Missing
+8.82409E+14,EFT Credit,AM,South Carolina Deposits,PATIENT PAYMENT,10-01-2024,60.32,$0.00,$0.00,"Pay +$60.32, Post -$60.32",Remit Missing
+472495447,EFT Credit,ZZ,Ohio Deposits,HBSC HOST,10-01-2024,33.64,$0.00,$0.00,"Pay +$33.64, Post -$33.64",Remit Missing
+C6780509,EFT Credit,ZZ,Texas Deposits,UNITEDBUHAN,10-01-2024,30.31,$0.00,$0.00,"Pay +$30.31, Post -$30.31",Remit Missing
+1131525311,EFT Credit,AM,Ohio Deposits,PATIENT PAYMENT,10-01-2024,25.9,$0.00,$0.00,"Pay +$25.9, Post -$25.9",Remit Missing
+472802780,EFT Credit,ZZ,Arizona Deposits,UNITEDARABCARE,10-01-2024,20.94,$0.00,$0.00,"Pay +$20.94, Post -$20.94",Remit Missing
+EFT4018042,EFT Credit,AM,Florida Deposits,RATNA A04,10-01-2024,359009.68,$0.00,$0.00,"Pay +$359009.68, Post -$359009.68",Remit Missing
+1TZ76487081,EFT Credit,ZZ,Arizona Deposits,UNITEDARABCARE,10-01-2024,158825.91,$0.00,$0.00,"Pay +$158825.91, Post -$158825.91",Remit Missing
+EFT4018043,EFT Credit,AM,Minnesota Deposits,PATIENT PAYMENT,10-01-2024,149532.22,$0.00,$0.00,"Pay +$149532.22, Post -$149532.22",Remit Missing
+9TZ76563770,EFT Credit,ZZ,North Carolina Deposits,PATIENT PAYMENT,10-01-2024,124910.98,$0.00,$0.00,"Pay +$124910.98, Post -$124910.98",Remit Missing
+C2964057,EFT Credit,AM,California Deposits,PATIENT PAYMENT,10-01-2024,91644.47,$0.00,$0.00,"Pay +$91644.47, Post -$91644.47",Remit Missing
+EFT4018045,EFT Credit,ZZ,North Carolina Deposits,HBSC HOST,10-01-2024,66351.76,$0.00,$0.00,"Pay +$66351.76, Post -$66351.76",Remit Missing
+EFT4018044,EFT Credit,AM,California Deposits,PATIENT PAYMENT,10-01-2024,65994.39,$0.00,$0.00,"Pay +$65994.39, Post -$65994.39",Remit Missing
+10931012,EFT Credit,ZZ,North Carolina Deposits,HBSC HOST,10-01-2024,11284.35,$0.00,$0.00,"Pay +$11284.35, Post -$11284.35",Remit Missing

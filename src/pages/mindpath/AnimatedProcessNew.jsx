@@ -75,7 +75,7 @@ const AnimatedProcessNew = ({currentStep, countFiles, type}) => {
                             <div className={["sub-step", currentStep > 3.1 ? "step-complete" : currentStep == "3.1" ? "step-active" : ""].join(" ")}>
                                 <div>
                                     <div className="title">
-                                        Processing only transactions with BAI Code-165.
+                                        Processing only transactions with BAI Code 115,142,165,168,175,295,475,631,699
                                     </div>
                                 </div>
                             </div>
