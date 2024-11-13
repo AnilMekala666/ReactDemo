@@ -183,7 +183,7 @@ function RemittanceData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 1000)
+      }, 2000)
     }
   }, [step, loading])
 

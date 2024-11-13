@@ -27,7 +27,7 @@ import Loader from 'components/Loader';
 import { currencyFormat } from 'components/mindpath';
 
 
-const postingReport = new URL('src/assets/data/posting_report.csv', import.meta.url).href;
+const postingReport = new URL('src/assets/data/newData/posting_report.csv', import.meta.url).href;
 
 
 function PlusSquare(props) {

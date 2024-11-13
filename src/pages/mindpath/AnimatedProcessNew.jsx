@@ -65,7 +65,7 @@ const AnimatedProcessNew = ({currentStep, countFiles, type}) => {
                 </div>
             </div>
             {type == "deposit" &&
-                <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }} className={["step", currentStep > 3.3 ? "step-complete" : currentStep.startsWith("3") ? "step-active" : ""].join(" ")}>
+                <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }} className={["step", currentStep > 3.6 ? "step-complete" : currentStep.startsWith("3") ? "step-active" : ""].join(" ")}>
                     {/* <div>
                         <div className="circle">{currentStep > 3.3 ? <Check color='#000' sx={{ width: 10, height: 10 }} /> : "3"}</div>
                     </div> */}
@@ -82,11 +82,32 @@ const AnimatedProcessNew = ({currentStep, countFiles, type}) => {
                             <div className={["sub-step", currentStep > 3.2 ? "step-complete" : currentStep == "3.2" ? "step-active" : ""].join(" ")}>
                                 <div>
                                     <div className="title">
-                                        Eliminating duplicate entries.
+                                        If there is no payer for a transaction, it should be considered as Self Pay.
                                     </div>
                                 </div>
                             </div>
                             <div className={["sub-step", currentStep > 3.3 ? "step-complete" : currentStep == "3.3" ? "step-active" : ""].join(" ")}>
+                                <div>
+                                    <div className="title">
+                                        If a transaction number is not available, use the bank reference as the transaction number.
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={["sub-step", currentStep > 3.4 ? "step-complete" : currentStep == "3.4" ? "step-active" : ""].join(" ")}>
+                                <div>
+                                    <div className="title">
+                                        If the bank reference is also unavailable, set the transaction number to "No Transaction #".
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={["sub-step", currentStep > 3.5 ? "step-complete" : currentStep == "3.5" ? "step-active" : ""].join(" ")}>
+                                <div>
+                                    <div className="title">
+                                        Eliminating duplicate entries.
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={["sub-step", currentStep > 3.6 ? "step-complete" : currentStep == "3.6" ? "step-active" : ""].join(" ")}>
                                 <div>
                                     <div className="title">
                                         Excluding transactions that include Fees.

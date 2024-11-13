@@ -190,7 +190,10 @@ function DepositData() {
             case "3": setStep("3.1"); return;
             case "3.1": setStep("3.2"); return;
             case "3.2": setStep("3.3"); return;
-            case "3.3": setStep("4"); return;
+            case "3.3": setStep("3.4"); return;
+            case "3.4": setStep("3.5"); return;
+            case "3.5": setStep("3.6"); return;
+            case "3.6": setStep("4"); return;
           }
         }
         if(step.startsWith("4")) {
@@ -214,7 +217,7 @@ function DepositData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 1000)
+      }, 2000)
     }
   }, [step, loading])
 
@@ -297,10 +300,7 @@ function DepositData() {
           formattedDate = `${month}/${day}/${year}`; // Final format: MM/DD/YYYY
         }
       }
-      if((parts[0].trim() === '88' && parts[1].trim().includes("PMT INFO:TRN*1*"))) {
-        let trn = parts[1].trim().split("*");
-        transactionNumber = trn.length > 2 ? trn[2] : "";
-      }
+      
       // Transaction line (starting with '16')
       if (parts[0].trim() === '16') {
         const transactionDate = parts[4] ? parts[4].trim() : '';
@@ -342,7 +342,7 @@ function DepositData() {
             amt += parseFloat(`${a.slice(0, -2)}.${a.slice(-2)}`);
           }
           currentTransaction = {
-            transaction_number: transactionNumber ? transactionNumber : '',
+            transaction_number: '',
             bank_name: bankName || 'Unknown Bank', // Use bank name from line '01'
             payment_type: formattedPaymentType,
             payer: 'Self Pay', // To be filled from '88' line
@@ -378,6 +378,10 @@ function DepositData() {
 
         // Append additional info
         currentTransaction.additional_info += parts.slice(1).join(',').trim() + ' ';
+        if((parts[1].trim().includes("PMT INFO:TRN*1*"))) {
+          let trn = parts[1].trim().split("*");
+          currentTransaction.transaction_number = trn.length > 2 ? trn[2] : "";
+        }
       }
     });
 
