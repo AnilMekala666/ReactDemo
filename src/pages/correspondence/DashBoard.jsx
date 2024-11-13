@@ -152,7 +152,7 @@ const DashBoard = () => {
   const fetchData = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(CORRESPONDENCE_ENDPOINTS.fetachConfScoreInfo);
+      const response = await axios.get(CORRESPONDENCE_ENDPOINTS.fetchConfScoreInfo);
       const data = response.data;
 
       console.log('API response:', data); // Log full API response
