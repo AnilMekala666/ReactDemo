@@ -146,7 +146,7 @@ const DocumentsList = () => {
             <img src={pdfIcon} alt="pdf icon" style={{ width: '30px', height: '30px', marginRight: '20px' }} />
             <Box
               onClick={() =>(
-                navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}`, {
+                navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}`, {
                   state: { row: params.row },
                 })
               ) }
@@ -249,7 +249,7 @@ const DocumentsList = () => {
             <Box
               // onClick={() => navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}`)}
               onClick={() => (
-                navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}`, {
+                navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}`, {
                   state: { row: params.row },
                 })
               )
@@ -326,7 +326,7 @@ const DocumentsList = () => {
       });
       console.log(response)
       let processedData = response.data.map((item, index) => {
-        const { id, checkAmount, checkNumber, depositDate, documentAge, letterName, payerName, statusName, checkId } =
+        const { id, checkAmount, checkNumber, depositDate, documentAge, letterName, payerName, statusName, checkId,statusId } =
           item;
         const shortDocumentName = letterName ? letterName.split('_').pop() : '-';
 
@@ -340,6 +340,7 @@ const DocumentsList = () => {
           openSince: documentAge ? documentAge : '-',
           status: statusName ? statusName : '-',
           checkId: checkId ? checkId : '-',
+          statusId: statusId? statusId:'-',
           // fileDate:fileDate?fileDate : '-'
         };
       });
@@ -358,9 +359,10 @@ const DocumentsList = () => {
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.FETCH_MEDICAL_PREDICTION_FILES_WITH_STATUS, {
         prediction: originalDocName
       });
-      console.log(response)
+      console.log(response,"RESPONSE")
       let processedData = response.data.map((item, index) => {
-        const { id, depositDate, documentAge, letterName, payerName, status, checkId, patientName, claimNumber, numOfPages } =
+        console.log(item,"ITEMS")
+        const { id, depositDate, documentAge, letterName, payerName, status, checkId, patientName, claimNumber, numOfPages ,statusId} =
           item;
         const shortDocumentName = letterName ? letterName.split('_').pop() : '-';
         console.log(letterName)
@@ -375,9 +377,11 @@ const DocumentsList = () => {
           depositDate: depositDate ? depositDate : '-',
           openSince: documentAge ? documentAge : '-',
           status: status ? status : '-',
-          checkId: checkId ? checkId : '-'
+          checkId: checkId ? checkId : '-',
+          statusId: statusId ? statusId:'-'
         };
       });
+      console.log(processedData)
       setRows(processedData);
     } catch (err) {
       setLoader(false);

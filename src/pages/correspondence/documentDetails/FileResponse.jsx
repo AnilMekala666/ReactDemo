@@ -1,8 +1,11 @@
 import React from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import pdfIcon from '../../../../src/assets/images/icons/pdf_icon.png';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import QueueIcon from '@mui/icons-material/Queue';
+import IconButton from '@mui/material/IconButton';
 
-export const FileResponse = ({ mailContent, attachments }) => {
+export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId }) => {
   // Group attachments by document type
   const groupedAttachments = attachments.reduce((acc, attachment) => {
     const { documentType } = attachment;
@@ -13,8 +16,7 @@ export const FileResponse = ({ mailContent, attachments }) => {
     return acc;
   }, {});
   const handleDownload = async (fileName) => {
-    console.log("fileName",fileName)
-    const filePath =  `/pdfs/${fileName}.pdf`;
+    const filePath = `/pdfs/${fileName}.pdf`;
     const link = document.createElement('a');
     link.href = filePath;
     link.setAttribute('download', `${fileName}.pdf`);
@@ -25,6 +27,52 @@ export const FileResponse = ({ mailContent, attachments }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
+      {statusId === '2' && (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+          <IconButton
+            sx={{
+              backgroundColor: '#6ac5fe',
+              color: 'white',
+              '&:hover': { backgroundColor: '#6ac5fe', color: 'white' },
+              padding: '10px 16px',
+              width: '11.5rem',
+              height: '2.5rem',
+              border: '1px solid #6ac5fe',
+              borderRadius: '.5rem'
+            }}
+            onClick={() => {
+              setUserValidation(true);
+              setUserProcess(false);
+            }}
+          >
+            <HowToRegIcon /> User Validation
+          </IconButton>
+
+          <IconButton
+            sx={{
+              backgroundColor: (userValidation && userProcess) || !userValidation ? '#656565' : '#6ac5fe',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: (userValidation && userProcess) || !userValidation ? '#656565' : '#6ac5fe',
+                color: 'white'
+              },
+              padding: '10px 16px',
+              width: '11.5rem',
+              height: '2.5rem',
+              border: '1px solid #6ac5fe',
+              borderRadius: '.5rem'
+            }}
+            disabled={(userValidation && userProcess) || !userValidation}
+            onClick={() => {
+              setUserValidation(false);
+              setUserProcess(true);
+            }}
+          >
+            <QueueIcon /> Submit
+          </IconButton>
+        </Box>
+      )}
+
       <Box dangerouslySetInnerHTML={{ __html: mailContent }}></Box>
       <Box sx={{ fontWeight: 700, marginBottom: 4 }}>Attachments:</Box>
 
@@ -45,7 +93,7 @@ export const FileResponse = ({ mailContent, attachments }) => {
                         padding: 2,
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                         marginBottom: 2,
-                        cursor:"pointer"
+                        cursor: 'pointer'
                       }}
                       onClick={() => handleDownload(documentType)}
                     >
