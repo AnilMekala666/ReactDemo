@@ -144,7 +144,7 @@ const StepTitleContainer = styled('div')(({ isLast }) => ({
     try {
       setLoader(true);
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.GET_MEDICAL_REQUEST_DATA, {
-        "fileId":17
+        fileId:Number(checkId)
     }); 
     setFileLevelData([response.data.medicalReqFileMetaData]);
     setPatientsData(response.data.medicalReqPatientData);
