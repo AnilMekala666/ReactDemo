@@ -4,8 +4,10 @@ import pdfIcon from '../../../../src/assets/images/icons/pdf_icon.png';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import QueueIcon from '@mui/icons-material/Queue';
 import IconButton from '@mui/material/IconButton';
+import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
+import axios from 'axios';
 
-export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId }) => {
+export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId,status,setStatus,docId }) => {
   // Group attachments by document type
   const groupedAttachments = attachments.reduce((acc, attachment) => {
     const { documentType } = attachment;
@@ -24,10 +26,28 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
     link.click();
     document.body.removeChild(link);
   };
+  const updateStatus = async () => {
+    console.log('UPDATESTATUS')
+    try {
+      console.log("USERINPUT");
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS,{id: docId});
+      console.log(response,"USERINPUT1")
+      if(response.status===200){
+        setStatus('Success')
+      }
+      else{
+        setStatus('')
+      }
+      //SetPatientsData(response.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+    }
+  };
 
   return (
     <Box sx={{ padding: 2 }}>
-      {statusId === '2' && (
+      {statusId === '2' && status !== 'Success'  && (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
           <IconButton
             sx={{
@@ -49,27 +69,24 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
           </IconButton>
 
           <IconButton
-            sx={{
-              backgroundColor: (userValidation && userProcess) || !userValidation ? '#656565' : '#6ac5fe',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: (userValidation && userProcess) || !userValidation ? '#656565' : '#6ac5fe',
-                color: 'white'
-              },
-              padding: '10px 16px',
-              width: '11.5rem',
-              height: '2.5rem',
-              border: '1px solid #6ac5fe',
-              borderRadius: '.5rem'
-            }}
-            disabled={(userValidation && userProcess) || !userValidation}
-            onClick={() => {
-              setUserValidation(false);
-              setUserProcess(true);
-            }}
-          >
-            <QueueIcon /> Submit
-          </IconButton>
+  sx={{
+    backgroundColor: !userValidation ? '#656565' : '#6ac5fe',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: !userValidation ? '#656565' : '#6ac5fe',
+      color: 'white',
+    },
+    padding: '10px 16px',
+    width: '11.5rem',
+    height: '2.5rem',
+    border: '1px solid #6ac5fe',
+    borderRadius: '.5rem',
+  }}
+  disabled={!userValidation}
+  onClick={updateStatus}  // Direct reference
+>
+  <QueueIcon /> Submit
+</IconButton>
         </Box>
       )}
 

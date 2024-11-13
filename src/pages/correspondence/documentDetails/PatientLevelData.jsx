@@ -227,7 +227,7 @@ import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import GradingIcon from '@mui/icons-material/Grading';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 
-export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus }) => {
+export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus,setUserValidation, setUserProcess, userProcess, userValidation, statusId,status,setStatus,docId  }) => {
   console.log("receivedStatus", receivedStatus)
   console.log("patientsData", patientsData)
   const [patientLevelTable, setPatientLevelTable] = useState([]);
@@ -344,7 +344,26 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
 
   const handleUserValidation = () => {
     // Enable the submit button when User Validation is clicked
-    setIsSubmitEnabled(true);
+    setUserValidation(true);
+    setUserProcess(false);
+  };
+  const updateStatus = async () => {
+    console.log('UPDATESTATUS')
+    try {
+      console.log("USERINPUT");
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS,{id: docId});
+      console.log(response,"USERINPUT1")
+      if(response.status===200){
+        setStatus('Success')
+      }
+      else{
+        setStatus('')
+      }
+      //SetPatientsData(response.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+    }
   };
 
   return (
@@ -422,22 +441,22 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
                       Cancel
                     </Button>
                   )}
-
-                  <Button variant="outlined"
+{receivedStatus === 2 && status !== 'Success' && <><Button variant="outlined"
                     startIcon={<GradingIcon />}
                     onClick={handleUserValidation}
                     sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
                   >
                     User Validation
-                  </Button>
-                  <Button
-                   variant="outlined"
-                   sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
-                   startIcon={<AddToPhotosIcon/>}
-                   disabled={!isSubmitEnabled} 
-                   >
-                    Submit
-                  </Button>
+                  </Button><Button
+                    variant="outlined"
+                    sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+                    startIcon={<AddToPhotosIcon />}
+                    disabled={!userValidation}
+                    onClick={updateStatus}
+                  >
+                      Submit
+                    </Button></>}
+                  
                 </>
               )}
 

@@ -37,10 +37,23 @@ const DocumentPage = () => {
   const [showFile, setShowFile] = useState(false);
   const [userValidation, setUserValidation] = useState(false);
   const [userProcess, setUserProcess] = useState(false);
+  const [status,setStatus] = useState('');
+
 
   const location = useLocation();
   const row = location.state?.row;
-  const receivedStatus = row.statusId
+  const receivedStatus = row.statusId;
+  const steps = [
+    { label: 'Classification', icon: <TaskIcon />, IsStepDone: true },
+    { label: 'Data Extraction', icon: <AssignmentIcon />, IsStepDone: true },
+    { label: 'AI Data Verification', icon: <CheckCircleIcon />, IsStepDone: true },
+    {
+      label: 'User validation',
+      icon: <HowToRegIcon />,
+      IsStepDone: (!userValidation && userProcess) || userValidation || statusId !== '2' ? true : false
+    },
+    { label: statusId !== '2' || status==='Success' ? 'Processed':'In-Posting Queue', icon: statusId !== '2' || status==='Success' ? <VerifiedIcon />:<QueueIcon/>, IsStepDone: userProcess || statusId !== '2' || status==='Success' ? true : false }
+  ];
 
   console.log("Received row data:", row.statusId);
   const sourceUrl = `https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showLabelingpdf?id=${docId}`;
@@ -222,21 +235,31 @@ const DocumentPage = () => {
             <MedicalReqPetientLevel patients={patients} patientsData={patientsData} docName={docName} />
           )}
           {activeTab === 1 && docName == 'EOB' && (
-            <PatientLevelData patients={patients} patientsData={patientsData} docName={docName} receivedStatus={receivedStatus} />
+            <PatientLevelData patients={patients} patientsData={patientsData} docName={docName} receivedStatus={receivedStatus} setUserValidation={setUserValidation}
+            setUserProcess={setUserProcess}
+            userValidation={userValidation}
+            userProcess={userProcess}
+            statusId={statusId}
+            status={status}
+            setStatus={setStatus}
+            docId={Number(docId)} />
           )}
 
           {activeTab === 2 && <AiInterPretation docTypes={docTypes || []} />}
 
           {activeTab === 3 && (
             <FileResponse
-              mailContent={mailContent || ''}
-              attachments={attachments || []}
-              setUserValidation={setUserValidation}
-              setUserProcess={setUserProcess}
-              userValidation={userValidation}
-              userProcess={userProcess}
-              statusId={statusId}
-            />
+            mailContent={mailContent || ''}
+            attachments={attachments || []}
+            setUserValidation={setUserValidation}
+            setUserProcess={setUserProcess}
+            userValidation={userValidation}
+            userProcess={userProcess}
+            statusId={statusId}
+            status={status}
+            setStatus={setStatus}
+            docId={Number(docId)}
+          />
           )}
 
           <Box
@@ -270,14 +293,14 @@ const DocumentPage = () => {
             </Box> */}
 
             {/* Cancel and Save & Submit buttons */}
-            {/* <Box sx={{ display: 'flex', gap: 1 }}>
+            {(docName == 'Medical-records-request' && activeTab === 3) &&  <Box sx={{ display: 'flex', gap: 1 }}>
               <Button variant="outlined" sx={{ borderRadius: '8px' }}>
                 Cancel
               </Button>
               <Button variant="contained" color="primary" sx={{ borderRadius: '8px', background: '#3A63D2' }}>
                 Save & Submit
               </Button>
-            </Box> */}
+            </Box>}
           </Box>
         </Paper>
       </Box>
