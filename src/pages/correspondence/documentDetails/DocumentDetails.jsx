@@ -36,7 +36,7 @@ import { useLocation } from 'react-router-dom';
 const steps = [
   { label: 'Classification', icon: <TaskIcon /> ,IsStepDone:true},
   { label: 'Data Extraction', icon: <AssignmentIcon />,IsStepDone:true },
-  { label: 'AI Data Verification', icon: <CheckCircleIcon />,IsStepDone:true },
+  { label: 'iCAN Data Verification', icon: <CheckCircleIcon />,IsStepDone:true },
   { label: 'In-Posting Queue', icon: <QueueIcon />,IsStepDone:false }
 ];
 

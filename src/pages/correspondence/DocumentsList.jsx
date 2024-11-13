@@ -475,11 +475,12 @@ const DocumentsList = () => {
                 sx={{
                   minWidth: '100px',
                   fontWeight: 'bold',
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  textTransform:'none'
                 }}
                 onClick={() => toggleDrawer(true)}
               >
-                ICan Assistence
+                iCAN Assistance
               </Button>
               :
               <Button
@@ -488,11 +489,12 @@ const DocumentsList = () => {
                 sx={{
                   minWidth: '100px',
                   fontWeight: 'bold',
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  textTransform:'none'
                 }}
                 onClick={() => toggleDrawer(true)}
               >
-                ICan Assistence
+                iCAN Assistance
               </Button>
 
             }

@@ -33,7 +33,7 @@ const FileLevelMetaData = ({ fileLevelData, docName }) => {
       { id: 5, label: 'Number of Pages', value: `${data.numOfPages} Pages` },
       { id: 6, label: 'Patient Count', value: `Only ${data.patientCount} Patients` },
       { id: 7, label: 'Document Age', value: `${data.documentAge} days ago` },
-      { id: 8, label: 'Confidence Score', value: data.confidenceScore ? data.confidenceScore.toFixed(2) : '-' },
+      { id: 8, label: 'Confidence Score', value: data.confidenceScore },
       { id: 9, label: 'Letter Name', value: data.letterName }
     ];
     const metadataForMedicalRequest = [

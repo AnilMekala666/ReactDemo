@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-
+import * as React from 'react';
 // material-ui
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -23,6 +23,7 @@ import SimpleBar from 'components/third-party/SimpleBar';
 
 import { ThemeMode } from 'config';
 import useConfig from 'hooks/useConfig';
+import axios from 'axios';
 
 // assets
 import LayoutOutlined from '@ant-design/icons/LayoutOutlined';
@@ -32,6 +33,11 @@ import BgColorsOutlined from '@ant-design/icons/BgColorsOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import FontColorsOutlined from '@ant-design/icons/FontColorsOutlined';
+import { Button } from '@mui/material';
+import Fade from '@mui/material/Fade';
+
+import Popper from '@mui/material/Popper';
+import { useSpring, animated } from '@react-spring/web';
 
 // ==============================|| HEADER CONTENT - CUSTOMIZATION ||============================== //
 
@@ -45,12 +51,43 @@ export default function Customization() {
   const themeWidth = useMemo(() => <ThemeWidth />, []);
   const themeFont = useMemo(() => <ThemeFont />, []);
 
-  const [open, setOpen] = useState(false);
-  const handleToggle = () => {
-    setOpen(!open);
+  //const [open, setOpen] = useState(false);
+  //const [anchorEl, setAnchorEl] = React.useState(null);
+  // const handleToggle = () => {
+  //   setOpen(!open);
+  // };
+    const iconBackColorOpen = mode === ThemeMode.DARK ? 'background.default' : 'grey.100';
+
+  const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((previousOpen) => !previousOpen);
   };
 
-  const iconBackColorOpen = mode === ThemeMode.DARK ? 'background.default' : 'grey.100';
+  const canBeOpen = open && Boolean(anchorEl);
+  const id = canBeOpen ? 'transition-popper' : undefined;
+
+
+  const handleClearData = async () => {
+    console.log("click")
+    try {
+      const response = await axios.get('http://10.0.1.123:8181/Correspondence/refresh');
+      console.log(response)
+
+      // if (!response.ok) {
+      //   throw new Error('Network response was not ok');
+      // }
+      
+      // const data = await response.json();
+      // console.log('Data cleared:', data);
+      // Optionally, you could add a success message or UI feedback here
+
+    } catch (error) {
+      console.error('Failed to clear data:', error);
+    }
+  };
 
   return (
     <>
@@ -59,18 +96,44 @@ export default function Customization() {
           color="secondary"
           variant="light"
           sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : 'transparent' }}
-          onClick={handleToggle}
+          // onClick={handleToggle}
+          onClick={handleClick}
           aria-label="settings toggler"
         >
           <AnimateButton type="rotate">
             <SettingOutlined />
           </AnimateButton>
         </IconButton>
+
+      {/* Popover */}
+      <Popper id={id} open={open} anchorEl={anchorEl} transition
+        sx={{zIndex:'9999',width: '10.5rem',textAlign:'center', boxShadow:'0px 1px 4px rgba(0, 0, 0, 0.08)' }}
+      >
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={350}>
+            <Box
+              sx={{
+                background:'#fff',
+                border:'1px solid #e6ebf1',
+                borderRadius:'8px',
+                padding:'30px 15px',
+              }}
+            >
+             <Button variant="contained"
+              sx={{ padding: '10px', width: '6.5rem', height: '2.5rem',borderRadius: '.5rem' }}
+              onClick={handleClearData}
+            >Clear Data
+            </Button>
+            </Box>
+          </Fade>
+        )}
+      </Popper>
+
       </Box>
-      <Drawer
+      {/* <Drawer
         sx={{ zIndex: 2001 }}
         anchor="right"
-        onClose={handleToggle}
+         onClose={handleToggle}
         open={open}
         PaperProps={{
           sx: {
@@ -253,7 +316,7 @@ export default function Customization() {
             </SimpleBar>
           </MainCard>
         )}
-      </Drawer>
+      </Drawer> */}
     </>
   );
 }

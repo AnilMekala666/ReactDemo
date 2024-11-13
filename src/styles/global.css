@@ -38,11 +38,16 @@
     font-weight: 600;
     font-size: 14px;
     color: #717680;
-    text-transform: capitalize;
+    text-transform: none;
   }
   .card-linear {
     font-weight: 500;
     font-size: 16px;
+    color: #656565;
+  }
+  .card-linear1 {
+    font-weight: 500;
+    font-size: 13px;
     color: #656565;
   }
   .body-text {

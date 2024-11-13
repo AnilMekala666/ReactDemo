@@ -22,19 +22,19 @@ export default function MultiSegmentLinearWithLabel({ processedWidth, inProgress
       {/* <Box sx={{ display: 'flex', flexDirection: 'column', ml: 2 }}> */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Box sx={{ width: '12px', height: '12px', backgroundColor: 'green', mr: 0.5 }} />
-          <Typography className='card-linear'>
+          <Typography className='card-linear1'>
             Processed: ({processedWithoutPercentage})
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
           <Box sx={{ width: '12px', height: '12px', backgroundColor: 'orange', mr: 0.5 }} />
-          <Typography className='card-linear'>
-            In Progress: ({inProgressWithoutPercentage})
+          <Typography className='card-linear1'>
+            Ready to Progress: ({inProgressWithoutPercentage})
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
           <Box sx={{ width: '12px', height: '12px', backgroundColor: 'red', mr: 0.5 }} />
-          <Typography className='card-linear'>
+          <Typography className='card-linear1'>
             Need Attention: ({needAttentionWithoutPercentage})
           </Typography>
         </Box>
