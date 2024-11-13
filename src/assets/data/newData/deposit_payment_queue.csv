@@ -1,6 +1,6 @@
 Transaction number,Payer Name,State name,Amount,Deposit Date
 91048537282,Medicare,Florida,2168.97,10-01-2024
-8.24092E+14,Blue Cross,Florida,1535.48,10-01-2024
+824092000000000,Blue Cross,Florida,1535.48,10-01-2024
 472712901,Kaiser Permanente,North Carolina,1130.94,10-01-2024
 C6782141,Anthem,North Carolina,874.21,10-01-2024
 472703834,Anthem,North Carolina,733.9,10-01-2024
@@ -8,7 +8,7 @@ C6782141,Anthem,North Carolina,874.21,10-01-2024
 2300842574,WellCare,South Carolina,349.5,10-01-2024
 1131525313,WellCare,Arizona,301.72,10-01-2024
 473124414,United Health,Arizona,299.04,10-01-2024
-8.82409E+14,Cigna,Texas,271.05,10-01-2024
+882409000000000,Cigna,Texas,271.05,10-01-2024
 7004275413,Humana,Texas,240.89,10-01-2024
 1131525314,Medicare,Florida,218.64,10-01-2024
 1000240589,Blue Cross,Florida,174.75,10-01-2024
@@ -16,7 +16,7 @@ C6782141,Anthem,North Carolina,874.21,10-01-2024
 2300849731,Anthem,North Carolina,122.7,10-01-2024
 472946011,Anthem,North Carolina,93.7,10-01-2024
 1131525312,Blue Cross,South Carolina,63.99,10-01-2024
-8.82409E+14,WellCare,South Carolina,60.32,10-01-2024
+882409000000000,WellCare,South Carolina,60.32,10-01-2024
 472495447,WellCare,Arizona,33.64,10-01-2024
 C6780509,United Health,Arizona,30.31,10-01-2024
 1131525311,Cigna,Texas,25.9,10-01-2024
@@ -39,12 +39,12 @@ C2962922,Humana,Texas,97074.41,10-01-2024
 2300849021,Anthem,North Carolina,37350.91,10-01-2024
 1131525315,Blue Cross,South Carolina,35977.39,10-01-2024
 1001213707,WellCare,South Carolina,35009.79,10-01-2024
-1.00E+09,WellCare,Arizona,29995.59,10-01-2024
-8.82E+14,United Health,Arizona,29509.89,10-01-2024
-7.00E+09,Cigna,Texas,24402.57,10-01-2024
-8.82E+14,Humana,Texas,19489.57,10-01-2024
-8.82E+14,Medicare,Florida,11535.05,10-01-2024
-2.68E+07,Blue Cross,Florida,7233.92,10-01-2024
-2.68E+07,Kaiser Permanente,North Carolina,5128.02,10-01-2024
-4.72E+08,Anthem,North Carolina,3334.32,10-01-2024
-8.12E+08,Anthem,North Carolina,3181.23,10-01-2024
+1000000000,WellCare,Arizona,29995.59,10-01-2024
+882000000000000,United Health,Arizona,29509.89,10-01-2024
+7000000000,Cigna,Texas,24402.57,10-01-2024
+882000000000000,Humana,Texas,19489.57,10-01-2024
+882000000000000,Medicare,Florida,11535.05,10-01-2024
+26800000,Blue Cross,Florida,7233.92,10-01-2024
+26800000,Kaiser Permanente,North Carolina,5128.02,10-01-2024
+472000000,Anthem,North Carolina,3334.32,10-01-2024
+812000000,Anthem,North Carolina,3181.23,10-01-2024
