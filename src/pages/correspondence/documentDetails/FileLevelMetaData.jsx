@@ -73,20 +73,7 @@ const FileLevelMetaData = ({ fileLevelData, docName }) => {
           {metaData.map((item, index) => (
             <MetaDataRow key={index} label={item.label} value={item.value} />
           ))}
-          <Grid item lg={6}>
-          <TextField
-              variant="outlined"
-              fullWidth
-              multiline
-              minRows={2}
-              maxRows={2}
-              placeholder="Enter the prompt..."
-              sx={{ marginBottom: 2, marginTop:1 }}
-              //value={docName == 'EOB' ? eobprompt : medicalRequestPrompt}
-              // onChange={(e) => setEobPrompt(e.target.value)}
-              //onChange={handlePromptChange}
-          />
-          </Grid>
+        
         </>
       </Grid>
     </Box>

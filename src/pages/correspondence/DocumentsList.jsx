@@ -33,10 +33,11 @@ const DocumentsList = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [aiEobTableData, setAiEobTableData] = useState([]);
   const [aiMedicalRequestTableData, setAiMedicalRequestTableData] = useState([])
-  const [patientDetails, setPatientDetails] = useState(null);
-  const [isPatientInfoOpen, setIsPatientInfoOpen] = useState(false);
+  const [isTableLoading, setIsTableLoading] = useState(false)
+  const [statusId, setStatusId] = useState()
 
-  console.log(docName)
+
+  console.log("docName")
 
 
   const originalDocName = docName.replace(/-/g, ' ');
@@ -301,9 +302,12 @@ const DocumentsList = () => {
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.FETCH_PREDICTION_FILES, {
         prediction: originalDocName
       });
-      console.log(response)
+      console.log("EOB data", response)
       let processedData = response.data.map((item, index) => {
-        const { id, checkAmount, checkNumber, depositDate, documentAge, letterName, payerName, statusName, checkId,statusId } =
+        // let sID= item.statusId
+        // setStatusId(sID)
+        // console.log("statusId", statusId)
+        const { id, checkAmount, checkNumber, depositDate, documentAge, letterName, payerName, statusName, checkId, fileDate, statusId } =
           item;
         const shortDocumentName = letterName ? letterName.split('_').pop() : '-';
 
@@ -317,8 +321,8 @@ const DocumentsList = () => {
           openSince: documentAge ? documentAge : '-',
           status: statusName ? statusName : '-',
           checkId: checkId ? checkId : '-',
-          statusId: statusId? statusId:'-',
-          // fileDate:fileDate?fileDate : '-'
+          fileDate:fileDate?fileDate : '-',
+          statusId:statusId?statusId : '-'
         };
       });
       // setRows(processedData);
@@ -330,6 +334,7 @@ const DocumentsList = () => {
       setLoader(false);
     }
   };
+  console.log("setAiEobTableData", aiEobTableData)
 
   const fetchMedicalRequestData = async () => {
     try {

@@ -39,22 +39,10 @@ const DocumentPage = () => {
   const [userProcess, setUserProcess] = useState(false);
 
   const location = useLocation();
-  const steps = [
-    { label: 'Classification', icon: <TaskIcon />, IsStepDone: true },
-    { label: 'Data Extraction', icon: <AssignmentIcon />, IsStepDone: true },
-    { label: 'AI Data Verification', icon: <CheckCircleIcon />, IsStepDone: true },
-    {
-      label: 'User validation',
-      icon: <HowToRegIcon />,
-      IsStepDone: (!userValidation && userProcess) || userValidation || statusId !== '2' ? true : false
-    },
-    { label: statusId !== '2' ? 'Processed':'In-Posting Queue', icon: statusId !== '2' ? <VerifiedIcon />:<QueueIcon/>, IsStepDone: userProcess || statusId !== '2' ? true : false }
-  ];
-
   const row = location.state?.row;
-  const receivedStatus = row.status;
+  const receivedStatus = row.statusId
 
-  console.log('Received row data:', row.status);
+  console.log("Received row data:", row.statusId);
   const sourceUrl = `https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showLabelingpdf?id=${docId}`;
   // Tab Change Handler
   const handleTabChange = (event, newValue) => {
@@ -282,16 +270,14 @@ const DocumentPage = () => {
             </Box> */}
 
             {/* Cancel and Save & Submit buttons */}
-            {activeTab === 3 && (
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button variant="outlined" sx={{ borderRadius: '8px' }}>
-                  Cancel
-                </Button>
-                <Button variant="contained" color="primary" sx={{ borderRadius: '8px', background: '#3A63D2' }}>
-                  Save & Submit
-                </Button>
-              </Box>
-            )}
+            {/* <Box sx={{ display: 'flex', gap: 1 }}>
+              <Button variant="outlined" sx={{ borderRadius: '8px' }}>
+                Cancel
+              </Button>
+              <Button variant="contained" color="primary" sx={{ borderRadius: '8px', background: '#3A63D2' }}>
+                Save & Submit
+              </Button>
+            </Box> */}
           </Box>
         </Paper>
       </Box>

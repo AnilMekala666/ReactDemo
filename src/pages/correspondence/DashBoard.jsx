@@ -121,14 +121,14 @@ const DashBoard = () => {
     },
     {
       id: 'inProgress',
-      label: 'Ready to Process',
+      label: 'Waiting for User Validation',
       // minWidth: 170,
       align: 'right',
       format: (value) => value.toLocaleString(),
     },
     {
       id: 'needAttention',
-      label: 'Need Attention',
+      label: 'Ready to Process',
       // minWidth: 170,
       align: 'right',
       format: (value) => value.toLocaleString(2),
@@ -216,8 +216,8 @@ const DashBoard = () => {
             name: item.prediction,
             totalDocument: item.totalDoc,
             processed: item.processed,
-            inProgress: item.inProgress,
-            needAttention: item.attention,
+            inProgress: item.waitingforUserValidation,
+            needAttention: item.readyToProcess,
           }))
           setOverviewTableData(formattedData);
         }
