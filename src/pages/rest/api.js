@@ -26,7 +26,7 @@ export const ENDPOINTS = {
 };
 
 export const CORRESPONDENCE_ENDPOINTS = {
-  fetachConfScoreInfo:`${CORRESPONDENCE_BASE_URL}/fetachConfScoreInfo`,
+  fetachConfScoreInfo:`${CORRESPONDENCE_BASE_URL}/fetchConfScoreInfo`,
   FETCH_PREDICTION_FILES:`${CORRESPONDENCE_BASE_URL}/fetchPredictionFilesWithStatus`,
   FETCH_PATIENT_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/fetchPatientLevelData`,
   GET_EOB_FILE_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/getEobFileLevelData`,

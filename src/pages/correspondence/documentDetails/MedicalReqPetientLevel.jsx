@@ -85,18 +85,18 @@ export const MedicalReqPetientLevel = ({ patients, patientsData,docName }) => {
         {/* Right buttons */}
         {patient && (
           <Box>
-            <Box sx={{ textAlign: 'right' }}>
+            {/* <Box sx={{ textAlign: 'right' }}>
               <label style={{ fontWeight: '600', fontSize: '16px' }}>Capture Info - 66%</label>
-            </Box>
+            </Box> */}
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button
+              {/* <Button
                 variant="outlined"
                 startIcon={<AppRegistrationOutlinedIcon />}
                 sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
               >
                 Edit Column
-              </Button>
-              <Button
+              </Button> */}
+              {/* <Button
                 variant="outlined"
                 startIcon={<PermIdentityOutlinedIcon />}
                 sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
@@ -109,7 +109,7 @@ export const MedicalReqPetientLevel = ({ patients, patientsData,docName }) => {
                 sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
               >
                 AI Validate
-              </Button>
+              </Button> */}
             </Box>
           </Box>
         )}
