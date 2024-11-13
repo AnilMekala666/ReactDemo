@@ -1,63 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Paper,
-  Tabs,
-  Grid,
-  Tab,
-  Stepper,
-  Step,
-  Button,
-  StepLabel,
-  StepConnector,
-  Typography,
-  Box,
-} from '@mui/material';
+import { Paper, Tabs, Grid, Tab, Stepper, Step, Button, StepLabel, StepConnector, Typography, Box } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import checkIcon from '../../../assets/images/icons/checkIcon.png'
+import checkIcon from '../../../assets/images/icons/checkIcon.png';
 import FileLevelMetaData from './fileLevelMetaData';
 import TaskIcon from '@mui/icons-material/Task';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import QueueIcon from '@mui/icons-material/Queue';
 import { styled } from '@mui/material/styles';
-import fileattachIcon from '../../../assets/images/icons/fileattach.png'
+import fileattachIcon from '../../../assets/images/icons/fileattach.png';
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import axios from 'axios';
 import { PatientLevelData } from './PatientLevelData';
-import {MedicalReqPetientLevel} from './MedicalReqPetientLevel'
+import { MedicalReqPetientLevel } from './MedicalReqPetientLevel';
 import { AiInterPretation } from './AiInterPretation';
 import { FileResponse } from './FileResponse';
 import { useParams } from 'react-router';
 import { FilePreviewDialog } from './FilePreviewDialog';
 import { useLocation } from 'react-router-dom';
-
-const steps = [
-  { label: 'Classification', icon: <TaskIcon /> ,IsStepDone:true},
-  { label: 'Data Extraction', icon: <AssignmentIcon />,IsStepDone:true },
-  { label: 'iCAN Data Verification', icon: <CheckCircleIcon />,IsStepDone:true },
-  { label: 'In-Posting Queue', icon: <QueueIcon />,IsStepDone:false }
-];
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 const DocumentPage = () => {
-  const{docName,fileName,docId,checkId}=useParams();
+  const { docName, fileName, docId, checkId, statusId } = useParams();
   const [activeTab, setActiveTab] = useState(0);
   const [fileLevelData, setFileLevelData] = useState([]);
   const [patients, setPatients] = useState([]);
   const [patientsData, setPatientsData] = useState({});
-  const [docTypes,setDocTypes] = useState([]);
-  const [mailContent,setMailContent] = useState([]);
-  const [attachments,setAttachments] = useState([]);
+  const [docTypes, setDocTypes] = useState([]);
+  const [mailContent, setMailContent] = useState([]);
+  const [attachments, setAttachments] = useState([]);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState(false);
-  const [showFile,setShowFile] = useState(false);
+  const [showFile, setShowFile] = useState(false);
+  const [userValidation, setUserValidation] = useState(false);
+  const [userProcess, setUserProcess] = useState(false);
 
   const location = useLocation();
-  const row = location.state?.row;
-  const receivedStatus = row.status
+  const steps = [
+    { label: 'Classification', icon: <TaskIcon />, IsStepDone: true },
+    { label: 'Data Extraction', icon: <AssignmentIcon />, IsStepDone: true },
+    { label: 'AI Data Verification', icon: <CheckCircleIcon />, IsStepDone: true },
+    {
+      label: 'User validation',
+      icon: <HowToRegIcon />,
+      IsStepDone: (!userValidation && userProcess) || userValidation || statusId !== '2' ? true : false
+    },
+    { label: statusId !== '2' ? 'Processed':'In-Posting Queue', icon: statusId !== '2' ? <VerifiedIcon />:<QueueIcon/>, IsStepDone: userProcess || statusId !== '2' ? true : false }
+  ];
 
-  console.log("Received row data:", row.status);
+  const row = location.state?.row;
+  const receivedStatus = row.status;
+
+  console.log('Received row data:', row.status);
   const sourceUrl = `https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showLabelingpdf?id=${docId}`;
   // Tab Change Handler
   const handleTabChange = (event, newValue) => {
@@ -65,55 +62,53 @@ const DocumentPage = () => {
   };
 
   // Custom StepConnector with dotted line
-// Custom StepConnector with conditional color for the last line
-const DottedConnector = styled(StepConnector)(({ theme, isLast }) => ({
-  '& .MuiStepConnector-line': {
-    borderColor: isLast ? '#656565' : '#0000FF',
-    borderStyle: 'dotted',
-    borderWidth: 1,
-  },
-}));
+  // Custom StepConnector with conditional color for the last line
+  const DottedConnector = styled(StepConnector)(({ theme, isLast }) => ({
+    '& .MuiStepConnector-line': {
+      borderColor: isLast ? '#656565' : '#0000FF',
+      borderStyle: 'dotted',
+      borderWidth: 1
+    }
+  }));
 
-// Custom StepIcon component with a circle around the icon, changing color for last step
-const StepIconContainer = styled('div')(({ isLast }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 32,
-  height: 32,
-  borderRadius: '50%',
-  border: `1px solid ${isLast ? '#656565' : '#0000FF'}`,
-  color: isLast ? '#656565' : '#0000FF',
-  fontSize: '12px',
-  padding: '19px'
-}));
+  // Custom StepIcon component with a circle around the icon, changing color for last step
+  const StepIconContainer = styled('div')(({ isLast }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 32,
+    height: 32,
+    borderRadius: '50%',
+    border: `1px solid ${isLast ? '#656565' : '#0000FF'}`,
+    color: isLast ? '#656565' : '#0000FF',
+    fontSize: '12px',
+    padding: '19px'
+  }));
 
-const StepTitleContainer = styled('div')(({ isLast }) => ({
-  color: isLast ? '#656565' : '#0000FF',
-}));
-
+  const StepTitleContainer = styled('div')(({ isLast }) => ({
+    color: isLast ? '#656565' : '#0000FF'
+  }));
 
   const fetchEobFileData = async () => {
     try {
       setLoader(true);
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.GET_EOB_FILE_LEVEL_DATA, {
         fileId: docId
-      }); 
-      setFileLevelData(response.data); 
+      });
+      setFileLevelData(response.data);
     } catch (err) {
       setLoader(false);
-      setError('Failed to fetch data'); 
+      setError('Failed to fetch data');
     } finally {
-      setLoader(false); 
+      setLoader(false);
     }
   };
 
   const fetchPatients = async () => {
-
     try {
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.GET_PATIENT_LIST, {
         eobCheckId: checkId
-      }); 
+      });
       if (response.status == 200) {
         setPatients(response.data);
       }
@@ -124,54 +119,53 @@ const StepTitleContainer = styled('div')(({ isLast }) => ({
     }
   };
   const fetchPatientData = async () => {
-
     try {
       setLoader(true);
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.FETCH_PATIENT_LEVEL_DATA, {
         eobCheckId: checkId
-      }); 
+      });
       setPatientsData(response.data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setLoader(false);
-      setError('Failed to fetch data'); 
+      setError('Failed to fetch data');
     } finally {
-      setLoader(false); 
+      setLoader(false);
     }
   };
 
-  const fetchMedicalRequestData = async () =>{
+  const fetchMedicalRequestData = async () => {
     try {
       setLoader(true);
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.GET_MEDICAL_REQUEST_DATA, {
-        fileId:Number(checkId)
-    }); 
-    setFileLevelData([response.data.medicalReqFileMetaData]);
-    setPatientsData(response.data.medicalReqPatientData);
-    setDocTypes(response.data.documentTypes);
-    setMailContent(response?.data.mailContent || "")
-    setAttachments(response?.data.attachments || []);
+        fileId: Number(checkId)
+      });
+      setFileLevelData([response.data.medicalReqFileMetaData]);
+      setPatientsData(response.data.medicalReqPatientData);
+      setDocTypes(response.data.documentTypes);
+      setMailContent(response?.data.mailContent || '');
+      setAttachments(response?.data.attachments || []);
       //SetPatientsData(response.data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setLoader(false);
-      setError('Failed to fetch data'); 
+      setError('Failed to fetch data');
     } finally {
-      setLoader(false); 
+      setLoader(false);
     }
-  }
+  };
 
-  const handlePreviewDoc = () =>{
-    setShowFile(true)
-  }
+  const handlePreviewDoc = () => {
+    setShowFile(true);
+  };
 
   useEffect(() => {
-    if(docName=="EOB"){
+    if (docName == 'EOB') {
       fetchEobFileData();
       fetchPatients();
       fetchPatientData();
     }
-    if(docName=="Medical-records-request"){
+    if (docName == 'Medical-records-request') {
       fetchMedicalRequestData();
     }
   }, []);
@@ -186,7 +180,7 @@ const StepTitleContainer = styled('div')(({ isLast }) => ({
               <Link underline="hover" color="inherit" href="/correspndence/dashboard">
                 Overview
               </Link>
-              <Link underline="hover" color="inherit" href="/">
+              <Link underline="hover" color="inherit" href="/correspndence/documentsList/Medical-records-request">
                 List of Document
               </Link>
               <Typography sx={{ color: 'text.primary' }}>{fileName ? shortFileName : ''}</Typography>
@@ -210,15 +204,15 @@ const StepTitleContainer = styled('div')(({ isLast }) => ({
             {steps.map((step, index) => (
               <Step key={index} completed={index < 3}>
                 <StepLabel
-                  StepIconComponent={() => <StepIconContainer isLast={index === steps.length - 1}>{step.icon}</StepIconContainer>}
+                  StepIconComponent={() => <StepIconContainer isLast={!step.IsStepDone}>{step.icon}</StepIconContainer>}
                   optional={index === 3 ? <Typography variant="caption"></Typography> : null}
                 >
-                  <StepTitleContainer isLast={index === steps.length - 1}>
+                  <StepTitleContainer isLast={!step.IsStepDone}>
                     {step.IsStepDone && <img src={checkIcon} style={{ marginRight: '4px' }} alt="check Icon" />}
                     {step.label}
                   </StepTitleContainer>
                 </StepLabel>
-                {index > 0 && <DottedConnector isLast={index === steps.length - 1} />}
+                {index > 0 && <DottedConnector isLast={!step.IsStepDone} />}
               </Step>
             ))}
           </Stepper>
@@ -239,11 +233,23 @@ const StepTitleContainer = styled('div')(({ isLast }) => ({
           {activeTab === 1 && docName == 'Medical-records-request' && (
             <MedicalReqPetientLevel patients={patients} patientsData={patientsData} docName={docName} />
           )}
-          {activeTab === 1 && docName == 'EOB' && <PatientLevelData patients={patients} patientsData={patientsData} docName={docName} receivedStatus = {receivedStatus}/>}
+          {activeTab === 1 && docName == 'EOB' && (
+            <PatientLevelData patients={patients} patientsData={patientsData} docName={docName} receivedStatus={receivedStatus} />
+          )}
 
           {activeTab === 2 && <AiInterPretation docTypes={docTypes || []} />}
 
-          {activeTab === 3 && <FileResponse mailContent={mailContent || ''} attachments={attachments || []} />}
+          {activeTab === 3 && (
+            <FileResponse
+              mailContent={mailContent || ''}
+              attachments={attachments || []}
+              setUserValidation={setUserValidation}
+              setUserProcess={setUserProcess}
+              userValidation={userValidation}
+              userProcess={userProcess}
+              statusId={statusId}
+            />
+          )}
 
           <Box
             sx={{
@@ -276,14 +282,16 @@ const StepTitleContainer = styled('div')(({ isLast }) => ({
             </Box> */}
 
             {/* Cancel and Save & Submit buttons */}
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button variant="outlined" sx={{ borderRadius: '8px' }}>
-                Cancel
-              </Button>
-              <Button variant="contained" color="primary" sx={{ borderRadius: '8px', background: '#3A63D2' }}>
-                Save & Submit
-              </Button>
-            </Box>
+            {activeTab === 3 && (
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button variant="outlined" sx={{ borderRadius: '8px' }}>
+                  Cancel
+                </Button>
+                <Button variant="contained" color="primary" sx={{ borderRadius: '8px', background: '#3A63D2' }}>
+                  Save & Submit
+                </Button>
+              </Box>
+            )}
           </Box>
         </Paper>
       </Box>
@@ -293,12 +301,7 @@ const StepTitleContainer = styled('div')(({ isLast }) => ({
         title="Document"
         sourceUrl="https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showpdf?id=21514&batchName=sample%20batch"
       /> */}
-      <FilePreviewDialog
-        dialogOpen={showFile}
-        setDialogOpen={setShowFile}
-        title="Document"
-        sourceUrl={sourceUrl}
-      />
+      <FilePreviewDialog dialogOpen={showFile} setDialogOpen={setShowFile} title="Document" sourceUrl={sourceUrl} />
     </>
   );
 };
