@@ -149,7 +149,7 @@ const DocumentsList = () => {
             <img src={pdfIcon} alt="pdf icon" style={{ width: '30px', height: '30px', marginRight: '20px' }} />
             <Box
               onClick={() => (
-                navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}`, {
+                navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}/${params.row.uId}`, {
                   state: { row: params.row },
                 })
               )}
@@ -252,11 +252,10 @@ const DocumentsList = () => {
             <Box
               // onClick={() => navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}`)}
               onClick={() => (
-                navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}`, {
+                navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}/${params.row.uId}`, {
                   state: { row: params.row },
                 })
               )
-
               }
               sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}
             >
@@ -332,7 +331,7 @@ const DocumentsList = () => {
         // let sID= item.statusId
         // setStatusId(sID)
         // console.log("statusId", statusId)
-        const { id, checkAmount, checkNumber, depositDate, documentAge, letterName, payerName, statusName, checkId, fileDate, statusId } =
+        const { id, checkAmount, checkNumber, depositDate, documentAge, letterName, payerName, statusName, checkId, fileDate, statusId,uId } =
           item;
         const shortDocumentName = letterName ? letterName.split('_').pop() : '-';
 
@@ -347,7 +346,8 @@ const DocumentsList = () => {
           status: statusName ? statusName : '-',
           checkId: checkId ? checkId : '-',
           fileDate:fileDate?fileDate : '-',
-          statusId:statusId?statusId : '-'
+          statusId:statusId?statusId : '-',
+          uId:uId?uId:'-'
         };
       });
       // setRows(processedData);
@@ -369,7 +369,7 @@ const DocumentsList = () => {
       });
       console.log(response)
       let processedData = response.data.map((item, index) => {
-        const { id, depositDate, documentAge, letterName, payerName, status, checkId, patientName, claimNumber, numOfPages,statusId } =
+        const { id, depositDate, documentAge, letterName, payerName, status, checkId, patientName, claimNumber, numOfPages,statusId,uId } =
           item;
         const shortDocumentName = letterName ? letterName.split('_').pop() : '-';
         console.log(letterName)
@@ -385,7 +385,8 @@ const DocumentsList = () => {
           openSince: documentAge ? documentAge : '-',
           status: status ? status : '-',
           checkId: checkId ? checkId : '-',
-          statusId:statusId?statusId:'-'
+          statusId:statusId?statusId:'-',
+          uId:uId?uId:'-'
         };
       });
       // setRows(processedData);

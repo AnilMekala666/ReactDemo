@@ -24,7 +24,7 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 const DocumentPage = () => {
-  const { docName, fileName, docId, checkId, statusId } = useParams();
+  const { docName, fileName, docId, checkId, statusId,uId } = useParams();
   const [activeTab, setActiveTab] = useState(0);
   const [fileLevelData, setFileLevelData] = useState([]);
   const [patients, setPatients] = useState([]);
@@ -242,7 +242,7 @@ const DocumentPage = () => {
             statusId={statusId}
             status={status}
             setStatus={setStatus}
-            docId={Number(docId)} />
+            uId={Number(uId)} />
           )}
 
           {activeTab === 2 && <AiInterPretation docTypes={docTypes || []} />}
@@ -258,7 +258,7 @@ const DocumentPage = () => {
             statusId={statusId}
             status={status}
             setStatus={setStatus}
-            docId={Number(docId)}
+            uId={Number(uId)}
           />
           )}
 

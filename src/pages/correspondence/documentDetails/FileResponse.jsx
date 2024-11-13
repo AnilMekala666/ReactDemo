@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import axios from 'axios';
 
-export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId,status,setStatus,docId }) => {
+export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId,status,setStatus,uId }) => {
   // Group attachments by document type
   const groupedAttachments = attachments.reduce((acc, attachment) => {
     const { documentType } = attachment;
@@ -30,7 +30,7 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
     console.log('UPDATESTATUS')
     try {
       console.log("USERINPUT");
-      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS,{id: docId});
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS,{id: uId});
       console.log(response,"USERINPUT1")
       if(response.status===200){
         setStatus('Success')

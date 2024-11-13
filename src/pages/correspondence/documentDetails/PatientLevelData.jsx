@@ -227,7 +227,7 @@ import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import GradingIcon from '@mui/icons-material/Grading';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 
-export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus,setUserValidation, setUserProcess, userProcess, userValidation, statusId,status,setStatus,docId  }) => {
+export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus,setUserValidation, setUserProcess, userProcess, userValidation, statusId,status,setStatus,uId  }) => {
   console.log("receivedStatus", receivedStatus)
   console.log("patientsData", patientsData)
   const [patientLevelTable, setPatientLevelTable] = useState([]);
@@ -351,7 +351,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
     console.log('UPDATESTATUS')
     try {
       console.log("USERINPUT");
-      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS,{id: docId});
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS,{id: uId});
       console.log(response,"USERINPUT1")
       if(response.status===200){
         setStatus('Success')
