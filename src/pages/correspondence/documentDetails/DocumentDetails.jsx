@@ -48,7 +48,7 @@ const DocumentPage = () => {
       icon: <HowToRegIcon />,
       IsStepDone: (!userValidation && userProcess) || userValidation || statusId !== '2' ? true : false
     },
-    { label: 'Processed', icon: <VerifiedIcon />, IsStepDone: userProcess || statusId !== '2' ? true : false }
+    { label: statusId !== '2' ? 'Processed':'In-Posting Queue', icon: statusId !== '2' ? <VerifiedIcon />:<QueueIcon/>, IsStepDone: userProcess || statusId !== '2' ? true : false }
   ];
 
   const row = location.state?.row;
