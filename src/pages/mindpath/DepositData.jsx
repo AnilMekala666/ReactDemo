@@ -138,7 +138,7 @@ function DepositData() {
     // }).filter((key) => key != "subRows" && key != undefined)
     // console.log("Columns", columns);
     // setTablecColumns(columns);
-    setOpenAlert(true)
+    
   }, [])
 
   const fetchInitial = async () => {
@@ -146,14 +146,15 @@ function DepositData() {
     // console.log("Data API", await data.json());
     const staticData = await data.json();
     setParsedData(staticData);
-    // staticData.map((s, i) => {
-    //   const today = new Date();
-    //   var inputDate = new Date(s["file_process_date"]);
-    //   if(inputDate.setHours(0,0,0,0) == todaysDate.setHours(0,0,0,0)) {
-    //     setFileMessage("No file available to process");
-    //     setDisableBtn(true);
-    //   }
-    // })
+    staticData.map((s, i) => {
+      const today = moment().toDate();
+      var inputDate = moment(s["fileProcessDate"], "YYYY-MM-DD").toDate();
+      console.log(inputDate);
+      if(inputDate.setHours(0,0,0,0) == today.setHours(0,0,0,0)) {
+        setFileMessage("No file available to process");
+        setDisableBtn(true);
+      }
+    })
     const headerKeys = Object.keys(Object.assign({}, ...staticData));
     let columns = [];
     columns = headerKeys.map((header, index) => {
@@ -168,6 +169,7 @@ function DepositData() {
     }).filter((key) => key != "subRows" && key != undefined)
     console.log("Columns", columns);
     setTablecColumns(columns);
+    setOpenAlert(true);
   }
 
   const handleClose = () => {
@@ -563,7 +565,7 @@ function DepositData() {
         </Grid>
         {openAlert &&
           <Grid>
-            <Typography className='blink_me' color="#080" variant="h4">{fileMessage}</Typography>
+            <Typography className='blink_me' color={ disableBtn ? "#800" : "#080"} variant="h4">{fileMessage}</Typography>
           </Grid>
         }
         <Grid >
@@ -580,11 +582,12 @@ function DepositData() {
             variant="contained"
             color="primary"
             component="label"
-            disabled={showFileContent}
+            disabled={showFileContent || disableBtn}
             onClick={handleFileUpload}
             sx={{ borderRadius: '40px', marginTop: '0px', padding: '12px 30px 12px 30px' }}
           >
-            {openAlert ? "Process" : fileMessage}
+            Process
+            {/* {openAlert ? "Process" : fileMessage} */}
             {/* <input type="file" multiple hidden onChange={handleFileUpload} sx={{ padding: '0px 10px 10px 0px' }} /> */}
             {!showFileContent &&
              <MemoryOutlined style={{ fontSize: '20px', marginLeft: '15px', borderRadius: '100%', background: 'transparent' }} />
