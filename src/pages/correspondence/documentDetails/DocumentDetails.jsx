@@ -5,7 +5,7 @@ import Link from '@mui/material/Link';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import checkIcon from '../../../assets/images/icons/checkIcon.png';
-import FileLevelMetaData from './fileLevelMetaData';
+import FileLevelMetaData from './FileLevelMetaData';
 import TaskIcon from '@mui/icons-material/Task';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import QueueIcon from '@mui/icons-material/Queue';
