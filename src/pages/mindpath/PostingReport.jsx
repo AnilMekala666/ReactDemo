@@ -175,9 +175,10 @@ const PostingReport = () => {
             const obj = csvHeader.reduce((object, header, index) => {
                 if (object !== undefined) {
                     console.log(object)
-                    if (object["id"] == undefined) {
-                        object["id"] = x + 1;
-                    }
+                    // if (object["id"] == undefined) {
+                    //     object["id"] = x + 1;
+                    // }
+                    delete object["batchnumber"];
                     if(header.toLowerCase().includes("amount")) {
                         if (values[index]) {
                             if(!Number.isNaN(parseFloat(values[index] || 0)))

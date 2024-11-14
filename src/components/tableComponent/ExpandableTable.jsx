@@ -286,7 +286,7 @@ function ReactTable({ data, columns, expandedColumns }) {
       <ScrollX>
         <Stack sx={{padding:'0'}}>
           <RowSelection selected={Object.keys(rowSelection).length} />
-          <TableContainer sx={{ maxHeight: 510 }}>
+          <TableContainer>
             <Table stickyHeader aria-label="sticky table">
               <TableHead 
                 sx={{

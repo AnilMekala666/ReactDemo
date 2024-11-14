@@ -200,9 +200,10 @@ const Reconcile = () => {
             // }
             const obj = csvHeader.reduce((object, header, index) => {
                 if (object !== undefined) {
-                    if (object["id"] == undefined) {
-                        object["id"] = x + 1;
-                    }
+                    // if (object["id"] == undefined) {
+                    //     object["id"] = x + 1;
+                    // }
+                    delete object["account_name"];
                     if (header.toLowerCase().includes("amount")) {
                         if (values[index]) {
                             if(!Number.isNaN(parseFloat(values[index] || 0)))
