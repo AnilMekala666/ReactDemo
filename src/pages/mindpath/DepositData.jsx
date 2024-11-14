@@ -227,12 +227,12 @@ function DepositData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 200)
+      }, 2000)
     }
   }, [step, loading])
 
   const waitLoad = () => {
-    setTimeout(()=>setLoading(false), 200);
+    setTimeout(()=>setLoading(false), 2000);
   }
 
   const handleChange = (event, newValue) => {
