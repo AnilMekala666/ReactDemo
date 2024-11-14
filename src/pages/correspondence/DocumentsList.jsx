@@ -141,7 +141,7 @@ const DocumentsList = () => {
     {
       field: 'documentName',
       headerName: 'Document Name',
-      width: 170,
+      width: 150,
       renderCell: (params) => {
         console.log(params.row, "inside column")
         return (
