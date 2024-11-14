@@ -289,6 +289,7 @@ const DocumentPage = () => {
               status={status}
               setStatus={setStatus}
               uId={Number(uId)}
+              fileId={checkId}
             />
           )}
 

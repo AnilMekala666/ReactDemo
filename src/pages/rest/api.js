@@ -37,4 +37,7 @@ export const CORRESPONDENCE_ENDPOINTS = {
   GET_MEDICAL_DETAILS_WITH_AI:`${CORRESPONDENCE_BASE_URL}/getMedicalDetailsWithAI`,
   UPDATE_PATIENT_LEVEL_DATA : `${CORRESPONDENCE_BASE_URL}/updatePatientLevelData`,
   UPDATE_STATUS:`${CORRESPONDENCE_BASE_URL}/updateStatus`,
+  UPLOAD_MEDICAL_REQ_PDF:`${CORRESPONDENCE_BASE_URL}/uploadMedicalReqFiles`,
+  SHOW_MEDICAL_FILE_PDF:`${CORRESPONDENCE_BASE_URL}/showMedicalFilepdf?fileName=`
+  //http://10.0.1.123:8181/Correspondence/showMedicalFilepdf?fileName=sample.pdf
 }
