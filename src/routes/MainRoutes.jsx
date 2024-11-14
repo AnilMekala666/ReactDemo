@@ -220,7 +220,7 @@ const MainRoutes = {
               element:<DocumentsList/>
             },
             {
-              path:'documentsDetails/:docName/:fileName/:docId/:checkId/:statusId',
+              path:'documentsDetails/:docName/:fileName/:docId/:checkId/:statusId/:uId',
               element:<DocumentDetails/>
             }
           ]
