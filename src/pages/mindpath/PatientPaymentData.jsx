@@ -226,7 +226,7 @@ function PatientPaymentData() {
 
         setFileContent(jsonData); // Save parsed data for displaying
         jsonData.map(data=> {
-          if(!Number.isNaN(parseFloat(values[index] || 0)))
+          if(!Number.isNaN(parseFloat(data["Amount"] || 0)))
             data["Amount"] = currencyFormat(parseFloat(data['Amount']) || 0);
           else
             data["Amount"] = data['Amount'].replaceAll("\"", "");
