@@ -225,7 +225,13 @@ function PatientPaymentData() {
         const jsonData = XLSX.utils.sheet_to_json(worksheet, {raw: false});
 
         setFileContent(jsonData); // Save parsed data for displaying
-        jsonData.map(data=>data["Amount"] = currencyFormat(parseFloat(data['Amount']) || 0));
+        jsonData.map(data=> {
+          if(!Number.isNaN(parseFloat(values[index] || 0)))
+            data["Amount"] = currencyFormat(parseFloat(data['Amount']) || 0);
+          else
+            data["Amount"] = data['Amount'].replaceAll("\"", "");
+          return data;
+        });
         jsonData.map(data=>data["Payment Date"] = moment().format("MM/DD/YYYY"));
         setParsedData(jsonData); // Save parsed data for the dialog
         const headerKeys = Object.keys(Object.assign({}, ...jsonData));

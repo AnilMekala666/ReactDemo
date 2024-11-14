@@ -204,7 +204,7 @@ const PostingReport = () => {
                 return obj;
             }
             return null;
-        }).filter((val) => val != undefined);
+        }).filter((val) => val != undefined && Object.keys(val).length > 2);
         const headerKeys = Object.keys(Object.assign({}, ...array));
         let columns = [];
         columns = headerKeys.map((header, index) => {

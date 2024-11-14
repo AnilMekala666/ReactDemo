@@ -227,12 +227,12 @@ function DepositData() {
         waitLoad();
         setStep("6.1");
         return;
-      }, 2000)
+      }, 200)
     }
   }, [step, loading])
 
   const waitLoad = () => {
-    setTimeout(()=>setLoading(false), 5000);
+    setTimeout(()=>setLoading(false), 200);
   }
 
   const handleChange = (event, newValue) => {
@@ -371,7 +371,7 @@ function DepositData() {
       if (parts[0].trim() === '88' && currentTransaction) {
         // Extract Payer (from line starting with '88')
         const payerMatch = line.match(/^(?:88,)?(.*?)(?: DES:|$)/);
-        if (payerMatch) {
+        if (payerMatch && !(parts[1].trim().includes("PMT INFO:TRN*1*"))) {
           currentTransaction.payer = payerMatch[1].trim(); // Set payer name
         }
 

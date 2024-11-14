@@ -5,7 +5,7 @@ Transaction No,Transaction Type,Batch Owner,Account Name,Payor,Deposit Date,Bank
 2300849731,EFT Credit,iCAN,North Carolina Deposits,FREEDOM MED,10-01-2024,$122.70,$122.70,$100.00,Post -$22.7,Variance
 472946011,EFT Credit,iCAN,North Carolina Deposits,UNITY SYSTEMS,10-01-2024,$93.70,$0.00,$0.00,"Pay +$93.7, Post -$93.7",Remit Missing
 1131525312,EFT Credit,iCAN,South Carolina Deposits,CAPITAL WELLNESS,10-01-2024,$63.99,$0.00,$0.00,"Pay +$63.99, Post -$63.99",Remit Missing
-8.82409E+14,EFT Credit,iCAN,South Carolina Deposits,HOMELAND HEALTH,10-01-2024,$60.32,$0.00,$0.00,"Pay +$60.32, Post -$60.32",Remit Missing
+882409001073798,EFT Credit,iCAN,South Carolina Deposits,HOMELAND HEALTH,10-01-2024,$60.32,$0.00,$0.00,"Pay +$60.32, Post -$60.32",Remit Missing
 472495447,EFT Credit,iCAN,Arizona Deposits,ZP  CHCSSERVI371,10-01-2024,$33.64,$0.00,$0.00,"Pay +$33.64, Post -$33.64",Remit Missing
 C6780509,EFT Credit,iCAN,Arizona Deposits,AMERICAN MED,10-01-2024,$30.31,$0.00,$0.00,"Pay +$30.31, Post -$30.31",Remit Missing
 1131525311,EFT Credit,iCAN,Texas Deposits,UNITY SYSTEMS,10-01-2024,$25.90,$0.00,$0.00,"Pay +$25.9, Post -$25.9",Remit Missing

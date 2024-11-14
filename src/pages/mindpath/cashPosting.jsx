@@ -203,11 +203,11 @@ const cashPosting = () => {
                 return object;
             }, {});
             console.log("OBJ", obj)
-            if(Object.keys(obj).length > 1) {
+            if(Object.keys(obj).length > 2) {
                 return obj;
             }
             return null;
-        }).filter((val) => val != undefined && Object.keys(val).length > 1);
+        }).filter((val) => val != undefined && Object.keys(val).length > 2);
         const headerKeys = Object.keys(Object.assign({}, ...array));
         let columns = [];
         columns = headerKeys.map((header, index) => {
