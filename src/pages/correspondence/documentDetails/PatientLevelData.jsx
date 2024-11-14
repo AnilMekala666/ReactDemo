@@ -216,8 +216,13 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  TextField
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
+
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
@@ -226,8 +231,45 @@ import axios from 'axios';
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import GradingIcon from '@mui/icons-material/Grading';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import { styled } from '@mui/material/styles';
+import CloseOutlined from '@ant-design/icons/CloseOutlined';
+import IconButton from 'components/@extended/IconButton';
+import { color } from 'framer-motion';
 
-export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus,setUserValidation, setUserProcess, userProcess, userValidation, statusId,status,setStatus,uId  }) => {
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(3)
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1.25),
+    paddingRight: theme.spacing(2)
+  }
+}));
+
+function BootstrapDialogTitle({ children, onClose, ...other }) {
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          color="white"
+          sx={{
+            position: 'absolute',
+            right: 10,
+            top: 10
+          }}
+        >
+          <CloseOutlined sx={{ color: "white" }} />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+}
+
+export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId }) => {
   console.log("receivedStatus", receivedStatus)
   console.log("patientsData", patientsData)
   const [patientLevelTable, setPatientLevelTable] = useState([]);
@@ -236,6 +278,9 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
   const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState([]);
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+  const [initialPatientLevelData, setInitialPatientLevelData] = useState([]);
+  const [validationDialogOpen, setValidationDialogOpen] = useState(false)
+  const [isEditButtonVisible, setIsEditButtonVisible] = useState(true); 
 
 
   // const handleSelectedPatient = (e) => {
@@ -249,10 +294,19 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
   //   setLineLevelTable(_lineData);
   //   setEditableData(_patientData);
   // };
+
+  const handleClickOpen = () => { 
+    setUserValidation(true);
+    setUserProcess(false);
+    setValidationDialogOpen(true)
+   };
+  const handleClose = () => {
+    console.log("close drawwer")
+    setValidationDialogOpen(false)
+  }
   console.log("patientLevelTable", patientLevelTable)
 
   useEffect(() => {
-    // Check if there are patients and set the first one by default
     if (patients && patients.length > 0) {
       const defaultPatient = patients[0].id;
       setPatient(defaultPatient);
@@ -260,6 +314,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
       const _patientData = patientsData.patient_level_data?.filter((patient) => patient.id === defaultPatient);
       const _lineData = patientsData.line_level_data?.filter((line) => line.checkPatientLevelDataId === defaultPatient);
 
+      setInitialPatientLevelData(_patientData);
       setPatientLevelTable(_patientData);
       setLineLevelTable(_lineData);
       setEditableData(_patientData);
@@ -283,7 +338,8 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
   const handleEditToggle = () => {
     console.log()
     console.log("handleEditToggle click")
-    setIsEditing((prev) => !prev);
+    // setIsEditing((prev) => !prev);
+    setIsEditing(true);
   };
 
 
@@ -291,6 +347,13 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
     const updatedData = [...patientLevelTable];
     updatedData[index][field] = value;
     setPatientLevelTable(updatedData);
+  };
+
+  const handleCancelEdit = () => {
+
+    setPatientLevelTable(initialPatientLevelData);
+    setEditableData(initialPatientLevelData);
+    setIsEditing(false);
   };
 
   // const updatePatientLevelData = async () => {
@@ -330,33 +393,42 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
 
         console.log("Payload to update:", payload);
 
-        // Send each patient's data individually
+      
         const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
         console.log("Update response:", response.data);
       }
 
-      // Set editing mode off and refresh data if needed
       setIsEditing(false);
     } catch (error) {
       console.error("Update failed:", error);
     }
   };
 
-  const handleUserValidation = () => {
-    // Enable the submit button when User Validation is clicked
-    setUserValidation(true);
-    setUserProcess(false);
-  };
+  // const handleUserValidation = () => {
+  //   // Enable the submit button when User Validation is clicked
+  //   setUserValidation(true);
+  //   setUserProcess(false);
+  // };
+
+
   const updateStatus = async () => {
     console.log('UPDATESTATUS')
     try {
       console.log("USERINPUT");
-      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS,{id: uId});
-      console.log(response,"USERINPUT1")
-      if(response.status===200){
-        setStatus('Success')
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS, { id: uId });
+   
+      console.log(response, "USERINPUT1")
+      if (response.status == 200) {
+        console.log("Response status 200, setting Success");
+        // setStatus('Success')
+        setStatus(prevStatus => {
+          console.log("Updating status to Success");
+          return 'Success';
+        });
+        setValidationDialogOpen(false)
+        setIsEditButtonVisible(false);
       }
-      else{
+      else {
         setStatus('')
       }
       //SetPatientsData(response.data);
@@ -428,35 +500,41 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
                     // onClick={handleEditToggle}
                     onClick={isEditing ? () => updatePatientLevelData() : handleEditToggle}
                   >
-                    {isEditing ? 'Save' : 'Edit Column'}
+                    {isEditing ? 'Save' : 'Edit'}
                   </Button>
 
-                  {isEditing && (
+                  {isEditing && isEditButtonVisible &&  (
                     <Button
                       variant="outlined"
                       startIcon={<AppRegistrationOutlinedIcon />}
                       sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
-                    // onClick={handleCancelEdit}
+                      onClick={handleCancelEdit}
                     >
                       Cancel
                     </Button>
                   )}
-{receivedStatus === 2 && status !== 'Success' && <><Button variant="outlined"
-                    startIcon={<GradingIcon />}
-                    onClick={handleUserValidation}
-                    sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
-                  >
-                    User Validation
-                  </Button><Button
-                    variant="outlined"
-                    sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
-                    startIcon={<AddToPhotosIcon />}
-                    disabled={!userValidation}
-                    onClick={updateStatus}
-                  >
+                  {receivedStatus === 2 && status !== 'Success' &&
+                    <>
+                      <Button variant="outlined"
+                        startIcon={<HowToRegIcon />}
+                        // onClick={handleUserValidation}
+                        onClick={handleClickOpen}
+                        disabled={isEditing}
+                        sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+                      >
+                        User Validation
+                      </Button>
+                      {/* <Button
+                      variant="outlined"
+                      sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+                      startIcon={<AddToPhotosIcon />}
+                      disabled={!userValidation}
+                      onClick={updateStatus}
+                    >
                       Submit
-                    </Button></>}
-                  
+                    </Button> */}
+                    </>}
+
                 </>
               )}
 
@@ -599,6 +677,29 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
           Please select a patient from the list to access detailed information!
         </Typography>
       )}
+
+      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={validationDialogOpen}>
+        <BootstrapDialogTitle id="customized-dialog-title" className="dialog-header" onClose={handleClose}>
+          User validation
+        </BootstrapDialogTitle>
+        <DialogContent dividers sx={{ p: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Are you sure you want to move to the posting queue?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" autoFocus 
+          // onClick={updateStatus}
+          onClick={() => {
+            console.log("Yes clicked, calling updateStatus");
+            updateStatus();
+          }}
+          >
+            Yes
+          </Button>
+          <Button variant='outlined' onClick={handleClose}>No</Button>
+        </DialogActions>
+      </BootstrapDialog>
     </Box>
   );
 };

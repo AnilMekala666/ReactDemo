@@ -24,7 +24,7 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import VerifiedIcon from '@mui/icons-material/Verified';
 
 const DocumentPage = () => {
-  const { docName, fileName, docId, checkId, statusId,uId } = useParams();
+  const { docName, fileName, docId, checkId, statusId, uId } = useParams();
   const [activeTab, setActiveTab] = useState(0);
   const [fileLevelData, setFileLevelData] = useState([]);
   const [patients, setPatients] = useState([]);
@@ -37,23 +37,44 @@ const DocumentPage = () => {
   const [showFile, setShowFile] = useState(false);
   const [userValidation, setUserValidation] = useState(false);
   const [userProcess, setUserProcess] = useState(false);
-  const [status,setStatus] = useState('');
+  const [status, setStatus] = useState('');
 
 
   const location = useLocation();
   const row = location.state?.row;
   const receivedStatus = row.statusId;
-  const steps = [
+  console.log("ptientRow", row)
+
+  
+  
+  const steps = React.useMemo(() => [
     { label: 'Classification', icon: <TaskIcon />, IsStepDone: true },
     { label: 'Data Extraction', icon: <AssignmentIcon />, IsStepDone: true },
-    { label: 'AI Data Verification', icon: <CheckCircleIcon />, IsStepDone: true },
+    { label: 'iCAN Data Verification', icon: <CheckCircleIcon />, IsStepDone: true },
     {
       label: 'User validation',
       icon: <HowToRegIcon />,
-      IsStepDone: (!userValidation && userProcess) || userValidation || statusId !== '2' ? true : false
+      IsStepDone: statusId === '2' && !userValidation ? false : true
     },
-    { label: statusId !== '2' || status==='Success' ? 'Processed':'In-Posting Queue', icon: statusId !== '2' || status==='Success' ? <VerifiedIcon />:<QueueIcon/>, IsStepDone: userProcess || statusId !== '2' || status==='Success' ? true : false }
-  ];
+    {
+      // Label logic based on statusId and status
+      label: statusId === '1' 
+        ? 'Processed' 
+        : statusId === '2' 
+          ? 'In-Posting Queue' 
+          : 'Posting Queue',
+  
+      // Icon logic based on statusId and status
+      icon: statusId === '1' 
+        ? <VerifiedIcon /> 
+        : <QueueIcon />,
+  
+      // Completion logic
+      IsStepDone: (statusId === '1') || (statusId === '3') || (status === 'Success')
+    }
+  ], [status, statusId, userValidation]);
+  
+  
 
   console.log("Received row data:", row.statusId);
   const sourceUrl = `https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showLabelingpdf?id=${docId}`;
@@ -62,8 +83,7 @@ const DocumentPage = () => {
     setActiveTab(newValue);
   };
 
-  // Custom StepConnector with dotted line
-  // Custom StepConnector with conditional color for the last line
+
   const DottedConnector = styled(StepConnector)(({ theme, isLast }) => ({
     '& .MuiStepConnector-line': {
       borderColor: isLast ? '#656565' : '#0000FF',
@@ -171,6 +191,10 @@ const DocumentPage = () => {
     }
   }, []);
   const shortFileName = fileName.split('_').pop();
+  const href = docName == "EOB"
+    ? "/correspndence/documentsList/EOB"
+    : "/correspndence/documentsList/Medical-records-request";
+
 
   return (
     <>
@@ -181,9 +205,15 @@ const DocumentPage = () => {
               <Link underline="hover" color="inherit" href="/correspndence/dashboard">
                 Overview
               </Link>
-              <Link underline="hover" color="inherit" href="/correspndence/documentsList/Medical-records-request">
+
+
+              <Link underline="hover" color="inherit" href={href}>
                 List of Document
               </Link>
+
+              {/* <Link underline="hover" color="inherit" href="/correspndence/documentsList/Medical-records-request">
+                List of Document
+              </Link> */}
               <Typography sx={{ color: 'text.primary' }}>{fileName ? shortFileName : ''}</Typography>
             </Breadcrumbs>
           </Grid>
@@ -236,30 +266,30 @@ const DocumentPage = () => {
           )}
           {activeTab === 1 && docName == 'EOB' && (
             <PatientLevelData patients={patients} patientsData={patientsData} docName={docName} receivedStatus={receivedStatus} setUserValidation={setUserValidation}
-            setUserProcess={setUserProcess}
-            userValidation={userValidation}
-            userProcess={userProcess}
-            statusId={statusId}
-            status={status}
-            setStatus={setStatus}
-            uId={Number(uId)} />
+              setUserProcess={setUserProcess}
+              userValidation={userValidation}
+              userProcess={userProcess}
+              statusId={Number(statusId)}
+              status={status}
+              setStatus={setStatus}
+              uId={Number(uId)} />
           )}
 
           {activeTab === 2 && <AiInterPretation docTypes={docTypes || []} />}
 
           {activeTab === 3 && (
             <FileResponse
-            mailContent={mailContent || ''}
-            attachments={attachments || []}
-            setUserValidation={setUserValidation}
-            setUserProcess={setUserProcess}
-            userValidation={userValidation}
-            userProcess={userProcess}
-            statusId={statusId}
-            status={status}
-            setStatus={setStatus}
-            uId={Number(uId)}
-          />
+              mailContent={mailContent || ''}
+              attachments={attachments || []}
+              setUserValidation={setUserValidation}
+              setUserProcess={setUserProcess}
+              userValidation={userValidation}
+              userProcess={userProcess}
+              statusId={statusId}
+              status={status}
+              setStatus={setStatus}
+              uId={Number(uId)}
+            />
           )}
 
           <Box
@@ -293,7 +323,7 @@ const DocumentPage = () => {
             </Box> */}
 
             {/* Cancel and Save & Submit buttons */}
-            {(docName == 'Medical-records-request' && activeTab === 3) &&  <Box sx={{ display: 'flex', gap: 1 }}>
+            {(docName == 'Medical-records-request' && activeTab === 3) && <Box sx={{ display: 'flex', gap: 1 }}>
               <Button variant="outlined" sx={{ borderRadius: '8px' }}>
                 Cancel
               </Button>

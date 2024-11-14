@@ -16,7 +16,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 const ReusableDataGrid = ({ rows, columns }) => {
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 3 });
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
 
   const handlePaginationChange = (newPagination) => {
     setPaginationModel(newPagination);
@@ -24,12 +24,12 @@ const ReusableDataGrid = ({ rows, columns }) => {
 
   return (
     <StyledDataGrid
-      style={{ minHeight: '600px', maxHeight: '800px' }}
+      style={{ minHeight: '400px', maxHeight: '400px' }}
       rows={rows}
       columns={columns}
       checkboxSelection
       disableRowSelectionOnClick
-      pageSizeOptions={[3, 5, 10, 15]}
+      pageSizeOptions={[5, 10, 15]}
       pagination
       paginationModel={paginationModel}
       onPaginationModelChange={handlePaginationChange}

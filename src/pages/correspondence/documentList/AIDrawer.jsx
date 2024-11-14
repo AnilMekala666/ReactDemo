@@ -43,20 +43,36 @@ const AIDrawer = ({ isDrawerOpen, toggleDrawer, onSetAIEobTableData, setIsDrawer
             console.log("AI payload", prompt)
             console.log("AI prompt response", response)
             let processedData = response.data.map((item, index) => {
-                const { check_amount, check_number, deposit_date, document_age,
-                    letter_name, payer_name, status_name } = item;
+                const {id, check_amount, check_number, deposit_date, document_age,
+                    letter_name, payer_name, status_name, file_Date, status_id, u_id } = item;
                 const shortDocumentName = letter_name ? letter_name.split('_').pop() : '-';
 
                 return {
-                    id: `row-${index}`,
+                    id: id,
                     documentName: letter_name ? shortDocumentName : '-',
                     payerName: payer_name ? payer_name : '-',
                     chequeNumber: check_number ? check_number : '-',
                     chequeAmount: check_amount ? check_amount : '-',
                     depositDate: deposit_date ? deposit_date : '-',
                     openSince: document_age ? document_age : '-',
-                    status: status_name ? status_name : '-'
+                    status: status_name ? status_name : '-',
+                    fileDate: file_Date ?file_Date : '-',
+                    statusId:status_id ? status_id : '-',
+                    uId:u_id ? u_id :'-'
                 };
+
+                // id: id,
+                // documentName: letterName ? shortDocumentName : '-',
+                // payerName: payerName ? payerName : '-',
+                // chequeNumber: checkNumber ? checkNumber : '-',
+                // chequeAmount: checkAmount ? checkAmount : '-',
+                // depositDate: depositDate ? depositDate : '-',
+                // openSince: documentAge ? documentAge : '-',
+                // status: statusName ? statusName : '-',
+                // checkId: checkId ? checkId : '-',
+                // fileDate:fileDate?fileDate : '-',
+                // statusId:statusId?statusId : '-',
+                // uId:uId?uId:'-'
             });
             setAIEobTableData(processedData);
             onSetAIEobTableData(processedData);
