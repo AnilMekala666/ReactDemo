@@ -1,14 +1,85 @@
-import React from 'react';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Box, Button, Grid, Typography, Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 import pdfIcon from '../../../../src/assets/images/icons/pdf_icon.png';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import QueueIcon from '@mui/icons-material/Queue';
 import IconButton from '@mui/material/IconButton';
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import axios from 'axios';
+import CustomDialog from 'components/correspndence/CustomDialog';
+import {
+  ShareAltOutlined
+} from '@ant-design/icons';
 
-export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId,status,setStatus,uId }) => {
+import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
+import CloseOutlined from '@ant-design/icons/CloseOutlined';
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(3)
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1.25),
+    paddingRight: theme.spacing(2)
+  }
+}));
+
+function BootstrapDialogTitle({ children, onClose, ...other }) {
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          color="white"
+          sx={{
+            position: 'absolute',
+            right: 10,
+            top: 10
+          }}
+        >
+          <CloseOutlined sx={{ color: "white" }} />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+}
+
+export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId }) => {
   // Group attachments by document type
+  console.log("statusResponse", statusId)
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [fileLinks, setFileLinks] = useState([]);
+  const [filePreviews, setFilePreviews] = useState([]);
+  const [isEditButtonVisible, setIsEditButtonVisible] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [validationDialogOpen, setValidationDialogOpen] = useState(false)
+
+  const handleFileChange = (event) => {
+    const selectedFiles = Array.from(event.target.files);
+    setFiles(selectedFiles);
+    console.log('selected files', selectedFiles, files)
+    const previews = selectedFiles.map((file) => URL.createObjectURL(file));
+    setFilePreviews(previews);
+    console.log("preview", previews, filePreviews)
+  };
+
+  const handleUpload = () => {
+    console.log("Files uploaded:", files);
+
+  };
+
+
   const groupedAttachments = attachments.reduce((acc, attachment) => {
     const { documentType } = attachment;
     if (!acc[documentType]) {
@@ -30,12 +101,14 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
     console.log('UPDATESTATUS')
     try {
       console.log("USERINPUT");
-      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS,{id: uId});
-      console.log(response,"USERINPUT1")
-      if(response.status===200){
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS, { id: uId });
+      console.log(response, "USERINPUT1")
+      if (response.status == 200) {
         setStatus('Success')
+        setValidationDialogOpen(false)
+        setIsEditButtonVisible(false);
       }
-      else{
+      else {
         setStatus('')
       }
       //SetPatientsData(response.data);
@@ -45,48 +118,96 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
     }
   };
 
+  const handleEditToggle = () => {
+    console.log()
+    console.log("handleEditToggle click")
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+  const handleClose = () => {
+    console.log("close drawwer")
+    setValidationDialogOpen(false)
+  }
+
+
   return (
     <Box sx={{ padding: 2 }}>
-      {statusId === '2' && status !== 'Success'  && (
+
+      {statusId === '2' && status !== 'Success' && (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-          <IconButton
+          {/* <Button
+            variant="outlined"
+            // startIcon={<UploadIcon />}
+            sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+            // onClick={handleCancelEdit}
+          >
+            Upload doccument
+          </Button> */}
+          <Button
+            variant="outlined"
+            startIcon={<AppRegistrationOutlinedIcon />}
+            sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+            // onClick={handleEditToggle}
+            onClick={isEditing ? () => updatePatientLevelData() : handleEditToggle}
+          >
+            {isEditing ? 'Save' : 'Edit'}
+          </Button>
+
+          {isEditing && isEditButtonVisible && (
+            <Button
+              variant="outlined"
+              startIcon={<AppRegistrationOutlinedIcon />}
+              sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+              onClick={handleCancelEdit}
+            >
+              Cancel
+            </Button>
+          )}
+          <Button variant='outlined'  sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }} onClick={() => setDialogOpen(true)}>Upload document</Button>
+          <Button
+            variant='outlined'  sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+            // sx={{
+            //   backgroundColor: '#6ac5fe',
+            //   color: 'white',
+            //   '&:hover': { backgroundColor: '#6ac5fe', color: 'white' },
+            //   padding: '10px 16px',
+            //   width: '11.5rem',
+            //   height: '2.5rem',
+            //   border: '1px solid #6ac5fe',
+            //   borderRadius: '.5rem'
+            // }}
+            onClick={() => {
+              setUserValidation(true);
+              setUserProcess(false);
+              setValidationDialogOpen(true)
+            }}
+            disabled={isEditing}
+          >
+            <HowToRegIcon /> User Validation
+          </Button>
+
+          {/* <IconButton
             sx={{
-              backgroundColor: '#6ac5fe',
+              backgroundColor: !userValidation ? '#656565' : '#6ac5fe',
               color: 'white',
-              '&:hover': { backgroundColor: '#6ac5fe', color: 'white' },
+              '&:hover': {
+                backgroundColor: !userValidation ? '#656565' : '#6ac5fe',
+                color: 'white',
+              },
               padding: '10px 16px',
               width: '11.5rem',
               height: '2.5rem',
               border: '1px solid #6ac5fe',
-              borderRadius: '.5rem'
+              borderRadius: '.5rem',
             }}
-            onClick={() => {
-              setUserValidation(true);
-              setUserProcess(false);
-            }}
+            disabled={!userValidation}
+            onClick={updateStatus}  // Direct reference
           >
-            <HowToRegIcon /> User Validation
-          </IconButton>
-
-          <IconButton
-  sx={{
-    backgroundColor: !userValidation ? '#656565' : '#6ac5fe',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: !userValidation ? '#656565' : '#6ac5fe',
-      color: 'white',
-    },
-    padding: '10px 16px',
-    width: '11.5rem',
-    height: '2.5rem',
-    border: '1px solid #6ac5fe',
-    borderRadius: '.5rem',
-  }}
-  disabled={!userValidation}
-  onClick={updateStatus}  // Direct reference
->
-  <QueueIcon /> Submit
-</IconButton>
+            <QueueIcon /> Submit
+          </IconButton> */}
         </Box>
       )}
 
@@ -128,6 +249,68 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
           </Grid>
         ))}
       </Grid>
+
+
+      <CustomDialog
+        open={dialogOpen}
+        onClose={() => {
+          setDialogOpen(false);
+          setFiles([])
+        }}
+        title="Upload Document"
+        maxWidth="md"
+      >
+        <Box sx={{ mb: 2 }}>
+          <Grid container spacing={2} alignItems="center" sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
+              <input type="file" multiple onChange={handleFileChange} />
+            </Grid>
+
+
+            {/* Run Prediction Button */}
+            <Grid item xs={12} sm={4}>
+              <Button
+                variant="contained"
+                // onClick={handleRunPrediction}
+                sx={{ mt: 2, width: '100%' }}
+                startIcon={<ShareAltOutlined />}
+              // onClick={handleUpload}
+              >
+                upload file
+              </Button>
+            </Grid>
+
+
+          </Grid>
+        </Box>
+
+
+      </CustomDialog>
+
+      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={validationDialogOpen}>
+        <BootstrapDialogTitle id="customized-dialog-title" className="dialog-header" onClose={handleClose}>
+          User validation
+        </BootstrapDialogTitle>
+        <DialogContent dividers sx={{ p: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Are you sure you want to move to the posting queue?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" autoFocus
+            // onClick={updateStatus}
+            onClick={() => {
+              console.log("Yes clicked, calling updateStatus");
+              updateStatus();
+            }}
+          >
+            Yes
+          </Button>
+          <Button variant='outlined' onClick={handleClose}>No</Button>
+        </DialogActions>
+      </BootstrapDialog>
     </Box>
   );
 };

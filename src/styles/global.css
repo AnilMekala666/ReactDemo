@@ -378,4 +378,14 @@
       opacity: 0;
     }
   }
+
+  .dialog-header {
+    background-color: #1677ff; 
+    color: white; 
+    padding: 16px;
+    font-weight: bold; 
+  }
+  .dialog-close-icon {
+    color: white !important;
+  }
   

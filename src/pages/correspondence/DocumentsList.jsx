@@ -148,11 +148,21 @@ const DocumentsList = () => {
           <Box display="flex" alignItems="center">
             <img src={pdfIcon} alt="pdf icon" style={{ width: '30px', height: '30px', marginRight: '20px' }} />
             <Box
-              onClick={() => (
+              // onClick={() => (
+              //   navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}/${params.row.uId}`, {
+              //     state: { row: params.row },
+                  
+              //   })
+                
+              // )}
+              onClick={() => {
+                // Console log before navigating to check the row data
+                console.log('Navigating with data:', params.row);
+                
                 navigate(`/correspndence/documentsDetails/${docName}/${params.row.documentName}/${params.row.id}/${params.row.checkId}/${params.row.statusId}/${params.row.uId}`, {
                   state: { row: params.row },
-                })
-              )}
+                });
+              }}
               sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}
             >
               <Typography variant="body2" sx={{ fontSize: '14px', color: "#1677ff" }}>
@@ -219,13 +229,14 @@ const DocumentsList = () => {
       filterable: true,
       align: 'left',
       renderCell: (params) => (
+        
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
           <div
             style={{
               width: '8px',
               height: '8px',
               borderRadius: '100%',
-              backgroundColor: params.value === 'Need attention' ? 'orange' : 'red',
+              backgroundColor: params.value === 'Ready to Process' ? 'orange' : 'red',
               marginRight: '6px',
               textAlign: 'left'
             }}
@@ -234,6 +245,40 @@ const DocumentsList = () => {
         </div>
       )
     }
+    // {
+    //   field: 'status',
+    //   headerName: 'Status',
+    //   width: 160,
+    //   filterable: true,
+    //   align: 'left',
+    //   renderCell: (params) => {
+    //     // Debugging log to check the value of statusId
+    //     console.log("Status ID:", params.row.statusId);
+    
+    //     // Set background color based on statusId
+    //     const backgroundColor = 
+    //       params.row.statusId == 1 ? 'green' :       
+    //       params.row.statusId == 2 ? 'orange' :       
+    //       params.row.statusId == 3 ? 'red' :          
+    //       'gray'; 
+    
+    //     return (
+    //       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+    //         <div
+    //           style={{
+    //             width: '8px',
+    //             height: '8px',
+    //             borderRadius: '100%',
+    //             backgroundColor: backgroundColor,
+    //             marginRight: '6px',
+    //           }}
+    //         ></div>
+    //         <p style={{ margin: '0px', padding: '0px' }}>{params.value || '-'}</p>
+    //       </div>
+    //     );
+    //   }
+    // }
+    
   ];
 
   const MedicalRequestColumns = [
