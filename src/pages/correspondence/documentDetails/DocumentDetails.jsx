@@ -15,7 +15,7 @@ import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import axios from 'axios';
 import { PatientLevelData } from './PatientLevelData';
 import { MedicalReqPetientLevel } from './MedicalReqPetientLevel';
-import { AiInterPretation } from './AiInterPretation';
+import { AiInterPretation } from './AiInterpretation';
 import { FileResponse } from './FileResponse';
 import { useParams } from 'react-router';
 import { FilePreviewDialog } from './FilePreviewDialog';
