@@ -421,7 +421,7 @@ export default function ReusableTable({data, columns}) {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid spacing={2}>
    
         <Grid item xs={12}>
           <Grid item xs={12}>

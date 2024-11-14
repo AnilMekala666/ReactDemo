@@ -418,7 +418,7 @@ export default function ReusableExpandableTableColumn({data, columns, expandedCo
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid spacing={2}>
    
         <Grid item xs={12}>
           <Grid item xs={12}>

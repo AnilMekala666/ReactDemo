@@ -31,7 +31,7 @@ const widget = {
       id: 'data',
       // title: <FormattedMessage id="data" />,
       type: 'item',
-      url: '/cognito/mindpath',
+      url: '/patient/payment',
       icon: icons.DatabaseOutlined
     },
     {

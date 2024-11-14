@@ -19,7 +19,7 @@ const icons = { dashboard: DashboardOutlined, components: GoldOutlined, loading:
 
 const loadingMenu = {
   id: 'group-dashboard-loading',
-  title: <FormattedMessage id="dashboard" />,
+  title: <FormattedMessage id=" " />,
   type: 'group',
   icon: icons.loading
   // children: [
@@ -95,7 +95,7 @@ export function MenuFromAPI() {
   if (!childrenList?.length) return defaultMenu;
 
   let menuList = fillItem(menu, childrenList);
-  return menuList;
+  return [];
 }
 
 function fillItem(item, children) {
