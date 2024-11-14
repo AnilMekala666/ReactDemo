@@ -112,6 +112,7 @@ function DepositData() {
   const [fileMessage, setFileMessage] = useState("File Available to Process");
   const [transactionsCount, setTransactionsCount] = useState([]);
   const [openAlert, setOpenAlert] = useState(false);
+  const [disableBtn, setDisableBtn] = useState(false);
 
   useEffect(() => {
     fetchInitial();
@@ -141,11 +142,18 @@ function DepositData() {
   }, [])
 
   const fetchInitial = async () => {
-    console.log("Fetch Called");
     const data = await fetch(`${BASE_PATH}/getLastWeekFilesData/1`);
     // console.log("Data API", await data.json());
     const staticData = await data.json();
     setParsedData(staticData);
+    // staticData.map((s, i) => {
+    //   const today = new Date();
+    //   var inputDate = new Date(s["file_process_date"]);
+    //   if(inputDate.setHours(0,0,0,0) == todaysDate.setHours(0,0,0,0)) {
+    //     setFileMessage("No file available to process");
+    //     setDisableBtn(true);
+    //   }
+    // })
     const headerKeys = Object.keys(Object.assign({}, ...staticData));
     let columns = [];
     columns = headerKeys.map((header, index) => {

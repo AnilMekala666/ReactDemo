@@ -119,7 +119,7 @@ function PatientPaymentData() {
   const [fileMessage, setFileMessage] = useState("File Available to Process");
   const [transactionsCount, setTransactionsCount] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
-  const [openAlert, setOpenAlert] = useState(false);
+  const [openAlert, setOpenAlert] = useState(true);
 
   useEffect(()=>{
     fetchInitial();
@@ -222,7 +222,7 @@ function PatientPaymentData() {
         const worksheet = workbook.Sheets[firstSheetName];
 
         // Convert the sheet to JSON format
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, {raw: false});
 
         setFileContent(jsonData); // Save parsed data for displaying
         jsonData.map(data=>data["Amount"] = currencyFormat(parseFloat(data['Amount']) || 0));
