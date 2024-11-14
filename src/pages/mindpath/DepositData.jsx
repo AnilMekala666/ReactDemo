@@ -307,7 +307,7 @@ function DepositData() {
           const year = `20${transactionDate.slice(0, 2)}`; // '24' -> '2024'
           const month = transactionDate.slice(2, 4); // '03' -> March
           const day = transactionDate.slice(4, 6); // '28' -> 28th day
-          formattedDate = `${month}/${day}/${year}`; // Final format: MM/DD/YYYY
+          formattedDate = moment().format("MM/DD/YYYY"); // Final format: MM/DD/YYYY
         }
       }
       

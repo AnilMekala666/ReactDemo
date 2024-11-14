@@ -25,6 +25,7 @@ import { useSpring, animated } from 'react-spring';
 import MainCard from 'components/MainCard';
 import Loader from 'components/Loader';
 import { currencyFormat } from 'components/mindpath';
+import moment from 'moment';
 
 
 // const reconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue';
@@ -204,13 +205,22 @@ const Reconcile = () => {
                     }
                     if (header.toLowerCase().includes("amount")) {
                         if (values[index]) {
-                            object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = currencyFormat(parseFloat(values[index].replaceAll("\"", "").replaceAll(" ", "") || 0));
+                            if(!Number.isNaN(parseFloat(values[index] || 0)))
+                                object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = currencyFormat(parseFloat(values[index] || 0));
+                            else
+                                object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index].replaceAll("\"", "");
                             return object;
                         }
                     }
                     else if (header.toLowerCase().includes("variance")) {
                         if (values[index]) {
                             object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index].replaceAll("\"", "").replaceAll(" ", "").replaceAll(",", ",\n");
+                            return object;
+                        }
+                    }
+                    else if (header.toLowerCase().includes("deposit date")) {
+                        if (values[index]) {
+                            object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = moment().format("MM/DD/YYYY");
                             return object;
                         }
                     }

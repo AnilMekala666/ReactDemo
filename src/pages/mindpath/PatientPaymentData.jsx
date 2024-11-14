@@ -226,6 +226,7 @@ function PatientPaymentData() {
 
         setFileContent(jsonData); // Save parsed data for displaying
         jsonData.map(data=>data["Amount"] = currencyFormat(parseFloat(data['Amount']) || 0));
+        jsonData.map(data=>data["Payment Date"] = moment().format("MM/DD/YYYY"));
         setParsedData(jsonData); // Save parsed data for the dialog
         const headerKeys = Object.keys(Object.assign({}, ...jsonData));
         let columns = [];

@@ -25,6 +25,7 @@ import { useSpring, animated } from 'react-spring';
 import MainCard from 'components/MainCard';
 import Loader from 'components/Loader';
 import { currencyFormat } from 'components/mindpath';
+import moment from 'moment';
 
 
 const deposit_payment_queue = new URL('src/assets/data/newData/deposit_payment_queue.csv', import.meta.url).href;
@@ -181,9 +182,15 @@ const cashPosting = () => {
                     }
                     if(header.toLowerCase().includes("amount")) {
                         if (values[index]) {
-                            object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = currencyFormat(parseFloat(values[index] || 0));
+                            if(!Number.isNaN(parseFloat(values[index] || 0)))
+                                object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = currencyFormat(parseFloat(values[index] || 0));
+                            else
+                                object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = values[index].replaceAll("\"", "");
                             return object;
                         }
+                    }
+                    else if(header.toLowerCase().includes("deposit date")) {
+                        object[header.replace(" ", "_").replace("\r", "").toLowerCase()] = moment().format("MM/DD/YYYY");
                     }
                     else {
                         if (values[index]) {
@@ -191,6 +198,7 @@ const cashPosting = () => {
                             return object;
                         }
                     }
+
                 }
                 return object;
             }, {});
