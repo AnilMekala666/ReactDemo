@@ -78,7 +78,7 @@ const DashBoard = () => {
       const payload = { fileNames: fileNames };
       console.log(payload);
       console.log(payload)
-      const response = await axios.post('http://10.0.1.123:8181/Correspondence/fetchQAFileData', payload)
+      const response = await axios.post('https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/fetchQAFileData', payload)
       console.log(response)
       const fileData = response.data.map((item) => ({
         fileName: item.filename || "Unknown File",

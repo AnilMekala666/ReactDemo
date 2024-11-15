@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 
-export const BASE_URL = 'http://10.0.1.216:8181/CorrespondenceServices';
+export const BASE_URL = 'https://ican-manage-mindpath-tst.cognitivehealthit.com/CashManagement';
 
-export const CORRESPONDENCE_BASE_URL = 'http://10.0.1.123:8181/Correspondence';
+export const CORRESPONDENCE_BASE_URL = 'https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence';
 
-// export const PDF_BASE_URL = 'http://localhost:8182/CorrespondenceServices'; // New base URL for PDF
+// export const PDF_BASE_URL = 'https://localhost:8182/CorrespondenceServices'; // New base URL for PDF
 
 
 export const DEMO_URL = 'https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence';

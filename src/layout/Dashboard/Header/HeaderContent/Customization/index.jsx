@@ -73,7 +73,7 @@ export default function Customization() {
   const handleClearData = async () => {
     console.log("click")
     try {
-      const response = await axios.get('http://10.0.1.123:8181/Correspondence/refresh');
+      const response = await axios.get('https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/refresh');
       console.log(response)
 
       // if (!response.ok) {
