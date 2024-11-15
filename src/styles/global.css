@@ -82,6 +82,7 @@
   }
   .doc-tab button {
     font-size: 16px;
+    text-transform: none;
   }
   .doc-tab .css-16eqya9-MuiButtonBase-root-MuiTab-root.Mui-selected {
     color: #3a63d2;

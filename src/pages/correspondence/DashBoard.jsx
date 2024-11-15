@@ -61,10 +61,20 @@ const DashBoard = () => {
   const [overviewTableData, setOverviewTableData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [selectedFiles] = useState(null);
+  const [fileNames, setFileNames] = useState([]);
+
+
+  // const handleFileChange = (event) => {
+  //   const selectedFiles = Array.from(event.target.files);
+  //   setFiles(selectedFiles);
+  // };
+
   const handleFileChange = (event) => {
-    const selectedFiles = Array.from(event.target.files);
-    setFiles(selectedFiles);
+    const files = Array.from(event.target.files);
+    setFileNames(files.map((file) => file.name));
   };
+
 
   const handleDropdownChange = (e) => {
     SetSelectModalDropdown(e.target.value)
@@ -256,6 +266,7 @@ const DashBoard = () => {
     console.log("clcik")
   }
 
+  
 
   return (
     <>
@@ -397,14 +408,49 @@ const DashBoard = () => {
           setFiles([])
         }}
         title="Upload Document"
-        maxWidth="md"
+        maxWidth="sm"
       >
         <Box sx={{ mb: 2 }}>
-          <Grid container spacing={2} alignItems="center" sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+          <Grid container spacing={2} alignItems="top" sx={{ flexDirection: { xs: 'column', sm: 'row' }, paddingTop:'0px' }}>
             {/* Multi-File Choose File */}
-            <Grid item xs={12} sm={4}>
+            {/* <Grid item xs={12} sm={4}>
               <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
               <input type="file" multiple onChange={handleFileChange} />
+            </Grid> */}
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
+
+
+              {/* Custom button */}
+              <div
+                onClick={() => document.getElementById("customFileInput").click()}
+                style={{
+                  display: "inline-block",
+                  padding: "9px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  color: "#1677ff",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  textAlign: "center",
+                  width: "100%",
+                  marginTop: "0px",
+                }}
+              >
+                Upload Files
+              </div>
+              <input
+                id="customFileInput"
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                style={{ display: "none" }} // Hides the default input
+              />
+              <div style={{ marginTop: "8px", color: "#1677ff" }}>
+                {fileNames.length > 0 ? `${fileNames.length} files selected` : "No files selected"}
+              </div>
+
+
             </Grid>
 
             {/* Dropdown */}
@@ -426,7 +472,7 @@ const DashBoard = () => {
               <Button
                 variant="contained"
                 onClick={handleRunPrediction}
-                sx={{ mt: 2, width: '100%' }}
+                sx={{ mt: 3, width: '100%' }}
                 startIcon={<ShareAltOutlined />}
               >
                 Run Prediction
