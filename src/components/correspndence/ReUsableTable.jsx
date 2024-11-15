@@ -147,7 +147,7 @@ import TableRow from '@mui/material/TableRow';
 
 const ReUsableTable = ({ columns, rows, clickableColumns = [], onClickHandler }) => {
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -231,7 +231,7 @@ const ReUsableTable = ({ columns, rows, clickableColumns = [], onClickHandler })
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 100]}
+                rowsPerPageOptions={[ 10, 25, 100]}
                 component="div"
                 count={rows.length}
                 rowsPerPage={rowsPerPage}
