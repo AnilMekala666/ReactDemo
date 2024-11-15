@@ -16,6 +16,7 @@ import CustomDialog from 'components/correspndence/CustomDialog';
 import {
   ShareAltOutlined
 } from '@ant-design/icons';
+
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import { openSnackbar } from 'api/snackbar';
@@ -57,7 +58,8 @@ function BootstrapDialogTitle({ children, onClose, ...other }) {
 
 export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId ,fileId,customAttachments,setCustomAttachments}) => {
   // Group attachments by document type
-
+  console.log("statusResponse", statusId)
+  const [editorContent, setEditorContent] = useState(mailContent || '');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -214,23 +216,42 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
     console.log("close drawwer")
     setValidationDialogOpen(false)
   }
-const updatePatientLevelData = ()=>{
-  console.log("close drawwer")
-}
+  
+const updatePatientLevelData = async () => {
+  try {
+   setLoader(true);
+    const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_MEDICAL_REQUEST_RESPONSE_DATA, {
+      "confScoreId" :Number(fileId),
+      "summary":[editorContent]
+  },);
+    if(response.status==200){
+     openSnackbar({
+       open: true,
+       message: 'Updated Successfully',
+       variant: 'alert',
+       close: true,
+     });
+     setLoader(false);
+    }
+  } catch (error) {
+    setLoader(false);
+    console.error('Error updatign the content', error);
+  }
+};
 
   return (
     <Box sx={{ padding: 2 }}>
 
       {statusId === '2' && status !== 'Success' && (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2,marginBottom:4  }}>
-              <Button
+              {/* <Button
             variant='outlined'  sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
             onClick={() => {
               console.log('Edited Content:', editorContent);
             }}
           >
             <HowToRegIcon /> OK
-          </Button>
+          </Button> */}
           {/* <Button
             variant="outlined"
             // startIcon={<UploadIcon />}
@@ -246,7 +267,7 @@ const updatePatientLevelData = ()=>{
             // onClick={handleEditToggle}
             onClick={isEditing ? () => updatePatientLevelData() : handleEditToggle}
           >
-            {isEditing ? 'Save' : 'Edit'}
+            {isEditing ? 'Save' : 'Edit Response'}
           </Button>
 
           {isEditing && isEditButtonVisible && (
