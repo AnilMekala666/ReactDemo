@@ -53,7 +53,7 @@ const DocumentPage = () => {
     { label: 'Data Extraction', icon: <AssignmentIcon />, IsStepDone: true },
     { label: 'iCAN Data Verification', icon: <CheckCircleIcon />, IsStepDone: true },
     {
-      label: 'User validation',
+      label: 'Submit',
       icon: <HowToRegIcon />,
       IsStepDone: statusId === '2' && !userValidation ? false : true
     },

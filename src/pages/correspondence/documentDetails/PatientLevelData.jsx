@@ -527,7 +527,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
                         disabled={isEditing}
                         sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
                       >
-                        User Validation
+                    Submit
                       </Button>
                       {/* <Button
                       variant="outlined"
@@ -691,7 +691,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
 
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={validationDialogOpen}>
         <BootstrapDialogTitle id="customized-dialog-title" className="dialog-header" onClose={handleClose}>
-          User validation
+          Submit
         </BootstrapDialogTitle>
         <DialogContent dividers sx={{ p: 3 }}>
           <Typography variant="h6" gutterBottom>

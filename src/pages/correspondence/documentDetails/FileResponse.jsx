@@ -307,7 +307,7 @@ const updatePatientLevelData = async () => {
             }}
             disabled={isEditing}
           >
-            <HowToRegIcon /> User Validation
+            <HowToRegIcon /> Submit
           </Button>
 
           {/* <IconButton
@@ -406,7 +406,7 @@ const updatePatientLevelData = async () => {
 
 
               {/* Custom button */}
-              <div
+              {/* <div
                 onClick={() => document.getElementById("customFileInput").click()}
                 style={{
                   display: "inline-block",
@@ -422,7 +422,26 @@ const updatePatientLevelData = async () => {
                 }}
               >
                 Upload Files
-              </div>
+              </div> */}
+              <button
+    onClick={() => document.getElementById("customFileInput").click()}
+    style={{
+        display: "inline-block",
+        padding: "9px",
+        border: "1px solid #ddd",
+        borderRadius: "4px",
+        color: "#1677ff",
+        cursor: "pointer",
+        fontSize: "14px",
+        textAlign: "center",
+        width: "100%",
+        marginTop: "0px",
+        background: "none", // Optional: Remove default button background
+        outline: "none", // Optional: Remove default button outline
+    }}
+>
+    Upload Files
+</button>
               <input
                 id="customFileInput"
                 type="file"
