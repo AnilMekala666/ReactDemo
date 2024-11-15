@@ -70,12 +70,15 @@ const DashBoard = () => {
   //   setFiles(selectedFiles);
   // };
 
+  // const handleFileChange = (event) => {
+  //   const files = Array.from(event.target.files);
+  //   setFileNames(files.map((file) => file.name));
+  // };
+
   const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    setFileNames(files.map((file) => file.name));
+    const selectedFiles = Array.from(event.target.files);
+    setFiles(selectedFiles);
   };
-
-
   const handleDropdownChange = (e) => {
     SetSelectModalDropdown(e.target.value)
   }
@@ -413,15 +416,13 @@ const DashBoard = () => {
         <Box sx={{ mb: 2 }}>
           <Grid container spacing={2} alignItems="top" sx={{ flexDirection: { xs: 'column', sm: 'row' }, paddingTop:'0px' }}>
             {/* Multi-File Choose File */}
-            {/* <Grid item xs={12} sm={4}>
-              <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
-              <input type="file" multiple onChange={handleFileChange} />
-            </Grid> */}
             <Grid item xs={12} sm={4}>
               <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
+              <input type="file" multiple onChange={handleFileChange} />
+            </Grid>
+            {/* <Grid item xs={12} sm={4}>
+              <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
 
-
-              {/* Custom button */}
               <div
                 onClick={() => document.getElementById("customFileInput").click()}
                 style={{
@@ -451,7 +452,7 @@ const DashBoard = () => {
               </div>
 
 
-            </Grid>
+            </Grid> */}
 
             {/* Dropdown */}
             <Grid item xs={12} sm={4}>
