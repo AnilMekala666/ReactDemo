@@ -256,7 +256,7 @@ const DocumentPage = () => {
           <Tabs className="doc-tab" value={activeTab} onChange={handleTabChange} textColor="primary" indicatorColor="primary">
             <Tab label="File-level MetaData" />
             <Tab label="Patient-Level Data" />
-            {docName == 'Medical-records-request' && <Tab label="AI Interpretation" />}
+            {docName == 'Medical-records-request' && <Tab label="iCAN Interpretation" />}
             {docName == 'Medical-records-request' && <Tab label="Response" />}
           </Tabs>
 

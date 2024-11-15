@@ -71,6 +71,8 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
   const [validationDialogOpen, setValidationDialogOpen] = useState(false)
   const [customFiles,setCustomFiles] = useState([]);
 
+  const [fileNames, setFileNames] = useState([]);
+
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
     setFiles(selectedFiles);
@@ -344,8 +346,9 @@ const updatePatientLevelData = async () => {
                         borderRadius: 4,
                         padding: 2,
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                        marginBottom: 2,
-                        cursor: 'pointer'
+                        marginBottom: 0,
+                        cursor: 'pointer',
+                        height:'60px'
                       }}
                       onClick={() => handleDownload(documentType)}
                     >
@@ -364,7 +367,7 @@ const updatePatientLevelData = async () => {
         ))}
       </Grid>
 
-      <Box sx={{ fontWeight: 700, marginBottom: 4 }}>Custom Documents:</Box>
+      <Box sx={{ fontWeight: 700, marginBottom: 4, marginTop:3 }}>Custom Documents:</Box>
       <Grid container spacing={4}>
       <Grid item xs={12} sm={6} md={3}>
         <Box>
@@ -384,19 +387,54 @@ const updatePatientLevelData = async () => {
           setFiles([])
         }}
         title="Upload Document"
-        maxWidth="md"
+       
       >
         <Box sx={{ mb: 2 }}>
           <Grid container spacing={2} alignItems="center" sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
 
-            <Grid item xs={12} sm={4}>
+            {/* <Grid item xs={12} sm={4}>
               <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
               <input type="file" multiple onChange={handleFileChange} />
+            </Grid> */}
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
+
+
+              {/* Custom button */}
+              <div
+                onClick={() => document.getElementById("customFileInput").click()}
+                style={{
+                  display: "inline-block",
+                  padding: "9px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  color: "#1677ff",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  textAlign: "center",
+                  width: "100%",
+                  marginTop: "0px",
+                }}
+              >
+                Upload Files
+              </div>
+              <input
+                id="customFileInput"
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                style={{ display: "none" }} // Hides the default input
+              />
+              <div style={{ marginTop: "8px", color: "#1677ff" }}>
+                {fileNames.length > 0 ? `${fileNames.length} files selected` : "No files selected"}
+              </div>
+
+
             </Grid>
 
 
             {/* Run Prediction Button */}
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <Button
                 disabled={files.length == 0}
                 variant="contained"
