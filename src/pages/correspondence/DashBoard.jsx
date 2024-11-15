@@ -140,8 +140,27 @@ const DashBoard = () => {
   }
 
 
+  // const handleClick = (columnId, rowData) => {
+  //   console.log(`Clicked on column: ${columnId}, data:`, rowData)
+  //   navigate(`/correspndence/documentsList/${toUrlFormat(rowData.name)}`);
+  // };
+
+  // const handleClick = (columnId, rowData) => {
+  //   if (rowData.name === 'OVER PAYMENT') {
+  //     console.log("Document is not clickable due to OVER PAYMENT status.");
+  //     return; // Prevent navigation if the prediction is OVER_Payment
+  //   }
+  //   console.log(`Clicked on column: ${columnId}, data:`, rowData);
+  //   navigate(`/correspndence/documentsList/${toUrlFormat(rowData.name)}`);
+  // };
+
+
   const handleClick = (columnId, rowData) => {
-    console.log(`Clicked on column: ${columnId}, data:`, rowData)
+    if (rowData.name !== 'EOB' && rowData.name !== 'Medical records request') {
+      console.log("Document is not clickable due to prediction status.");
+      return; // Prevent navigation if the prediction is not EOB or MEDICAL RECORDS REQUEST
+    }
+    console.log(`Clicked on column: ${columnId}, data:`, rowData);
     navigate(`/correspndence/documentsList/${toUrlFormat(rowData.name)}`);
   };
 
@@ -351,9 +370,17 @@ const DashBoard = () => {
                 rows={filteredData}
                 clickableColumns={['name']}
                 onClickHandler={handleClick}
-              // onClickHandler={(row) => handleClick(row)}
               />
-            </Grid>
+              {/* <ReUsableTable
+  columns={columns}
+  rows={filteredData.map(row => ({
+    ...row,
+    isClickable: row.name !== 'OVER_PAYMENT' // Add a flag to indicate if the row is clickable
+  }))} 
+  clickableColumns={['name']}
+  onClickHandler={(row) => row.isClickable ? handleClick('name', row) : null} // Use the flag to determine if the click should be handled
+/> */}
+          </Grid>
           </Grid>
 
 

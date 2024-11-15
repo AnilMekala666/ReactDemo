@@ -191,7 +191,7 @@ const DocumentsList = () => {
     {
       field: 'depositDate',
       headerName: 'Deposit Date',
-      width: 150,
+      width: 110,
       //type: 'date',
       sortable: true,
       valueFormatter: (params) => `${params ? params : '-'}`
@@ -199,7 +199,7 @@ const DocumentsList = () => {
     {
       field: 'fileDate',
       headerName: 'File Date',
-      width: 150,
+      width: 130,
       //type: 'date',
       sortable: true,
       valueFormatter: (params) => `${params ? params : '-'}`
@@ -249,7 +249,7 @@ const DocumentsList = () => {
     {
       field: 'status',
       headerName: 'Status',
-      width: 160,
+      width: 180,
       filterable: true,
       align: 'left',
       renderCell: (params) => {

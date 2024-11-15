@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable prettier/prettier */
 // /* eslint-disable prettier/prettier */
 // import React from 'react';
 // import Paper from '@mui/material/Paper';
@@ -184,19 +186,35 @@ const ReUsableTable = ({ columns, rows, clickableColumns = [], onClickHandler })
                                                 const value = row[column.id];
                                                 const isClickable = clickableColumns.includes(column.id);
                                                 const isDocumentNameColumn = column.id === 'name';
+
+                                                // Determine if the cell should be clickable based on the document name
+                                                const shouldBeClickable = isClickable && 
+                                                    (row.name === 'EOB' || row.name === 'Medical records request');
                                                 return (
+                                                    // <TableCell
+                                                    //     key={column.id}
+                                                    //     align={column.align}
+                                                    //     onClick={isClickable ? () => onClickHandler(column.id, row) : null}
+                                                    //     style={{
+                                                    //         cursor: isClickable ? 'pointer' : 'default',
+                                                    //         color: isClickable ? '#1677ff' : '',
+                                                    //         fontWeight: isDocumentNameColumn ? 'bold' : 'normal',
+                                                    //     }}
+                                                    // >
+                                                    //     {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                    // </TableCell>
                                                     <TableCell
-                                                        key={column.id}
-                                                        align={column.align}
-                                                        onClick={isClickable ? () => onClickHandler(column.id, row) : null}
-                                                        style={{
-                                                            cursor: isClickable ? 'pointer' : 'default',
-                                                            color: isClickable ? '#1677ff' : '',
-                                                            fontWeight: isDocumentNameColumn ? 'bold' : 'normal',
-                                                        }}
-                                                    >
-                                                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                    </TableCell>
+                                                    key={column.id}
+                                                    align={column.align}
+                                                    onClick={shouldBeClickable ? () => onClickHandler(column.id, row) : null}
+                                                    style={{
+                                                        cursor: shouldBeClickable ? 'pointer' : 'default',
+                                                        color: shouldBeClickable ? '#1677ff' : 'black', // Set color to black for non-clickable
+                                                        fontWeight: isDocumentNameColumn ? 'bold' : 'normal',
+                                                    }}
+                                                >
+                                                    {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                </TableCell>
                                                 );
                                             })}
                                         </TableRow>
