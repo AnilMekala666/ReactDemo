@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import ReusableDataGrid from 'components/correspndence/ReusableDataGrid';
@@ -222,62 +223,62 @@ const DocumentsList = () => {
     },
 
 
-    {
-      field: 'status',
-      headerName: 'Status',
-      width: 160,
-      filterable: true,
-      align: 'left',
-      renderCell: (params) => (
-        
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-          <div
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '100%',
-              backgroundColor: params.value === 'Ready to Process' ? 'orange' : 'red',
-              marginRight: '6px',
-              textAlign: 'left'
-            }}
-          ></div>
-          <p style={{ margin: '0px', padding: '0px' }}>{params.value ? params.value : '-'}</p>
-        </div>
-      )
-    }
     // {
     //   field: 'status',
     //   headerName: 'Status',
     //   width: 160,
     //   filterable: true,
     //   align: 'left',
-    //   renderCell: (params) => {
-    //     // Debugging log to check the value of statusId
-    //     console.log("Status ID:", params.row.statusId);
-    
-    //     // Set background color based on statusId
-    //     const backgroundColor = 
-    //       params.row.statusId == 1 ? 'green' :       
-    //       params.row.statusId == 2 ? 'orange' :       
-    //       params.row.statusId == 3 ? 'red' :          
-    //       'gray'; 
-    
-    //     return (
-    //       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-    //         <div
-    //           style={{
-    //             width: '8px',
-    //             height: '8px',
-    //             borderRadius: '100%',
-    //             backgroundColor: backgroundColor,
-    //             marginRight: '6px',
-    //           }}
-    //         ></div>
-    //         <p style={{ margin: '0px', padding: '0px' }}>{params.value || '-'}</p>
-    //       </div>
-    //     );
-    //   }
+    //   renderCell: (params) => (
+        
+    //     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+    //       <div
+    //         style={{
+    //           width: '8px',
+    //           height: '8px',
+    //           borderRadius: '100%',
+    //           backgroundColor: params.value === 'Ready to Process' ? 'orange' : 'red',
+    //           marginRight: '6px',
+    //           textAlign: 'left'
+    //         }}
+    //       ></div>
+    //       <p style={{ margin: '0px', padding: '0px' }}>{params.value ? params.value : '-'}</p>
+    //     </div>
+    //   )
     // }
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 160,
+      filterable: true,
+      align: 'left',
+      renderCell: (params) => {
+        // Debugging log to check the value of statusId
+        console.log("Status ID:", params.row.statusId);
+    
+        // Set background color based on statusId
+        const backgroundColor = 
+          params.row.statusId == 1 ? 'green' :       
+          params.row.statusId == 2 ? 'pink' :       
+          params.row.statusId == 3 ? 'orange' :          
+          'gray'; 
+    
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+            <div
+              style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '100%',
+                backgroundColor: backgroundColor,
+                marginRight: '6px',
+              }}
+            ></div>
+            <p style={{ margin: '0px', padding: '0px' }}>{params.value || '-'}</p>
+          </div>
+        );
+      }
+    }
     
   ];
 
@@ -340,29 +341,63 @@ const DocumentsList = () => {
         return `${params ? params : '-'} ${params > 1 ? 'days ago' : 'day ago'}`
       }
     },
-    {
-      id: 'status',
+    // {
+    //   id: 'status',
+    //   field: 'status',
+    //   headerName: 'Status',
+    //   width: 200,
+    //   filterable: true,
+    //   align: 'left',
+    //   renderCell: (params) => (
+    //     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+    //       <div
+    //         style={{
+    //           width: '8px',
+    //           height: '8px',
+    //           borderRadius: '100%',
+    //           backgroundColor: params.value === 'Need attention' ? 'orange' : 'red',
+    //           marginRight: '6px',
+    //           textAlign: 'left'
+    //         }}
+    //       ></div>
+    //       <p style={{ margin: '0px', padding: '0px' }}>{params.value ? params.value : '-'}</p>
+    //     </div>
+    //   )
+    // }
+    {id:statusId,
       field: 'status',
       headerName: 'Status',
-      width: 200,
+      width: 160,
       filterable: true,
       align: 'left',
-      renderCell: (params) => (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-          <div
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '100%',
-              backgroundColor: params.value === 'Need attention' ? 'orange' : 'red',
-              marginRight: '6px',
-              textAlign: 'left'
-            }}
-          ></div>
-          <p style={{ margin: '0px', padding: '0px' }}>{params.value ? params.value : '-'}</p>
-        </div>
-      )
+      renderCell: (params) => {
+        // Debugging log to check the value of statusId
+        console.log("Status ID:", params.row.statusId);
+    
+        // Set background color based on statusId
+        const backgroundColor = 
+          params.row.statusId == 1 ? 'green' :       
+          params.row.statusId == 2 ? 'pink' :       
+          params.row.statusId == 3 ? 'orange' :          
+          'gray'; 
+    
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+            <div
+              style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '100%',
+                backgroundColor: backgroundColor,
+                marginRight: '6px',
+              }}
+            ></div>
+            <p style={{ margin: '0px', padding: '0px' }}>{params.value || '-'}</p>
+          </div>
+        );
+      }
     }
+
   ];
   const columns = docName == "EOB" ? Eobcolumns : MedicalRequestColumns;
   const fetchData = async () => {
@@ -590,7 +625,7 @@ const DocumentsList = () => {
           : ""} */}
            {!isTableLoading ?
           <ReusableDataGrid rows={aiData} columns={columns} />
-          : <h4 sx={{textAlign:"center", alignItems:"center", display:"flex"}}>Loading...</h4>}
+          : <h4 style={{textAlign:"center", alignItems:"center", display:"flex"}}>Loading...</h4>}
 
         {console.log(aiData)}
         {console.log(rows)}

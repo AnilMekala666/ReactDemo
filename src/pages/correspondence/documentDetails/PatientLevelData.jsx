@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable prettier/prettier */
 // import React, { useEffect, useState } from 'react';
 // import {
 //   Paper,
@@ -200,6 +202,8 @@
 //     </Box>
 //   );
 // };
+
+
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -434,8 +438,9 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
       //SetPatientsData(response.data);
     } catch (err) {
       console.log(err);
-    } finally {
-    }
+    } 
+    // finally {
+    // }
   };
 
   return (
@@ -560,7 +565,10 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
       {/* Table for Patient-Level Data */}
       {patient && (
         <Box className="doc-table-cont" sx={{ padding: 2 }}>
-          <label style={{ fontWeight: '600', fontSize: '16px' }}>Patient-Level Data</label>
+          {/* <label style={{ fontWeight: '600', fontSize: '16px' }}>Patient-Level Data</label> */}
+          <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
+          Patient-Level Data
+</Typography>
           <TableContainer component={Paper} sx={{ marginTop: 2, marginBottom: 2 }}>
             <Table>
               <TableHead>
@@ -588,7 +596,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
                           onChange={(e) => handleInputChange(index, 'claimNumber', e.target.value)}
                         />
                       ) : (
-                        `  $${patient.claimNumber}`
+                        `  ${patient.claimNumber}`
                       )}
                     </TableCell>
                     <TableCell>{patient.patientLevelServiceDate}</TableCell>
@@ -629,7 +637,10 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
             </Table>
           </TableContainer>
 
-          <label style={{ fontWeight: '600', fontSize: '16px' }}>Line-Level Data</label>
+          {/* <label style={{ fontWeight: '600', fontSize: '16px' }}>Line-Level Data</label> */}
+          <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
+  Line-Level Data
+</Typography>
           <TableContainer component={Paper} sx={{ marginTop: 2 }}>
             <Table>
               <TableHead>
