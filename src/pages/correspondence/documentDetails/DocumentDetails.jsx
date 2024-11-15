@@ -328,14 +328,14 @@ const DocumentPage = () => {
             </Box> */}
 
             {/* Cancel and Save & Submit buttons */}
-            {(docName == 'Medical-records-request' && activeTab === 3) && <Box sx={{ display: 'flex', gap: 1 }}>
+            {/* {(docName == 'Medical-records-request' && activeTab === 3) && <Box sx={{ display: 'flex', gap: 1 }}>
               <Button variant="outlined" sx={{ borderRadius: '8px' }}>
                 Cancel
               </Button>
               <Button variant="contained" color="primary" sx={{ borderRadius: '8px', background: '#3A63D2' }}>
                 Save & Submit
               </Button>
-            </Box>}
+            </Box>} */}
           </Box>
         </Paper>
       </Box>

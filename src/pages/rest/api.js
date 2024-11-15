@@ -38,6 +38,8 @@ export const CORRESPONDENCE_ENDPOINTS = {
   UPDATE_PATIENT_LEVEL_DATA : `${CORRESPONDENCE_BASE_URL}/updatePatientLevelData`,
   UPDATE_STATUS:`${CORRESPONDENCE_BASE_URL}/updateStatus`,
   UPLOAD_MEDICAL_REQ_PDF:`${CORRESPONDENCE_BASE_URL}/uploadMedicalReqFiles`,
-  SHOW_MEDICAL_FILE_PDF:`${CORRESPONDENCE_BASE_URL}/showMedicalFilepdf?fileName=`
-  //http://10.0.1.123:8181/Correspondence/showMedicalFilepdf?fileName=sample.pdf
+  SHOW_MEDICAL_FILE_PDF:`${CORRESPONDENCE_BASE_URL}/showMedicalFilepdf?fileName=`,
+  UPDATE_MEDICAL_REQUEST_RESPONSE_DATA: `${CORRESPONDENCE_BASE_URL}/updateMedicalRequestResponseData`
+  //http://10.0.1.123:8181/Correspondence/updateMedicalRequestResponseData
+
 }
