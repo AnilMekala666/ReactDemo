@@ -684,7 +684,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
         </BootstrapDialogTitle>
         <DialogContent dividers sx={{ p: 3 }}>
           <Typography variant="h6" gutterBottom>
-            Are you sure you want to move to the posting queue?
+          Do you want to confirm moving this item to the posting queue?
           </Typography>
         </DialogContent>
         <DialogActions>

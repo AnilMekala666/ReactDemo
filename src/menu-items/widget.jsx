@@ -28,15 +28,15 @@ const widget = {
     //   icon: icons.IdcardOutlined
     // },
     {
-      id: 'data',
-      // title: <FormattedMessage id="data" />,
+      id: 'iCAN-RCM',
+      title: <FormattedMessage id="iCAN-RCM" />,
       type: 'item',
       url: '/patient/payment',
       icon: icons.DatabaseOutlined
     },
     {
-      id: 'Correspondance',
-      title: <FormattedMessage id="Correspondance" />,
+      id: 'iCAN-CDA',
+      title: <FormattedMessage id="iCAN-CDA" />,
       type: 'item',
       url: '/correspndence/dashboard',
       icon: icons.Mail

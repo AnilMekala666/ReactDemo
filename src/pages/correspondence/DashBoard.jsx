@@ -166,17 +166,17 @@ const DashBoard = () => {
             title: 'Total Document',
             count: data.totalDoc.toString(),
             percentage: 20.3,
-            isLoss: false,
-            invoice: '30% has been last week',
-            color: theme.palette.success
+            // isLoss: false,
+            invoice: '',
+            // color: theme.palette.success
           },
           {
             title: 'Processed Document',
             count: data.processedDoc.toString(),
             percentage: -8.73,
-            isLoss: true,
-            invoice: '80% Previous week',
-            color: theme.palette.error
+            // isLoss: true,
+            invoice: '',
+            // color: theme.palette.error
           }
         ]);
 
@@ -185,8 +185,8 @@ const DashBoard = () => {
           console.log(data.documentMetrics.metricsProcessed)
           setStatusValues({
             processed: data.documentMetrics.metricsProcessed || 0,
-            inProgress: data.documentMetrics.metricsInProgress || 0,
-            needAttention: data.documentMetrics.metricsAttention || 0
+            inProgress: data.documentMetrics.metricsReadyToProcess || 0,
+            needAttention: data.documentMetrics.metricsWaitingforUserValidation || 0
           });
           console.log(statusValues)
 
@@ -195,8 +195,8 @@ const DashBoard = () => {
               title: 'Document Metrics',
               count: data.totalDoc.toString(),
               percentage: 1.73,
-              isLoss: true,
-              invoice: '89% Previous week',
+              // isLoss: true,
+              invoice: '',
               color: theme.palette.error,
               status: 'processed',
               value: statusValues || 0,
@@ -285,9 +285,9 @@ const DashBoard = () => {
                   title={data.title}
                   count={data.count}
                   percentage={data.percentage}
-                  isLoss={data.isLoss}
+                  // isLoss={data.isLoss}
                   invoice={data.invoice}
-                  color={data.color.main}
+                  // color={data.color.main}
                 // isActive={index === activeChart}
                 />
               </Box>
@@ -300,7 +300,7 @@ const DashBoard = () => {
                   title={data.title}
                   count={data.count}
                   percentage={data.percentage}
-                  isLoss={data.isLoss}
+                  // isLoss={data.isLoss}
                   invoice={data.invoice}
                   color={data.color.main}
                   status={data.status}  // Pass the status

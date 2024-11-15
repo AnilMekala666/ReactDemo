@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import { useSearchParams } from 'react-router-dom';
 
@@ -14,7 +16,7 @@ import AuthFooter from 'components/cards/AuthFooter';
 import Logo from 'components/logo';
 import AuthCard from './AuthCard';
 import LoginProvider from './LoginProvider';
-
+import CogntiveIPA from 'assets/images/CogntiveIPA.png';
 import useAuth from 'hooks/useAuth';
 
 // assets
@@ -51,7 +53,8 @@ export default function AuthWrapper({ children }) {
       <AuthBackground />
       <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
         <Grid item xs={12} sx={{ ml: 3, mt: 3 }}>
-          <Logo />
+          {/* <Logo /> */}
+          <img src={CogntiveIPA} alt='Icon' width={200} />
         </Grid>
         <Grid item xs={12}>
           <Grid
@@ -78,7 +81,7 @@ export default function AuthWrapper({ children }) {
                 </Box>
               )}
               <AuthCard>{children}</AuthCard>
-              {!isLoggedIn && (
+              {/* {!isLoggedIn && (
                 <Box sx={{ maxWidth: { xs: 400, lg: 475 }, margin: { xs: 2.5, md: 3 }, '& > *': { flexGrow: 1, flexBasis: '50%' } }}>
                   <Grid item xs={12}>
                     <Divider sx={{ mb: 3 }}>
@@ -89,7 +92,7 @@ export default function AuthWrapper({ children }) {
                     <LoginProvider currentLoginWith={authParam} />
                   </Grid>
                 </Box>
-              )}
+              )} */}
             </Grid>
           </Grid>
         </Grid>

@@ -60,7 +60,7 @@ export function TableWidgetCard1({ color, title, count, percentage, isLoss, invo
                 <Grid item xs={12}>
                     <Stack spacing={0.25}>
                         <Typography className='card-header'>{count}</Typography>
-                        <Stack direction="row" spacing={1} alignItems="center">
+                        {/* <Stack direction="row" spacing={1} alignItems="center">
 
                             {percentage && (
                                 <Stack sx={{ ml: 1.25, pl: 1 }} direction="row" alignItems="center" spacing={1} style={{ marginTop: "5px", padding: "0px" }}>
@@ -71,7 +71,7 @@ export function TableWidgetCard1({ color, title, count, percentage, isLoss, invo
                                     </Typography>
                                 </Stack>
                             )}
-                        </Stack>
+                        </Stack> */}
                     </Stack>
                 </Grid>
             </Grid>
@@ -151,7 +151,7 @@ export function TableWidgetCard2({
                             <Typography className="card-header" style={{ marginLeft: "10px" }}>
                                 {count}
                             </Typography>
-                            {percentage && (
+                            {/* {percentage && (
                                 <Stack direction="row" alignItems="center" spacing={0.5}>
                                     {!isLoss ? (
                                         <ArrowUpOutlined style={{ fontSize: '13px', color: color }} />
@@ -162,7 +162,7 @@ export function TableWidgetCard2({
                                         {invoice}
                                     </Typography>
                                 </Stack>
-                            )}
+                            )} */}
                         </Stack>
                     </Grid>
                     <Grid item xs={12} sx={{ marginTop: '20px' }}>
