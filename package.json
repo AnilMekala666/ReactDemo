@@ -131,7 +131,7 @@
   },
   "scripts": {
     "start": "vite --port 80",
-    "build": "vite build",
+    "build": "NODE_OPTIONS=--max-old-space-size=4096 vite build",
     "build-stage": "env-cmd -f .env.qa vite build",
     "preview": "vite preview --port 80",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
