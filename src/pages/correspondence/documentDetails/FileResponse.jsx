@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-key */
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import {
   Box, Button, Grid, Typography, Dialog,
@@ -199,8 +202,10 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
       //SetPatientsData(response.data);
     } catch (err) {
       console.log(err);
-    } finally {
-    }
+    } 
+    // finally {
+
+    // }
   };
 
   const handleEditToggle = () => {
@@ -422,7 +427,7 @@ const updatePatientLevelData = async () => {
         </BootstrapDialogTitle>
         <DialogContent dividers sx={{ p: 3 }}>
           <Typography variant="h6" gutterBottom>
-            Are you sure you want to move to the posting queue?
+          Do you want to confirm moving this item to the posting queue?
           </Typography>
         </DialogContent>
         <DialogActions>

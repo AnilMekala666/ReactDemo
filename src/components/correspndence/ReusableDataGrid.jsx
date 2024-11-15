@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
@@ -16,7 +17,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 const ReusableDataGrid = ({ rows, columns }) => {
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
 
   const handlePaginationChange = (newPagination) => {
     setPaginationModel(newPagination);
@@ -29,7 +30,7 @@ const ReusableDataGrid = ({ rows, columns }) => {
       columns={columns}
       checkboxSelection
       disableRowSelectionOnClick
-      pageSizeOptions={[5, 10, 15]}
+      pageSizeOptions={[ 10, 15]}
       pagination
       paginationModel={paginationModel}
       onPaginationModelChange={handlePaginationChange}
