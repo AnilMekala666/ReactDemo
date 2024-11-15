@@ -16,9 +16,12 @@ import CustomDialog from 'components/correspndence/CustomDialog';
 import {
   ShareAltOutlined
 } from '@ant-design/icons';
-
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
+import { openSnackbar } from 'api/snackbar';
+import LinearProgress from '@mui/material/LinearProgress';
+import Editor from './editor';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -52,31 +55,111 @@ function BootstrapDialogTitle({ children, onClose, ...other }) {
   );
 }
 
-export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId }) => {
+export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId ,fileId,customAttachments,setCustomAttachments}) => {
   // Group attachments by document type
-  console.log("statusResponse", statusId)
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [loader,setLoader] = useState(false);
   const [fileLinks, setFileLinks] = useState([]);
   const [filePreviews, setFilePreviews] = useState([]);
   const [isEditButtonVisible, setIsEditButtonVisible] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [validationDialogOpen, setValidationDialogOpen] = useState(false)
+  const [customFiles,setCustomFiles] = useState([]);
 
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
     setFiles(selectedFiles);
-    console.log('selected files', selectedFiles, files)
     const previews = selectedFiles.map((file) => URL.createObjectURL(file));
     setFilePreviews(previews);
-    console.log("preview", previews, filePreviews)
   };
 
-  const handleUpload = () => {
-    console.log("Files uploaded:", files);
 
+  const showPdf = async (fileName) => {
+    try {
+      const response = await axios.get(`${CORRESPONDENCE_ENDPOINTS.SHOW_MEDICAL_FILE_PDF}${fileName}`,{ responseType: 'blob' });
+      // Create a URL for the downloaded file
+      const fileURL = window.URL.createObjectURL(new Blob([response.data],{ type: 'application/pdf' }));
+      const link = document.createElement('a');
+      link.href = fileURL;
+      link.setAttribute('download', `${fileName}`); // Set the file name
+      document.body.appendChild(link);
+      link.click();
+      link.remove(); // Clean up the link element
+  
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+    }
+  };
+
+   const uploadFiles = async () => {
+     const formData = new FormData();
+
+     // Append each file to the formData object
+    //  Array.from(files).forEach((file) => {
+    //    formData.append('file', file);
+    //  });
+
+    formData.append("file",files[0]);
+
+     // Add other fields
+    formData.append('id', fileId);
+
+     try {
+      setLoader(true);
+       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPLOAD_MEDICAL_REQ_PDF, formData, {
+         headers: {
+           'Content-Type': 'multipart/form-data'
+         }
+       });
+       if(response.status==200){
+        response.data.forEach(item=>{
+          setCustomAttachments([...customAttachments,{documentType:item.fileName,fileLocation:item.fileLocation}])
+        })
+        //setCustomFiles([...customFiles,response.data]);
+        openSnackbar({
+          open: true,
+          message: 'File Uploaded Success',
+          variant: 'alert',
+          close: true,
+        });
+        setDialogOpen(false);
+        setFiles([])
+        setLoader(false);
+       }
+     } catch (error) {
+       setLoader(false);
+       console.error('Error uploading files:', error);
+     }
+   };
+
+   const FileCard = ({ file ,index}) => {
+    return (
+      <Grid item xs={12} key={index}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            border: '1px solid #E0E0E0',
+            borderRadius: 4,
+            padding: 2,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            marginBottom: 2,
+            cursor: 'pointer'
+          }}
+          onClick={() =>showPdf(file.documentType) }
+        >
+          <img src={pdfIcon} alt="pdf icon" style={{ width: '24px', height: '24px', marginRight: '10px' }} />
+          <Box>
+            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+             {file.documentType}
+            </Typography>
+          </Box>
+        </Box>
+      </Grid>
+    );
   };
 
 
@@ -131,13 +214,23 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
     console.log("close drawwer")
     setValidationDialogOpen(false)
   }
-
+const updatePatientLevelData = ()=>{
+  console.log("close drawwer")
+}
 
   return (
     <Box sx={{ padding: 2 }}>
 
       {statusId === '2' && status !== 'Success' && (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2,marginBottom:4  }}>
+              <Button
+            variant='outlined'  sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+            onClick={() => {
+              console.log('Edited Content:', editorContent);
+            }}
+          >
+            <HowToRegIcon /> OK
+          </Button>
           {/* <Button
             variant="outlined"
             // startIcon={<UploadIcon />}
@@ -211,8 +304,8 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
         </Box>
       )}
 
-      <Box dangerouslySetInnerHTML={{ __html: mailContent }}></Box>
-      <Box sx={{ fontWeight: 700, marginBottom: 4 }}>Attachments:</Box>
+<Editor content={mailContent} onContentChange={(newContent) => setEditorContent(newContent)} />
+      <Box sx={{ fontWeight: 700, marginBottom: 4,marginTop:4 }}>Attachments:</Box>
 
       <Grid container spacing={4}>
         {Object.entries(groupedAttachments).map(([documentType, files]) => (
@@ -250,6 +343,18 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
         ))}
       </Grid>
 
+      <Box sx={{ fontWeight: 700, marginBottom: 4 }}>Custom Documents:</Box>
+      <Grid container spacing={4}>
+      <Grid item xs={12} sm={6} md={3}>
+        <Box>
+          <Grid container spacing={2}>
+            {customAttachments.map((file, index) => {
+              return <FileCard file={file} index={index} />;
+            })}
+          </Grid>
+        </Box>
+      </Grid>
+      </Grid>
 
       <CustomDialog
         open={dialogOpen}
@@ -272,14 +377,15 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
             {/* Run Prediction Button */}
             <Grid item xs={12} sm={4}>
               <Button
+                disabled={files.length == 0}
                 variant="contained"
-                // onClick={handleRunPrediction}
-                sx={{ mt: 2, width: '100%' }}
+                onClick={uploadFiles}
+                sx={{ mt: 2, width: '100%', mb: 2 }}
                 startIcon={<ShareAltOutlined />}
-              // onClick={handleUpload}
               >
                 upload file
               </Button>
+              {loader && <LinearProgress />}
             </Grid>
 
 

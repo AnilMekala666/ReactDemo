@@ -38,6 +38,7 @@ const DocumentPage = () => {
   const [userValidation, setUserValidation] = useState(false);
   const [userProcess, setUserProcess] = useState(false);
   const [status, setStatus] = useState('');
+  const [customAttachments,setCustomAttachments] = useState([]);
 
 
   const location = useLocation();
@@ -165,7 +166,8 @@ const DocumentPage = () => {
       setPatientsData(response.data.medicalReqPatientData);
       setDocTypes(response.data.documentTypes);
       setMailContent(response?.data.mailContent || '');
-      setAttachments(response?.data.attachments || []);
+      setAttachments(response?.data.attachments.filter(item=>item.fileLocation==null) || []);
+      setCustomAttachments(response?.data.attachments.filter(item=>item.fileLocation != null) || []);
       //SetPatientsData(response.data);
     } catch (err) {
       console.log(err);
@@ -281,6 +283,8 @@ const DocumentPage = () => {
             <FileResponse
               mailContent={mailContent || ''}
               attachments={attachments || []}
+              customAttachments={customAttachments || []}
+              setCustomAttachments={setCustomAttachments}
               setUserValidation={setUserValidation}
               setUserProcess={setUserProcess}
               userValidation={userValidation}
@@ -289,6 +293,7 @@ const DocumentPage = () => {
               status={status}
               setStatus={setStatus}
               uId={Number(uId)}
+              fileId={checkId}
             />
           )}
 

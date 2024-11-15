@@ -9,6 +9,8 @@ import RTLLayout from 'components/RTLLayout';
 import ScrollTop from 'components/ScrollTop';
 import Snackbar from 'components/@extended/Snackbar';
 import Notistack from 'components/third-party/Notistack';
+import { MantineProvider } from '@mantine/core';
+
 
 // auth-provider
 import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
@@ -25,6 +27,7 @@ export default function App() {
       <RTLLayout>
         <Locales>
           <ScrollTop>
+          <MantineProvider>
             <AuthProvider>
               <>
                 <Notistack>
@@ -33,6 +36,7 @@ export default function App() {
                 </Notistack>
               </>
             </AuthProvider>
+            </MantineProvider>
           </ScrollTop>
         </Locales>
       </RTLLayout>
