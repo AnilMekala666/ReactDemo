@@ -24,7 +24,7 @@ import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutl
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import { openSnackbar } from 'api/snackbar';
 import LinearProgress from '@mui/material/LinearProgress';
-import Editor from './editor';
+import Editor from './Editor';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
