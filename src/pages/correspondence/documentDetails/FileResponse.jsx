@@ -20,6 +20,8 @@ import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutl
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import { openSnackbar } from 'api/snackbar';
 import LinearProgress from '@mui/material/LinearProgress';
+import Editor from './editor';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -212,11 +214,23 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
     console.log("close drawwer")
     setValidationDialogOpen(false)
   }
+const updatePatientLevelData = ()=>{
+  console.log("close drawwer")
+}
 
   return (
     <Box sx={{ padding: 2 }}>
+
       {statusId === '2' && status !== 'Success' && (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2,marginBottom:4  }}>
+              <Button
+            variant='outlined'  sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
+            onClick={() => {
+              console.log('Edited Content:', editorContent);
+            }}
+          >
+            <HowToRegIcon /> OK
+          </Button>
           {/* <Button
             variant="outlined"
             // startIcon={<UploadIcon />}
@@ -290,8 +304,8 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
         </Box>
       )}
 
-      <Box dangerouslySetInnerHTML={{ __html: mailContent }}></Box>
-      <Box sx={{ fontWeight: 700, marginBottom: 4 }}>Attachments:</Box>
+<Editor content={mailContent} onContentChange={(newContent) => setEditorContent(newContent)} />
+      <Box sx={{ fontWeight: 700, marginBottom: 4,marginTop:4 }}>Attachments:</Box>
 
       <Grid container spacing={4}>
         {Object.entries(groupedAttachments).map(([documentType, files]) => (
@@ -346,7 +360,7 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
         open={dialogOpen}
         onClose={() => {
           setDialogOpen(false);
-          setFiles([]);
+          setFiles([])
         }}
         title="Upload Document"
         maxWidth="md"
