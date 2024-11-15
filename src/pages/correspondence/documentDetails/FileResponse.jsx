@@ -53,7 +53,7 @@ function BootstrapDialogTitle({ children, onClose, ...other }) {
   );
 }
 
-export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId ,fileId}) => {
+export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId ,fileId,customAttachments,setCustomAttachments}) => {
   // Group attachments by document type
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -114,7 +114,7 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
        });
        if(response.status==200){
         response.data.forEach(item=>{
-          setCustomFiles([...customFiles,item])
+          setCustomAttachments([...customAttachments,{documentType:item.fileName,fileLocation:item.fileLocation}])
         })
         //setCustomFiles([...customFiles,response.data]);
         openSnackbar({
@@ -147,12 +147,12 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
             marginBottom: 2,
             cursor: 'pointer'
           }}
-          onClick={() =>showPdf(file.fileName) }
+          onClick={() =>showPdf(file.documentType) }
         >
           <img src={pdfIcon} alt="pdf icon" style={{ width: '24px', height: '24px', marginRight: '10px' }} />
           <Box>
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
-             {file.fileName}
+             {file.documentType}
             </Typography>
           </Box>
         </Box>
@@ -334,7 +334,7 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
       <Grid item xs={12} sm={6} md={3}>
         <Box>
           <Grid container spacing={2}>
-            {customFiles.map((file, index) => {
+            {customAttachments.map((file, index) => {
               return <FileCard file={file} index={index} />;
             })}
           </Grid>
