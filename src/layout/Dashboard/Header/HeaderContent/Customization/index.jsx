@@ -33,17 +33,21 @@ import BgColorsOutlined from '@ant-design/icons/BgColorsOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import FontColorsOutlined from '@ant-design/icons/FontColorsOutlined';
-import { Button } from '@mui/material';
+import { Button,ClickAwayListener, LinearProgress } from '@mui/material';
 import Fade from '@mui/material/Fade';
 
 import Popper from '@mui/material/Popper';
 import { useSpring, animated } from '@react-spring/web';
+import { setIsCDAdataCleared, setIsRCMdataCleared,setLoader } from 'store/reducers/userSlice';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // ==============================|| HEADER CONTENT - CUSTOMIZATION ||============================== //
 
 export default function Customization() {
   const { mode } = useConfig();
-
+  const dispatch = useDispatch();
+  const loader = useSelector(state=>state.user.loader);
   const themeLayout = useMemo(() => <ThemeLayout />, []);
   const themeMenuLayout = useMemo(() => <ThemeMenuLayout />, []);
   const themeMode = useMemo(() => <DefaultThemeMode />, []);
@@ -89,6 +93,44 @@ export default function Customization() {
     }
   };
 
+  const handleClearCDAData = async (e) => {
+    e.preventDefault()
+    try {
+      dispatch(setLoader(true));
+      const response = await axios.get('http://10.0.1.123:8181/Correspondence/refreshPredictionData')
+      if(response.status==200){
+        dispatch(setLoader(false));
+        dispatch(setIsCDAdataCleared(true));
+        setOpen(false);
+      }
+    } catch (error) {
+      dispatch(setLoader(false));
+      console.log("Error in clear the cda data", error)
+    }
+  }
+  const handleClearRCMData = async (e) => {
+    e.preventDefault()
+    try {
+      dispatch(setLoader(true));
+      const response = await axios.get('http://10.0.1.121:8181/BAIDataExtracter/bai/updateLastRecordByDate/1')
+      if(response.status==200){
+        dispatch(setLoader(false));
+        dispatch(setIsRCMdataCleared(true));
+        setOpen(false);
+      }
+    } catch (error) {
+      dispatch(setLoader(false));
+      console.log("Error in clear the RCM data", error)
+    }
+  }
+
+  const handleClose = (event) => {
+    if (anchorEl && anchorEl.contains(event.target)) {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <>
       <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -106,28 +148,60 @@ export default function Customization() {
         </IconButton>
 
       {/* Popover */}
-      <Popper id={id} open={open} anchorEl={anchorEl} transition
-        sx={{zIndex:'9999',width: '10.5rem',textAlign:'center', boxShadow:'0px 1px 4px rgba(0, 0, 0, 0.08)' }}
-      >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Box
-              sx={{
-                background:'#fff',
-                border:'1px solid #e6ebf1',
-                borderRadius:'8px',
-                padding:'30px 15px',
-              }}
-            >
-             <Button variant="contained"
-              sx={{ padding: '10px', width: '6.5rem', height: '2.5rem',borderRadius: '.5rem' }}
-              onClick={handleClearData}
-            >Clear Data
-            </Button>
-            </Box>
-          </Fade>
-        )}
-      </Popper>
+      <ClickAwayListener onClickAway={handleClose}>
+          <Popper id={id} open={open} anchorEl={anchorEl} transition
+        sx={{zIndex:'9999',width: '10.5rem',textAlign: 'center', boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.08)' }}
+          >
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <Box
+                  sx={{
+                    background: '#fff',
+                    border: '1px solid #e6ebf1',
+                    borderRadius: '8px',
+                    padding: '20px',
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 'bold', marginBottom: '10px' }}
+                  >
+                    Manage Data
+                  </Typography>
+                  <Button
+                    disabled={loader}
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      width: '100%',
+                      padding: '10px',
+                      marginBottom: '10px',
+                      borderRadius: '.5rem',
+                    }}
+                    onClick={handleClearRCMData}
+                  >
+                    Clear RCM Data
+                  </Button>
+                  <Button
+                    disabled={loader}
+                    variant="contained"
+                    color="secondary"
+                    sx={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '.5rem',
+                      marginBottom:"10px"
+                    }}
+                    onClick={handleClearCDAData}
+                  >
+                    Clear CDA Data
+                  </Button>
+                  {loader && <LinearProgress size="5px" />}
+                </Box>
+              </Fade>
+            )}
+          </Popper>
+        </ClickAwayListener>
 
       </Box>
       {/* <Drawer

@@ -10,6 +10,8 @@ import ScrollTop from 'components/ScrollTop';
 import Snackbar from 'components/@extended/Snackbar';
 import Notistack from 'components/third-party/Notistack';
 import { MantineProvider } from '@mantine/core';
+import { Provider } from 'react-redux';
+import store from './store';
 
 
 // auth-provider
@@ -23,23 +25,25 @@ import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
 
 export default function App() {
   return (
-    <ThemeCustomization>
-      <RTLLayout>
-        <Locales>
-          <ScrollTop>
-          <MantineProvider>
-            <AuthProvider>
-              <>
-                <Notistack>
-                  <RouterProvider router={router} />
-                  <Snackbar />
-                </Notistack>
-              </>
-            </AuthProvider>
-            </MantineProvider>
-          </ScrollTop>
-        </Locales>
-      </RTLLayout>
-    </ThemeCustomization>
+    <Provider store={store}>
+      <ThemeCustomization>
+        <RTLLayout>
+          <Locales>
+            <ScrollTop>
+              <MantineProvider>
+                <AuthProvider>
+                  <>
+                    <Notistack>
+                      <RouterProvider router={router} />
+                      <Snackbar />
+                    </Notistack>
+                  </>
+                </AuthProvider>
+              </MantineProvider>
+            </ScrollTop>
+          </Locales>
+        </RTLLayout>
+      </ThemeCustomization>
+    </Provider>
   );
 }

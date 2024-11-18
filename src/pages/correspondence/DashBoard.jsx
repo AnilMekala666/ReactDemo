@@ -36,10 +36,14 @@ import {
   ShareAltOutlined
 } from '@ant-design/icons';
 import { getMarginRight } from 'react-table-sticky';
-
+import { useSelector, useDispatch } from 'react-redux';
 
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
+import { setIsCDAdataCleared, setIsRCMdataCleared } from 'store/reducers/userSlice';
 const DashBoard = () => {
+  const isCDAdataCleared = useSelector((state)=>state.user.isCDAdataCleared);
+  const isRCMdataCleared = useSelector((state)=>state.user.isRCMdataCleared);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -178,8 +182,14 @@ const DashBoard = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if(isCDAdataCleared || isRCMdataCleared){
+      fetchData();
+    }
+  }, [isCDAdataCleared,isRCMdataCleared]);
+
+  useEffect(()=>{
+    fetchData()
+  },[])
 
   const fetchData = async () => {
     try {
@@ -191,8 +201,9 @@ const DashBoard = () => {
 
       if (data) {
         setOverViewData(data);
+        dispatch(setIsCDAdataCleared(false));
+        dispatch(setIsRCMdataCleared(false));
         console.log(OverviewData)
-
         setWidgetData1([
           {
             title: 'Total Document',
