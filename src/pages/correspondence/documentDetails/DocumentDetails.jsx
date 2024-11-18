@@ -22,10 +22,53 @@ import { FilePreviewDialog } from './FilePreviewDialog';
 import { useLocation } from 'react-router-dom';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+import IconButton from 'components/@extended/IconButton';
+import CloseOutlined from '@ant-design/icons/CloseOutlined';
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(3)
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1.25),
+    paddingRight: theme.spacing(2)
+  }
+}));
+
+function BootstrapDialogTitle({ children, onClose, ...other }) {
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          color="white"
+          sx={{
+            position: 'absolute',
+            right: 10,
+            top: 10
+          }}
+        >
+          <CloseOutlined sx={{ color: "white" }} />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+}
 
 const DocumentPage = () => {
   const { docName, fileName, docId, checkId, statusId, uId } = useParams();
   const [activeTab, setActiveTab] = useState(0);
+  const [isFileLevelEditMode, setFileLevelEditMode] = useState(false);
+  const [isPatientLevelEditMode, setIsPatientLevelEditMode] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [fileLevelData, setFileLevelData] = useState([]);
   const [patients, setPatients] = useState([]);
   const [patientsData, setPatientsData] = useState({});
@@ -38,7 +81,14 @@ const DocumentPage = () => {
   const [userValidation, setUserValidation] = useState(false);
   const [userProcess, setUserProcess] = useState(false);
   const [status, setStatus] = useState('');
-  const [customAttachments,setCustomAttachments] = useState([]);
+  const [customAttachments, setCustomAttachments] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [initialFileLevelData, setInitialFileLevelData] = useState([])
+  const [isEditButtonVisible, setIsEditButtonVisible] = useState(true);
+  const [validationDialogOpen, setValidationDialogOpen] = useState(false);
+  const [message, setMessage] = useState('')
+
+
 
 
   const location = useLocation();
@@ -46,36 +96,37 @@ const DocumentPage = () => {
   const receivedStatus = row.statusId;
   console.log("ptientRow", row)
 
-  
-  
+
+
   const steps = React.useMemo(() => [
     { label: 'Classification', icon: <TaskIcon />, IsStepDone: true },
     { label: 'Data Extraction', icon: <AssignmentIcon />, IsStepDone: true },
     { label: 'iCAN Data Verification', icon: <CheckCircleIcon />, IsStepDone: true },
     {
-      label: 'Submit',
+      label: 'User Validation',
       icon: <HowToRegIcon />,
       IsStepDone: statusId === '2' && !userValidation ? false : true
     },
     {
       // Label logic based on statusId and status
-      label: statusId === '1' 
-        ? 'Processed' 
-        : statusId === '2' 
-          ? 'In-Posting Queue' 
-          : 'Posting Queue',
-  
+      label: statusId === '1'
+        ? 'Processed'
+        : statusId === '2'
+          ? 'Submitted'
+          // : 'Posting Queue',
+          : 'Submitted',
+
       // Icon logic based on statusId and status
-      icon: statusId === '1' 
-        ? <VerifiedIcon /> 
+      icon: statusId === '1'
+        ? <VerifiedIcon />
         : <QueueIcon />,
-  
+
       // Completion logic
       IsStepDone: (statusId === '1') || (statusId === '3') || (status === 'Success')
     }
   ], [status, statusId, userValidation]);
-  
-  
+
+
 
   console.log("Received row data:", row.statusId);
   const sourceUrl = `https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showLabelingpdf?id=${docId}`;
@@ -118,6 +169,7 @@ const DocumentPage = () => {
         fileId: docId
       });
       setFileLevelData(response.data);
+      setInitialFileLevelData(response.data)
     } catch (err) {
       setLoader(false);
       setError('Failed to fetch data');
@@ -166,8 +218,8 @@ const DocumentPage = () => {
       setPatientsData(response.data.medicalReqPatientData);
       setDocTypes(response.data.documentTypes);
       setMailContent(response?.data.mailContent || '');
-      setAttachments(response?.data.attachments.filter(item=>item.fileLocation==null) || []);
-      setCustomAttachments(response?.data.attachments.filter(item=>item.fileLocation != null) || []);
+      setAttachments(response?.data.attachments.filter(item => item.fileLocation == null) || []);
+      setCustomAttachments(response?.data.attachments.filter(item => item.fileLocation != null) || []);
       //SetPatientsData(response.data);
     } catch (err) {
       console.log(err);
@@ -196,6 +248,105 @@ const DocumentPage = () => {
   const href = docName == "EOB"
     ? "/correspndence/documentsList/EOB"
     : "/correspndence/documentsList/Medical-records-request";
+
+  const handleEditToggle = () => {
+    console.log()
+    console.log("handleEditToggle click")
+    // setIsEditing((prev) => !prev);
+    setIsPatientLevelEditMode(true);
+  };
+  const updatePatientLevelData = async () => {
+    console.log("Payload to click")
+    try {
+      console.log("patientsData", patientsData)
+      // for (const patient of patientsData.patient_level_data) {
+      //   const patientLevelPayload = {
+      //     id: patient.id,
+      //     claimNumber: patient.claimNumber,
+      //     claimedAmount: patient.claimAmount,
+      //     allowedAmount: patient.allowedAmount,
+      //     paidAmount: patient.paidAmount,
+      //   };
+
+      //   console.log("Payload to update:", payload);
+
+
+      //   // const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
+      //   // console.log("Update response:", response.data);
+      // }
+      const patientLevelPayload = patientsData.patient_level_data.map((patient) => ({
+        id: patient.id,
+        claimNumber: patient.claimNumber,
+        claimedAmount: patient.claimAmount,
+        allowedAmount: patient.allowedAmount,
+        paidAmount: patient.paidAmount,
+      }))[0];
+      const lineLevelPayload = patientsData.line_level_data.map((line) => ({
+        id: line.id,
+        claimNumber: line.checkPatientLevelDataId,
+        claimedAmount: line.chargeAmount,
+        allowedAmount: line.allowedAmount,
+        paidAmount: line.paidAmount,
+      }));
+      const payload = {
+        patientLevelData: patientLevelPayload,
+        lineLevelData: lineLevelPayload,
+      };
+      console.log("bothpayload", payload)
+      const response = await axios.post(
+        CORRESPONDENCE_ENDPOINTS.UPDATE_EOB_PATIENT_LEVEL_DATA,
+        payload
+      );
+      console.log("Update response:", response.data);
+      if (response.data.statusCode == 200) {
+        setMessage(response.data.message)
+        fetchPatientData()
+        setIsPatientLevelEditMode(false);
+      }else{
+        setMessage(response.data.message)
+        fetchPatientData()
+      }     
+
+      
+    } catch (error) {
+      console.error("Update failed:", error);
+    }
+  };
+  const handleClickOpen = () => {
+    setUserValidation(true);
+    setUserProcess(false);
+    setValidationDialogOpen(true)
+  };
+
+  const handleClose = () => {
+    console.log("close drawwer")
+    setValidationDialogOpen(false)
+  }
+  const updateStatus = async () => {
+    console.log('UPDATESTATUS')
+    try {
+      console.log("USERINPUT");
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS, { id: uId });
+
+      console.log(response, "USERINPUT1")
+      if (response.status == 200) {
+        console.log("Response status 200, setting Success");
+        // setStatus('Success')
+        setStatus(prevStatus => {
+          console.log("Updating status to Success");
+          return 'Success';
+        });
+        setValidationDialogOpen(false)
+        setIsEditButtonVisible(false);
+      }
+      else {
+        setStatus('')
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+  };
 
 
   return (
@@ -260,8 +411,93 @@ const DocumentPage = () => {
             {docName == 'Medical-records-request' && <Tab label="Response" />}
           </Tabs>
 
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              paddingRight: 2,
+              marginTop: -6, // Adjust to align buttons properly
+            }}
+          >
+            {/* Conditionally Render Edit/Save Button */}
+            {activeTab === 0 && statusId == 2 && (
+              <>
+                <Button
+                  variant="outlined"
+                  onClick={() => setIsEditMode(true)}
+
+                  sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: "5px" }}
+                >
+                  {isEditMode ? 'Save' : ' file level Edit'}
+                </Button>
+
+              </>
+            )}
+
+            {activeTab === 0 && statusId == 2 && isEditMode && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setIsEditMode(false)} // Call save or other logic here
+                sx={{ marginLeft: '10px', borderRadius: '8px' }}
+              >
+                Cancel
+              </Button>
+            )}
+
+            {/* Patient-level Tab Edit/Save Button */}
+            {/* {activeTab === 1 && !isPatientLevelEditMode && (
+              <Button
+                variant="outlined"
+                onClick={() => setPatientLevelEditMode(true)}
+                sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
+              >
+                patient level Edit
+              </Button>
+            )} */}
+            {activeTab === 1 && statusId == 2 && (
+              <Button
+                variant="outlined"
+                // onClick={() => setPatientLevelEditMode(true)}
+                onClick={isPatientLevelEditMode ? () => updatePatientLevelData() : handleEditToggle}
+                sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
+              >
+                {!isPatientLevelEditMode ? ' patient level Edit' : ' patient level Save'}
+
+              </Button>
+            )}
+            {activeTab === 1 && isPatientLevelEditMode && statusId == 2 && (
+              <Button
+                variant="outlined"
+                onClick={() => setIsPatientLevelEditMode(false)}
+                sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
+              >
+                Cancel
+
+              </Button>
+            )}
+            {activeTab === 1 && !isPatientLevelEditMode && statusId == 2 && (
+              <Button
+                variant="outlined"
+                onClick={handleClickOpen}
+                sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
+              >
+                Submit
+
+              </Button>
+            )}
+          </Box>
+
           {/* Tab Content */}
-          {activeTab === 0 && <FileLevelMetaData fileLevelData={fileLevelData} docName={docName} />}
+          {activeTab === 0 && <FileLevelMetaData
+            fileLevelData={fileLevelData}
+            docName={docName}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            setFileLevelData={setFileLevelData}
+            initialFileLevelData={initialFileLevelData}
+          />}
 
           {activeTab === 1 && docName == 'Medical-records-request' && (
             <MedicalReqPetientLevel patients={patients} patientsData={patientsData} docName={docName} />
@@ -274,7 +510,11 @@ const DocumentPage = () => {
               statusId={Number(statusId)}
               status={status}
               setStatus={setStatus}
-              uId={Number(uId)} />
+              uId={Number(uId)}
+              isEditing={isPatientLevelEditMode}
+              updatePatientLevelData={updatePatientLevelData}
+              handleEditToggle={handleEditToggle}
+            />
           )}
 
           {activeTab === 2 && <AiInterPretation docTypes={docTypes || []} />}
@@ -346,6 +586,29 @@ const DocumentPage = () => {
         sourceUrl="https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showpdf?id=21514&batchName=sample%20batch"
       /> */}
       <FilePreviewDialog dialogOpen={showFile} setDialogOpen={setShowFile} title="Document" sourceUrl={sourceUrl} />
+
+      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={validationDialogOpen}>
+        <BootstrapDialogTitle id="customized-dialog-title" className="dialog-header" onClose={handleClose}>
+          Submit
+        </BootstrapDialogTitle>
+        <DialogContent dividers sx={{ p: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Do you want to confirm moving this item to the posting queue?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" autoFocus
+            // onClick={updateStatus}
+            onClick={() => {
+              console.log("Yes clicked, calling updateStatus");
+              updateStatus();
+            }}
+          >
+            Yes
+          </Button>
+          <Button variant='outlined' onClick={handleClose}>No</Button>
+        </DialogActions>
+      </BootstrapDialog>
     </>
   );
 };

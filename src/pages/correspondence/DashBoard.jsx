@@ -153,21 +153,6 @@ const DashBoard = () => {
   }
 
 
-  // const handleClick = (columnId, rowData) => {
-  //   console.log(`Clicked on column: ${columnId}, data:`, rowData)
-  //   navigate(`/correspndence/documentsList/${toUrlFormat(rowData.name)}`);
-  // };
-
-  // const handleClick = (columnId, rowData) => {
-  //   if (rowData.name === 'OVER PAYMENT') {
-  //     console.log("Document is not clickable due to OVER PAYMENT status.");
-  //     return; // Prevent navigation if the prediction is OVER_Payment
-  //   }
-  //   console.log(`Clicked on column: ${columnId}, data:`, rowData);
-  //   navigate(`/correspndence/documentsList/${toUrlFormat(rowData.name)}`);
-  // };
-
-
   const handleClick = (columnId, rowData) => {
     if (rowData.name !== 'EOB' && rowData.name !== 'Medical records request') {
       console.log("Document is not clickable due to prediction status.");
@@ -269,7 +254,7 @@ const DashBoard = () => {
     console.log("clcik")
   }
 
-  
+
 
   return (
     <>
@@ -320,7 +305,7 @@ const DashBoard = () => {
                   percentage={data.percentage}
                   // isLoss={data.isLoss}
                   invoice={data.invoice}
-                  // color={data.color.main}
+                // color={data.color.main}
                 // isActive={index === activeChart}
                 />
               </Box>
@@ -369,13 +354,6 @@ const DashBoard = () => {
                 </Grid>
                 <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                   <Button variant='outlined' sx={{ mr: 2 }} onClick={() => setDialogOpen(true)}>Upload document</Button>
-                  {/* <Button variant='outlined' startIcon={<FileOutlined />}>Document Type</Button>
-                  <IconButton
-                    sx={{ color: "#1677ff" }}
-                    onClick={handleRefresh}
-                  >
-                    <RefreshOutlinedIcon />
-                  </IconButton> */}
                 </Grid>
               </Grid>
 
@@ -385,20 +363,8 @@ const DashBoard = () => {
                 clickableColumns={['name']}
                 onClickHandler={handleClick}
               />
-              {/* <ReUsableTable
-  columns={columns}
-  rows={filteredData.map(row => ({
-    ...row,
-    isClickable: row.name !== 'OVER_PAYMENT' // Add a flag to indicate if the row is clickable
-  }))} 
-  clickableColumns={['name']}
-  onClickHandler={(row) => row.isClickable ? handleClick('name', row) : null} // Use the flag to determine if the click should be handled
-/> */}
+            </Grid>
           </Grid>
-          </Grid>
-
-
-
         </Grid>
       }
 
@@ -414,47 +380,13 @@ const DashBoard = () => {
         maxWidth="sm"
       >
         <Box sx={{ mb: 2 }}>
-          <Grid container spacing={2} alignItems="top" sx={{ flexDirection: { xs: 'column', sm: 'row' }, paddingTop:'0px' }}>
+          <Grid container spacing={2} alignItems="top" sx={{ flexDirection: { xs: 'column', sm: 'row' }, paddingTop: '0px' }}>
             {/* Multi-File Choose File */}
             <Grid item xs={12} sm={4}>
               <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
               <input type="file" multiple onChange={handleFileChange} />
             </Grid>
-            {/* <Grid item xs={12} sm={4}>
-              <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
-
-              <div
-                onClick={() => document.getElementById("customFileInput").click()}
-                style={{
-                  display: "inline-block",
-                  padding: "9px",
-                  border: "1px solid #ddd",
-                  borderRadius: "4px",
-                  color: "#1677ff",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                  textAlign: "center",
-                  width: "100%",
-                  marginTop: "0px",
-                }}
-              >
-                Upload Files
-              </div>
-              <input
-                id="customFileInput"
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                style={{ display: "none" }} // Hides the default input
-              />
-              <div style={{ marginTop: "8px", color: "#1677ff" }}>
-                {fileNames.length > 0 ? `${fileNames.length} files selected` : "No files selected"}
-              </div>
-
-
-            </Grid> */}
-
-            {/* Dropdown */}
+          
             <Grid item xs={12} sm={4}>
               <Typography variant="body1" style={{ color: '#1677ff' }}>Select Option:</Typography>
               <Select

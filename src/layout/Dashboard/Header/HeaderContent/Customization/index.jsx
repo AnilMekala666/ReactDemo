@@ -33,11 +33,13 @@ import BgColorsOutlined from '@ant-design/icons/BgColorsOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import FontColorsOutlined from '@ant-design/icons/FontColorsOutlined';
-import { Button } from '@mui/material';
+import { Button, ClickAwayListener } from '@mui/material';
 import Fade from '@mui/material/Fade';
 
 import Popper from '@mui/material/Popper';
 import { useSpring, animated } from '@react-spring/web';
+
+
 
 // ==============================|| HEADER CONTENT - CUSTOMIZATION ||============================== //
 
@@ -56,7 +58,7 @@ export default function Customization() {
   // const handleToggle = () => {
   //   setOpen(!open);
   // };
-    const iconBackColorOpen = mode === ThemeMode.DARK ? 'background.default' : 'grey.100';
+  const iconBackColorOpen = mode === ThemeMode.DARK ? 'background.default' : 'grey.100';
 
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -65,9 +67,16 @@ export default function Customization() {
     setAnchorEl(event.currentTarget);
     setOpen((previousOpen) => !previousOpen);
   };
-
+  const handleClose = (event) => {
+    if (anchorEl && anchorEl.contains(event.target)) {
+      return;
+    }
+    setOpen(false);
+  };
   const canBeOpen = open && Boolean(anchorEl);
   const id = canBeOpen ? 'transition-popper' : undefined;
+
+
 
 
   const handleClearData = async () => {
@@ -79,7 +88,7 @@ export default function Customization() {
       // if (!response.ok) {
       //   throw new Error('Network response was not ok');
       // }
-      
+
       // const data = await response.json();
       // console.log('Data cleared:', data);
       // Optionally, you could add a success message or UI feedback here
@@ -88,6 +97,25 @@ export default function Customization() {
       console.error('Failed to clear data:', error);
     }
   };
+
+  const handleClearCDAData = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.get('http://10.0.1.123:8181/Correspondence/refreshPredictionData')
+      console.log(response)
+    } catch (error) {
+      console.log("Error in clear the cda data", error)
+    }
+  }
+  const handleClearRCMData = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.get('http://10.0.1.121:8181/BAIDataExtracter/bai/updateLastRecordByDate/1')
+      console.log(response)
+    } catch (error) {
+      console.log("Error in clear the RCM data", error)
+    }
+  }
 
   return (
     <>
@@ -105,29 +133,59 @@ export default function Customization() {
           </AnimateButton>
         </IconButton>
 
-      {/* Popover */}
-      <Popper id={id} open={open} anchorEl={anchorEl} transition
-        sx={{zIndex:'9999',width: '10.5rem',textAlign:'center', boxShadow:'0px 1px 4px rgba(0, 0, 0, 0.08)' }}
-      >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Box
-              sx={{
-                background:'#fff',
-                border:'1px solid #e6ebf1',
-                borderRadius:'8px',
-                padding:'30px 15px',
-              }}
-            >
-             <Button variant="contained"
-              sx={{ padding: '10px', width: '6.5rem', height: '2.5rem',borderRadius: '.5rem' }}
-              onClick={handleClearData}
-            >Clear Data
-            </Button>
-            </Box>
-          </Fade>
-        )}
-      </Popper>
+        {/* Popover */}
+        <ClickAwayListener onClickAway={handleClose}>
+          <Popper id={id} open={open} anchorEl={anchorEl} transition
+            sx={{ zIndex: '9999', width: '10.5rem', textAlign: 'center', boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.08)' }}
+          >
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <Box
+                  sx={{
+                    background: '#fff',
+                    border: '1px solid #e6ebf1',
+                    borderRadius: '8px',
+                    padding: '20px',
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 'bold', marginBottom: '10px' }}
+                  >
+                    Manage Data
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      width: '100%',
+                      padding: '10px',
+                      marginBottom: '10px',
+                      borderRadius: '.5rem',
+                    }}
+                    onClick={handleClearRCMData}
+                  >
+                    Clear RCM Data
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '.5rem',
+                    }}
+                    onClick={handleClearCDAData}
+                  >
+                    Clear CDA Data
+                  </Button>
+
+                </Box>
+              </Fade>
+            )}
+          </Popper>
+        </ClickAwayListener>
+
 
       </Box>
       {/* <Drawer

@@ -241,50 +241,54 @@ import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import IconButton from 'components/@extended/IconButton';
 import { color } from 'framer-motion';
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(3)
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1.25),
-    paddingRight: theme.spacing(2)
-  }
-}));
+// const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+//   '& .MuiDialogContent-root': {
+//     padding: theme.spacing(3)
+//   },
+//   '& .MuiDialogActions-root': {
+//     padding: theme.spacing(1.25),
+//     paddingRight: theme.spacing(2)
+//   }
+// }));
 
-function BootstrapDialogTitle({ children, onClose, ...other }) {
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          color="white"
-          sx={{
-            position: 'absolute',
-            right: 10,
-            top: 10
-          }}
-        >
-          <CloseOutlined sx={{ color: "white" }} />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-}
+// function BootstrapDialogTitle({ children, onClose, ...other }) {
+//   return (
+//     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+//       {children}
+//       {onClose ? (
+//         <IconButton
+//           aria-label="close"
+//           onClick={onClose}
+//           color="white"
+//           sx={{
+//             position: 'absolute',
+//             right: 10,
+//             top: 10
+//           }}
+//         >
+//           <CloseOutlined sx={{ color: "white" }} />
+//         </IconButton>
+//       ) : null}
+//     </DialogTitle>
+//   );
+// }
 
-export const PatientLevelData = ({ patients, patientsData, docName, receivedStatus, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId }) => {
+export const PatientLevelData = ({ patients,
+  patientsData, docName, receivedStatus, setUserValidation, setUserProcess,
+  userProcess, userValidation, statusId, status, setStatus, uId, isEditing
+}) => {
   console.log("receivedStatus", receivedStatus)
   console.log("patientsData", patientsData)
   const [patientLevelTable, setPatientLevelTable] = useState([]);
   const [lineLevelTable, setLineLevelTable] = useState([]);
   const [patient, setPatient] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState([]);
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
   const [initialPatientLevelData, setInitialPatientLevelData] = useState([]);
   const [validationDialogOpen, setValidationDialogOpen] = useState(false)
-  const [isEditButtonVisible, setIsEditButtonVisible] = useState(true); 
+  const [isEditButtonVisible, setIsEditButtonVisible] = useState(true);
+
 
 
   // const handleSelectedPatient = (e) => {
@@ -299,11 +303,11 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
   //   setEditableData(_patientData);
   // };
 
-  const handleClickOpen = () => { 
+  const handleClickOpen = () => {
     setUserValidation(true);
     setUserProcess(false);
     setValidationDialogOpen(true)
-   };
+  };
   const handleClose = () => {
     console.log("close drawwer")
     setValidationDialogOpen(false)
@@ -339,80 +343,62 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
     setEditableData(_patientData);
   };
 
-  const handleEditToggle = () => {
-    console.log()
-    console.log("handleEditToggle click")
-    // setIsEditing((prev) => !prev);
-    setIsEditing(true);
-  };
+  // const handleEditToggle = () => {
+  //   console.log()
+  //   console.log("handleEditToggle click")
+  //   // setIsEditing((prev) => !prev);
+  //   setIsEditing(true);
+  // };
 
 
   const handleInputChange = (index, field, value) => {
     const updatedData = [...patientLevelTable];
     updatedData[index][field] = value;
     setPatientLevelTable(updatedData);
+    // const updatedLineLevelData = [...lineLevelTable];
+    // updatedLineLevelData[index][field] = value;
+    // setLineLevelTable(updatedLineLevelData)
+  };
+  const lineLevelInputChange = (index, field, value) => {
+    const updatedLineLevelData = [...lineLevelTable];
+    updatedLineLevelData[index][field] = value;
+    setLineLevelTable(updatedLineLevelData)
   };
 
-  const handleCancelEdit = () => {
+  // const handleCancelEdit = () => {
 
-    setPatientLevelTable(initialPatientLevelData);
-    setEditableData(initialPatientLevelData);
-    setIsEditing(false);
-  };
+  //   setPatientLevelTable(initialPatientLevelData);
+  //   setEditableData(initialPatientLevelData);
+  //   setIsEditing(false);
+  // };
+
+
+
 
   // const updatePatientLevelData = async () => {
-  //   const payload = patientLevelTable.map((patient) => (
-  //     {
-  //     id: patient.id,
-  //     claimNumber: patient.claimNumber,
-  //     claimedAmount: patient.claimAmount,
-  //     allowedAmount: patient.allowedAmount,
-  //     paidAmount: patient.paidAmount,
-  //   }));
+  //   try {
+  //     for (const patient of patientLevelTable) {
+  //       const payload = {
+  //         id: patient.id,
+  //         claimNumber: patient.claimNumber,
+  //         claimedAmount: patient.claimAmount,
+  //         allowedAmount: patient.allowedAmount,
+  //         paidAmount: patient.paidAmount,
+  //       };
+
+  //       console.log("Payload to update:", payload);
 
 
-  //   console.log("Payload to update:",payload);
+  //       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
+  //       console.log("Update response:", response.data);
+  //     }
 
-  //   // try {
-  //   //   const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
-  //   //   console.log("Update response:", response.data);
-  //   //   setPatientLevelTable(response.data);
-  //   //   setIsEditing(false);
-  //   // } catch (error) {
-  //   //   console.error("Update failed:", error);
-  //   // }
+  //     setIsEditing(false);
+  //   } catch (error) {
+  //     console.error("Update failed:", error);
+  //   }
   // };
 
-
-  const updatePatientLevelData = async () => {
-    try {
-      for (const patient of patientLevelTable) {
-        const payload = {
-          id: patient.id,
-          claimNumber: patient.claimNumber,
-          claimedAmount: patient.claimAmount,
-          allowedAmount: patient.allowedAmount,
-          paidAmount: patient.paidAmount,
-        };
-
-        console.log("Payload to update:", payload);
-
-      
-        const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
-        console.log("Update response:", response.data);
-      }
-
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Update failed:", error);
-    }
-  };
-
-  // const handleUserValidation = () => {
-  //   // Enable the submit button when User Validation is clicked
-  //   setUserValidation(true);
-  //   setUserProcess(false);
-  // };
 
 
   const updateStatus = async () => {
@@ -420,7 +406,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
     try {
       console.log("USERINPUT");
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS, { id: uId });
-   
+
       console.log(response, "USERINPUT1")
       if (response.status == 200) {
         console.log("Response status 200, setting Success");
@@ -438,7 +424,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
       //SetPatientsData(response.data);
     } catch (err) {
       console.log(err);
-    } 
+    }
     // finally {
     // }
   };
@@ -455,7 +441,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
           borderRadius: '8px',
           width: '100%',
           boxSizing: 'border-box',
-          marginTop: '2'
+          marginTop: '20px'
         }}
       >
         {/* Previous and Next buttons */}
@@ -495,7 +481,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
               <label style={{ fontWeight: '600', fontSize: '16px' }}>Capture Info - 66%</label>
             </Box> */}
             <Box sx={{ display: 'flex', gap: 1 }}>
-
+              {/* 
               {receivedStatus === 2 && (
                 <>
                   <Button
@@ -508,7 +494,7 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
                     {isEditing ? 'Save' : 'Edit'}
                   </Button>
 
-                  {isEditing && isEditButtonVisible &&  (
+                  {isEditing && isEditButtonVisible && (
                     <Button
                       variant="outlined"
                       startIcon={<AppRegistrationOutlinedIcon />}
@@ -527,36 +513,12 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
                         disabled={isEditing}
                         sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
                       >
-                    Submit
+                        Submit
                       </Button>
-                      {/* <Button
-                      variant="outlined"
-                      sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
-                      startIcon={<AddToPhotosIcon />}
-                      disabled={!userValidation}
-                      onClick={updateStatus}
-                    >
-                      Submit
-                    </Button> */}
                     </>}
 
                 </>
-              )}
-
-              {/* <Button
-                variant="outlined"
-                startIcon={<PermIdentityOutlinedIcon />}
-                sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
-              >
-                Manual Validate
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<AutoAwesomeOutlinedIcon />}
-                sx={{ borderRadius: '8px', fontSize: '14px', border: '1px solid #d5d7da', color: '#2f2f2f' }}
-              >
-                AI Validate
-              </Button> */}
+              )} */}
             </Box>
           </Box>
         )}
@@ -567,8 +529,8 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
         <Box className="doc-table-cont" sx={{ padding: 2 }}>
           {/* <label style={{ fontWeight: '600', fontSize: '16px' }}>Patient-Level Data</label> */}
           <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
-          Patient-Level Data
-</Typography>
+            Patient-Level Data
+          </Typography>
           <TableContainer component={Paper} sx={{ marginTop: 2, marginBottom: 2 }}>
             <Table>
               <TableHead>
@@ -639,8 +601,8 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
 
           {/* <label style={{ fontWeight: '600', fontSize: '16px' }}>Line-Level Data</label> */}
           <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
-  Line-Level Data
-</Typography>
+            Line-Level Data
+          </Typography>
           <TableContainer component={Paper} sx={{ marginTop: 2 }}>
             <Table>
               <TableHead>
@@ -661,10 +623,42 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
                     <TableCell>{patient.lineLevelServiceDate}</TableCell>
                     <TableCell>{patient.procedureCode}</TableCell>
                     <TableCell>{patient.serviceDescription}</TableCell>
-                    <TableCell>${patient.chargeAmount}</TableCell>
-                    <TableCell>${patient.allowedAmount}</TableCell>
-                    <TableCell>${patient.paidAmount}</TableCell>
-                    <TableCell>${patient.adjustmentAmount}</TableCell>
+                    {/* <TableCell>${patient.chargeAmount}</TableCell> */}
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.chargeAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'chargeAmount', e.target.value)}
+                        />
+                      ) : (
+                        `$${patient.chargeAmount}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                    {isEditing ? (
+                        <TextField
+                          value={patient.allowedAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'allowedAmount', e.target.value)}
+                        />
+                      ) : (
+                     ` $${patient.allowedAmount}`
+                      )}
+                      </TableCell>
+                    <TableCell>
+                      {/* ${patient.paidAmount} */}
+                      {isEditing ? (
+                        <TextField
+                          value={patient.paidAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'paidAmount', e.target.value)}
+                        />
+                      ) : (
+                     ` $${patient.paidAmount}`
+                      )}
+                      </TableCell>
+                    <TableCell>
+                      ${patient.adjustmentAmount}
+                   
+                      </TableCell>
                     <TableCell>{patient.reasonCodes}</TableCell>
                   </TableRow>
                 ))}
@@ -689,28 +683,28 @@ export const PatientLevelData = ({ patients, patientsData, docName, receivedStat
         </Typography>
       )}
 
-      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={validationDialogOpen}>
+      {/* <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={validationDialogOpen}>
         <BootstrapDialogTitle id="customized-dialog-title" className="dialog-header" onClose={handleClose}>
           Submit
         </BootstrapDialogTitle>
         <DialogContent dividers sx={{ p: 3 }}>
           <Typography variant="h6" gutterBottom>
-          Do you want to confirm moving this item to the posting queue?
+            Do you want to confirm moving this item to the posting queue?
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" autoFocus 
-          // onClick={updateStatus}
-          onClick={() => {
-            console.log("Yes clicked, calling updateStatus");
-            updateStatus();
-          }}
+          <Button variant="contained" autoFocus
+            // onClick={updateStatus}
+            onClick={() => {
+              console.log("Yes clicked, calling updateStatus");
+              updateStatus();
+            }}
           >
             Yes
           </Button>
           <Button variant='outlined' onClick={handleClose}>No</Button>
         </DialogActions>
-      </BootstrapDialog>
+      </BootstrapDialog> */}
     </Box>
   );
 };
