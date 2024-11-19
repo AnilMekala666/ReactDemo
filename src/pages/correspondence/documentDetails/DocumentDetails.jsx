@@ -30,6 +30,8 @@ import {
 } from '@mui/material';
 import IconButton from 'components/@extended/IconButton';
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
+import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -302,12 +304,12 @@ const DocumentPage = () => {
         setMessage(response.data.message)
         fetchPatientData()
         setIsPatientLevelEditMode(false);
-      }else{
+      } else {
         setMessage(response.data.message)
         fetchPatientData()
-      }     
+      }
 
-      
+
     } catch (error) {
       console.error("Update failed:", error);
     }
@@ -446,42 +448,35 @@ const DocumentPage = () => {
               </Button>
             )}
 
-            {/* Patient-level Tab Edit/Save Button */}
-            {/* {activeTab === 1 && !isPatientLevelEditMode && (
+            {activeTab === 1 && statusId == 2 && docName == 'EOB' && (
               <Button
                 variant="outlined"
-                onClick={() => setPatientLevelEditMode(true)}
-                sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
-              >
-                patient level Edit
-              </Button>
-            )} */}
-            {activeTab === 1 && statusId == 2 && (
-              <Button
-                variant="outlined"
-                // onClick={() => setPatientLevelEditMode(true)}
+                startIcon={ <AppRegistrationOutlinedIcon/>}
                 onClick={isPatientLevelEditMode ? () => updatePatientLevelData() : handleEditToggle}
-                sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
+                className='tab-button'
               >
-                {!isPatientLevelEditMode ? ' patient level Edit' : ' patient level Save'}
+                {!isPatientLevelEditMode ? ' Edit' : ' Save'}
 
               </Button>
             )}
-            {activeTab === 1 && isPatientLevelEditMode && statusId == 2 && (
+            {activeTab === 1 && isPatientLevelEditMode && statusId == 2 && docName == 'EOB' && (
               <Button
                 variant="outlined"
                 onClick={() => setIsPatientLevelEditMode(false)}
-                sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
+                className='tab-button'
+                sx={{marginLeft:"10px"}}
               >
                 Cancel
 
               </Button>
             )}
-            {activeTab === 1 && !isPatientLevelEditMode && statusId == 2 && (
+            {activeTab === 1 && !isPatientLevelEditMode && statusId == 2 && docName == 'EOB' && (
               <Button
                 variant="outlined"
                 onClick={handleClickOpen}
-                sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
+                className='tab-button'
+                sx={{ marginLeft: '10px' }}
+                startIcon={<HowToRegIcon />}
               >
                 Submit
 
