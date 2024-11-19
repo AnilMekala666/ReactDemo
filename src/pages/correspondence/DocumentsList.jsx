@@ -185,13 +185,15 @@ const DocumentsList = () => {
     {
       field: 'chequeAmount',
       headerName: 'Cheque Amount',
-      width: 130,
+      //width: 130,
+      flex:1,
       valueFormatter: (params) => `$${params ? params : '-'}`
     },
     {
       field: 'depositDate',
       headerName: 'Deposit Date',
-      width: 110,
+     // width: 110,
+      flex:1,
       //type: 'date',
       sortable: true,
       valueFormatter: (params) => `${params ? params : '-'}`
@@ -199,7 +201,8 @@ const DocumentsList = () => {
     {
       field: 'fileDate',
       headerName: 'File Date',
-      width: 130,
+      //width: 130,
+      flex:1,
       //type: 'date',
       sortable: true,
       valueFormatter: (params) => `${params ? params : '-'}`
@@ -207,7 +210,8 @@ const DocumentsList = () => {
     {
       field: 'openSince',
       headerName: 'Open Since',
-      width: 130,
+      //width: 130,
+      flex:1,
       renderHeader: () => (
         <Box display="flex" alignItems="center">
           Open Since
@@ -249,7 +253,8 @@ const DocumentsList = () => {
     {
       field: 'status',
       headerName: 'Status',
-      width: 180,
+      //width: 180,
+      flex:1,
       filterable: true,
       align: 'left',
       renderCell: (params) => {
