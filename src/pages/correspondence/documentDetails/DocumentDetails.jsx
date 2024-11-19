@@ -39,13 +39,13 @@ const DocumentPage = () => {
   const [userProcess, setUserProcess] = useState(false);
   const [status, setStatus] = useState('');
   const [customAttachments,setCustomAttachments] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
 
 
   const location = useLocation();
   const row = location.state?.row;
-  const receivedStatus = row.statusId;
+  const receivedStatus = row?.statusId;
   console.log("ptientRow", row)
-
   
   
   const steps = React.useMemo(() => [
@@ -147,6 +147,22 @@ const DocumentPage = () => {
         eobCheckId: checkId
       });
       setPatientsData(response.data);
+    } catch (err) {
+      console.log(err);
+      setLoader(false);
+      setError('Failed to fetch data');
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const updateEobFileLevelData = async () => {
+    const {id,payerName,depositDate,checkNumber,checkAmount}=fileLevelData[0]
+    try {
+      setLoader(true);
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_EOB_FILE_LEVEL_DATA, {
+        id,payerName,depositDate,checkNumber,checkAmount
+      });
     } catch (err) {
       console.log(err);
       setLoader(false);
@@ -260,8 +276,48 @@ const DocumentPage = () => {
             {docName == 'Medical-records-request' && <Tab label="Response" />}
           </Tabs>
 
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              paddingRight: 2,
+              marginTop: statusId==2 && docName=="EOB" ? -6 : 0 // Adjust to align buttons properly
+            }}
+          >
+            {activeTab === 0 && statusId == 2 && docName=="EOB" && (
+              <>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    if(isEditMode){
+                    updateEobFileLevelData();
+                    }
+                    setIsEditMode(!isEditMode);
+                  }}
+                  className='tab-button'
+                  sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
+                >
+                  {isEditMode ? 'Save' : 'Edit'}
+                </Button>
+              </>
+            )}
+
+            {activeTab === 0 && statusId == 2 && isEditMode && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setIsEditMode(false)} // Call save or other logic here
+                sx={{ marginLeft: '10px', borderRadius: '8px' }}
+                className='tab-button'
+              >
+                Cancel
+              </Button>
+            )}
+          </Box>
+
           {/* Tab Content */}
-          {activeTab === 0 && <FileLevelMetaData fileLevelData={fileLevelData} docName={docName} />}
+          {activeTab === 0 && <FileLevelMetaData fileLevelData={fileLevelData} docName={docName} setFileLevelData={setFileLevelData} isEditMode={isEditMode}/>}
 
           {activeTab === 1 && docName == 'Medical-records-request' && (
             <MedicalReqPetientLevel patients={patients} patientsData={patientsData} docName={docName} />
