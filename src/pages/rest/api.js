@@ -40,5 +40,7 @@ export const CORRESPONDENCE_ENDPOINTS = {
   UPLOAD_MEDICAL_REQ_PDF:`${CORRESPONDENCE_BASE_URL}/uploadMedicalReqFiles`,
   SHOW_MEDICAL_FILE_PDF:`${CORRESPONDENCE_BASE_URL}/showMedicalFilepdf?fileName=`,
   UPDATE_MEDICAL_REQUEST_RESPONSE_DATA: `${CORRESPONDENCE_BASE_URL}/updateMedicalRequestResponseData`,
-  UPDATE_EOB_FILE_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/updateEOBFileLevelData`
+  UPDATE_EOB_PATIENT_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/updatePatientWithLineLevelData`
+  //http://10.0.1.123:8181/Correspondence/updateMedicalRequestResponseData
+
 }
