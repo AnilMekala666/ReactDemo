@@ -33,19 +33,22 @@ import BgColorsOutlined from '@ant-design/icons/BgColorsOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import FontColorsOutlined from '@ant-design/icons/FontColorsOutlined';
-import { Button, ClickAwayListener } from '@mui/material';
+import { Button,ClickAwayListener, LinearProgress } from '@mui/material';
 import Fade from '@mui/material/Fade';
 
 import Popper from '@mui/material/Popper';
 import { useSpring, animated } from '@react-spring/web';
-
-
+import { setIsCDAdataCleared, setIsRCMdataCleared,setLoader } from 'store/reducers/userSlice';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 
 // ==============================|| HEADER CONTENT - CUSTOMIZATION ||============================== //
 
 export default function Customization() {
   const { mode } = useConfig();
-
+  const dispatch = useDispatch();
+  const loader = useSelector(state=>state.user.loader);
   const themeLayout = useMemo(() => <ThemeLayout />, []);
   const themeMenuLayout = useMemo(() => <ThemeMenuLayout />, []);
   const themeMode = useMemo(() => <DefaultThemeMode />, []);
@@ -67,16 +70,9 @@ export default function Customization() {
     setAnchorEl(event.currentTarget);
     setOpen((previousOpen) => !previousOpen);
   };
-  const handleClose = (event) => {
-    if (anchorEl && anchorEl.contains(event.target)) {
-      return;
-    }
-    setOpen(false);
-  };
+
   const canBeOpen = open && Boolean(anchorEl);
   const id = canBeOpen ? 'transition-popper' : undefined;
-
-
 
 
   const handleClearData = async () => {
@@ -101,21 +97,40 @@ export default function Customization() {
   const handleClearCDAData = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.get('http://10.0.1.123:8181/Correspondence/refreshPredictionData')
-      console.log(response)
+      dispatch(setLoader(true));
+      const response = await axios.get(CORRESPONDENCE_ENDPOINTS.REFRESH_PREDICTION_DATA)
+      if(response.status==200){
+        dispatch(setLoader(false));
+        dispatch(setIsCDAdataCleared(true));
+        setOpen(false);
+      }
     } catch (error) {
+      dispatch(setLoader(false));
       console.log("Error in clear the cda data", error)
     }
   }
   const handleClearRCMData = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.get('http://10.0.1.121:8181/BAIDataExtracter/bai/updateLastRecordByDate/1')
-      console.log(response)
+      dispatch(setLoader(true));
+      const response = await axios.get(CORRESPONDENCE_ENDPOINTS.UPDATE_LAST_RECORD_BY_DATE)
+      if(response.status==200){
+        dispatch(setLoader(false));
+        dispatch(setIsRCMdataCleared(true));
+        setOpen(false);
+      }
     } catch (error) {
+      dispatch(setLoader(false));
       console.log("Error in clear the RCM data", error)
     }
   }
+
+  const handleClose = (event) => {
+    if (anchorEl && anchorEl.contains(event.target)) {
+      return;
+    }
+    setOpen(false);
+  };
 
   return (
     <>
@@ -155,6 +170,7 @@ export default function Customization() {
                     Manage Data
                   </Typography>
                   <Button
+                    disabled={loader}
                     variant="contained"
                     color="primary"
                     sx={{
@@ -168,24 +184,25 @@ export default function Customization() {
                     Clear RCM Data
                   </Button>
                   <Button
+                    disabled={loader}
                     variant="contained"
                     color="secondary"
                     sx={{
                       width: '100%',
                       padding: '10px',
                       borderRadius: '.5rem',
+                      marginBottom:"10px"
                     }}
                     onClick={handleClearCDAData}
                   >
                     Clear CDA Data
                   </Button>
-
+                  {loader && <LinearProgress size="5px" />}
                 </Box>
               </Fade>
             )}
           </Popper>
         </ClickAwayListener>
-
 
       </Box>
       {/* <Drawer

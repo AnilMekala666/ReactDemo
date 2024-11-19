@@ -134,7 +134,6 @@ const DocumentsList = () => {
   const [statusId, setStatusId] = useState()
 
 
-  console.log("docName")
 
 
   const originalDocName = docName.replace(/-/g, ' ');
@@ -146,7 +145,7 @@ const DocumentsList = () => {
       renderCell: (params) => {
         console.log(params.row, "inside column")
         return (
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" sx={{marginTop:"12px"}}>
             <img src={pdfIcon} alt="pdf icon" style={{ width: '30px', height: '30px', marginRight: '20px' }} />
             <Box
               // onClick={() => (
@@ -253,8 +252,8 @@ const DocumentsList = () => {
     {
       field: 'status',
       headerName: 'Status',
-      //width: 180,
-      flex:1,
+      width: 200,
+      //flex:1,
       filterable: true,
       align: 'left',
       renderCell: (params) => {
@@ -264,10 +263,9 @@ const DocumentsList = () => {
         // Set background color based on statusId
         const backgroundColor = 
           params.row.statusId == 1 ? 'green' :       
-          params.row.statusId == 2 ? 'pink' :       
+          params.row.statusId == 2 ? 'blue' :       
           params.row.statusId == 3 ? 'orange' :          
           'gray'; 
-    
         return (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
             <div
@@ -326,21 +324,24 @@ const DocumentsList = () => {
       id: 'patientName',
       field: 'patientName',
       headerName: 'Patient Name',
-      width: 200,
+      //width: 200,
+      flex:1,
       valueFormatter: (params) => `${params ? params : '-'}`
     },
     {
       id: 'claimNumber',
       field: 'claimNumber',
       headerName: 'Claim Number',
-      width: 180,
+      //width: 180,
+      flex:1,
       valueFormatter: (params) => `${params ? params : '-'}`
     },
     {
       id: 'documentAge',
       field: 'documentAge',
       headerName: 'Document Age',
-      width: 180,
+      //width: 180,
+      flex:1,
       valueFormatter: (params) => {
 
         return `${params ? params : '-'} ${params > 1 ? 'days ago' : 'day ago'}`
@@ -372,7 +373,7 @@ const DocumentsList = () => {
     {id:statusId,
       field: 'status',
       headerName: 'Status',
-      width: 160,
+      width: 200,
       filterable: true,
       align: 'left',
       renderCell: (params) => {
@@ -382,7 +383,7 @@ const DocumentsList = () => {
         // Set background color based on statusId
         const backgroundColor = 
           params.row.statusId == 1 ? 'green' :       
-          params.row.statusId == 2 ? 'pink' :       
+          params.row.statusId == 2 ? 'blue' :       
           params.row.statusId == 3 ? 'orange' :          
           'gray'; 
     
@@ -408,6 +409,7 @@ const DocumentsList = () => {
   const fetchData = async () => {
     try {
       setLoader(true);
+      setIsTableLoading(true);
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.FETCH_PREDICTION_FILES, {
         prediction: originalDocName
       });
@@ -437,10 +439,13 @@ const DocumentsList = () => {
       });
       // setRows(processedData);
       setAiEobTableData(processedData);
+      setIsTableLoading(false);
     } catch (err) {
+      setIsTableLoading(false);
       setLoader(false);
       setError('Failed to fetch data');
     } finally {
+      setIsTableLoading(false);
       setLoader(false);
     }
   };
@@ -448,6 +453,7 @@ const DocumentsList = () => {
 
   const fetchMedicalRequestData = async () => {
     try {
+      setIsTableLoading(true);
       setLoader(true);
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.FETCH_MEDICAL_PREDICTION_FILES_WITH_STATUS, {
         prediction: originalDocName
@@ -475,11 +481,14 @@ const DocumentsList = () => {
         };
       });
       // setRows(processedData);
-      setAiMedicalRequestTableData(processedData)
+      setAiMedicalRequestTableData(processedData);
+      setIsTableLoading(false);
     } catch (err) {
+      setIsTableLoading(false);
       setLoader(false);
       setError('Failed to fetch data');
     } finally {
+      setIsTableLoading(false);
       setLoader(false);
     }
   };
@@ -630,7 +639,7 @@ const DocumentsList = () => {
           : ""} */}
            {!isTableLoading ?
           <ReusableDataGrid rows={aiData} columns={columns} />
-          : <h4 style={{textAlign:"center", alignItems:"center", display:"flex"}}>Loading...</h4>}
+          : <h3 style={{textAlign:"center",height:"200px"}}>Loading...</h3>}
 
         {console.log(aiData)}
         {console.log(rows)}
