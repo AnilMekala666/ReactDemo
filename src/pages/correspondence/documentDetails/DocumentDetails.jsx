@@ -435,20 +435,21 @@ const DocumentPage = () => {
               justifyContent: 'flex-end',
               alignItems: 'center',
               paddingRight: 2,
-              marginTop: statusId==2 && docName=="EOB" ? -6 : 0 // Adjust to align buttons properly
+              marginTop: statusId == 2 && docName == 'EOB' ? -6 : 0 // Adjust to align buttons properly
             }}
           >
-            {activeTab === 0 && statusId == 2 && docName=="EOB" && (
+            {activeTab === 0 && statusId == 2 && docName == 'EOB' && (
               <>
                 <Button
                   variant="outlined"
+                  startIcon={<AppRegistrationOutlinedIcon />}
                   onClick={() => {
-                    if(isEditMode){
-                    updateEobFileLevelData();
+                    if (isEditMode) {
+                      updateEobFileLevelData();
                     }
                     setIsEditMode(!isEditMode);
                   }}
-                  className='tab-button'
+                  className="tab-button"
                   sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
                 >
                   {isEditMode ? 'Save' : 'Edit'}
@@ -464,6 +465,18 @@ const DocumentPage = () => {
                 sx={{ marginLeft: '10px', borderRadius: '8px' }}
               >
                 Cancel
+              </Button>
+            )}
+
+            {activeTab === 0 && !isEditMode && statusId == 2 && docName == 'EOB' && (
+              <Button
+                variant="outlined"
+                onClick={handleClickOpen}
+                className="tab-button"
+                sx={{ marginLeft: '10px' }}
+                startIcon={<HowToRegIcon />}
+              >
+                Submit
               </Button>
             )}
 
@@ -504,13 +517,25 @@ const DocumentPage = () => {
           </Box>
 
           {/* Tab Content */}
-          {activeTab === 0 && <FileLevelMetaData fileLevelData={fileLevelData} docName={docName} setFileLevelData={setFileLevelData} isEditMode={isEditMode}/>}
+          {activeTab === 0 && (
+            <FileLevelMetaData
+              fileLevelData={fileLevelData}
+              docName={docName}
+              setFileLevelData={setFileLevelData}
+              isEditMode={isEditMode}
+            />
+          )}
 
           {activeTab === 1 && docName == 'Medical-records-request' && (
             <MedicalReqPetientLevel patients={patients} patientsData={patientsData} docName={docName} />
           )}
           {activeTab === 1 && docName == 'EOB' && (
-            <PatientLevelData patients={patients} patientsData={patientsData} docName={docName} receivedStatus={receivedStatus} setUserValidation={setUserValidation}
+            <PatientLevelData
+              patients={patients}
+              patientsData={patientsData}
+              docName={docName}
+              receivedStatus={receivedStatus}
+              setUserValidation={setUserValidation}
               setUserProcess={setUserProcess}
               userValidation={userValidation}
               userProcess={userProcess}
@@ -607,13 +632,14 @@ const DocumentPage = () => {
           <Button variant="contained" autoFocus
             // onClick={updateStatus}
             onClick={() => {
-              console.log("Yes clicked, calling updateStatus");
               updateStatus();
             }}
           >
             Yes
           </Button>
-          <Button variant='outlined' onClick={handleClose}>No</Button>
+          <Button variant="outlined" onClick={handleClose}>
+            No
+          </Button>
         </DialogActions>
       </BootstrapDialog>
     </>
