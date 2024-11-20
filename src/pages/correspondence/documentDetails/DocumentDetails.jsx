@@ -95,7 +95,7 @@ const DocumentPage = () => {
 
   const location = useLocation();
   const row = location.state?.row;
-  const receivedStatus = row.statusId;
+  const receivedStatus = row?.statusId;
   console.log("ptientRow", row)
 
 
@@ -201,6 +201,22 @@ const DocumentPage = () => {
         eobCheckId: checkId
       });
       setPatientsData(response.data);
+    } catch (err) {
+      console.log(err);
+      setLoader(false);
+      setError('Failed to fetch data');
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const updateEobFileLevelData = async () => {
+    const {id,payerName,depositDate,checkNumber,checkAmount}=fileLevelData[0]
+    try {
+      setLoader(true);
+      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_EOB_FILE_LEVEL_DATA, {
+        id,payerName,depositDate,checkNumber,checkAmount
+      });
     } catch (err) {
       console.log(err);
       setLoader(false);
@@ -419,32 +435,48 @@ const DocumentPage = () => {
               justifyContent: 'flex-end',
               alignItems: 'center',
               paddingRight: 2,
-              marginTop: -6, // Adjust to align buttons properly
+              marginTop: statusId == 2 && docName == 'EOB' ? -6 : 0 // Adjust to align buttons properly
             }}
           >
-            {/* Conditionally Render Edit/Save Button */}
-            {activeTab === 0 && statusId == 2 && (
+            {activeTab === 0 && statusId == 2 && docName == 'EOB' && (
               <>
                 <Button
                   variant="outlined"
-                  onClick={() => setIsEditMode(true)}
-
-                  sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: "5px" }}
+                  startIcon={<AppRegistrationOutlinedIcon />}
+                  onClick={() => {
+                    if (isEditMode) {
+                      updateEobFileLevelData();
+                    }
+                    setIsEditMode(!isEditMode);
+                  }}
+                  className="tab-button"
+                  sx={{ marginLeft: '10px', borderRadius: '8px', marginTop: '5px' }}
                 >
-                  {isEditMode ? 'Save' : ' file level Edit'}
+                  {isEditMode ? 'Save' : 'Edit'}
                 </Button>
-
               </>
             )}
 
             {activeTab === 0 && statusId == 2 && isEditMode && (
               <Button
-                variant="contained"
-                color="primary"
+                variant="outlined"
                 onClick={() => setIsEditMode(false)} // Call save or other logic here
+                className='tab-button'
                 sx={{ marginLeft: '10px', borderRadius: '8px' }}
               >
                 Cancel
+              </Button>
+            )}
+
+            {activeTab === 0 && !isEditMode && statusId == 2 && docName == 'EOB' && (
+              <Button
+                variant="outlined"
+                onClick={handleClickOpen}
+                className="tab-button"
+                sx={{ marginLeft: '10px' }}
+                startIcon={<HowToRegIcon />}
+              >
+                Submit
               </Button>
             )}
 
@@ -485,20 +517,25 @@ const DocumentPage = () => {
           </Box>
 
           {/* Tab Content */}
-          {activeTab === 0 && <FileLevelMetaData
-            fileLevelData={fileLevelData}
-            docName={docName}
-            isEditing={isEditing}
-            setIsEditing={setIsEditing}
-            setFileLevelData={setFileLevelData}
-            initialFileLevelData={initialFileLevelData}
-          />}
+          {activeTab === 0 && (
+            <FileLevelMetaData
+              fileLevelData={fileLevelData}
+              docName={docName}
+              setFileLevelData={setFileLevelData}
+              isEditMode={isEditMode}
+            />
+          )}
 
           {activeTab === 1 && docName == 'Medical-records-request' && (
             <MedicalReqPetientLevel patients={patients} patientsData={patientsData} docName={docName} />
           )}
           {activeTab === 1 && docName == 'EOB' && (
-            <PatientLevelData patients={patients} patientsData={patientsData} docName={docName} receivedStatus={receivedStatus} setUserValidation={setUserValidation}
+            <PatientLevelData
+              patients={patients}
+              patientsData={patientsData}
+              docName={docName}
+              receivedStatus={receivedStatus}
+              setUserValidation={setUserValidation}
               setUserProcess={setUserProcess}
               userValidation={userValidation}
               userProcess={userProcess}
@@ -595,13 +632,14 @@ const DocumentPage = () => {
           <Button variant="contained" autoFocus
             // onClick={updateStatus}
             onClick={() => {
-              console.log("Yes clicked, calling updateStatus");
               updateStatus();
             }}
           >
             Yes
           </Button>
-          <Button variant='outlined' onClick={handleClose}>No</Button>
+          <Button variant="outlined" onClick={handleClose}>
+            No
+          </Button>
         </DialogActions>
       </BootstrapDialog>
     </>
