@@ -4,7 +4,7 @@ export const twitterColor = '#1DA1F2';
 export const facebookColor = '#3b5998';
 export const linkedInColor = '#0e76a8';
 // https://ican-manage-chit-dem.cognitivehealthit.com/BAIDataExtracter/bai/getLastWeekFilesData/1
-export const BASE_PATH = "http://10.0.1.121:8181/BAIDataExtracter/bai";
+export const BASE_PATH = "https://ican-manage-chit-dem.cognitivehealthit.com/BAIDataExtracter/bai";
 
 export const APP_DEFAULT_PATH = '/patient/payment';
 export const HORIZONTAL_MAX_ITEM = 7;
