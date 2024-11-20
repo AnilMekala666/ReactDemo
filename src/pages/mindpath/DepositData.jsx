@@ -244,7 +244,7 @@ function DepositData() {
   };
 
   const handleFileUpload = async(event) => {
-    const depositDataBai = `/src/assets/data/newData/deposit1.bai`;
+    const depositDataBai = `/data/newData/deposit1.bai`;
     const file = await fetch(depositDataBai).then(res => res.text());
     if (file) {
       setFileContent(file);

@@ -209,7 +209,7 @@ function PatientPaymentData() {
   };
 
   const handleFileUpload = async (event) => {
-    const patientlXlsx = `/src/assets/data/newData/patient_payments1.xlsx`;
+    const patientlXlsx = `/data/newData/patient_payments1.xlsx`;
     const file = await fetch(patientlXlsx).then(res => res.blob());
     if (file) {
       setLoading(true);

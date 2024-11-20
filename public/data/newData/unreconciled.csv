@@ -1,0 +1,20 @@
+Transaction No,Transaction Type,Batch Owner,Account Name,Payor,Deposit Date,Bank Deposit,Remittance,EMR,Variance,Status
+1131525314,EFT Credit,iCAN,Florida Deposits,AMERICA CARE,10-01-2024,$218.64,$0.00,$0.00,"Pay +$218.64, Post -$218.64",Remit Missing
+1000240589,EFT Credit,iCAN,Florida Deposits,WELLCARE HEALTH,10-01-2024,$174.75,$174.75,$0.00,Post -$174.75,Waiting for Posting
+1001213709,EFT Credit,iCAN,North Carolina Deposits,WELLCARECTCARE,10-01-2024,$170.01,$100.00,$0.00,"Pay +$70.01, Post -$170.01",Remit Not Matching Deposit
+2300849731,EFT Credit,iCAN,North Carolina Deposits,FREEDOM MED,10-01-2024,$122.70,$122.70,$100.00,Post -$22.7,Variance
+472946011,EFT Credit,iCAN,North Carolina Deposits,UNITY SYSTEMS,10-01-2024,$93.70,$0.00,$0.00,"Pay +$93.7, Post -$93.7",Remit Missing
+1131525312,EFT Credit,iCAN,South Carolina Deposits,CAPITAL WELLNESS,10-01-2024,$63.99,$0.00,$0.00,"Pay +$63.99, Post -$63.99",Remit Missing
+882409001073798,EFT Credit,iCAN,South Carolina Deposits,HOMELAND HEALTH,10-01-2024,$60.32,$0.00,$0.00,"Pay +$60.32, Post -$60.32",Remit Missing
+472495447,EFT Credit,iCAN,Arizona Deposits,ZP  CHCSSERVI371,10-01-2024,$33.64,$0.00,$0.00,"Pay +$33.64, Post -$33.64",Remit Missing
+C6780509,EFT Credit,iCAN,Arizona Deposits,AMERICAN MED,10-01-2024,$30.31,$0.00,$0.00,"Pay +$30.31, Post -$30.31",Remit Missing
+1131525311,EFT Credit,iCAN,Texas Deposits,UNITY SYSTEMS,10-01-2024,$25.90,$0.00,$0.00,"Pay +$25.9, Post -$25.9",Remit Missing
+472802780,EFT Credit,iCAN,Texas Deposits,ZP  AETNA1264,10-01-2024,$20.94,$0.00,$0.00,"Pay +$20.94, Post -$20.94",Remit Missing
+EFT4018042,EFT Credit,iCAN,Florida Deposits,EAGLE WELLNESS,10-01-2024,"$3,59,009.68",$0.00,$0.00,"Pay +$359009.68, Post -$359009.68",Remit Missing
+1TZ76487081,EFT Credit,iCAN,Florida Deposits,CAPITAL WELLNESS,10-01-2024,"$1,58,825.91",$0.00,$0.00,"Pay +$158825.91, Post -$158825.91",Remit Missing
+EFT4018043,EFT Credit,iCAN,North Carolina Deposits,EAGLE WELLNESS,10-01-2024,"$1,49,532.22",$0.00,$0.00,"Pay +$149532.22, Post -$149532.22",Remit Missing
+9TZ76563770,EFT Credit,iCAN,North Carolina Deposits,CAPITAL WELLNESS,10-01-2024,"$1,24,910.98",$0.00,$0.00,"Pay +$124910.98, Post -$124910.98",Remit Missing
+C2964057,EFT Credit,iCAN,North Carolina Deposits,AMERICAN MED,10-01-2024,"$91,644.47",$0.00,$0.00,"Pay +$91644.47, Post -$91644.47",Remit Missing
+EFT4018045,EFT Credit,iCAN,South Carolina Deposits,EAGLE WELLNESS,10-01-2024,"$66,351.76",$0.00,$0.00,"Pay +$66351.76, Post -$66351.76",Remit Missing
+EFT4018044,EFT Credit,iCAN,South Carolina Deposits,EAGLE WELLNESS,10-01-2024,"$65,994.39",$0.00,$0.00,"Pay +$65994.39, Post -$65994.39",Remit Missing
+10931012,EFT Credit,iCAN,Arizona Deposits,CAPITAL WELLNESS,10-01-2024,"$11,284.35",$0.00,$0.00,"Pay +$11284.35, Post -$11284.35",Remit Missing

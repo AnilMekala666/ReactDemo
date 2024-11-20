@@ -285,8 +285,8 @@ function ClaimsData() {
   }
 
   const handleFileUpload = async (event) => {
-    const claimsCsv = `/src/assets/data/newData/claims${randomIntFromInterval(1, 2)}.csv`;
-    const claimsTxt = `/src/assets/data/newData/claims${randomIntFromInterval(1, 2)}.txt`;
+    const claimsCsv = `/data/newData/claims${randomIntFromInterval(1, 2)}.csv`;
+    const claimsTxt = `/data/newData/claims${randomIntFromInterval(1, 2)}.txt`;
     const file = await fetch(claimsCsv).then(res => res.text());
     const fileTxt = await fetch(claimsTxt).then(res => res.text());
     if (file) {

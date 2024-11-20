@@ -318,8 +318,8 @@ function RemittanceData() {
   
 
   const handleFileUpload = async (event) => {
-    const remittance = `/src/assets/data/newData/remittance${randomIntFromInterval(1, 2)}.csv`;
-    const remittanceTxt = `/src/assets/data/newData/remittance${randomIntFromInterval(1, 2)}.txt`;
+    const remittance = `/data/newData/remittance${randomIntFromInterval(1, 2)}.csv`;
+    const remittanceTxt = `/data/newData/remittance${randomIntFromInterval(1, 2)}.txt`;
     const file = await fetch(remittance).then(res => res.text());
     const fileTxt = await fetch(remittanceTxt).then(res => res.text());
     if (file) {

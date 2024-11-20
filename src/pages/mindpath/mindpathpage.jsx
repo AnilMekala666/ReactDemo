@@ -816,9 +816,9 @@ function MindPathPage() {
   const videoModal = (type) => {
     let videosUrl = "";
     switch (type?.toLowerCase()) {
-      case "deposit": videosUrl = new URL('src/assets/data/Demo_Videos/eft_secondary_posting_amd.mp4', import.meta.url).href; break;
-      case "patient": videosUrl = new URL('src/assets/data/Demo_Videos/PatientPosting_AMD.mp4', import.meta.url).href; break;
-      case "payment": videosUrl = new URL('src/assets/data/Demo_Videos/ZeroPosting_AMD.mp4', import.meta.url).href; break;
+      case "deposit": videosUrl = new URL('/data/Demo_Videos/eft_secondary_posting_amd.mp4', import.meta.url).href; break;
+      case "patient": videosUrl = new URL('/data/Demo_Videos/PatientPosting_AMD.mp4', import.meta.url).href; break;
+      case "payment": videosUrl = new URL('/data/Demo_Videos/ZeroPosting_AMD.mp4', import.meta.url).href; break;
     }
     setVideoUrl(videosUrl);
     setVideoModalOpen(true);
