@@ -7,11 +7,13 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  DialogContentText
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import pdfIcon from '../../../../src/assets/images/icons/pdf_icon.png';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import QueueIcon from '@mui/icons-material/Queue';
+import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import axios from 'axios';
@@ -59,7 +61,7 @@ function BootstrapDialogTitle({ children, onClose, ...other }) {
   );
 }
 
-export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId ,fileId,customAttachments,setCustomAttachments}) => {
+export const FileResponse = ({ mailContent, attachments, setUserValidation, setUserProcess, userProcess, userValidation, statusId, status, setStatus, uId ,fileId,customAttachments,setCustomAttachments,onDelete,fetchMedicalRequestData}) => {
   // Group attachments by document type
   console.log("statusResponse", statusId)
   const [editorContent, setEditorContent] = useState(mailContent || '');
@@ -73,12 +75,16 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
   const [isEditing, setIsEditing] = useState(false);
   const [validationDialogOpen, setValidationDialogOpen] = useState(false)
   const [customFiles,setCustomFiles] = useState([]);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [deleteFileId,setDeleteFileId] = useState("");
+
 
   const [fileNames, setFileNames] = useState([]);
 
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
     setFiles(selectedFiles);
+    setFileNames(selectedFiles);
     const previews = selectedFiles.map((file) => URL.createObjectURL(file));
     setFilePreviews(previews);
   };
@@ -104,16 +110,16 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
    const uploadFiles = async () => {
      const formData = new FormData();
 
-     // Append each file to the formData object
-    //  Array.from(files).forEach((file) => {
-    //    formData.append('file', file);
-    //  });
+     //Append each file to the formData object
+     Array.from(files).forEach((file) => {
+       formData.append('file', file);
+     });
 
-    formData.append("file",files[0]);
+    //formData.append("file",files[0]);
 
      // Add other fields
     formData.append('id', fileId);
-
+    setFileNames(formData);
      try {
       setLoader(true);
        const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPLOAD_MEDICAL_REQ_PDF, formData, {
@@ -122,10 +128,7 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
          }
        });
        if(response.status==200){
-        response.data.forEach(item=>{
-          setCustomAttachments([...customAttachments,{documentType:item.fileName,fileLocation:item.fileLocation}])
-        })
-        //setCustomFiles([...customFiles,response.data]);
+        fetchMedicalRequestData();
         openSnackbar({
           open: true,
           message: 'File Uploaded Success',
@@ -142,13 +145,14 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
      }
    };
 
-   const FileCard = ({ file ,index}) => {
+   const FileCard = ({ file ,index , handleDeleteClick,id}) => {
     return (
       <Grid item xs={12} key={index}>
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent:'space-between',
             border: '1px solid #E0E0E0',
             borderRadius: 4,
             padding: 2,
@@ -156,14 +160,19 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
             marginBottom: 2,
             cursor: 'pointer'
           }}
-          onClick={() =>showPdf(file.documentType) }
+          
         >
-          <img src={pdfIcon} alt="pdf icon" style={{ width: '24px', height: '24px', marginRight: '10px' }} />
-          <Box>
-            <Typography variant="body2" sx={{ fontWeight: 500 }}>
-             {file.documentType}
-            </Typography>
+          <Box sx={{display:"flex",alignItems:"center",width:"90%",overflow:"hidden"}}>
+            <img src={pdfIcon} alt="pdf icon" style={{ width: '24px', height: '24px', marginRight: '10px' }} />
+            <Box  onClick={() =>showPdf(file.documentType) }>
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                {file.documentType}
+              </Typography>
+            </Box>
           </Box>
+          <IconButton aria-label="delete" onClick={()=>handleDeleteClick(file.id)}>
+            <DeleteIcon color="error" />
+          </IconButton>
         </Box>
       </Grid>
     );
@@ -223,6 +232,23 @@ export const FileResponse = ({ mailContent, attachments, setUserValidation, setU
     console.log("close drawwer")
     setValidationDialogOpen(false)
   }
+
+    // Open the confirmation dialog
+    const handleDeleteClick = (id) => {
+      setDeleteFileId(id)
+      setOpenDeleteDialog(true);
+    };
+  
+    // Close the confirmation dialog
+    const handleCloseDeleteDialog = () => {
+      setOpenDeleteDialog(false);
+    };
+  
+    // Confirm delete and trigger the callback
+    const handleConfirmDelete = () => {
+      onDelete(deleteFileId); // Pass the file's unique identifier to the parent
+      setOpenDeleteDialog(false);
+    };
   
 const updatePatientLevelData = async () => {
   try {
@@ -245,6 +271,7 @@ const updatePatientLevelData = async () => {
     console.error('Error updatign the content', error);
   }
 };
+
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -378,7 +405,7 @@ const updatePatientLevelData = async () => {
         <Box>
           <Grid container spacing={2}>
             {customAttachments.map((file, index) => {
-              return <FileCard file={file} index={index} />;
+              return <FileCard file={file} index={index} handleDeleteClick={handleDeleteClick}/>;
             })}
           </Grid>
         </Box>
@@ -500,6 +527,25 @@ const updatePatientLevelData = async () => {
           <Button variant='outlined' onClick={handleClose}>No</Button>
         </DialogActions>
       </BootstrapDialog>
+
+
+         {/* Confirmation Dialog  for delete*/}
+         <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>Delete File</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this file? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

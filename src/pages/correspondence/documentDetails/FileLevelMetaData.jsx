@@ -51,7 +51,7 @@ const FileLevelMetaData = ({ fileLevelData, docName, setFileLevelData,isEditMode
       { id: 9, label: 'Letter Name', value: data.letterName, isEditable:false }
     ];
     const metadataForMedicalRequest = [
-      { id: 1, label: 'Payer Name', value: data.payerName ,isEditable:false},
+      { id: 1, label: 'Payer Name', value: data.payerName ,isEditable:true, keyToEdit:"payerName"},
       { id: 2, label: 'Deposit Date', value: data.depositDate,isEditable:false },
       { id: 3, label: 'Number of Pages', value: `${data.numberOfPages} ${data.numberOfPages>1 ? "Pages" : "Page"}`,isEditable:false },
       { id: 4, label: 'Document Age', value: `${data.documentAge} ${data.documentAge>1?"days":"day"} ago`,isEditable:false },

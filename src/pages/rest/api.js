@@ -43,5 +43,8 @@ export const CORRESPONDENCE_ENDPOINTS = {
   UPDATE_EOB_PATIENT_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/updatePatientWithLineLevelData`,
   UPDATE_EOB_FILE_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/updateEOBFileLevelData`,
   REFRESH_PREDICTION_DATA:`${CORRESPONDENCE_BASE_URL}/refreshPredictionData`,
-  UPDATE_LAST_RECORD_BY_DATE:`https://ican-manage-chit-dem.cognitivehealthit.com/BAIDataExtracter/bai/updateLastRecordByDate/1`
+  UPDATE_LAST_RECORD_BY_DATE:`https://ican-manage-chit-dem.cognitivehealthit.com/BAIDataExtracter/bai/updateLastRecordByDate/1`,
+  UPDATE_MEDICAL_REQUEST_PATIENT_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/updateMedicalReqPatientLevelData`,
+  UPDATE_MEDICAL_REQUEST_FILE_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/updateMedicalReqFileLevelData`,
+  DELETE_MEDICAL_REQ_AI_INTERPRETATION:`${CORRESPONDENCE_BASE_URL}/deleteMedicalReqAiInterpretationAtt`,
 }
