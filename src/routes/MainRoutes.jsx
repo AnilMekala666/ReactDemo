@@ -138,6 +138,7 @@ const ClaimsDataPage = Loadable(lazy(() => import('pages/mindpath/ClaimsData')))
 const DashBoard= Loadable(lazy(() => import('pages/correspondence/DashBoard')))
 const DocumentsList = Loadable(lazy(() => import('pages/correspondence/DocumentsList')))
 const DocumentDetails = Loadable(lazy(() => import('pages/correspondence/documentDetails/DocumentDetails')))
+const CorrespondanceAuth = Loadable(lazy(()=> import('pages/correspondence/correspondenceAuth/index')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -222,9 +223,14 @@ const MainRoutes = {
             {
               path:'documentsDetails/:docName/:fileName/:docId/:checkId/:statusId/:uId',
               element:<DocumentDetails/>
+            },
+            {
+              path:'validateToken',
+              element:<CorrespondanceAuth/>
             }
           ]
         },
+        //https://10.1.3.72/correspndence/validateToken?type=RCM&token=
         // Innoclique
         // {
         //   path: 'apps',
