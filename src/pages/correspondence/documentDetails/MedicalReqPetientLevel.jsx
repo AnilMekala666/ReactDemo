@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Paper,
-  Button,
-  Typography,
+  Select,
+  MenuItem,
+  InputLabel,
   Box,
   Table,
   TableBody,
@@ -10,18 +11,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Select,
-  MenuItem,
-  InputLabel
+  Typography,
+  TextField,
 } from '@mui/material';
+
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
 
-export const MedicalReqPetientLevel = ({ patients, patientsData,docName }) => {
-  const [patientLevelTable, setPatientLevelTable] = useState([]);
-  const [lineLevelTable, setLineLevelTable] = useState([]);
-  const [patient, setPatient] = useState(patientsData?.patientName||"");
+export const MedicalReqPetientLevel = ({
+  patients,
+  patientsData,
+  setPatientsData,
+  editMode = false,
+}) => {
+  const [patient, setPatient] = useState(patientsData?.patientName || "");
+
   const handleSelectedPatient = (e) => {
     const id = e.target.value;
     setPatient(id);
@@ -33,9 +38,13 @@ export const MedicalReqPetientLevel = ({ patients, patientsData,docName }) => {
     setLineLevelTable(_lineData);
   };
 
-  useEffect(() => {
-    
-  }, []);
+  const handleFieldChange = (field, value) => {
+    console.log(value,"inside the onchange");
+    setPatientsData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -49,7 +58,6 @@ export const MedicalReqPetientLevel = ({ patients, patientsData,docName }) => {
           borderRadius: '8px',
           width: '100%',
           boxSizing: 'border-box',
-          marginTop: '2'
         }}
       >
         {/* Previous and Next buttons */}
@@ -116,7 +124,7 @@ export const MedicalReqPetientLevel = ({ patients, patientsData,docName }) => {
       </Box>
 
       {/* Table for Patient-Level Data */}
-      {patient && (
+      {patient ? (
         <Box className="doc-table-cont" sx={{ padding: 2 }}>
           <label style={{ fontWeight: '600', fontSize: '16px' }}>Patient-Level Data</label>
           <TableContainer component={Paper} sx={{ marginTop: 2, marginBottom: 2 }}>
@@ -130,20 +138,59 @@ export const MedicalReqPetientLevel = ({ patients, patientsData,docName }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-             
-                  <TableRow>
-                    <TableCell>{patientsData.patientName}</TableCell>
-                    <TableCell>{patientsData.claimNumber}</TableCell>
-                    <TableCell>{patientsData.serviceDate}</TableCell>
-                    <TableCell>{patientsData.dateOfBirth}</TableCell>
-                  </TableRow>
-              
+                <TableRow>
+                  <TableCell>
+                    {editMode ? (
+                      <TextField
+                        value={patientsData.patientName}
+                        onChange={(e) => handleFieldChange('patientName', e.target.value)}
+                        fullWidth
+                      />
+                    ) : (
+                      patientsData.patientName
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editMode ? (
+                      <TextField
+                        value={patientsData.claimNumber}
+                        onChange={(e) => handleFieldChange('claimNumber', e.target.value)}
+                        fullWidth
+                      />
+                    ) : (
+                      patientsData.claimNumber
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editMode ? (
+                      <TextField
+                        type="date"
+                        value={patientsData.serviceDate}
+                        onChange={(e) => handleFieldChange('serviceDate', e.target.value)}
+                        fullWidth
+                      />
+                    ) : (
+                      patientsData.serviceDate
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editMode ? (
+                      <TextField
+                        type="date"
+                        value={patientsData.dateOfBirth}
+                        onChange={(e) => handleFieldChange('dateOfBirth', e.target.value)}
+                        fullWidth
+                      />
+                    ) : (
+                      patientsData.dateOfBirth
+                    )}
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
-      )}
-      {!patient && (
+      ) : (
         <Typography
           sx={{
             height: '250px',
@@ -152,7 +199,7 @@ export const MedicalReqPetientLevel = ({ patients, patientsData,docName }) => {
             justifyContent: 'center',
             alignItems: 'center',
             color: '#656565',
-            fontSize: '1rem'
+            fontSize: '1rem',
           }}
         >
           Please select a patient from the list to access detailed information!

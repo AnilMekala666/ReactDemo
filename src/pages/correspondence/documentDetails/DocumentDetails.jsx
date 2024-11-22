@@ -28,6 +28,7 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
+import { openSnackbar } from 'api/snackbar';
 import IconButton from 'components/@extended/IconButton';
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
@@ -210,13 +211,22 @@ const DocumentPage = () => {
     }
   };
 
-  const updateEobFileLevelData = async () => {
+  const updateFileLevelData = async () => {
     const {id,payerName,depositDate,checkNumber,checkAmount}=fileLevelData[0]
     try {
       setLoader(true);
-      const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_EOB_FILE_LEVEL_DATA, {
-        id,payerName,depositDate,checkNumber,checkAmount
+      if(docName=="EOB"){
+        const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_EOB_FILE_LEVEL_DATA, {
+          id,payerName,depositDate,checkNumber,checkAmount
+        });
+      }
+      if(docName == 'Medical-records-request'){
+        const {payerName,id}=fileLevelData[0]
+       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_MEDICAL_REQUEST_FILE_LEVEL_DATA, {
+        payerName,id
       });
+      }
+      
     } catch (err) {
       console.log(err);
       setLoader(false);
@@ -268,66 +278,47 @@ const DocumentPage = () => {
     : "/correspndence/documentsList/Medical-records-request";
 
   const handleEditToggle = () => {
-    console.log()
-    console.log("handleEditToggle click")
-    // setIsEditing((prev) => !prev);
     setIsPatientLevelEditMode(true);
   };
   const updatePatientLevelData = async () => {
-    console.log("Payload to click")
     try {
-      console.log("patientsData", patientsData)
-      // for (const patient of patientsData.patient_level_data) {
-      //   const patientLevelPayload = {
-      //     id: patient.id,
-      //     claimNumber: patient.claimNumber,
-      //     claimedAmount: patient.claimAmount,
-      //     allowedAmount: patient.allowedAmount,
-      //     paidAmount: patient.paidAmount,
-      //   };
-
-      //   console.log("Payload to update:", payload);
-
-
-      //   // const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_PATIENT_LEVEL_DATA, payload);
-      //   // console.log("Update response:", response.data);
-      // }
-      const patientLevelPayload = patientsData.patient_level_data.map((patient) => ({
-        id: patient.id,
-        claimNumber: patient.claimNumber,
-        claimedAmount: patient.claimAmount,
-        allowedAmount: patient.allowedAmount,
-        paidAmount: patient.paidAmount,
-      }))[0];
-      const lineLevelPayload = patientsData.line_level_data.map((line) => ({
-        id: line.id,
-        claimNumber: line.checkPatientLevelDataId,
-        claimedAmount: line.chargeAmount,
-        allowedAmount: line.allowedAmount,
-        paidAmount: line.paidAmount,
-      }));
-      const payload = {
-        patientLevelData: patientLevelPayload,
-        lineLevelData: lineLevelPayload,
-      };
-      console.log("bothpayload", payload)
-      const response = await axios.post(
-        CORRESPONDENCE_ENDPOINTS.UPDATE_EOB_PATIENT_LEVEL_DATA,
-        payload
-      );
-      console.log("Update response:", response.data);
-      if (response.data.statusCode == 200) {
-        setMessage(response.data.message)
-        fetchPatientData()
-        setIsPatientLevelEditMode(false);
-      } else {
-        setMessage(response.data.message)
-        fetchPatientData()
+      if (docName == 'EOB') {
+        const patientLevelPayload = patientsData.patient_level_data.map((patient) => ({
+          id: patient.id,
+          claimNumber: patient.claimNumber,
+          claimedAmount: patient.claimAmount,
+          allowedAmount: patient.allowedAmount,
+          paidAmount: patient.paidAmount
+        }))[0];
+        const lineLevelPayload = patientsData.line_level_data.map((line) => ({
+          id: line.id,
+          claimNumber: line.checkPatientLevelDataId,
+          claimedAmount: line.chargeAmount,
+          allowedAmount: line.allowedAmount,
+          paidAmount: line.paidAmount
+        }));
+        const payload = {
+          patientLevelData: patientLevelPayload,
+          lineLevelData: lineLevelPayload
+        };
+        const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_EOB_PATIENT_LEVEL_DATA, payload);
+        if (response.data.statusCode == 200) {
+          setMessage(response.data.message);
+          fetchPatientData();
+          setIsPatientLevelEditMode(false);
+        } else {
+          setMessage(response.data.message);
+          fetchPatientData();
+        }
       }
-
-
+      if (docName == 'Medical-records-request') {
+        const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_MEDICAL_REQUEST_PATIENT_LEVEL_DATA, { ...patientsData });
+        if(response.status==200){
+          setIsPatientLevelEditMode(false);
+        }
+      }
     } catch (error) {
-      console.error("Update failed:", error);
+      console.error('Update failed:', error);
     }
   };
   const handleClickOpen = () => {
@@ -364,6 +355,25 @@ const DocumentPage = () => {
       console.log(err);
     }
 
+  };
+
+  const deleteMedReqFiles = async (fileId) => {
+    try {
+      const response = await axios.get(`${CORRESPONDENCE_ENDPOINTS.DELETE_MEDICAL_REQ_AI_INTERPRETATION}/${fileId}`);
+      if (response.status == 200) {
+        openSnackbar({
+          open: true,
+          message: 'File Deleted Successfully',
+          variant: 'alert',
+          close: true,
+        });
+        fetchMedicalRequestData();
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoader(false); // Correctly set loader state
+    }
   };
 
 
@@ -435,17 +445,17 @@ const DocumentPage = () => {
               justifyContent: 'flex-end',
               alignItems: 'center',
               paddingRight: 2,
-              marginTop: statusId == 2 && docName == 'EOB' ? -6 : 0 // Adjust to align buttons properly
+              marginTop: statusId == 2 && (activeTab==0 || activeTab==1 )? -6 : 0 // Adjust to align buttons properly
             }}
           >
-            {activeTab === 0 && statusId == 2 && docName == 'EOB' && (
+            {activeTab === 0 && statusId == 2  && (
               <>
                 <Button
                   variant="outlined"
                   startIcon={<AppRegistrationOutlinedIcon />}
                   onClick={() => {
                     if (isEditMode) {
-                      updateEobFileLevelData();
+                      updateFileLevelData();
                     }
                     setIsEditMode(!isEditMode);
                   }}
@@ -468,7 +478,7 @@ const DocumentPage = () => {
               </Button>
             )}
 
-            {activeTab === 0 && !isEditMode && statusId == 2 && docName == 'EOB' && (
+            {activeTab === 0 && !isEditMode && statusId == 2  && (
               <Button
                 variant="outlined"
                 onClick={handleClickOpen}
@@ -480,7 +490,7 @@ const DocumentPage = () => {
               </Button>
             )}
 
-            {activeTab === 1 && statusId == 2 && docName == 'EOB' && (
+            {activeTab === 1 && statusId == 2  && (
               <Button
                 variant="outlined"
                 startIcon={ <AppRegistrationOutlinedIcon/>}
@@ -491,7 +501,7 @@ const DocumentPage = () => {
 
               </Button>
             )}
-            {activeTab === 1 && isPatientLevelEditMode && statusId == 2 && docName == 'EOB' && (
+            {activeTab === 1 && isPatientLevelEditMode && statusId == 2  && (
               <Button
                 variant="outlined"
                 onClick={() => setIsPatientLevelEditMode(false)}
@@ -502,7 +512,7 @@ const DocumentPage = () => {
 
               </Button>
             )}
-            {activeTab === 1 && !isPatientLevelEditMode && statusId == 2 && docName == 'EOB' && (
+            {activeTab === 1 && !isPatientLevelEditMode && statusId == 2 && (
               <Button
                 variant="outlined"
                 onClick={handleClickOpen}
@@ -527,7 +537,12 @@ const DocumentPage = () => {
           )}
 
           {activeTab === 1 && docName == 'Medical-records-request' && (
-            <MedicalReqPetientLevel patients={patients} patientsData={patientsData} docName={docName} />
+            <MedicalReqPetientLevel 
+             patients={patients} 
+             patientsData={patientsData} 
+             setPatientsData={setPatientsData}
+             editMode={isPatientLevelEditMode}
+            />
           )}
           {activeTab === 1 && docName == 'EOB' && (
             <PatientLevelData
@@ -566,6 +581,8 @@ const DocumentPage = () => {
               setStatus={setStatus}
               uId={Number(uId)}
               fileId={checkId}
+              onDelete={deleteMedReqFiles}
+              fetchMedicalRequestData={fetchMedicalRequestData}
             />
           )}
 
@@ -611,12 +628,7 @@ const DocumentPage = () => {
           </Box>
         </Paper>
       </Box>
-      {/* <FilePreviewDialog
-        dialogOpen={showFile}
-        setDialogOpen={setShowFile}
-        title="Document"
-        sourceUrl="https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showpdf?id=21514&batchName=sample%20batch"
-      /> */}
+   
       <FilePreviewDialog dialogOpen={showFile} setDialogOpen={setShowFile} title="Document" sourceUrl={sourceUrl} />
 
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={validationDialogOpen}>

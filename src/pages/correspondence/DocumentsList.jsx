@@ -449,7 +449,6 @@ const DocumentsList = () => {
       setLoader(false);
     }
   };
-  console.log("setAiEobTableData", aiEobTableData)
 
   const fetchMedicalRequestData = async () => {
     try {
@@ -458,12 +457,10 @@ const DocumentsList = () => {
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.FETCH_MEDICAL_PREDICTION_FILES_WITH_STATUS, {
         prediction: originalDocName
       });
-      console.log(response)
       let processedData = response.data.map((item, index) => {
         const { id, depositDate, documentAge, letterName, payerName, status, checkId, patientName, claimNumber, numOfPages,statusId,uId } =
           item;
         const shortDocumentName = letterName ? letterName.split('_').pop() : '-';
-        console.log(letterName)
         return {
           id: id,
           documentName: letterName ? letterName : '-',
@@ -508,8 +505,6 @@ const DocumentsList = () => {
   };
 
   const handleSetAIEobTableData = (data) => {
-    console.log("handleSetAIEobTableData", data)
-
     setIsTableLoading(true)
     setTimeout(() => {
       setAiEobTableData(data);
@@ -518,7 +513,6 @@ const DocumentsList = () => {
   };
 
   const handleSetAIMedicalRequestTableData = (data) => {
-    console.log("data", data)
     setIsTableLoading(true)
     setTimeout(() => {
       setAiMedicalRequestTableData(data);
