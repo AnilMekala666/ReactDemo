@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 
 // project import
 import SalesChart from 'sections/dashboard/SalesChart';
+import { Switch } from '@mui/material';
 
 // sales report status
 const status = [
@@ -32,27 +33,7 @@ export default function SaleReportCard() {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between">
-        <Grid item>
-          <Typography variant="h5">Sales Report</Typography>
-        </Grid>
-        <Grid item>
-          <TextField
-            id="standard-select-currency"
-            size="small"
-            select
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            sx={{ '& .MuiInputBase-input': { py: 0.75, fontSize: '0.875rem' } }}
-          >
-            {status.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-      </Grid>
+      
       <SalesChart />
     </>
   );

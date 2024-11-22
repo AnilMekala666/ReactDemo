@@ -28,6 +28,13 @@ const widget = {
     //   icon: icons.IdcardOutlined
     // },
     {
+      id: 'Dashboard',
+      title: <FormattedMessage id="Dashboard" />,
+      type: 'item',
+      url: '/dashboard/default',
+      icon: icons.DatabaseOutlined
+    },
+    {
       id: 'iCAN-RCM',
       title: <FormattedMessage id="iCAN-RCM" />,
       type: 'item',

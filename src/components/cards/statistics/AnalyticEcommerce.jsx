@@ -17,40 +17,33 @@ const iconSX = { fontSize: '0.75rem', color: 'inherit', marginLeft: 0, marginRig
 
 export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra }) {
   return (
-    <MainCard contentSX={{ p: 2.25 }}>
-      <Stack spacing={0.5}>
-        <Typography variant="h6" color="text.secondary">
+    <MainCard contentSX={{ p: 2 }}>
+      <Stack >
+        <Typography mb={3} variant="h6" color="#656565">
           {title}
         </Typography>
         <Grid container alignItems="center">
           <Grid item>
-            <Typography variant="h4" color="inherit">
+            <Typography mb={2} variant="h4" color="#252525">
               {count}
             </Typography>
           </Grid>
-          {percentage && (
-            <Grid item>
-              <Chip
-                variant="combined"
-                color={color}
-                icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
-                label={`${percentage}%`}
-                sx={{ ml: 1.25, pl: 1 }}
-                size="small"
-              />
-            </Grid>
-          )}
+          
         </Grid>
       </Stack>
-      <Box sx={{ pt: 2.25 }}>
-        <Typography variant="caption" color="text.secondary">
-          You made an extra{' '}
-          <Typography variant="caption" sx={{ color: `${color || 'primary'}.main` }}>
+      <Grid container columnSpacing={0} p={0.5} style={{border:1, borderColor:'#ececec',borderStyle:'solid', backgroundColor:'#fdfdfd', borderRadius:5}}>
+            <Grid item xs={10}  >
+            <Typography style={{fontWeight:'bold'}}>
+            {percentage}
+            </Typography>
+            </Grid>
+            <Grid item xs={1}  >
+              <Typography style={{textAlign:'right', fontWeight:'bold'}}>
             {extra}
-          </Typography>{' '}
-          this year
-        </Typography>
-      </Box>
+            </Typography>
+            </Grid>
+        
+      </Grid>
     </MainCard>
   );
 }

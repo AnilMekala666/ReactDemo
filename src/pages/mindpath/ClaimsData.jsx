@@ -476,18 +476,11 @@ function ClaimsData() {
         return o;
       }
     }).filter((key) => key != "subRows" && key != undefined)
-    console.log("Columns", columns);
     setTableColumns(columns);
     setParsedData(result);
     setFileMessage("No File Available to Process");
+    console.log(arr);
     await saveFileToDb({
-      total: arr.length,
-      recorded: arr.length,
-      fileName: `${(new Date().toJSON().slice(0,10))}_remits.edi`,
-      files: "1",
-      filesProcessed: "1"
-    });
-    console.log({
       total: arr.length,
       recorded: arr.length,
       fileName: `${(new Date().toJSON().slice(0,10))}_remits.edi`,

@@ -269,13 +269,6 @@ function PatientPaymentData() {
           files: "1",
           filesProcessed: "1"
         });
-        console.log({
-          total: jsonData.length,
-          recorded: jsonData.length,
-          fileName: `${(new Date().toJSON().slice(0,10))}_patient_payment.xlsx`,
-          files: "1",
-          filesProcessed: "1"
-        });
       };
       reader.readAsArrayBuffer(file); // Read file as ArrayBuffer
       setFileMessage("No File Available to Process");

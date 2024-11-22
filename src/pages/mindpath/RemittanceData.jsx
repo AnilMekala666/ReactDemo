@@ -463,13 +463,6 @@ function RemittanceData() {
       files: "1",
       filesProcessed: "1"
     });
-    console.log({
-      total: arr.length,
-      recorded: arr.length,
-      fileName: `${(new Date().toJSON().slice(0,10))}_remits.edi`,
-      files: "1",
-      filesProcessed: "1"
-    });
   };
 
 

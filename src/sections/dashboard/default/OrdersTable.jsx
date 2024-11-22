@@ -152,7 +152,7 @@ export default function OrderTable() {
   const orderBy = 'tracking_no';
 
   return (
-    <Box>
+    <Box mt={2}>
       <TableContainer
         sx={{
           width: '100%',

@@ -13,6 +13,7 @@ import { BarChart } from '@mui/x-charts/BarChart';
 
 // project import
 import MainCard from 'components/MainCard';
+import { Grid } from '@mui/material';
 
 // ==============================|| SALES COLUMN CHART ||============================== //
 
@@ -31,29 +32,29 @@ export default function SalesChart() {
   };
 
   const valueFormatter = (value) => `$ ${value} Thousands`;
-  const primaryColor = theme.palette.primary.main;
-  const warningColor = theme.palette.warning.main;
+  const primaryColor = "#3A63D2";
+  const warningColor = "#EB7724";
 
-  const lables = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const lables = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
   const data = [
-    { data: [180, 90, 135, 114, 120, 145, 170, 200, 170, 230, 210, 180], label: 'Income', color: warningColor, valueFormatter },
-    { data: [120, 45, 78, 150, 168, 99, 180, 220, 180, 210, 220, 200], label: 'Cost of Sales', color: primaryColor, valueFormatter }
+    { data: [180, 90, 135, 114, 120], label: 'Income', color: primaryColor, valueFormatter },
+    { data: [120, 45, 78, 150, 168], label: 'Cost of Sales', color: warningColor, valueFormatter }
   ];
 
   const axisFonstyle = { fontSize: 10, fill: theme.palette.text.secondary };
 
   return (
-    <MainCard sx={{ mt: 1 }} content={false}>
-      <Box sx={{ p: 2.5, pb: 0 }}>
+    <Grid sx={{ mt: 1 }} content={false}>
+      <Grid sx={{ p: 2.5, pb: 0 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Box>
+          {/* <Box>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
               Net Profit
             </Typography>
             <Typography variant="h4">$1560</Typography>
-          </Box>
+          </Box> */}
 
-          <FormGroup>
+          {/* <FormGroup>
             <Stack direction="row">
               <FormControlLabel
                 control={
@@ -76,27 +77,54 @@ export default function SalesChart() {
                 label="Cost of Sales"
               />
             </Stack>
-          </FormGroup>
+          </FormGroup> */}
         </Stack>
 
         <BarChart
           height={380}
           grid={{ horizontal: true }}
-          xAxis={[{ data: lables, scaleType: 'band', tickLabelStyle: { ...axisFonstyle, fontSize: 12 } }]}
+          xAxis={[{ data: lables, scaleType: 'band', categoryGapRatio: 0.8,
+            barGapRatio: 0.05, tickLabelStyle: { ...axisFonstyle, fontSize: 12 } }]}
           yAxis={[{ disableLine: true, disableTicks: true, tickMaxStep: 20, tickLabelStyle: axisFonstyle }]}
           series={data
             .filter((series) => (series.label === 'Income' && showIncome) || (series.label === 'Cost of Sales' && showCostOfSales))
             .map((series) => ({ ...series, type: 'bar' }))}
-          slotProps={{ legend: { hidden: true }, bar: { rx: 5, ry: 5 } }}
+          slotProps={{ legend: { hidden: true }, bar: { rx: 5, ry: 5, style: { width: 24 } } }}
           axisHighlight={{ x: 'none' }}
           margin={{ top: 30, left: 40, right: 10 }}
           tooltip={{ trigger: 'item' }}
           sx={{
+            // '.MuiBarElement-series-auto-generated-id-1': { transform: "translate3d(90.63px, 130px, 0px) !important" },
             '& .MuiBarElement-root:hover': { opacity: 0.6 },
             '& .MuiChartsAxis-directionX .MuiChartsAxis-tick, & .MuiChartsAxis-root line': { stroke: theme.palette.divider }
           }}
         />
-      </Box>
-    </MainCard>
+        <Grid container mt={1} >
+          <Grid item xs={12} textAlign="center">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={showIncome}
+                  onChange={handleIncomeChange}
+                  sx={{ '&.Mui-checked': { color: warningColor }, '&:hover': { backgroundColor: alpha(warningColor, 0.08) } }}
+                />
+              }
+              label="Monthly"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+
+                  checked={showCostOfSales}
+                  onChange={handleCostOfSalesChange}
+                  sx={{ '&.Mui-checked': { color: primaryColor } }}
+                />
+              }
+              label="Today"
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }

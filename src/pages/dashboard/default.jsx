@@ -51,15 +51,34 @@ const actionSX = {
 
 export default function DashboardDefault() {
   return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+    <Grid container rowSpacing={4.5} columnSpacing={2.75} mt={1}>
       {/* row 1 */}
-      <Grid item xs={12} sx={{ mb: -2.25 }}>
-        <Typography variant="h5">Dashboard</Typography>
+      <Grid item xs={9} sx={{ mb: -2.25 }}>
+        <Typography variant="h5">Overall Metrics</Typography>
+      </Grid>
+      <Grid item xs={1} sx={{ mb: -2.25 }} >
+        <Typography style={{backgroundColor:'#fff', textAlign:'center', padding:10, borderRadius:10}}>Add Widget</Typography>
+      </Grid>
+      <Grid item xs={2} sx={{ mb: -2.25 }}  >
+        <Typography style={{backgroundColor:'#3A63D2', color:'#fff', textAlign:'center', padding:10, borderRadius:10}}>Export Dashboard</Typography>
+      </Grid>
+
+     <Grid container rowSpacing={4.5} columnSpacing={0} mt={1} ml={3} >
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <AnalyticEcommerce title="Bank Deposits" count="$1.2M" percentage={1212} extra="#0" />
+      </Grid>
+       <Grid item xs={12} sm={6} md={4} lg={3}>
+        <AnalyticEcommerce title="Variance/Not Reconciled" count="$500K" percentage={232} extra="#7" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Page Views" count="4,42,236" percentage={59.3} extra="35,000" />
+        <AnalyticEcommerce title="Zero Variance/Reconciled (DOP)" count="$0" percentage={232} extra="N/A" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
+        <AnalyticEcommerce title="Zero Variance/Reconciled (DOP)" count="$1.2K" percentage={232} extra="#123" />
+      </Grid>
+     </Grid>
+
+      {/* <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="Total Users" count="78,250" percentage={70.5} extra="8,900" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -67,15 +86,15 @@ export default function DashboardDefault() {
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="Total Sales" count="$35,078" percentage={27.4} isLoss color="warning" extra="$20,395" />
-      </Grid>
+      </Grid> */}
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
       {/* row 2 */}
-      <Grid item xs={12} md={7} lg={8}>
+      <Grid container mt={1} ml={3} style={{backgroundColor:'#fff'}}>
         <UniqueVisitorCard />
       </Grid>
-      <Grid item xs={12} md={5} lg={4}>
+      {/* <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Income Overview</Typography>
@@ -93,10 +112,10 @@ export default function DashboardDefault() {
           </Box>
           <MonthlyBarChart />
         </MainCard>
-      </Grid>
+      </Grid> */}
 
       {/* row 3 */}
-      <Grid item xs={12} md={7} lg={8}>
+      {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Recent Orders</Typography>
@@ -131,13 +150,13 @@ export default function DashboardDefault() {
           </List>
           <ReportAreaChart />
         </MainCard>
-      </Grid>
+      </Grid> */}
 
       {/* row 4 */}
-      <Grid item xs={12} md={7} lg={8}>
+      {/* <Grid item xs={12} md={7} lg={8}>
         <SaleReportCard />
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
+      </Grid> */}
+      {/* <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Transaction History</Typography>
@@ -240,7 +259,7 @@ export default function DashboardDefault() {
             </Button>
           </Stack>
         </MainCard>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }
