@@ -42,10 +42,12 @@ import { setIsCDAdataCleared, setIsRCMdataCleared,setLoader } from 'store/reduce
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
+import { useNavigate } from 'react-router';
 
 // ==============================|| HEADER CONTENT - CUSTOMIZATION ||============================== //
 
 export default function Customization() {
+  const navigate = useNavigate();
   const { mode } = useConfig();
   const dispatch = useDispatch();
   const loader = useSelector(state=>state.user.loader);
@@ -103,6 +105,7 @@ export default function Customization() {
         dispatch(setLoader(false));
         dispatch(setIsCDAdataCleared(true));
         setOpen(false);
+        navigate('/correspndence/dashboard');
       }
     } catch (error) {
       dispatch(setLoader(false));
@@ -118,6 +121,7 @@ export default function Customization() {
         dispatch(setLoader(false));
         dispatch(setIsRCMdataCleared(true));
         setOpen(false);
+        navigate('/patient/payment');
       }
     } catch (error) {
       dispatch(setLoader(false));

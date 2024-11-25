@@ -143,7 +143,6 @@ const DocumentsList = () => {
       headerName: 'Document Name',
       width: 150,
       renderCell: (params) => {
-        console.log(params.row, "inside column")
         return (
           <Box display="flex" alignItems="center" sx={{marginTop:"12px"}}>
             <img src={pdfIcon} alt="pdf icon" style={{ width: '30px', height: '30px', marginRight: '20px' }} />

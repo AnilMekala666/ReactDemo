@@ -38,7 +38,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Stack from '@mui/material/Stack';
 import { SmileOutlined, UserOutlined, ClockCircleOutlined, PictureOutlined, PlusCircleOutlined } from '@ant-design/icons'; // Assuming you use Ant Design icons
 import { openSnackbar } from 'api/snackbar';
-import { useSelector } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { format } from 'date-fns';
 import UpRightArrow from 'assets/images/UpRightArrow.png';
@@ -68,7 +67,7 @@ import NavigateToHome from 'pages/correspondence/correspondenceAuth/NavigateToHo
 
 function MindPathPage() {
   const navigate = useNavigate();
-  const token = useSelector(state=>state.user.userAuthToken);
+  const token = localStorage.getItem("correspondenceAutToken");
   const [depositeOpen, setDepositOpen] = useState(false);
   const [showDepositTable, setShowDepositTable] = useState(false);
   const [remittanceOpen, setRemittancetOpen] = useState(false);

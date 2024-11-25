@@ -14,6 +14,7 @@ import {
   Typography,
   TextField,
 } from '@mui/material';
+import { getDateFormat_DD_MM_YYYY } from '../helpers';
 
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
@@ -170,7 +171,7 @@ export const MedicalReqPetientLevel = ({
                         fullWidth
                       />
                     ) : (
-                      patientsData.serviceDate
+                      getDateFormat_DD_MM_YYYY(patientsData.serviceDate)
                     )}
                   </TableCell>
                   <TableCell>
@@ -182,7 +183,7 @@ export const MedicalReqPetientLevel = ({
                         fullWidth
                       />
                     ) : (
-                      patientsData.dateOfBirth
+                      getDateFormat_DD_MM_YYYY(patientsData.dateOfBirth)
                     )}
                   </TableCell>
                 </TableRow>

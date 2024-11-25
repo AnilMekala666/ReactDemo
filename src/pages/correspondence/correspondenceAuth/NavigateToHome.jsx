@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Button } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 
 
 const NavigateToHome = () => {
-  const token = useSelector((state)=>state.user.userAuthToken);
+    const token = localStorage.getItem("correspondenceAutToken");
   return (
     <Button
       variant="contained"

@@ -44,7 +44,7 @@ import { setIsCDAdataCleared, setIsRCMdataCleared } from 'store/reducers/userSli
 const DashBoard = () => {
   const isCDAdataCleared = useSelector((state)=>state.user.isCDAdataCleared);
   const isRCMdataCleared = useSelector((state)=>state.user.isRCMdataCleared);
-  const token = useSelector(state=>state.user.userAuthToken);
+  const token = localStorage.getItem("correspondenceAutToken");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();

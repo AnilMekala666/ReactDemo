@@ -6,7 +6,6 @@ const userSlice = createSlice({
     isCDAdataCleared: false,
     isRCMdataCleared:false,
     loader:false,
-    userAuthToken:"",
   },
   reducers: {
     setIsCDAdataCleared: (state, action) => {
@@ -18,12 +17,9 @@ const userSlice = createSlice({
     setLoader: (state,action) =>{
         state.loader = action.payload;
     },
-    updateUserAuthToken: (state,action)=>{
-      state.userAuthToken = action.payload;
-    }
   }
 });
 
-export const { setIsCDAdataCleared,setIsRCMdataCleared,setLoader,updateUserAuthToken } = userSlice.actions;
+export const { setIsCDAdataCleared,setIsRCMdataCleared,setLoader } = userSlice.actions;
 
 export default userSlice.reducer;
