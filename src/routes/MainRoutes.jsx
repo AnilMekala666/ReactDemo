@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 import { lazy } from 'react';
 
@@ -133,6 +134,8 @@ const ReconcilePage = Loadable(lazy(() => import('pages/mindpath/reconcile')))
 const PostingReport = Loadable(lazy(() => import('pages/mindpath/PostingReport')))
 const ClaimsDataPage = Loadable(lazy(() => import('pages/mindpath/ClaimsData')))
 
+
+const QaMindpath = Loadable(lazy(() => import('pages/QA/qaMindpath')));
 //correspondence 
 
 const DashBoard= Loadable(lazy(() => import('pages/correspondence/DashBoard')))
@@ -178,6 +181,10 @@ const MainRoutes = {
             {
               path: 'payment',
               element: <Mindpath />
+            },
+            {
+              path: 'mindpath',
+              element: <QaMindpath />
             },
             {
               path: 'cash/posting',
