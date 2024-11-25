@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Box,TextField  } from '@mui/material';
 import CircularWithPath from 'components/@extended/progress/CircularWithPath';
+import { formatUsNumberSystem, getDateFormat_DD_MM_YYYY } from './../helpers';
 
 const MetaDataRow = ({ label, value, isEditable,updateFileLevelData,keyToEdit,isEditMode }) => (
   <>
@@ -15,14 +16,14 @@ const MetaDataRow = ({ label, value, isEditable,updateFileLevelData,keyToEdit,is
     <Grid item xs={5}>
     {isEditable && isEditMode ? (
         <TextField
-          type={keyToEdit=="checkAmount" ? "number" : keyToEdit=="depositDate" ? "date": "text"}
+          type={keyToEdit=="depositDate" ? "date": "text"}
           fullWidth
           value={value || ''}
           onChange={(e) => updateFileLevelData(e.target.value,keyToEdit)}
           size="small"
         />
       ) : (
-        <Typography variant="body1">{keyToEdit=="checkAmount" && "$"}{value || '--'}</Typography>
+        <Typography variant="body1">{keyToEdit=="checkAmount" && "$"}{keyToEdit=='depositDate' ? getDateFormat_DD_MM_YYYY(value) : keyToEdit=="checkAmount" ? formatUsNumberSystem(value):value || '--'}</Typography>
       )}
     </Grid>
   </>
@@ -81,10 +82,24 @@ const FileLevelMetaData = ({ fileLevelData, docName, setFileLevelData,isEditMode
   }
 
   const updateFileLevelData = (value, key) => {
-    const fileLevelObj = fileLevelData[0];
-    fileLevelObj[key] = value;
-    setFileLevelData([fileLevelObj]);
+    const fileLevelObj = { ...fileLevelData[0] }; 
+  
+    if (key === "checkAmount") {
+      console.log(value,"inside onchange1");
+      if (/^\d*\.?\d*$/.test(value.replace(/,/g, ''))) {
+        console.log(value,"inside onchange2");
+        console.log(formatUsNumberSystem(value),"inside onchange3");
+        fileLevelObj[key] = formatUsNumberSystem(value); 
+      } else {
+        return; 
+      }
+    } else {
+      fileLevelObj[key] = value; 
+    }
+  
+    setFileLevelData([fileLevelObj]); 
   };
+
   return (
     <Box sx={{ padding: 3 }}>
       <Grid container spacing={1} xs={6}>

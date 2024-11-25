@@ -25,6 +25,7 @@ const CorrespondanceAuth = () => {
           navigate('/patient/payment');
         }
         setLoader(false);
+        localStorage.setItem("correspondenceAutToken",token);
       }
       console.log(response.data, 'inside validate user');
     } catch (err) {

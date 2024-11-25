@@ -98,7 +98,6 @@ const DocumentPage = () => {
   const location = useLocation();
   const row = location.state?.row;
   const receivedStatus = row?.statusId;
-  console.log("ptientRow", row)
 
 
 
@@ -132,7 +131,6 @@ const DocumentPage = () => {
 
 
 
-  console.log("Received row data:", row.statusId);
   const sourceUrl = `https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence/showLabelingpdf?id=${docId}`;
   // Tab Change Handler
   const handleTabChange = (event, newValue) => {
@@ -329,21 +327,15 @@ const DocumentPage = () => {
   };
 
   const handleClose = () => {
-    console.log("close drawwer")
     setValidationDialogOpen(false)
   }
   const updateStatus = async () => {
-    console.log('UPDATESTATUS')
     try {
-      console.log("USERINPUT");
       const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_STATUS, { id: uId });
 
-      console.log(response, "USERINPUT1")
       if (response.status == 200) {
-        console.log("Response status 200, setting Success");
         // setStatus('Success')
         setStatus(prevStatus => {
-          console.log("Updating status to Success");
           return 'Success';
         });
         setValidationDialogOpen(false)

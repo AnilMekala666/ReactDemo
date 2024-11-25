@@ -25,6 +25,7 @@ import { useTheme } from '@mui/material/styles';
 import { TableWidgetCard1, TableWidgetCard2 } from 'components/correspndence/TableWidgetCard';
 import ReUsableTable from 'components/correspndence/ReUsableTable';
 import CustomDialog from 'components/correspndence/CustomDialog';
+import NavigateToHome from './correspondenceAuth/NavigateToHome';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 
 
@@ -43,6 +44,7 @@ import { setIsCDAdataCleared, setIsRCMdataCleared } from 'store/reducers/userSli
 const DashBoard = () => {
   const isCDAdataCleared = useSelector((state)=>state.user.isCDAdataCleared);
   const isRCMdataCleared = useSelector((state)=>state.user.isRCMdataCleared);
+  const token = localStorage.getItem("correspondenceAutToken");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -181,9 +183,6 @@ const DashBoard = () => {
       setLoader(true);
       const response = await axios.get(CORRESPONDENCE_ENDPOINTS.fetchConfScoreInfo);
       const data = response.data;
-
-      console.log('API response:', data); // Log full API response
-
       if (data) {
         setOverViewData(data);
         dispatch(setIsCDAdataCleared(false));
@@ -271,7 +270,8 @@ const DashBoard = () => {
     <>
       <Grid container style={{ marginBottom: '20px', padding: '0px' }}  >
         <Grid xs={12} sx={{ bgcolor: "#ffffff", display: "flex", padding: 2 }} alignItems="center">
-          <Grid item xs={6}  >
+          <Grid item xs={6}  sx={{display:"flex"}}>
+            {token && <NavigateToHome/>}
             <Typography variant="h3">Overview</Typography>
           </Grid>
 

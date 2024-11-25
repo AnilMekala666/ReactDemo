@@ -142,6 +142,7 @@ const DashBoard= Loadable(lazy(() => import('pages/correspondence/DashBoard')))
 const DocumentsList = Loadable(lazy(() => import('pages/correspondence/DocumentsList')))
 const DocumentDetails = Loadable(lazy(() => import('pages/correspondence/documentDetails/DocumentDetails')))
 const CorrespondanceAuth = Loadable(lazy(()=> import('pages/correspondence/correspondenceAuth/index')));
+const KpiDashboard = Loadable(lazy(()=> import('pages/KPIs')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -237,8 +238,15 @@ const MainRoutes = {
             }
           ]
         },
-        //https://10.1.3.72/correspndence/validateToken?type=RCM&token=
-        // Innoclique
+        {
+          path: 'kpi',
+          children: [
+            {
+              path: 'dashboard',
+              element: <KpiDashboard />
+            },
+          ]
+        },
         // {
         //   path: 'apps',
         //   children: [
