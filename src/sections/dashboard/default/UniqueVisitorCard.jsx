@@ -57,7 +57,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import SaleReportCard from './SaleReportCard';
-import OrderTable from './OrdersTable';
 import ReportAreaChart from './ReportAreaChart';
 import MonthlyBarChart from './MonthlyBarChart';
 import { Grid, Switch, Typography } from '@mui/material';
@@ -65,6 +64,7 @@ import Download from './Download';
 import EFTPosting from './EFTPosting';
 import CedarPosting from './CedarPosting';
 import NonPaymentPosting from './NonPaymentPosting';
+import CashReconciliationTable from './CashReconciliationTable';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -144,7 +144,7 @@ export default function UniqueVisitorCard() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <Download />
-        <OrderTable />
+        <CashReconciliationTable />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         <Download />

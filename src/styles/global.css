@@ -476,3 +476,31 @@ header .css-13n62e0-MuiToolbar-root {
   color: #2f2f2f;
   margin-top: 5px;
 }
+
+.table-head-cell {
+  text-align: center;
+  border-right: 1px #eee solid;
+  text-transform: none;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  
+}
+
+.table-head-cell > p {
+  font-weight: 600;
+  color: #717680;
+}
+
+.table-head-cell > .amount {
+  color: #EB7724;
+}
+
+.table-body-cell {
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.table-body-cell > p {
+  color: #535862;
+  font-weight: 400;
+}
