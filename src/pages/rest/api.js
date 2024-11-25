@@ -10,16 +10,16 @@ export const CORRESPONDENCE_BASE_URL = 'https://ican-manage-chit-dem.cognitivehe
 
 export const DEMO_URL = 'https://ican-manage-chit-dem.cognitivehealthit.com/Correspondence';
 
-
+export const IP_URL = 'https://ican-manage-mindpath-tst.cognitivehealthit.com/CorrespondenceServices';
 
 export const ENDPOINTS = {
-  GET_STATE_LIST: `${BASE_URL}/getStateList`,
-  GET_CLASSIFICATION_LIST: `${BASE_URL}/getClassificationList`,
-  LOCKBOX_FILES_LIST: `${BASE_URL}/lockboxFilesList`,
-  GET_PREDICTION_LIST: `${BASE_URL}/getPredictionList`,
-  SAVE_QA_FILE: `${BASE_URL}/saveQAFile`,
-  VIEW_QA_FILE: `${BASE_URL}/viewQAFile`,
-  SHOW_QA_PDF: (fileName) => `${BASE_URL}/showQApdf?fileName=${fileName}`, // New endpoint for showing PDF
+  GET_STATE_LIST: `${IP_URL}/getStateList`,
+  GET_CLASSIFICATION_LIST: `${IP_URL}/getClassificationList`,
+  LOCKBOX_FILES_LIST: `${IP_URL}/lockboxFilesList`,
+  GET_PREDICTION_LIST: `${IP_URL}/getPredictionList`,
+  SAVE_QA_FILE: `${IP_URL}/saveQAFile`,
+  VIEW_QA_FILE: `${IP_URL}/viewQAFile`,
+  SHOW_QA_PDF: (fileName) => `${IP_URL}/showQApdf?fileName=${fileName}`, // New endpoint for showing PDF
   GET_BATCH_DATA: `${DEMO_URL}/getBatchData`,
   GET_QA_BATCH_FILES: `${DEMO_URL}/getQAbatchFiles`,
   // Add more endpoints as needed
