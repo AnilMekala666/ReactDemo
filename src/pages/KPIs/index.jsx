@@ -19,7 +19,7 @@ import MonthlyBarChart from 'sections/dashboard/default/MonthlyBarChart';
 import ReportAreaChart from 'sections/dashboard/default/ReportAreaChart';
 import UniqueVisitorCard from 'sections/dashboard/default/UniqueVisitorCard';
 import SaleReportCard from 'sections/dashboard/default/SaleReportCard';
-import OrdersTable from 'sections/dashboard/default/OrdersTable';
+//import OrdersTable from 'sections/dashboard/default/OrdersTable';
 
 // assets
 import GiftOutlined from '@ant-design/icons/GiftOutlined';
