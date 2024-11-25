@@ -40,14 +40,14 @@ const widget = {
       type: 'item',
       url: '/correspndence/dashboard',
       icon: icons.Mail
+    },
+    {
+      id: 'qa',
+      title: <FormattedMessage id="QA" />,
+      type: 'item',
+      url: '/patient/mindpath',
+      icon: icons.LineChartOutlined
     }
-    // {
-    //   id: 'chart',
-    //   title: <FormattedMessage id="chart" />,
-    //   type: 'item',
-    //   url: '/widget/chart',
-    //   icon: icons.LineChartOutlined
-    // }
   ]
 };
 
