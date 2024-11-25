@@ -54,6 +54,13 @@ const widget = {
       type: 'item',
       url: '/patient/mindpath',
       icon: icons.LineChartOutlined
+    },
+    {
+      id: 'kpi',
+      title: <FormattedMessage id="KPIs" />,
+      type: 'item',
+      url: '/kpi/dashboard',
+      icon: icons.DatabaseOutlined
     }
   ]
 };
