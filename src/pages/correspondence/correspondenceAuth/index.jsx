@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {updateUserAuthToken} from '../../../store/reducers/userSlice'
 import axios from 'axios';
 import CircularLoader from 'components/CircularLoader';
 //https://10.1.3.72/correspndence/validateToken?type=RCM&token=
@@ -7,6 +9,7 @@ import CircularLoader from 'components/CircularLoader';
 const CorrespondanceAuth = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const queryParams = new URLSearchParams(location.search);
   const dashboard = queryParams.get('type');
   const token = queryParams.get('token');
@@ -25,6 +28,7 @@ const CorrespondanceAuth = () => {
           navigate('/patient/payment');
         }
         setLoader(false);
+        dispatch(updateUserAuthToken(token));
       }
       console.log(response.data, 'inside validate user');
     } catch (err) {

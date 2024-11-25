@@ -38,6 +38,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Stack from '@mui/material/Stack';
 import { SmileOutlined, UserOutlined, ClockCircleOutlined, PictureOutlined, PlusCircleOutlined } from '@ant-design/icons'; // Assuming you use Ant Design icons
 import { openSnackbar } from 'api/snackbar';
+import { useSelector } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { format } from 'date-fns';
 import UpRightArrow from 'assets/images/UpRightArrow.png';
@@ -61,12 +62,13 @@ import Recon from 'assets/images/new-images/Recon.png';
 import CashPostingIcon from 'assets/images/new-images/CashPostingIcon.png';
 import AdvancedMd from 'assets/images/new-images/AdvancedMd.png';
 import NexGen from 'assets/images/new-images/NexGen.png';
+import NavigateToHome from 'pages/correspondence/correspondenceAuth/NavigateToHome';
 
 
 
 function MindPathPage() {
   const navigate = useNavigate();
-
+  const token = useSelector(state=>state.user.userAuthToken);
   const [depositeOpen, setDepositOpen] = useState(false);
   const [showDepositTable, setShowDepositTable] = useState(false);
   const [remittanceOpen, setRemittancetOpen] = useState(false);
@@ -827,6 +829,9 @@ function MindPathPage() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      {token && <Box sx={{width:"100px"}}>
+        <NavigateToHome/>
+      </Box>}
       <Grid container className='main-bg'>
         {/* Pannel 1 */}
         <Grid item xs={12} md={2} lg={2} sm={2} marginTop={9}>
