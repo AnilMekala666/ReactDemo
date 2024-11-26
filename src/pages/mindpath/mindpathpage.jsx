@@ -61,6 +61,7 @@ import Recon from 'assets/images/new-images/Recon.png';
 import CashPostingIcon from 'assets/images/new-images/CashPostingIcon.png';
 import AdvancedMd from 'assets/images/new-images/AdvancedMd.png';
 import NexGen from 'assets/images/new-images/NexGen.png';
+import EpicLogo from 'assets/images/new-images/epic_logo.png';
 import NavigateToHome from 'pages/correspondence/correspondenceAuth/NavigateToHome';
 
 
@@ -951,28 +952,36 @@ function MindPathPage() {
           <Grid sx={{ textAlign: 'center', marginBottom: '40px' }}>
             <div>
               <img src={DotLine6} alt="DotLine6" style={{ maxWidth: '110px' }} />
+              <img src={DotLine8} alt="DotLine8" style={{ maxWidth: '110px', position: 'relative', left: '0px' }} />
               <img src={DotLine7} alt="DotLine7" style={{ maxWidth: '110px' }} />
             </div>
           </Grid>
           <Grid style={{ display: 'flex', justifyContent: 'space-between', marginTop: '-40px' }}>
             <img src={iCanImg} alt="iCanImg" className="w-100h-100 ican-bg" style={{ left: '30px' }} />
+            <img src={iCanImg} alt="iCanImg" className="w-100h-100 ican-bg" style={{ position: 'relative', left: '0px' }} />
             <img src={iCanImg} alt="iCanImg" className="w-100h-100 ican-bg" style={{ position: 'relative', left: '-28px' }} />
           </Grid>
           <Grid>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <img src={DotLine8} alt="DotLine8" style={{ maxWidth: '90px', paddingLeft: '60px' }} />
+              <img src={DotLine8} alt="DotLine8" style={{ maxWidth: '90px', position: 'relative', left: '-30px' }} />
               <img src={DotLine8} alt="DotLine8" style={{ maxWidth: '90px', position: 'relative', left: '-50px' }} />
             </div>
           </Grid>
           <Grid container marginTop={2} position={'relative'}>
             {/* AdvancedMd Logo */}
-            <Grid item className='bottom-logo' xs={12} md={5} lg={5} sm={5} onClick={(evt)=>handleClick(evt, "advanced")}>
-              <img src={AdvancedMd} alt="AdvancedMd" style={{ maxWidth: '100px' }} />
+            <Grid item className='bottom-logo' xs={12} md={3} lg={3} sm={3} onClick={(evt)=>handleClick(evt, "advanced")}>
+              <img src={AdvancedMd} alt="AdvancedMd" style={{ maxWidth: '80px' }} />
             </Grid>
 
             {/* NexGen Logo */}
-            <Grid item className='bottom-logo'  onClick={(evt)=>handleClick(evt, "nexgen")} xs={12} md={5} lg={5} sm={5} style={{ position: 'relative', left: '50px' }}>
+            <Grid item className='bottom-logo'  onClick={(evt)=>handleClick(evt, "nexgen")} xs={12} md={3} lg={3} sm={3} style={{ position: 'relative', left: '50px' }}>
               <img src={NexGen} alt="NexGen" style={{ maxWidth: '100px' }} />
+            </Grid>
+
+            {/* Epic Logo */}
+            <Grid item className='bottom-logo'  onClick={(evt)=>handleClick(evt, "epic")} xs={12} md={3} lg={3} sm={3} style={{ position: 'relative', left: '100px' }}>
+              <img src={EpicLogo} alt="EpicLogo" style={{ maxWidth: '60px' }} />
             </Grid>
 
             <Grid>
