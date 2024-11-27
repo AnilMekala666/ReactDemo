@@ -428,7 +428,36 @@ export default function ReusableTable({data, columns}) {
             {data && data.length > 0 ? (
               <ReactTable data={data} columns={columns} />
             ) : (
-              <Typography>No data available</Typography>
+              <TableContainer>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead 
+                    sx={{
+                      '& th': { borderTop: '1px solid ', borderTopColor: 'divider', borderBottom: `2px solid ${theme.palette.divider} !important` },
+                      position: 'sticky',
+                      top: 0,
+                      zIndex: 1,
+                      backgroundColor: theme.palette.background.paper, // Ensure the header has a background
+                    }}
+                  >
+                    <TableRow>
+                      {columns.map((header) => (
+                        <TableCell key={header.id}>
+                          <Stack direction="row" spacing={1} alignItems="center">
+                            <Box>{header.header}</Box>
+                          </Stack>
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell colSpan={columns.length} sx={{ background: '#fff', textAlign: 'center' }}>
+                        <Typography>No data found for the last week</Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             )}
           </Grid> 
         </Grid>

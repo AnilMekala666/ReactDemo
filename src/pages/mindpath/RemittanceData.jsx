@@ -220,7 +220,7 @@ function RemittanceData() {
   const fetchInitial = async () => {
     console.log("Fetch Called");
     const data = await fetch(`${BASE_PATH}/getRemitDataForLastWeek/1`);
-    // console.log("Data API", await data.json());
+    console.log("Data API", await data.text());
     const staticData = await data.json();
     setParsedData(staticData);
     staticData.map((s, i) => {
@@ -232,7 +232,8 @@ function RemittanceData() {
         setDisableBtn(true);
       }
     })
-    const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    const sData = staticData.length > 0 ? staticData : initialStaticData;
+    const headerKeys = Object.keys(Object.assign({}, ...sData));
     let columns = [];
     columns = headerKeys.map((header, index) => {
       if(header != "subRows" && header != "id") {

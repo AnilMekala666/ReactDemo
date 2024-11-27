@@ -248,7 +248,8 @@ function ClaimsData() {
         setDisableBtn(true);
       }
     })
-    const headerKeys = Object.keys(Object.assign({}, ...staticData));
+    const sData = staticData.length > 0 ? staticData : initialStaticData;
+    const headerKeys = Object.keys(Object.assign({}, ...sData));
     let columns = [];
     columns = headerKeys.map((header, index) => {
       if(header != "subRows" && header != "id") {
