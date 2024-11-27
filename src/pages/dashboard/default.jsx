@@ -28,6 +28,11 @@ import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { FilterOutlined } from '@ant-design/icons';
+import { ButtonGroup } from '@mui/material';
+import { useState } from 'react';
+import FilterDrawer from './FilterDrawer';
 
 // avatar style
 const avatarSX = {
@@ -49,8 +54,50 @@ const actionSX = {
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export default function DashboardDefault() {
+  const [activeFilter, setActiveFilter] = useState("today");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open) => {
+    setIsDrawerOpen(open);
+  };
+
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75} mt={1}>
+      <Grid container style={{ marginBottom: '20px', padding: '0px', width: '100%' }}  >
+        <Grid xs={12} sx={{ bgcolor: "#ffffff", display: "flex", padding: 2 }} alignItems="center">
+          <Grid item xs={6}  sx={{display:"flex"}}>
+            <Typography variant="h3">Dashboard</Typography>
+          </Grid>
+
+          {/* Button Group Section */}
+          <Grid item xs={12} sm={6}
+            sx={{
+              display: 'flex',
+              justifyContent: { xs: 'center', sm: 'flex-end' },
+              alignItems: 'center',
+              mt: { xs: 2, sm: 0 },
+            }}
+          >
+            <ButtonGroup
+              variant="outlined"
+              aria-label="Basic button group"
+              sx={{ mr: 2, border: "1px solid #ECECEC", p: 1, borderRadius: 2, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}
+            >
+              <Button onClick={()=>setActiveFilter("today")} className={["filter-btn", activeFilter == "today" ? "active" : ""].join(" ")}>Today</Button>
+              <Button onClick={()=>setActiveFilter("week")} className={["filter-btn", activeFilter == "week" ? "active" : ""].join(" ")}>Week</Button>
+              <Button onClick={()=>setActiveFilter("month")} className={["filter-btn", activeFilter == "month" ? "active" : ""].join(" ")}>Month</Button>
+            </ButtonGroup>
+            <Button onClick={() => toggleDrawer(true)} variant="outlined" sx={{ display: 'flex', p: 1.5, alignItems: 'center', fontWeight: 500, border: "1px solid #ECECEC", color: "#656565" }}>
+              <FilterListIcon />
+              <span style={{ marginLeft: 5 }}>Global Filter</span>
+            </Button>
+            <FilterDrawer
+              isDrawerOpen={isDrawerOpen}
+              toggleDrawer={toggleDrawer}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
       {/* row 1 */}
       <Grid item xs={9} sx={{ mb: -2.25 }}>
         <Typography variant="h5">Overall Metrics</Typography>

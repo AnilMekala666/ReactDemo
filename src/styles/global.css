@@ -504,3 +504,18 @@ header .css-13n62e0-MuiToolbar-root {
   color: #535862;
   font-weight: 400;
 }
+
+.filter-btn, .filter-btn:hover, .filter-btn:focus-visible {
+  border: 0px;
+  border-radius: 10px !important;
+  outline: 0px;
+  transition: none;
+  color: #656565;
+  font-weight: 500;
+}
+
+.filter-btn.active {
+  background-color: #3A63D2;
+  color: #fff;
+  font-weight: 500;
+}

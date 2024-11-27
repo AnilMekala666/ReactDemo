@@ -269,7 +269,7 @@ const DashBoard = () => {
   return (
     <>
       <Grid container style={{ marginBottom: '20px', padding: '0px' }}  >
-        <Grid xs={12} sx={{ bgcolor: "#ffffff", display: "flex", padding: 2 }} alignItems="center">
+        <Grid xs={12} sx={{ bgcolor: "#ffffff", display: "flex", padding: 2, mt: 1 }} alignItems="center">
           <Grid item xs={6}  sx={{display:"flex"}}>
             {token && <NavigateToHome/>}
             <Typography variant="h3">Overview</Typography>
