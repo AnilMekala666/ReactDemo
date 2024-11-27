@@ -1011,7 +1011,7 @@ function MindPathPage() {
               <div class="popover_in">
                 <Button onClick={() => videoModal("deposit")}>Deposit Posting</Button>
                 <Button onClick={() => videoModal('patient')}>Patient Posting</Button>
-                {popType == "advanced" &&
+                {(popType == "advanced" || popType == "epic") &&
                   <Button onClick={() => videoModal('payment')}>Zero Payment Posting</Button>
                 }
               </div>
