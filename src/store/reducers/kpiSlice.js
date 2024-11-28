@@ -3,15 +3,19 @@ import { createSlice } from '@reduxjs/toolkit';
 const kpiSlice = createSlice({
   name: 'user',
   initialState: {
-    selectedDate:{}
+    selectedDate:{},
+    showTable:false,
   },
   reducers: {
     updateSelectedDate:(state,action)=>{
       state.selectedDate=action.payload;
+    },
+    updateShowTable:(state,action)=>{
+      state.showTable=action.payload
     }
   }
 });
 
-export const { updateSelectedDate } = kpiSlice.actions;
+export const { updateSelectedDate ,updateShowTable} = kpiSlice.actions;
 
 export default kpiSlice.reducer;

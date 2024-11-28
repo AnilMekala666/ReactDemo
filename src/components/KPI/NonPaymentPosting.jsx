@@ -10,6 +10,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import LinearProgressBar from '../../pages/KPIs/Charts/LinearProgessBar'
+// import LinearProgressBar from 'pages/KPIs/Charts/LinearProgressBar';
 
 // third-party
 import { NumericFormat } from 'react-number-format';
@@ -154,9 +156,19 @@ const initialStaticData = [
 export default function NonPaymentPosting() {
   const order = 'asc';
   const orderBy = 'tracking_no';
+  const progressData = [
+    { title: 'Fully Reconciled', value: 92 },
+    { title: 'Pending Reconciliation', value: 8 },
+    { title: 'Manual Intervention Required', value: 5 },
+    { title: 'Automated Reconciliation', value: 85 },
+    { title: 'Unreconciled', value: 10 },
+  ];
   return (
     <Box mt={2}>
-      <CustomTable data={initialStaticData} datacolumns={tableColumns} />
+      {progressData.map((data, index) => (
+        <LinearProgressBar key={index} value={data.value} title={data.title} />
+      ))}
+      {/* <CustomTable data={initialStaticData} datacolumns={tableColumns} /> */}
       {/* <TableContainer
         sx={{
           width: '100%',

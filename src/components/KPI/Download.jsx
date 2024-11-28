@@ -1,13 +1,18 @@
 
 import * as React from 'react';
 import { Grid, Switch, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { updateShowTable } from 'store/reducers/kpiSlice';
+import { useSelector } from 'react-redux';
 // import { Target } from 'assets/images/analytics/target.svg';
 
 
 export default function Download() {
+  const showTable = useSelector(state=>state.kpi.showTable);
+  const dispatch = useDispatch();
 
   const handleChange = (event) =>{
-    console.log(event.target.checked,"inside the switch");
+    dispatch(updateShowTable(event.target.checked))
   }
   
 
@@ -19,6 +24,7 @@ export default function Download() {
           <Grid item xs={0.5}>
             <Typography variant="h5">
             <Switch
+            checked={showTable}
             onChange={handleChange}	
             />
            </Typography>

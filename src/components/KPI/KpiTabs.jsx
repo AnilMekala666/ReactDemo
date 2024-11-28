@@ -1,56 +1,3 @@
-// import { useState } from 'react';
-
-// // material-ui
-// import Button from '@mui/material/Button';
-// import Grid from '@mui/material/Grid';
-// import Stack from '@mui/material/Stack';
-// import Typography from '@mui/material/Typography';
-// import Box from '@mui/material/Box';
-
-// // project import
-// import MainCard from 'components/MainCard';
-// import IncomeAreaChart from './IncomeAreaChart';
-
-// // ==============================|| DEFAULT - UNIQUE VISITOR ||============================== //
-
-// export default function UniqueVisitorCard() {
-//   const [view, setView] = useState('monthly'); // 'monthly' or 'weekly'
-
-//   return (
-//     <>
-//       <Grid container alignItems="center" justifyContent="space-between">
-//         <Grid item>
-//           <Typography variant="h5">Unique Visitor</Typography>
-//         </Grid>
-//         <Grid item>
-//           <Stack direction="row" alignItems="center" spacing={0}>
-//             <Button
-//               size="small"
-//               onClick={() => setView('monthly')}
-//               color={view === 'monthly' ? 'primary' : 'secondary'}
-//               variant={view === 'monthly' ? 'outlined' : 'text'}
-//             >
-//               Month
-//             </Button>
-//             <Button
-//               size="small"
-//               onClick={() => setView('weekly')}
-//               color={view === 'weekly' ? 'primary' : 'secondary'}
-//               variant={view === 'weekly' ? 'outlined' : 'text'}
-//             >
-//               Week
-//             </Button>
-//           </Stack>
-//         </Grid>
-//       </Grid>
-//       <MainCard content={false} sx={{ mt: 1.5 }}>
-//         <Box sx={{ pt: 1, pr: 2 }}>
-//           <IncomeAreaChart view={view} />
-//         </Box>
-//       </MainCard>
-//     </>
-//   );
-// }
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
@@ -65,8 +12,15 @@ import EFTPosting from './EFTPosting';
 import CedarPosting from './CedarPosting';
 import NonPaymentPosting from './NonPaymentPosting';
 import CashReconciliationTable from './CashReconciliationTable';
-import BasicHeatMap from 'pages/KPIs/Charts/HeatMap';
+import HeatMap from 'pages/KPIs/Charts/HeatMap';
 import ReusableBarChart from 'pages/KPIs/Charts/barChart';
+import BasicBars from 'pages/KPIs/Charts/DenialBarChart';
+import AgeBucketChart from 'pages/KPIs/Charts/AgeBucketChart';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { updateShowTable } from 'store/reducers/kpiSlice';
+import ReUsableTable from 'components/correspndence/ReUsableTable';
+import { remittanceSummaryColumns } from 'pages/KPIs/kpiTableHeaderData';
 import { rem } from '@mantine/core';
 
 function CustomTabPanel(props) {
@@ -127,10 +81,24 @@ const denialManagementChart = [
 
 export default function UniqueVisitorCard() {
   const [value, setValue] = React.useState(0);
-
+  const showTable = useSelector(state=>state.kpi.showTable);
+  const dispatch = useDispatch();
   const handleChange = (event, newValue) => {
+    dispatch(updateShowTable(false));
     setValue(newValue);
   };
+
+  const heatMapdata = [
+    { payer: 'Medicare', processingTime: 15, totalAmount: 2500000 },
+    { payer: 'Blue Cross', processingTime: 10, totalAmount: 1800000 },
+    { payer: 'Aetna', processingTime: 20, totalAmount: 1200000 },
+    { payer: 'UnitedHealth', processingTime: 12, totalAmount: 2000000 },
+    { payer: 'Cigna', processingTime: 18, totalAmount: 1500000 },
+    { payer: 'Humana', processingTime: 14, totalAmount: 1700000 },
+  ];
+
+  const xCategories = heatMapdata.map(item => item.processingTime);
+  const yCategories = [...new Set(heatMapdata.map(item => item.totalAmount))].sort((a, b) => a - b);
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -148,6 +116,7 @@ export default function UniqueVisitorCard() {
       </Box>
       <CustomTabPanel value={value} index={0}>
         <Download />
+        {!showTable ?<div style={{width:"60%"}}>
         <ReusableBarChart
         graphData={remittanceSummaryBarChart}
         xAxisKey="month"
@@ -161,6 +130,7 @@ export default function UniqueVisitorCard() {
           { label: 'Today', key: 'showToday' },
         ]}
       />
+      </div>:<ReUsableTable columns={remittanceSummaryColumns} rows={remittanceSummaryBarChart}/>}
         {/* <SaleReportCard /> */}
       </CustomTabPanel>
 
@@ -171,22 +141,12 @@ export default function UniqueVisitorCard() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <Download />
-        <BasicHeatMap scatterData={scatterData} xStep={5} yStep={500000} />
+        <HeatMap data={heatMapdata} xCategories={xCategories} yCategories={yCategories} />
         {/* <CashReconciliationTable /> */}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         <Download />
-        <ReusableBarChart
-        graphData={denialManagementChart}
-        xAxisKey="reason"
-        seriesKeys={[
-          { key: 'revenueLoss', label: 'Revenue Loss', color: '#3A63D2' },
-        ]}
-        // checkboxes={[
-        //   { label: 'Monthly', key: 'showMonthly' },
-        //   { label: 'Today', key: 'showToday' },
-        // ]}
-      />
+        <BasicBars/>
         {/* <EFTPosting /> */}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
@@ -199,7 +159,8 @@ export default function UniqueVisitorCard() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={6}>
         <Download />
-        <NonPaymentPosting />
+        <AgeBucketChart/>
+        {/* <NonPaymentPosting /> */}
       </CustomTabPanel>
     </Box>
   );

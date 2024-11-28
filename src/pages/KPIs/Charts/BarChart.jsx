@@ -19,7 +19,7 @@ const ReusableChart = ({
   ],
   axisFontStyle = { fontSize: 10, fill: '#6b7280' }, // Default font style
   chartHeight = 380,
-  valueFormatter = (value) => `$ ${value} Thousands`,
+  valueFormatter = (value) => `${value}`,
   checkboxes = [
     { label: 'Monthly', key: 'showMonthly' },
     { label: 'Today', key: 'showToday' },
@@ -46,7 +46,7 @@ const ReusableChart = ({
   return (
     <Grid sx={{ mt: 1 }} content={false}>
       <Grid sx={{ p: 2.5, pb: 0 }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
+        {/* <Stack direction="row" justifyContent="space-between" alignItems="center">
           <FormGroup>
             <Stack direction="row">
               {showCheckboxes &&
@@ -68,7 +68,7 @@ const ReusableChart = ({
                 ))}
             </Stack>
           </FormGroup>
-        </Stack>
+        </Stack> */}
 
         <BarChart
           height={chartHeight}
@@ -77,7 +77,7 @@ const ReusableChart = ({
             {
               data: xAxisLabels,
               scaleType: 'band',
-              categoryGapRatio: 0.8,
+              categoryGapRatio: 0.5,
               barGapRatio: 0.05,
               tickLabelStyle: { ...axisFontStyle, fontSize: 12 },
             },
