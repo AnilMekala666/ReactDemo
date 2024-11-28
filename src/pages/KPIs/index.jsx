@@ -52,7 +52,7 @@ const actionSX = {
 export default function DashboardDefault() {
   return (
     <>
-    <Box sx={{padding:"20px",backgroundColor:"white",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+    <Box sx={{padding:"20px", mt:2,backgroundColor:"white",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <Typography variant='h4' fontWeight={600}>US Healthcare Claim Reconciliation Dashboard</Typography>
         <Box sx={{padding:"4px",border:"1px solid #ECECEC",borderRadius:".5rem" }}>
             <Button
@@ -70,10 +70,10 @@ export default function DashboardDefault() {
     </Box>
     <Grid container rowSpacing={4.5} columnSpacing={2.75} mt={1}>
       {/* row 1 */}
-      <Grid item xs={9}>
-        <Typography variant="h5">Overall Metrics</Typography>
+      <Grid item xs={8}>
+        <Typography sx={{ ml: 1 }} variant="h5">Overall Metrics</Typography>
       </Grid>
-      <Grid item xs={1} sx={{ mb: -2.25 }} >
+      <Grid item xs={2} sx={{ mb: -2.25 }} >
         <Typography style={{backgroundColor:'#fff', textAlign:'center', padding:10, borderRadius:10}}>Add Widget</Typography>
       </Grid>
       <Grid item xs={2} sx={{ mb: -2.25 }}  >

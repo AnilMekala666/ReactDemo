@@ -29,10 +29,13 @@ import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { FilterOutlined } from '@ant-design/icons';
+import { ExportOutlined, FilterOutlined, LayoutOutlined } from '@ant-design/icons';
 import { ButtonGroup } from '@mui/material';
 import { useState } from 'react';
 import FilterDrawer from './FilterDrawer';
+import AlignBottom from 'assets/images/icons/align_bottom.svg';
+import LayoutAlt from 'assets/images/icons/layout-alt.svg';
+import DashboardAnalyticEcommerce from 'components/cards/statistics/DashboardAnalyticEcommerce';
 
 // avatar style
 const avatarSX = {
@@ -63,8 +66,8 @@ export default function DashboardDefault() {
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75} mt={1}>
-      <Grid container style={{ marginBottom: '20px', padding: '0px', width: '100%' }}  >
-        <Grid xs={12} sx={{ bgcolor: "#ffffff", display: "flex", padding: 2 }} alignItems="center">
+      <Grid container sx={{ marginBottom: '10px', padding: '0px', width: '100%' }}  >
+        <Grid xs={12} sx={{ bgcolor: "#ffffff", display: "flex", padding: 2, pl: 3.5 }} alignItems="center">
           <Grid item xs={6}  sx={{display:"flex"}}>
             <Typography variant="h3">Dashboard</Typography>
           </Grid>
@@ -99,28 +102,38 @@ export default function DashboardDefault() {
         </Grid>
       </Grid>
       {/* row 1 */}
-      <Grid item xs={9} sx={{ mb: -2.25 }}>
-        <Typography variant="h5">Overall Metrics</Typography>
+      <Grid item xs={8} sx={{ mb: -2.25, mt: 0, pt: "25px !important" }}>
+        <Typography variant="h5" sx={{ pl: 1 }}>Overall Metrics</Typography>
       </Grid>
-      <Grid item xs={1} sx={{ mb: -2.25 }} >
-        <Typography style={{backgroundColor:'#fff', textAlign:'center', padding:10, borderRadius:10}}>Add Widget</Typography>
+      <Grid item xs={2} sx={{ mb: -2.25, textAlign: 'right', pt: "25px !important" }} >
+        <Button sx={{ backgroundColor:'#fff !important', color:'#656565 !important', padding:1, borderRadius:2, fontWeight: 500 }}>
+          <img src={LayoutAlt} style={{ height: 20, width: 20, marginRight: 5 }} />
+          <Typography component="span" sx={{textAlign:'center'}}>
+            Add Widget
+          </Typography>
+        </Button>
       </Grid>
-      <Grid item xs={2} sx={{ mb: -2.25 }}  >
-        <Typography style={{backgroundColor:'#3A63D2', color:'#fff', textAlign:'center', padding:10, borderRadius:10}}>Export Dashboard</Typography>
+      <Grid item xs={2} sx={{ mb: -2.25, pl: "0px !important", textAlign: 'right', pt: "25px !important" }}  >
+        <Button sx={{ ml: 'auto', backgroundColor:'#3A63D2 !important', color:'#fff !important', padding:1, borderRadius:2, fontWeight: 500 }}>
+          <img src={AlignBottom} style={{ height: 20, width: 20, marginRight: 5 }} />
+          <Typography component="span" sx={{textAlign:'center', fontWeight: 500}}>
+            Export Dashboard
+          </Typography>
+        </Button>
       </Grid>
 
      <Grid container rowSpacing={4.5} columnSpacing={0} mt={1} ml={3} >
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Bank Deposits" count="$1.2M" percentage={1212} extra="#0" />
+        <DashboardAnalyticEcommerce title="Bank Deposits" count="$1.2M" percentage={1212} extra="#0" />
       </Grid>
        <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Variance/Not Reconciled" count="$500K" percentage={232} extra="#7" />
+        <DashboardAnalyticEcommerce title="Variance/Not Reconciled" count="$500K" percentage={232} extra="#7" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Zero Variance/Reconciled (DOP)" count="$0" percentage={232} extra="N/A" />
+        <DashboardAnalyticEcommerce title="Zero Variance/Reconciled (DOP)" count="$0" percentage={232} extra="N/A" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Zero Variance/Reconciled (DOP)" count="$1.2K" percentage={232} extra="#123" />
+        <DashboardAnalyticEcommerce border={false} title="Zero Variance/Reconciled (DOP)" count="$1.2K" percentage={232} extra="#123" />
       </Grid>
      </Grid>
 
