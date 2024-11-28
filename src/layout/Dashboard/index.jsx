@@ -49,12 +49,12 @@ export default function DashboardLayout() {
         <Header />
         {!isHorizontal ? <Drawer /> : <HorizontalBar />}
 
-        <Box component="main" sx={{ width: 'calc(100% - 260px)', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+        <Box component="main" sx={{ width: '100%', flexGrow: 1}}>
           <Toolbar sx={{ mt: isHorizontal ? 8 : 'inherit' }} />
           <Container
-            maxWidth={container ? 'xl' : false}
+            maxWidth={container ? '1920px' : false}
             sx={{
-              ...(container && { px: { xs: 0, sm: 2 } }),
+              ...(container && { px: { xs: 0, sm: 0 } }),
               position: 'relative',
               minHeight: 'calc(100vh - 110px)',
               display: 'flex',
@@ -63,7 +63,7 @@ export default function DashboardLayout() {
           >
             {pathname !== '/apps/profiles/account/my-account'}
             <Outlet />
-            <Footer />
+            {/* <Footer /> */}
           </Container>
         </Box>
         <AddCustomer />
