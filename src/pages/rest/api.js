@@ -50,7 +50,12 @@ export const CORRESPONDENCE_ENDPOINTS = {
   UPDATE_MEDICAL_REQUEST_FILE_LEVEL_DATA:`${CORRESPONDENCE_BASE_URL}/updateMedicalReqFileLevelData`,
   DELETE_MEDICAL_REQ_AI_INTERPRETATION:`${CORRESPONDENCE_BASE_URL}/deleteMedicalReqAiInterpretationAtt`,
 }
-//http://10.0.1.216:8181/KPIServices/getWidgetData
+
 export const KPI_ENDPOINTS = {
   GET_WIDGET_DATA:`${KPI_URL}/getWidgetData`,
+  GET_REMMITTANCE_SUMMARY:`${KPI_URL}/getRemittanceSummaryYear`,
+  GET_REMMITTANCE_KPI:`${KPI_URL}/getRemittanceKpi`,
+  GET_DENIAL_KPI:`${KPI_URL}/getDenialKpi`,
+  GET_RECONCILIATION_STATUS_KPI:`${KPI_URL}/getReconciliationStatusKPI`,
+  GET_AGING_ANALYSIS:`${KPI_URL}/getAgingKPI`,
 }

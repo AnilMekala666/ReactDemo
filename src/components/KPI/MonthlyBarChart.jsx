@@ -3,6 +3,11 @@ import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { PieChart } from '@mui/x-charts';
 import { Stack, Typography, Tooltip } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { KPI_ENDPOINTS} from 'pages/rest/api';
+import useAxios from 'hooks/useAxios';
+import ReUsableTable from 'components/correspndence/ReUsableTable';
+import { claimStatusColumns } from 'pages/KPIs/kpiTableHeaderData';
 
 const valueFormatter = (item) => `${item.value}%`;
 
@@ -27,6 +32,14 @@ export const LegendItem = ({ color, label }) => {
 // ==============================|| MONTHLY PIE CHART ||============================== //
 
 export default function MonthlyBarChart() {
+  const {showTable,payloadDate} = useSelector(state=>state.kpi);
+    // const remmitanceConfig = useMemo(() => ({
+    //     url: `${KPI_ENDPOINTS.GET_REMMITTANCE_SUMMARY}?year=2024`,
+    //     method: "GET",
+    //   }), [payloadDate])
+    // const { data:kpiWidgetsData, loading:kpiWidgetLoading, error:kpiWidgetError } = useAxios(remmitanceConfig, true); 
+    // console.log(kpiWidgetsData,"inside the remmitance summary")
+    // const remittanceSummaryBarChart = kpiWidgetsData?.kpiResponse?.monthlyData;
   const theme = useTheme();
   const axisFontStyle = { fontSize: 10, fill: theme.palette.text.secondary };
   const [radius, setRadius] = React.useState(120);
@@ -49,8 +62,8 @@ export default function MonthlyBarChart() {
     return sum;
   },[])
 
-  return (
-    <Stack
+  return (<>
+    {!showTable?<Stack
       direction={{ xs: 'column', md: 'row' }}
       spacing={{ xs: 0, md: 4 }}
       sx={{ width: '100%' }}
@@ -110,6 +123,6 @@ export default function MonthlyBarChart() {
           ))}
         </Stack>
       </Stack>
-    </Stack>
-  );
+    </Stack>:<ReUsableTable columns={claimStatusColumns} rows={statusData}/>}
+    </>);
 }

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 // material-ui
+import { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
@@ -11,6 +12,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import LinearProgressBar from '../../pages/KPIs/Charts/LinearProgessBar'
+import { useSelector } from 'react-redux';
+import ReUsableTable from 'components/correspndence/ReUsableTable';
+import { KPI_ENDPOINTS } from 'pages/rest/api';
+import useAxios from 'hooks/useAxios';
+import { kpiReconciliationColumns } from 'pages/KPIs/kpiTableHeaderData';
 // import LinearProgressBar from 'pages/KPIs/Charts/LinearProgressBar';
 
 // third-party
@@ -154,20 +160,29 @@ const initialStaticData = [
 // ==============================|| ORDER TABLE ||============================== //
 
 export default function NonPaymentPosting() {
+  const {showTable,payloadDate} = useSelector(state=>state.kpi);
+  const reconciliationConfig = useMemo(() => ({
+      url: KPI_ENDPOINTS.GET_RECONCILIATION_STATUS_KPI,
+      method: "POST",
+      data: payloadDate,
+    }), [payloadDate])
+  const { data:reconciliationData, loading:reconciliationLoading, error:reconciliationisError } = useAxios(reconciliationConfig, true); 
+  //const denialChartData=denialKpiData?.kpiResponse;
   const order = 'asc';
   const orderBy = 'tracking_no';
-  const progressData = [
-    { title: 'Fully Reconciled', value: 92 },
-    { title: 'Pending Reconciliation', value: 8 },
-    { title: 'Manual Intervention Required', value: 5 },
-    { title: 'Automated Reconciliation', value: 85 },
-    { title: 'Unreconciled', value: 10 },
-  ];
+  const progressData = reconciliationData?.kpiResponse
+  // const progressData = [
+  //   { title: 'Fully Reconciled', value: 92 },
+  //   { title: 'Pending Reconciliation', value: 8 },
+  //   { title: 'Manual Intervention Required', value: 5 },
+  //   { title: 'Automated Reconciliation', value: 85 },
+  //   { title: 'Unreconciled', value: 10 },
+  // ];
   return (
-    <Box mt={2}>
-      {progressData.map((data, index) => (
-        <LinearProgressBar key={index} value={data.value} title={data.title} />
-      ))}
+    <Box mt={2} mb={6}>
+      {!showTable && progressData ? progressData?.map((data, index) => (
+        <LinearProgressBar key={index} value={data.percentage} title={data.reconciliationStatus} />
+      )):showTable && progressData ? <ReUsableTable columns={kpiReconciliationColumns} rows={progressData}/> :<h5>Loading...</h5>}
       {/* <CustomTable data={initialStaticData} datacolumns={tableColumns} /> */}
       {/* <TableContainer
         sx={{

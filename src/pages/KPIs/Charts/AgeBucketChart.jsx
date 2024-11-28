@@ -1,6 +1,12 @@
-import React from 'react';
+import React,{useMemo} from 'react';
 import Chart from 'react-apexcharts';
-
+import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
+import ReUsableTable from 'components/correspndence/ReUsableTable';
+import Download from 'components/KPI/Download';
+import { KPI_ENDPOINTS } from 'pages/rest/api';
+import useAxios from 'hooks/useAxios';
+import { ageBucketColumns } from '../kpiTableHeaderData';
 const data = [
     { ageBucket: "0-30 Days", claimsCount: 2500, remittanceAmount: 2000000 },
     { ageBucket: "31-60 Days", claimsCount: 1500, remittanceAmount: 1200000 },
@@ -11,6 +17,15 @@ const data = [
   ];
 
 export default function ApexBarChart() {
+  const {showTable,payloadDate} = useSelector(state=>state.kpi);
+  const ageBucketConfig = useMemo(() => ({
+      url: KPI_ENDPOINTS.GET_AGING_ANALYSIS,
+      method: "POST",
+      data: payloadDate,
+    }), [payloadDate])
+  const { data:ageBucketData, loading:ageBucketLoading, error:ageBucketisError } = useAxios(ageBucketConfig, true); 
+  const ageBucketChartData=ageBucketData?.kpiResponse;
+
   const chartOptions = {
     chart: {
       type: 'bar',
@@ -23,7 +38,7 @@ export default function ApexBarChart() {
       },
     },
     xaxis: {
-      categories: data.map((item) => item.ageBucket), // Setting x-axis labels
+      categories: ageBucketChartData?.map((item) => item.ageBucket), // Setting x-axis labels
       title: {
         text: 'Age Bucket',
       },
@@ -59,18 +74,24 @@ export default function ApexBarChart() {
     {
       name: 'Remittance Amount',
       type: 'bar',
-      data: data.map((item) => item.remittanceAmount), // Setting the data for the series
+      data: ageBucketChartData?.map((item) => item.remittanceAmount), // Setting the data for the series
     },
     {
         name: 'Claims Count',
         type: 'line',
-        data: data.map((item) => item.claimsCount),
+        data: ageBucketChartData?.map((item) => item.claimCount),
       },
   ];
 
   return (
     <div style={{ padding: '10px' }}>
-      <Chart options={chartOptions} series={chartSeries}  height={500} width={1500} />
+      {!showTable && ageBucketChartData ? (
+        <Chart options={chartOptions} series={chartSeries} height={500} width={"80%"} />
+      ) : showTable && ageBucketChartData ? (
+        <ReUsableTable columns={ageBucketColumns} rows={ageBucketChartData} />
+      ) : (
+        <h5>Loading...</h5>
+      )}
     </div>
   );
 }

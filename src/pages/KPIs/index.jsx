@@ -37,6 +37,11 @@ import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
+import { useSelector } from 'react-redux';
+import { updatePayloadDate } from 'store/reducers/kpiSlice';
+import { useDispatch } from 'react-redux';
+import Slider from "react-slick";
+
 
 // avatar style
 const avatarSX = {
@@ -58,18 +63,18 @@ const actionSX = {
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export default function DashboardDefault() {
+  const {payloadDate} = useSelector(state=>state.kpi)
+  const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [activeTab, setActiveTab] = useState('last30days'); // Manage active state
   const [anchorEl, setAnchorEl] = useState(null); // Manage popover state
   const config = useMemo(() => ({
     url: KPI_ENDPOINTS.GET_WIDGET_DATA,
     method: "POST",
-    data: {
-      monthId: 3,
-      year: 2023,
-    },
-  }), [])
+    data: payloadDate,
+  }), [payloadDate])
   const { data:kpiWidgetsData, loading:kpiWidgetLoading, error:kpiWidgetError } = useAxios(config, true); 
+
 
   console.log({kpiWidgetsData},"kpiData");
 
@@ -93,7 +98,6 @@ export default function DashboardDefault() {
   return (
     <>
       <div style={{ backgroundColor: '#F5F5F5' }}>
-       
         <Box sx={{ padding: '20px', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant="h4" fontWeight={600}>
             Cognitive Health Claim Reconciliation Dashboard
@@ -142,11 +146,8 @@ export default function DashboardDefault() {
               Select Year and Month
             </Typography>
             <MonthYearPicker
-              value={selectedDate}
+              //value={selectedDate}
               onChange={(newValue) => {
-                const monthId = newValue.month() + 1; // 1-based month
-                const year = newValue.year();
-                console.log({ monthId, year }, 'inside datepicker');
                 setSelectedDate(newValue);
               }}
               label="Choose a Month and Year"
@@ -174,8 +175,10 @@ export default function DashboardDefault() {
               <Button
                 variant="contained"
                 onClick={() => {
+                  const monthId = selectedDate.month() + 1; // 1-based month
+                  const year = selectedDate.year();
+                  dispatch(updatePayloadDate({ monthId, year }));
                   handlePopoverClose();
-                  console.log('Selected Date:', selectedDate.format('DD/MM/YYYY'));
                 }}
                 sx={{ backgroundColor: '#3A63D2', color: 'white' }}
               >
@@ -184,31 +187,33 @@ export default function DashboardDefault() {
             </Box>
           </Box>
         </Popover>
-        <Box sx={{padding:"20px",}}>
-        <Grid container rowSpacing={4.5} columnSpacing={2.75} >
-          {/* row 1 */}
-          <Grid item xs={9}>
-            <Typography variant="h5" sx={{margin:"1rem 4px",fontSize:"1.2rem"}}>Overall Metrics</Typography>
-          </Grid>
+        <Box sx={{ padding: '20px' }}>
+          <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+            {/* row 1 */}
+            <Grid item xs={9}>
+              <Typography variant="h5" sx={{ margin: '1rem 4px', fontSize: '1.2rem' }}>
+                Overall Metrics
+              </Typography>
+            </Grid>
 
-          <Grid container rowSpacing={4.5} columnSpacing={0}  ml={3} sx={{marginBottom:"1.5rem"}}>
+            <Grid container rowSpacing={2} columnSpacing={2} ml={3} sx={{ marginBottom: '1.5rem' }}>
+              {!kpiWidgetLoading &&
+                kpiWidgetsData &&
+                kpiWidgetsData.widgetsList.length > 0 &&
+                kpiWidgetsData.widgetsList.map((item) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <KpiCard title={item.name} count={item.value} percentage={1212} extra="#0" />
+                  </Grid>
+                ))}
 
-           {kpiWidgetsData && kpiWidgetsData.widgetsList.length>0 && kpiWidgetsData.widgetsList.map(item=>(
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-            <KpiCard title={item.name} count={item.value} percentage={1212} extra="#0" />
+              {kpiWidgetLoading && <h1>Loading</h1>}
+              {kpiWidgetsData?.length == 0 && <h6>No Data Available</h6>}
+            </Grid>
+            <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+            <Grid container mt={1} ml={3} style={{ backgroundColor: '#fff' }}>
+              <KpiTabs />
+            </Grid>
           </Grid>
-           ))} 
-           
-           
-            
-          
-          </Grid>
-          <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
-          <Grid container mt={1} ml={3} style={{ backgroundColor: '#fff' }}>
-            <KpiTabs />
-          </Grid>
-
-        </Grid>
         </Box>
       </div>
     </>

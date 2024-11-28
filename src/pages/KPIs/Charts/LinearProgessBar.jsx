@@ -14,7 +14,7 @@ const LinearProgressBar = ({ title, value, ...others }) => {
     };
     return (
 
-        <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', marginBottom: "10px", width: '100%' }}>
+        <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', width: '80%',margin:"auto", marginBottom: "10px", }}>
 
             <Typography
                 variant="h5"
@@ -34,8 +34,9 @@ const LinearProgressBar = ({ title, value, ...others }) => {
                 variant="determinate"
                 value={value}
                 sx={{
+                    maxWidth:"60%",
                     flexGrow: 1,
-                    height: 30,
+                    height: 20,
                     borderRadius: 5,
                     backgroundColor: '#e0e0e0',
                     '& .MuiLinearProgress-bar': {

@@ -10,6 +10,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
+
 
 // third-party
 import { NumericFormat } from 'react-number-format';
@@ -143,48 +145,21 @@ export default function CedarPosting() {
   const orderBy = 'tracking_no';
   return (
     <Box mt={2}>
-      <CustomTable data={initialStaticData} datacolumns={tableColumns} />
-      {/* <TableContainer
+      
+      <h1>Gauge Chart</h1>
+      <Gauge
+        width={200} height={150}
+        value={75}
+        startAngle={-110}
+        endAngle={110}
         sx={{
-          width: '100%',
-          overflowX: 'auto',
-          position: 'relative',
-          display: 'block',
-          maxWidth: '100%',
-          '& td, & th': { whiteSpace: 'nowrap' }
+          [`& .${gaugeClasses.valueText}`]: {
+            fontSize: 20,
+            transform: 'translate(0px, 0px)'
+          }
         }}
-      >
-        <Table aria-labelledby="tableTitle">
-          <EFTPostingHead order={order} orderBy={orderBy} />
-          <TableBody>
-            {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  tabIndex={-1}
-                  key={row.tracking_no}
-                >
-                  <TableCell component="th" id={labelId} scope="row">
-                    <Link color="secondary"> {row.tracking_no}</Link>
-                  </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell>
-                    <OrderStatus status={row.carbs} />
-                  </TableCell>
-                  <TableCell align="right">
-                    <NumericFormat value={row.protein} displayType="text" thousandSeparator prefix="$" />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
+        text={({ value, valueMax }) => `${value} / ${valueMax}`}
+      />
     </Box>
   );
 }

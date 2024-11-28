@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -14,14 +15,15 @@ import NonPaymentPosting from './NonPaymentPosting';
 import CashReconciliationTable from './CashReconciliationTable';
 import HeatMap from 'pages/KPIs/Charts/HeatMap';
 import ReusableBarChart from 'pages/KPIs/Charts/barChart';
-import BasicBars from 'pages/KPIs/Charts/DenialBarChart';
+import DenialBarChart from 'pages/KPIs/Charts/DenialBarChart';
 import AgeBucketChart from 'pages/KPIs/Charts/AgeBucketChart';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { updateShowTable } from 'store/reducers/kpiSlice';
-import ReUsableTable from 'components/correspndence/ReUsableTable';
-import { remittanceSummaryColumns } from 'pages/KPIs/kpiTableHeaderData';
-import { rem } from '@mantine/core';
+import { KPI_ENDPOINTS } from 'pages/rest/api';
+import useAxios from 'hooks/useAxios';
+import RemmitanceSummary from 'pages/KPIs/RemmitanceSummary';
+import RemmitanceAnalysis from 'pages/KPIs/RemmitanceAnalysis';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,8 +83,14 @@ const denialManagementChart = [
 
 export default function UniqueVisitorCard() {
   const [value, setValue] = React.useState(0);
-  const showTable = useSelector(state=>state.kpi.showTable);
+  const {showTable,payloadDate} = useSelector(state=>state.kpi);
   const dispatch = useDispatch();
+  const remmitanceConfig = useMemo(() => ({
+    url: `${KPI_ENDPOINTS.GET_REMMITTANCE_SUMMARY}?year=2024`,
+    method: "GET",
+  }), [payloadDate])
+  const { data:remmitanceData, loading:remmitanceDataLoading, error:remmitanceDataError } = useAxios(remmitanceConfig, true); 
+
   const handleChange = (event, newValue) => {
     dispatch(updateShowTable(false));
     setValue(newValue);
@@ -115,22 +123,7 @@ export default function UniqueVisitorCard() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Download />
-        {!showTable ?<div style={{width:"60%"}}>
-        <ReusableBarChart
-        graphData={remittanceSummaryBarChart}
-        xAxisKey="month"
-        seriesKeys={[
-          { key: 'totalClaims', label: 'Total Claims', color: '#3A63D2' },
-          { key: 'totalRemittances', label: 'Total Remittance', color: '#EB7724' },
-          { key: 'reconciliationRate', label: 'Reconciliation Rate', color: 'yellow' },
-        ]}
-        checkboxes={[
-          { label: 'Monthly', key: 'showMonthly' },
-          { label: 'Today', key: 'showToday' },
-        ]}
-      />
-      </div>:<ReUsableTable columns={remittanceSummaryColumns} rows={remittanceSummaryBarChart}/>}
+        <RemmitanceSummary/>
         {/* <SaleReportCard /> */}
       </CustomTabPanel>
 
@@ -139,14 +132,14 @@ export default function UniqueVisitorCard() {
         <Download />
         <MonthlyBarChart />
       </CustomTabPanel>
+
       <CustomTabPanel value={value} index={2}>
-        <Download />
-        <HeatMap data={heatMapdata} xCategories={xCategories} yCategories={yCategories} />
+        <RemmitanceAnalysis/>
         {/* <CashReconciliationTable /> */}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         <Download />
-        <BasicBars/>
+        <DenialBarChart />
         {/* <EFTPosting /> */}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>

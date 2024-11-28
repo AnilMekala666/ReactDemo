@@ -4,19 +4,19 @@ import ReactApexChart from 'react-apexcharts';
 // Reusable HeatMap Component
 const HeatMap = ({ data, xCategories, yCategories, chartTitle }) => {
   // Sorting and processing data
-  const sortedData = [...data].sort((a, b) => a.processingTime - b.processingTime);
+  const sortedData = [...data].sort((a, b) => a.avgProcessingTime - b.avgProcessingTime);
   const seriesData = yCategories.map(amount => ({
     name: `$${amount.toLocaleString()}`,
-    data: xCategories.map(processingTime => {
+    data: xCategories.map(avgProcessingTime => {
       const dataPoint = sortedData.find(
-        item => item.processingTime === processingTime && item.totalAmount === amount
+        item => item.avgProcessingTime === avgProcessingTime && item.totalRemittanceAmount === amount
       );
-      return dataPoint ? dataPoint.totalAmount : null;
+      return dataPoint ? dataPoint.totalRemittanceAmount : null;
     }),
   }));
 
-  const minValue = Math.min(...data.map(item => item.totalAmount));
-  const maxValue = Math.max(...data.map(item => item.totalAmount));
+  const minValue = Math.min(...data.map(item => item.totalRemittanceAmount));
+  const maxValue = Math.max(...data.map(item => item.totalRemittanceAmount));
 
   // HeatMap options
   const options = {
@@ -45,13 +45,13 @@ const HeatMap = ({ data, xCategories, yCategories, chartTitle }) => {
     tooltip: {
       custom: function ({ seriesIndex, dataPointIndex, w }) {
         const payer = sortedData.find(
-          item => item.processingTime === xCategories[dataPointIndex] && item.totalAmount === yCategories[seriesIndex]
+          item => item.avgProcessingTime === xCategories[dataPointIndex] && item.totalRemittanceAmount === yCategories[seriesIndex]
         );
         return `
           <div>
             <strong>Payer:</strong> ${payer ? payer.payer : '-'} <br>
-            <strong>Processing Time:</strong> ${payer ? payer.processingTime : '-'} Days <br>
-            <strong>Total Amount:</strong> $${payer ? payer.totalAmount.toLocaleString() : '-'}
+            <strong>Processing Time:</strong> ${payer ? payer.avgProcessingTime : '-'} Days <br>
+            <strong>Total Amount:</strong> $${payer ? payer.totalRemittanceAmount.toLocaleString() : '-'}
           </div>
         `;
       },
@@ -74,7 +74,6 @@ const HeatMap = ({ data, xCategories, yCategories, chartTitle }) => {
       },
     },
   };
-
   return (
     <div id="heatmap-chart">
       <ReactApexChart options={options} series={seriesData} type="heatmap" height={350} />

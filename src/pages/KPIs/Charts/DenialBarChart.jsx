@@ -1,5 +1,12 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import Chart from 'react-apexcharts';
+import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
+import ReUsableTable from 'components/correspndence/ReUsableTable';
+import Download from 'components/KPI/Download';
+import { KPI_ENDPOINTS } from 'pages/rest/api';
+import useAxios from 'hooks/useAxios';
+import { denialKpiColumns } from '../kpiTableHeaderData';
 
 const data = [
   { reason: 'Eligibility Issues', count: 150, percentage: 30, revenueLoss: 300000 },
@@ -10,7 +17,18 @@ const data = [
   { reason: 'Service Not Covered', count: 65, percentage: 13, revenueLoss: 130000 },
 ];
 
+
+
 export default function ApexBarChart() {
+  const {showTable,payloadDate} = useSelector(state=>state.kpi);
+    const denialKpiConfig = useMemo(() => ({
+        url: KPI_ENDPOINTS.GET_DENIAL_KPI,
+        method: "POST",
+        data: payloadDate,
+      }), [payloadDate])
+    const { data:denialKpiData, loading:denialKpiLoading, error:denialKpiisError } = useAxios(denialKpiConfig, true); 
+    const denialChartData=denialKpiData?.kpiResponse;
+
   const chartOptions = {
     chart: {
       type: 'bar',
@@ -23,7 +41,7 @@ export default function ApexBarChart() {
       },
     },
     xaxis: {
-      categories: data.map((item) => item.reason), // Setting x-axis labels
+      categories: denialChartData?.map((item) => item.denialReason), // Setting x-axis labels
       title: {
         text: 'Revenue Loss',
       },
@@ -59,18 +77,18 @@ export default function ApexBarChart() {
     {
       name: 'Revenue Loss',
       type: 'bar',
-      data: data.map((item) => item.revenueLoss), // Setting the data for the series
+      data: denialChartData?.map((item) => item.potentialRevenueLoss), // Setting the data for the series
     },
     {
         name: 'Percentage',
         type: 'line',
-        data: data.map((item) => item.percentage),
+        data: denialChartData?.map((item) => item.percentage),
       },
   ];
 
   return (
     <div style={{ padding: '10px' }}>
-      <Chart options={chartOptions} series={chartSeries}  height={500} width={1500} />
+      {!showTable && denialChartData ?  <Chart options={chartOptions} series={chartSeries}  height={500} width={1500} />:showTable && denialChartData ?<ReUsableTable columns={denialKpiColumns} rows={denialChartData}/>:<h5>Loading...</h5>}
     </div>
   );
 }
