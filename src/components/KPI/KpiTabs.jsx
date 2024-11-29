@@ -10,7 +10,7 @@ import MonthlyBarChart from './MonthlyBarChart';
 import { Grid, Switch, Typography } from '@mui/material';
 import Download from './Download';
 import EFTPosting from './EFTPosting';
-import CedarPosting from './CedarPosting';
+import RevenueCycleKpi from './RevenueCycleKpi';
 import NonPaymentPosting from './NonPaymentPosting';
 import CashReconciliationTable from './CashReconciliationTable';
 import HeatMap from 'pages/KPIs/Charts/HeatMap';
@@ -127,29 +127,33 @@ export default function UniqueVisitorCard() {
         {/* <SaleReportCard /> */}
       </CustomTabPanel>
 
-
+    {/* CLAIMS OVERVIEW */}
       <CustomTabPanel value={value} index={1}>
         <Download />
         <MonthlyBarChart />
       </CustomTabPanel>
-
+      {/* REMITTANCE ANALYSIS */}
       <CustomTabPanel value={value} index={2}>
         <RemmitanceAnalysis/>
         {/* <CashReconciliationTable /> */}
       </CustomTabPanel>
+      {/* DENIAL MANAGEMENT */}
       <CustomTabPanel value={value} index={3}>
         <Download />
         <DenialBarChart />
         {/* <EFTPosting /> */}
       </CustomTabPanel>
+      {/* REVENUE CYCLE KPI */}
       <CustomTabPanel value={value} index={4}>
         <Download />
-        <CedarPosting />
+        <RevenueCycleKpi />
       </CustomTabPanel>
+      {/* RECONCILLIATION STATUS */}
       <CustomTabPanel value={value} index={5}>
         <Download />
         <NonPaymentPosting />
       </CustomTabPanel>
+      {/* AGING ANALYSIS */}
       <CustomTabPanel value={value} index={6}>
         <Download />
         <AgeBucketChart/>

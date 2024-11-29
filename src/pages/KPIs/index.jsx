@@ -60,6 +60,21 @@ const actionSX = {
   transform: 'none'
 };
 
+function getMonthName(monthId) {
+  const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+  ];
+
+  // Ensure the monthId is valid (1 to 12)
+  if (monthId < 1 || monthId > 12) {
+      return "Invalid month ID. Please provide a number between 1 and 12.";
+  }
+
+  // Return the month name (monthId - 1 because array indices start at 0)
+  return months[monthId - 1];
+}
+
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export default function DashboardDefault() {
@@ -76,12 +91,17 @@ export default function DashboardDefault() {
   const { data:kpiWidgetsData, loading:kpiWidgetLoading, error:kpiWidgetError } = useAxios(config, true); 
 
 
-  console.log({kpiWidgetsData},"kpiData");
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
     if (tabName === 'custom') {
       setAnchorEl(anchorEl); // Open popover when "Custom" is clicked
+    }
+    if(tabName === 'last30days'){
+      const currentDate = dayjs();
+      const initialMonthId = currentDate.month() + 1; // Day.js month is 0-based, so add 1
+      const initialYear = currentDate.year();
+      dispatch(updatePayloadDate({monthId:initialMonthId,year:initialYear})) 
     }
   };
 
@@ -102,33 +122,40 @@ export default function DashboardDefault() {
           <Typography variant="h4" fontWeight={600}>
             Cognitive Health Claim Reconciliation Dashboard
           </Typography>
-          <Box sx={{ padding: '4px', border: '1px solid #ECECEC', borderRadius: '.5rem' }}>
-            <Button
-              onClick={() => handleTabClick('last30days')}
-              sx={{
-                padding: '.75rem 1.5rem',
-                borderRadius: '6px',
-                marginRight: '8px',
-                backgroundColor: activeTab === 'last30days' ? '#3A63D2' : 'transparent',
-                color: activeTab === 'last30days' ? 'white' : '#656565'
-              }}
-            >
-              Last 30 days
-            </Button>
-            <Button
-              onClick={(event) => {
-                handleTabClick('custom');
-                handlePopoverOpen(event);
-              }}
-              sx={{
-                padding: '.75rem 1.5rem',
-                borderRadius: '6px',
-                backgroundColor: activeTab === 'custom' ? '#3A63D2' : 'transparent',
-                color: activeTab === 'custom' ? 'white' : '#656565'
-              }}
-            >
-              Custom
-            </Button>
+          <Box>
+            <Box sx={{ padding: '4px', border: '1px solid #ECECEC', borderRadius: '.5rem' }}>
+              <Button
+                onClick={() => handleTabClick('last30days')}
+                sx={{
+                  padding: '.75rem 1.5rem',
+                  borderRadius: '6px',
+                  marginRight: '8px',
+                  backgroundColor: activeTab === 'last30days' ? '#3A63D2' : 'transparent',
+                  color: activeTab === 'last30days' ? 'white' : '#656565'
+                }}
+              >
+                Current Month
+              </Button>
+              <Button
+                onClick={(event) => {
+                  handleTabClick('custom');
+                  handlePopoverOpen(event);
+                }}
+                sx={{
+                  padding: '.75rem 1.5rem',
+                  borderRadius: '6px',
+                  backgroundColor: activeTab === 'custom' ? '#3A63D2' : 'transparent',
+                  color: activeTab === 'custom' ? 'white' : '#656565'
+                }}
+              >
+                Custom
+              </Button>
+            </Box>
+            <Typography sx={{ marginTop: '.5rem' }} variant="h6">
+              <span style={{ fontWeight: '600', display: 'inline-block', merginRight: '.4rem' }}>Month: </span>
+              {getMonthName(payloadDate.monthId)} <span style={{ fontWeight: '600' }}>Year: </span>
+              {payloadDate.year}
+            </Typography>
           </Box>
         </Box>
         {/* Popover for Date Selection */}

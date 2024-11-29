@@ -20,6 +20,12 @@ const kpiSlice = createSlice({
     },
     updatePayloadDate:(state,action)=>{
       state.payloadDate=action.payload
+    },
+    getCurrentMonthAndYear:(state,action)=>{
+      const currentDate = dayjs();
+      const initialMonthId = currentDate.month() + 1; // Day.js month is 0-based, so add 1
+      const initialYear = currentDate.year();
+      return {monthId:initialMonthId,year:initialYear}
     }
   }
 });

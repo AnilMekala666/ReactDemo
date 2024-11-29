@@ -68,3 +68,9 @@ export const ageBucketColumns = [
 ];
 
 
+
+export const revenueCycleKpiColumns = [
+  { id: 'kpi', label: 'KPI' },
+  { id: 'value', label: 'Value' },
+  { id: 'target', label: 'Target' },
+];

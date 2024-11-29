@@ -11,6 +11,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
+import React,{useMemo} from 'react';
+import { useSelector } from 'react-redux';
+import ReUsableTable from 'components/correspndence/ReUsableTable';
+import Download from 'components/KPI/Download';
+import { KPI_ENDPOINTS } from 'pages/rest/api';
+import useAxios from 'hooks/useAxios';
+import GaugeChart from 'pages/KPIs/Charts/GaugeChart';
+import { revenueCycleKpiColumns } from 'pages/KPIs/kpiTableHeaderData';
 
 
 // third-party
@@ -140,26 +148,26 @@ const initialStaticData = [
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function CedarPosting() {
+export default function RevenueCycleKpi() {
+  const {showTable,payloadDate} = useSelector(state=>state.kpi);
+  const revenueCycleKpiConfig = useMemo(() => ({
+      url: KPI_ENDPOINTS.GET_REVENUE_CYCLE_KPI,
+      method: "POST",
+      data: payloadDate,
+    }), [payloadDate])
+  const { data:revenueCycleKpiData, loading:revenueCycleKpiIsLoading, error:revenueCycleKpiIsError } = useAxios(revenueCycleKpiConfig, true); 
+  const gaugeChartGraph = revenueCycleKpiData?.kpiResponse;
+  console.log(revenueCycleKpiData,"inside the revenueCycleKpi")
   const order = 'asc';
   const orderBy = 'tracking_no';
   return (
-    <Box mt={2}>
+    <Box mt={2} sx={{width:"50%"}}>
       
-      <h1>Gauge Chart</h1>
-      <Gauge
-        width={200} height={150}
-        value={75}
-        startAngle={-110}
-        endAngle={110}
-        sx={{
-          [`& .${gaugeClasses.valueText}`]: {
-            fontSize: 20,
-            transform: 'translate(0px, 0px)'
-          }
-        }}
-        text={({ value, valueMax }) => `${value} / ${valueMax}`}
-      />
+      <Box>
+        {!showTable && gaugeChartGraph ? <Box sx={{display:'flex',flexWrap:"wrap",gap:"2rem"}}>
+        {gaugeChartGraph?.map(gaugeData=><GaugeChart gaugeData={gaugeData}/>)}
+        </Box> : showTable && gaugeChartGraph ? <ReUsableTable columns={revenueCycleKpiColumns} rows={gaugeChartGraph}/> :<h5>Loading....</h5>}
+      </Box>
     </Box>
   );
 }

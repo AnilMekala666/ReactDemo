@@ -58,4 +58,5 @@ export const KPI_ENDPOINTS = {
   GET_DENIAL_KPI:`${KPI_URL}/getDenialKpi`,
   GET_RECONCILIATION_STATUS_KPI:`${KPI_URL}/getReconciliationStatusKPI`,
   GET_AGING_ANALYSIS:`${KPI_URL}/getAgingKPI`,
+  GET_REVENUE_CYCLE_KPI:`${KPI_URL}/getRevenueCycleKpi`,
 }
