@@ -57,7 +57,7 @@ const widget = {
     },
     {
       id: 'kpi',
-      title: <FormattedMessage id="KPIs" />,
+      title: <FormattedMessage id="KPI" />,
       type: 'item',
       url: '/kpi/dashboard',
       icon: icons.DatabaseOutlined
