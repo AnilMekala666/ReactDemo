@@ -225,6 +225,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Stack,
 } from '@mui/material';
 
 import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
@@ -240,6 +241,8 @@ import { styled } from '@mui/material/styles';
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import IconButton from 'components/@extended/IconButton';
 import { color } from 'framer-motion';
+import { AddCircleOutlined } from '@mui/icons-material';
+import { MinusCircleFilled } from '@ant-design/icons';
 
 // const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 //   '& .MuiDialogContent-root': {
@@ -429,6 +432,26 @@ export const PatientLevelData = ({ patients,
     // }
   };
 
+  const addLineItem = () => {
+    let item = [...lineLevelTable, {}];
+    setLineLevelTable(item);
+  }
+  const removeLineItem = (index) => {
+    let item = [...lineLevelTable];
+    item.splice(index, 1);
+    setLineLevelTable(item);
+  }
+
+  const addPatientItem = () => {
+    let item = [...patientLevelTable, {}];
+    setPatientLevelTable(item);
+  }
+  const removePatientItem = (index) => {
+    let item = [...patientLevelTable];
+    item.splice(index, 1);
+    setPatientLevelTable(item);
+  }
+
   return (
     <Box sx={{ padding: 2 }}>
       {/* Patient Selection Input */}
@@ -528,60 +551,31 @@ export const PatientLevelData = ({ patients,
       {patient && (
         <Box className="doc-table-cont" sx={{ padding: 2 }}>
           {/* <label style={{ fontWeight: '600', fontSize: '16px' }}>Patient-Level Data</label> */}
-          <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
-            Patient-Level Data
-          </Typography>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
+              Patient-Level Data
+            </Typography>
+            <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={addPatientItem} />
+          </Stack>
           <TableContainer component={Paper} sx={{ marginTop: 2, marginBottom: 2 }}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Patient Name</TableCell>
-                  <TableCell>Insurance Name</TableCell>
-                  <TableCell>Claim Number</TableCell>
-                  <TableCell>Service Date</TableCell>
-                  <TableCell>Claimed Amount</TableCell>
-                  <TableCell>Allowed Amount</TableCell>
+                  <TableCell>Visit Id</TableCell>
                   <TableCell>Paid Amount</TableCell>
-                  <TableCell>Patient Portion</TableCell>
+                  <TableCell>Payer Name</TableCell>
+                  <TableCell>Service Date</TableCell>
+                  <TableCell>Claim No</TableCell>
+                  <TableCell>Check No</TableCell>
+                  <TableCell>Patient Name</TableCell>
+                  <TableCell>Check Date</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {Array.isArray(patientLevelTable) && patientLevelTable.map((patient, index) => (
                   <TableRow key={index}>
-                    <TableCell>{patient.patientName}</TableCell>
-                    <TableCell>{patient.insuranceName}</TableCell>
-                    {/* <TableCell>{patient.claimNumber}</TableCell> */}
-                    <TableCell>
-                      {isEditing ? (
-                        <TextField
-                          value={patient.claimNumber}
-                          onChange={(e) => handleInputChange(index, 'claimNumber', e.target.value)}
-                        />
-                      ) : (
-                        `  ${patient.claimNumber}`
-                      )}
-                    </TableCell>
-                    <TableCell>{patient.patientLevelServiceDate}</TableCell>
-                    <TableCell>
-                      {isEditing ? (
-                        <TextField
-                          value={patient.claimAmount}
-                          onChange={(e) => handleInputChange(index, 'claimAmount', e.target.value)}
-                        />
-                      ) : (
-                        `  $${patient.claimAmount}`
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {isEditing ? (
-                        <TextField
-                          value={patient.allowedAmount}
-                          onChange={(e) => handleInputChange(index, 'allowedAmount', e.target.value)}
-                        />
-                      ) : (
-                        `$${patient.allowedAmount}`
-                      )}
-                    </TableCell>
+                    <TableCell>{patient.id}</TableCell>
                     <TableCell>
                       {isEditing ? (
                         <TextField
@@ -592,7 +586,58 @@ export const PatientLevelData = ({ patients,
                         `$${patient.paidAmount}`
                       )}
                     </TableCell>
-                    <TableCell>{patient.patientPortion}</TableCell>
+                    {/* <TableCell>{patient.claimNumber}</TableCell> */}
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.payerName}
+                          onChange={(e) => handleInputChange(index, 'payerName', e.target.value)}
+                        />
+                      ) : (
+                        patient.payerName
+                      )}
+                    </TableCell>
+                    <TableCell>{patient.patientLevelServiceDate}</TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.claimNumber}
+                          onChange={(e) => handleInputChange(index, 'checkNo', e.target.value)}
+                        />
+                      ) : (
+                        patient.claimNumber
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.claimNumber}
+                          onChange={(e) => handleInputChange(index, 'checkNo', e.target.value)}
+                        />
+                      ) : (
+                        patient.claimNumber
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.patientName}
+                          onChange={(e) => handleInputChange(index, 'patientName', e.target.value)}
+                        />
+                      ) : (
+                        patient.patientName
+                      )}
+                    </TableCell>
+                    <TableCell>{patient.checkDate}</TableCell>
+                    {index  == 0 &&
+                      <TableCell sx={{ color: "#e55" }}>
+                      </TableCell>
+                    }
+                    {index > 0 &&
+                      <TableCell sx={{ color: "#e55" }}>
+                        <MinusCircleFilled onClick={()=>removePatientItem(index)} />
+                      </TableCell>
+                    }
                   </TableRow>
                 ))}
               </TableBody>
@@ -600,31 +645,67 @@ export const PatientLevelData = ({ patients,
           </TableContainer>
 
           {/* <label style={{ fontWeight: '600', fontSize: '16px' }}>Line-Level Data</label> */}
-          <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
-            Line-Level Data
-          </Typography>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
+              Line-Level Data
+            </Typography>
+            <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={addLineItem} />
+          </Stack>
           <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-            <Table>
+            <Table sx={{ display: 'block' }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Service Date</TableCell>
-                  <TableCell>Procedure Code</TableCell>
-                  <TableCell>Service Description</TableCell>
-                  <TableCell>Charge Amount</TableCell>
-                  <TableCell>Allowed Amount</TableCell>
-                  <TableCell>Paid Amount</TableCell>
-                  <TableCell>Adjustment Amount</TableCell>
-                  <TableCell>Reason Codes</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Service Start Date</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Service End Date</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Procedure Code</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Billed Amount</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Allowed Amount</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Covered Amount</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Not Covered Amount</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Discount Amount</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Adjustment Amount</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Co-Pay</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Co-Insurance</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Deductible Amount</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Patient Responsibility</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Denied Amount</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Reason Codes</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Remark Codes</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Description</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {lineLevelTable?.map((patient, index) => (
                   <TableRow key={index}>
                     <TableCell>{patient.lineLevelServiceDate}</TableCell>
+                    <TableCell>{patient.lineLevelServiceEndDate}</TableCell>
                     <TableCell>{patient.procedureCode}</TableCell>
-                    <TableCell>{patient.serviceDescription}</TableCell>
+                    <TableCell>{patient.billedAmount}</TableCell>
+                    <TableCell>{patient.allowedAmount}</TableCell>
+                    <TableCell>{patient.coveredAmount}</TableCell>
+                    <TableCell>{patient.notCoveredAmount}</TableCell>
+                    <TableCell>{patient.discountAmount}</TableCell>
+                    <TableCell>{patient.adjustmentAmount}</TableCell>
+                    <TableCell>{patient.coPay}</TableCell>
+                    <TableCell>{patient.coInsurance}</TableCell>
+                    <TableCell>{patient.deductibleAmount}</TableCell>
+                    <TableCell>{patient.patientResponsibility}</TableCell>
+                    <TableCell>{patient.deniedAmount}</TableCell>
+                    <TableCell>{patient.reasonCodes}</TableCell>
+                    <TableCell>{patient.remarkCodes}</TableCell>
+                    <TableCell>{patient.description}</TableCell>
+                    {index  == 0 &&
+                      <TableCell sx={{ color: "#e55" }}>
+                      </TableCell>
+                    }
+                    {index > 0 &&
+                      <TableCell sx={{ color: "#e55" }}>
+                        <MinusCircleFilled onClick={()=>removeLineItem(index)} />
+                      </TableCell>
+                    }
                     {/* <TableCell>${patient.chargeAmount}</TableCell> */}
-                    <TableCell>
+                    {/* <TableCell>
                       {isEditing ? (
                         <TextField
                           value={patient.chargeAmount}
@@ -645,7 +726,7 @@ export const PatientLevelData = ({ patients,
                       )}
                       </TableCell>
                     <TableCell>
-                      {/* ${patient.paidAmount} */}
+                      {/* ${patient.paidAmount} 
                       {isEditing ? (
                         <TextField
                           value={patient.paidAmount}
@@ -659,7 +740,7 @@ export const PatientLevelData = ({ patients,
                       ${patient.adjustmentAmount}
                    
                       </TableCell>
-                    <TableCell>{patient.reasonCodes}</TableCell>
+                    <TableCell>{patient.reasonCodes}</TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>
