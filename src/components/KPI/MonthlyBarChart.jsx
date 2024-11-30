@@ -2,13 +2,12 @@
 import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { PieChart } from '@mui/x-charts';
-import { Stack, Typography, Tooltip } from '@mui/material';
+import { Stack, Typography, Tooltip,Box, Skeleton,CircularProgress } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import ReUsableTable from 'components/correspndence/ReUsableTable';
 import { claimStatusColumns } from 'pages/KPIs/kpiTableHeaderData';
-
 const valueFormatter = (item) => `${item.value}%`;
 
 export const LegendItem = ({ color, label }) => {
@@ -63,80 +62,75 @@ export default function MonthlyBarChart() {
   ];
 
   const totalValue = useMemo(() => {
-    let sum = claimsStatusPieChart?.reduce((acc, item) => {
-      return acc + item.count;
-    }, 0);
-    return sum;
+    if(claimsStatusPieChart){
+      let sum = claimsStatusPieChart?.reduce((acc, item) => {
+        return acc + item.count;
+      }, 0);
+      return sum;
+    }
+    
   }, [claimsStatusPieChart]);
+
 
   return (
     <>
-      {!showTable ? (
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 4 }} sx={{ width: '100%' }}>
-          <Stack direction="column" sx={{ width: { xs: '100%', md: '50%' } }}>
-            <span
-              style={{
-                position: 'relative',
-                top: 190,
-                textAlign: 'center',
-                left: -50
-              }}
-            >
-              <Typography color={'#656565'} fontSize={16} fontWeight={600}>
-                Total
-              </Typography>
-              <Typography color={'#2F2F2F'} fontSize={32} fontWeight={700}>
-                {totalValue}
-              </Typography>
-            </span>
-            {claimsStatusData && (
-              <PieChart
-                sx={{border:"2px solid yellow"}}
-                height={300}
-                series={[
-                  {
-                    data: claimsStatusPieChart?.map(({ status, percentage }) => ({
-                      label: status,
-                      value: percentage,
-                    })),
-                    innerRadius: radius,
-                    valueFormatter: (v, { dataIndex }) => {
-
-                      const { status, count, percentage } = claimsStatusPieChart[dataIndex];
-                      return `${percentage}% (${count})`;
-                    }
-                  }
-                ]}
-                //skipAnimation={skipAnimation}
-                slotProps={{
-                  legend: {
-                    direction: 'column',
-                    position: { vertical: 'middle', horizontal: 'right' },
-                    //padding:20,
-                  },
-                }}
-              />
-            )}
-
-            {/* <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={{ xs: 0, md: 4 }}
-              sx={{
-                width: '100%',
-                marginTop: 1,
-                textAlign: 'center',
-                display: 'block'
-              }}
-            >
-              {claimsStatusPieChart?.map((series) => (
-                <LegendItem color={series.color} label={series.status} />
-              ))}
-            </Stack> */}
-          </Stack>
-        </Stack>
-      ) : (
-        <ReUsableTable columns={claimStatusColumns} rows={claimsStatusPieChart} />
-      )}
+      <Box sx={{ minHeight: `${!showTable?'20rem':'10rem' }`}}>
+        {claimsStatusLoading && (
+          <Box width={'100%'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress width={'100%'} />
+          </Box>
+        )}
+        {!claimsStatusLoading && !showTable && (
+          <Box sx={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+            <Box direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 4 }} sx={{ width: '100%'}}>
+              <Box direction="column" sx={{ width: { xs: '100%', md: '50%' } }}>
+                <span
+                  style={{
+                    position: 'relative',
+                    top: 190,
+                    textAlign: 'center',
+                    left: -50
+                  }}
+                >
+                  <Typography color={'#656565'} fontSize={16} fontWeight={600}>
+                    Total
+                  </Typography>
+                  <Typography color={'#2F2F2F'} fontSize={32} fontWeight={700}>
+                    {totalValue}
+                  </Typography>
+                </span>
+                {claimsStatusData && (
+                  <PieChart
+                    height={300}
+                    series={[
+                      {
+                        data: claimsStatusPieChart?.map(({ status, percentage }) => ({
+                          label: status,
+                          value: percentage
+                        })),
+                        innerRadius: radius,
+                        valueFormatter: (v, { dataIndex }) => {
+                          const { status, count, percentage } = claimsStatusPieChart[dataIndex];
+                          return `${percentage}% (${count})`;
+                        }
+                      }
+                    ]}
+                    //skipAnimation={skipAnimation}
+                    slotProps={{
+                      legend: {
+                        direction: 'column',
+                        position: { vertical: 'middle', horizontal: 'right' }
+                        //padding:20,
+                      }
+                    }}
+                  />
+                )}
+              </Box>
+            </Box>
+          </Box>
+        )}
+        {showTable && <Box sx={{maxWidth:"40%",margin:"auto",display:"flex",justifyContent:"center",alignItems:"center"}}><ReUsableTable columns={claimStatusColumns} rows={claimsStatusPieChart || []} /></Box>}
+      </Box>
     </>
   );
 }

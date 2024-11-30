@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 // material-ui
 import Box from '@mui/material/Box';
+import { Skeleton ,CircularProgress} from '@mui/material';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
@@ -157,16 +158,26 @@ export default function RevenueCycleKpi() {
     }), [payloadDate])
   const { data:revenueCycleKpiData, loading:revenueCycleKpiIsLoading, error:revenueCycleKpiIsError } = useAxios(revenueCycleKpiConfig, true); 
   const gaugeChartGraph = revenueCycleKpiData?.kpiResponse;
-  console.log(revenueCycleKpiData,"inside the revenueCycleKpi")
   const order = 'asc';
   const orderBy = 'tracking_no';
   return (
-    <Box mt={2} sx={{width:"50%"}}>
-      
+    <Box mt={2} sx={{ width: '100%', minHeight: '20rem' }}>
+      {revenueCycleKpiIsLoading && (
+        <Box width={'100%'} height={'40vh'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress width={'100%'} />
+        </Box>
+      )}
       <Box>
-        {!showTable && gaugeChartGraph ? <Box sx={{display:'flex',flexWrap:"wrap",gap:"2rem"}}>
-        {gaugeChartGraph?.map(gaugeData=><GaugeChart gaugeData={gaugeData}/>)}
-        </Box> : showTable && gaugeChartGraph ? <ReUsableTable columns={revenueCycleKpiColumns} rows={gaugeChartGraph}/> :<h5>Loading....</h5>}
+        {!revenueCycleKpiIsLoading && gaugeChartGraph && (
+          <Box sx={{ display: 'flex', justifyContent:"space-between",alignItems:'flex-start' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
+            {gaugeChartGraph?.map((gaugeData) => (
+              <GaugeChart gaugeData={gaugeData} />
+            ))}
+          </Box>
+          <ReUsableTable columns={revenueCycleKpiColumns} rows={gaugeChartGraph} />
+          </Box>
+        )}
       </Box>
     </Box>
   );

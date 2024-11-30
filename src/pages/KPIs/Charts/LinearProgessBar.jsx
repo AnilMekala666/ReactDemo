@@ -2,76 +2,60 @@ import React from 'react';
 import { Box, LinearProgress, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
-const LinearProgressBar = ({ title, value, ...others }) => {
+const LinearProgressBar = ({ title, value, maxValue = 100, ...others }) => {
     const getColorForValue = (value) => {
         if (value >= 90) {
-            return 'green'; 
+            return 'green';
         } else if (value >= 40) {
-            return 'orange'; 
+            return 'orange';
         } else {
-            return 'red'; 
+            return 'red';
         }
     };
+
     return (
+        <Box sx={{ width: '100%', margin: 'auto', marginBottom: '10px', textAlign: 'center' }}>
+            {/* Label and Percentage */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+                <Typography
+                    variant="body1"
+                    sx={{
+                        fontWeight: 'bold',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                    }}
+                >
+                    {title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {`${value}/${maxValue}`}
+                </Typography>
+            </Box>
 
-        <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', width: '80%',margin:"auto", marginBottom: "10px", }}>
-
-            <Typography
-                variant="h5"
-                sx={{
-                    width: '250px',
-                    marginRight: "10px",
-                    whiteSpace: "nowrap",
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                }}
-            >
-                {title}:
-            </Typography>
-
-
+            {/* Progress Bar */}
             <LinearProgress
                 variant="determinate"
-                value={value}
+                value={(value / maxValue) * 100}
                 sx={{
-                    maxWidth:"60%",
-                    flexGrow: 1,
-                    height: 20,
+                    height: 10,
                     borderRadius: 5,
                     backgroundColor: '#e0e0e0',
                     '& .MuiLinearProgress-bar': {
-                        background: getColorForValue(value),
+                        background: getColorForValue((value / maxValue) * 100),
                     },
                 }}
                 {...others}
             />
-
-
-            <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    fontWeight: 'bold',
-                    color: value < 50 ? 'black' : 'white',
-                    width: '80px',
-                    textAlign: 'center',
-                }}
-            >
-                {`${Math.round(value)}%`}
-            </Typography>
         </Box>
-
     );
-}
+};
 
 LinearProgressBar.propTypes = {
     title: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired, 
+    value: PropTypes.number.isRequired,
+    maxValue: PropTypes.number, // Maximum value for percentage calculation
     others: PropTypes.any,
 };
 
-export default LinearProgressBar
+export default LinearProgressBar;

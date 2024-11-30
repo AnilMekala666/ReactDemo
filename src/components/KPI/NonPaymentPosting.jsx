@@ -17,6 +17,7 @@ import ReUsableTable from 'components/correspndence/ReUsableTable';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { kpiReconciliationColumns } from 'pages/KPIs/kpiTableHeaderData';
+import { Skeleton ,CircularProgress} from '@mui/material';
 // import LinearProgressBar from 'pages/KPIs/Charts/LinearProgressBar';
 
 // third-party
@@ -179,52 +180,22 @@ export default function NonPaymentPosting() {
   //   { title: 'Unreconciled', value: 10 },
   // ];
   return (
-    <Box mt={2} mb={6}>
-      {!showTable && progressData ? progressData?.map((data, index) => (
-        <LinearProgressBar key={index} value={data.percentage} title={data.reconciliationStatus} />
-      )):showTable && progressData ? <ReUsableTable columns={kpiReconciliationColumns} rows={progressData}/> :<h5>Loading...</h5>}
-      {/* <CustomTable data={initialStaticData} datacolumns={tableColumns} /> */}
-      {/* <TableContainer
-        sx={{
-          width: '100%',
-          overflowX: 'auto',
-          position: 'relative',
-          display: 'block',
-          maxWidth: '100%',
-          '& td, & th': { whiteSpace: 'nowrap' }
-        }}
-      >
-        <Table aria-labelledby="tableTitle">
-          <EFTPostingHead order={order} orderBy={orderBy} />
-          <TableBody>
-            {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  tabIndex={-1}
-                  key={row.tracking_no}
-                >
-                  <TableCell component="th" id={labelId} scope="row">
-                    <Link color="secondary"> {row.tracking_no}</Link>
-                  </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell>
-                    <OrderStatus status={row.carbs} />
-                  </TableCell>
-                  <TableCell align="right">
-                    <NumericFormat value={row.protein} displayType="text" thousandSeparator prefix="$" />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
+    <Box mt={2} mb={6} sx={{ minHeight: '10rem' }}>
+      {reconciliationLoading && (
+        <Box width={'100%'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress width={'100%'} />
+        </Box>
+      )}
+      {!reconciliationLoading && progressData && (
+        <Box sx={{ width:"90%",display: 'flex', alignItems: 'center', justifyContent: 'space-between',}}>
+        <Box sx={{width:"45%",marginRight:"1rem"}}>
+        {progressData?.map((data, index) => <LinearProgressBar key={index} value={data.percentage} title={data.reconciliationStatus} />)}
+        </Box>
+        <Box sx={{width:"45%"}}>
+        <ReUsableTable columns={kpiReconciliationColumns} rows={progressData} />
+        </Box>
+        </Box>
+      )}
     </Box>
   );
 }

@@ -85,11 +85,6 @@ export default function UniqueVisitorCard() {
   const [value, setValue] = React.useState(0);
   const {showTable,payloadDate} = useSelector(state=>state.kpi);
   const dispatch = useDispatch();
-  const remmitanceConfig = useMemo(() => ({
-    url: `${KPI_ENDPOINTS.GET_REMMITTANCE_SUMMARY}?year=2024`,
-    method: "GET",
-  }), [payloadDate])
-  const { data:remmitanceData, loading:remmitanceDataLoading, error:remmitanceDataError } = useAxios(remmitanceConfig, true); 
 
   const handleChange = (event, newValue) => {
     dispatch(updateShowTable(false));
@@ -145,12 +140,12 @@ export default function UniqueVisitorCard() {
       </CustomTabPanel>
       {/* REVENUE CYCLE KPI */}
       <CustomTabPanel value={value} index={4}>
-        <Download />
+        <Download hideSwitch={true}/>
         <RevenueCycleKpi />
       </CustomTabPanel>
       {/* RECONCILLIATION STATUS */}
       <CustomTabPanel value={value} index={5}>
-        <Download />
+        <Download hideSwitch={true}/>
         <NonPaymentPosting />
       </CustomTabPanel>
       {/* AGING ANALYSIS */}

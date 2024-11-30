@@ -1,11 +1,11 @@
 // material-ui
-import { useState,useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { Popover } from '@mui/material';
+import { Popover, Skeleton } from '@mui/material';
 import List from '@mui/material/List';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -41,8 +41,8 @@ import { KPI_ENDPOINTS } from 'pages/rest/api';
 import { useSelector } from 'react-redux';
 import { updatePayloadDate } from 'store/reducers/kpiSlice';
 import { useDispatch } from 'react-redux';
+import {CircularProgress} from '@mui/material';
 import Slider from "react-slick";
-
 
 // avatar style
 const avatarSX = {
@@ -116,6 +116,13 @@ export default function DashboardDefault() {
   };
 
   const isPopoverOpen = Boolean(anchorEl);
+
+  const formatValue = (value) => {
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
 
   return (
     <>
@@ -296,20 +303,40 @@ export default function DashboardDefault() {
                 Overall Metrics
               </Typography>
             </Grid>
-
-            <Grid container rowSpacing={2} columnSpacing={2} ml={3} sx={{ marginBottom: '1.5rem' }}>
+            
+            <Grid container rowSpacing={2} columnSpacing={2} ml={"1rem"} sx={{ marginBottom: '1.5rem' }}>
               {!kpiWidgetLoading &&
                 kpiWidgetsData &&
                 kpiWidgetsData.widgetsList.length > 0 &&
-                kpiWidgetsData.widgetsList.map((item) => (
+                kpiWidgetsData.widgetsList.filter(item=>(item.name)).map((item) => (
+
                   <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <KpiCard title={item.name} count={item.value} percentage={1212} extra="#0" />
+                    <KpiCard title={item.name} count={formatValue(item.value)} percentage={1212} payor={item.payor || ""} extra="#0" />
                   </Grid>
                 ))}
 
-              {kpiWidgetLoading && <h1>Loading</h1>}
+              {kpiWidgetLoading &&<Box width={'100%'} height={'40vh'} sx={{display:'flex',alignItems:"center",justifyContent:"center"}}>
+                <CircularProgress width={"100%"}/>
+              </Box> }
               {kpiWidgetsData?.length == 0 && <h6>No Data Available</h6>}
             </Grid>
+
+            {/* <Grid container columnSpacing={2} ml={3} sx={{ marginBottom: '1.5rem' }}>
+              <div className="slider-container caurosel-width" style={{width:"100%"}}>
+                <Slider  >
+                  {kpiWidgetsData.widgetsList.map((item, index) => (
+                    <div key={index}  className="carousel-slide">
+                      <KpiCard
+                        title={item.name}
+                        count={formatValue(item.value)}
+                        // percentage={1212}
+                        extra="#0"
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            </Grid> */}
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
             <Grid container mt={1} ml={3} style={{ backgroundColor: '#fff' }}>
               <KpiTabs />

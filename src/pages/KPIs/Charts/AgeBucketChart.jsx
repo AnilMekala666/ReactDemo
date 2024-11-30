@@ -1,31 +1,25 @@
-import React,{useMemo} from 'react';
+import React, { useMemo } from 'react';
 import Chart from 'react-apexcharts';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { useSelector } from 'react-redux';
 import ReUsableTable from 'components/correspndence/ReUsableTable';
-import Download from 'components/KPI/Download';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { ageBucketColumns } from '../kpiTableHeaderData';
-const data = [
-    { ageBucket: "0-30 Days", claimsCount: 2500, remittanceAmount: 2000000 },
-    { ageBucket: "31-60 Days", claimsCount: 1500, remittanceAmount: 1200000 },
-    { ageBucket: "61-90 Days", claimsCount: 800, remittanceAmount: 600000 },
-    { ageBucket: "91+ Days", claimsCount: 500, remittanceAmount: 400000 },
-    { ageBucket: "120+ Days", claimsCount: 300, remittanceAmount: 200000 },
-    { ageBucket: "180+ Days", claimsCount: 100, remittanceAmount: 100000 },
-  ];
 
 export default function ApexBarChart() {
-  const {showTable,payloadDate} = useSelector(state=>state.kpi);
-  const ageBucketConfig = useMemo(() => ({
-      url: KPI_ENDPOINTS.GET_AGING_ANALYSIS,
-      method: "POST",
-      data: payloadDate,
-    }), [payloadDate])
-  const { data:ageBucketData, loading:ageBucketLoading, error:ageBucketisError } = useAxios(ageBucketConfig, true); 
-  const ageBucketChartData=ageBucketData?.kpiResponse;
+  const { showTable, payloadDate } = useSelector((state) => state.kpi);
 
+  const ageBucketConfig = useMemo(() => ({
+    url: KPI_ENDPOINTS.GET_AGING_ANALYSIS,
+    method: "POST",
+    data: payloadDate,
+  }), [payloadDate]);
+
+  const { data: ageBucketData, loading: ageBucketLoading } = useAxios(ageBucketConfig, true);
+  const ageBucketChartData = ageBucketData?.kpiResponse || []; // Default to an empty array
+
+  // Chart options
   const chartOptions = {
     chart: {
       type: 'bar',
@@ -33,35 +27,46 @@ export default function ApexBarChart() {
     },
     plotOptions: {
       bar: {
-        vertical:true,
-        //horizontal: true, // Makes the chart horizontal
+        vertical: true,
       },
     },
     xaxis: {
-      categories: ageBucketChartData?.map((item) => item.ageBucket), // Setting x-axis labels
+      categories: ageBucketChartData.map((item) => item.ageBucket || 'N/A'), // Set x-axis labels
       title: {
         text: 'Age Bucket',
       },
-    },
-    yaxis:[
-        {
-            title:{
-                text:"Remittance Amount"
-            }
+      labels: {
+        rotate: -45, // Rotate labels 45 degrees
+        style: {
+          fontSize: '12px',
         },
-        {
-            opposite:true,
-            title:{
-                text:"Claims Count"
-            }
-        }
+      },
+    },
+    yaxis: [
+      {
+        title: {
+          text: "Remittance Amount",
+        },
+        labels: {
+          formatter: (val) => Math.round(val), // Round off values on y-axis
+        },
+      },
+      {
+        opposite: true,
+        title: {
+          text: "Claims Count",
+        },
+        labels: {
+          formatter: (val) => val.toFixed(2), // Round off values on y-axis
+        },
+      },
     ],
     dataLabels: {
       enabled: false, // Hide data labels
     },
     tooltip: {
       y: {
-        //formatter: (val: number) => val, // Format tooltip value as currency
+        formatter: (val) => val.toFixed(2), // Format tooltip value
       },
     },
     title: {
@@ -70,28 +75,34 @@ export default function ApexBarChart() {
     },
   };
 
+  // Chart series
   const chartSeries = [
     {
       name: 'Remittance Amount',
       type: 'bar',
-      data: ageBucketChartData?.map((item) => item.remittanceAmount), // Setting the data for the series
+      data: ageBucketChartData.map((item) => Math.round(item.remittanceAmount || 0)), // Ensure valid data
     },
     {
-        name: 'Claims Count',
-        type: 'line',
-        data: ageBucketChartData?.map((item) => item.claimCount),
-      },
+      name: 'Claims Count',
+      type: 'line',
+      data: ageBucketChartData.map((item) =>{
+        return Math.round(item.claimCount)
+      } ), // Ensure valid data
+    },
   ];
 
   return (
-    <div style={{ padding: '10px' }}>
-      {!showTable && ageBucketChartData ? (
-        <Chart options={chartOptions} series={chartSeries} height={500} width={"80%"} />
-      ) : showTable && ageBucketChartData ? (
-        <ReUsableTable columns={ageBucketColumns} rows={ageBucketChartData} />
-      ) : (
-        <h5>Loading...</h5>
+    <div style={{ padding: '10px', minHeight: "20rem", width: `${!showTable ? "80%" : "50%"}`, margin: "auto" }}>
+      {ageBucketLoading && (
+        <Box width={'100%'} sx={{ display: 'flex', alignItems: "center", justifyContent: "center" }}>
+          <CircularProgress />
+        </Box>
       )}
+      {!showTable && ageBucketChartData.length > 0 ? (
+        <Chart options={chartOptions} series={chartSeries} height={500} />
+      ) : showTable && ageBucketChartData.length > 0 ? (
+        <ReUsableTable columns={ageBucketColumns} rows={ageBucketChartData} />
+      ) : null}
     </div>
   );
 }
