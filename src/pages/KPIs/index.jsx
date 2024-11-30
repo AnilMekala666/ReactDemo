@@ -1,16 +1,21 @@
 // material-ui
+import { useState, useMemo } from 'react';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import { Popover, Skeleton } from '@mui/material';
 import List from '@mui/material/List';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
+import dayjs from 'dayjs';
 import Typography from '@mui/material/Typography';
+import MonthYearPicker from 'components/KPI/MonthYearPicker';
+import YearPicker from 'components/KPI/YearPicker';
 
 // project import
 import MainCard from 'components/MainCard';
@@ -18,6 +23,9 @@ import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 import MonthlyBarChart from 'sections/dashboard/default/MonthlyBarChart';
 import ReportAreaChart from 'sections/dashboard/default/ReportAreaChart';
 import UniqueVisitorCard from 'sections/dashboard/default/UniqueVisitorCard';
+import KpiCard from 'components/KPI/KpiCard';
+import KpiTabs from 'components/KPI/KpiTabs';
+import useAxios from 'hooks/useAxios';
 import SaleReportCard from 'sections/dashboard/default/SaleReportCard';
 //import OrdersTable from 'sections/dashboard/default/OrdersTable';
 
@@ -29,6 +37,12 @@ import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
+import { KPI_ENDPOINTS } from 'pages/rest/api';
+import { useSelector } from 'react-redux';
+import { updatePayloadDate } from 'store/reducers/kpiSlice';
+import { useDispatch } from 'react-redux';
+import {CircularProgress} from '@mui/material';
+import Slider from "react-slick";
 
 // avatar style
 const avatarSX = {
@@ -47,237 +61,289 @@ const actionSX = {
   transform: 'none'
 };
 
+function getMonthName(monthId) {
+  const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+  ];
+
+  // Ensure the monthId is valid (1 to 12)
+  if (monthId < 1 || monthId > 12) {
+      return "Invalid month ID. Please provide a number between 1 and 12.";
+  }
+
+  // Return the month name (monthId - 1 because array indices start at 0)
+  return months[monthId - 1];
+}
+
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export default function DashboardDefault() {
+  const {payloadDate} = useSelector(state=>state.kpi)
+  const dispatch = useDispatch();
+  const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [selectedYear, setSelectedYear] = useState(null); // For Year-only picker
+  const [activeTab, setActiveTab] = useState('last30days'); // Manage active state
+  const [anchorEl, setAnchorEl] = useState(null); // Manage popover state
+  const config = useMemo(() => ({
+    url: KPI_ENDPOINTS.GET_WIDGET_DATA,
+    method: "POST",
+    data: payloadDate,
+  }), [payloadDate])
+  const { data:kpiWidgetsData, loading:kpiWidgetLoading, error:kpiWidgetError } = useAxios(config, true); 
+
+
+
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
+    if (tabName === 'custom') {
+      setAnchorEl(anchorEl); // Open popover when "Custom" is clicked
+    }
+    if(tabName === 'last30days'){
+      const currentDate = dayjs();
+      const initialMonthId = currentDate.month() + 1; // Day.js month is 0-based, so add 1
+      const initialYear = currentDate.year();
+      dispatch(updatePayloadDate({monthId:initialMonthId,year:initialYear})) 
+    }
+  };
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const isPopoverOpen = Boolean(anchorEl);
+
+  const formatValue = (value) => {
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
   return (
     <>
-    <Box sx={{padding:"20px", mt:2,backgroundColor:"white",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <Typography variant='h4' fontWeight={600}>US Healthcare Claim Reconciliation Dashboard</Typography>
-        <Box sx={{padding:"4px",border:"1px solid #ECECEC",borderRadius:".5rem" }}>
-            <Button
-            sx={{padding:".75rem 1.5rem",borderRadius:"6px",backgroundColor:"#3A63D2",color:"white",marginRight:"8px"}}
-            >
-                Last 30 days
-            </Button>
-            <Button
-            sx={{padding:".75rem 1.5rem",borderRadius:"6px",color:"#656565",}}
-            >
+      <div style={{ backgroundColor: '#F5F5F5' }}>
+        <Box sx={{ padding: '20px', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Typography variant="h4" fontWeight={600}>
+            Cognitive Health Claim Reconciliation Dashboard
+          </Typography>
+          <Box>
+            <Box sx={{ padding: '4px', border: '1px solid #ECECEC', borderRadius: '.5rem' }}>
+              <Button
+                disableRipple
+                onClick={() => handleTabClick('last30days')}
+                sx={{
+                  padding: '.75rem 1.5rem',
+
+                  borderRadius: '6px',
+                  marginRight: '8px',
+                  backgroundColor: activeTab === 'last30days' ? '#3A63D2' : 'transparent',
+                  color: activeTab === 'last30days' ? 'white' : '#656565',
+                  '&:hover': {
+                    backgroundColor: activeTab === 'last30days' ? '#3A63D2' : 'transparent', // Keep the same background color on hover
+                    color: activeTab === 'last30days' ? 'white' : '#656565',
+                    cursor: 'pointer' // Keep the same text color on hover
+                  }
+                }}
+              >
+                Current Month
+              </Button>
+              <Button
+                disableRipple
+                onClick={(event) => {
+                  handleTabClick('custom');
+                  handlePopoverOpen(event);
+                }}
+                sx={{
+                  padding: '.75rem 1.5rem',
+                  borderRadius: '6px',
+                  backgroundColor: activeTab === 'custom' ? '#3A63D2' : 'transparent',
+                  color: activeTab === 'custom' ? 'white' : '#656565',
+                  '&:hover': {
+                    backgroundColor: activeTab === 'custom' ? '#3A63D2' : 'transparent', // Keep the same background color on hover
+                    color: activeTab === 'custom' ? 'white' : '#656565',
+                    cursor: 'pointer' // Keep the same text color on hover
+                  }
+                }}
+              >
                 Custom
-            </Button>
-
-        </Box>
-    </Box>
-    <Grid container rowSpacing={4.5} columnSpacing={2.75} mt={1}>
-      {/* row 1 */}
-      <Grid item xs={8}>
-        <Typography sx={{ ml: 1 }} variant="h5">Overall Metrics</Typography>
-      </Grid>
-      <Grid item xs={2} sx={{ mb: -2.25 }} >
-        <Typography style={{backgroundColor:'#fff', textAlign:'center', padding:10, borderRadius:10}}>Add Widget</Typography>
-      </Grid>
-      <Grid item xs={2} sx={{ mb: -2.25 }}  >
-        <Typography style={{backgroundColor:'#3A63D2', color:'#fff', textAlign:'center', padding:10, borderRadius:10}}>Export Dashboard</Typography>
-      </Grid>
-
-     <Grid container rowSpacing={4.5} columnSpacing={0} mt={1} ml={3} >
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Bank Deposits" count="$1.2M" percentage={1212} extra="#0" />
-      </Grid>
-       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Variance/Not Reconciled" count="$500K" percentage={232} extra="#7" />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Zero Variance/Reconciled (DOP)" count="$0" percentage={232} extra="N/A" />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Zero Variance/Reconciled (DOP)" count="$1.2K" percentage={232} extra="#123" />
-      </Grid>
-     </Grid>
-
-      {/* <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Users" count="78,250" percentage={70.5} extra="8,900" />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Order" count="18,800" percentage={27.4} isLoss color="warning" extra="1,943" />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Sales" count="$35,078" percentage={27.4} isLoss color="warning" extra="$20,395" />
-      </Grid> */}
-
-      <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
-
-      {/* row 2 */}
-      <Grid container mt={1} ml={3} style={{backgroundColor:'#fff'}}>
-        <UniqueVisitorCard />
-      </Grid>
-      {/* <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Income Overview</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <Box sx={{ p: 3, pb: 0 }}>
-            <Stack spacing={2}>
-              <Typography variant="h6" color="text.secondary">
-                This Week Statistics
-              </Typography>
-              <Typography variant="h3">$7,650</Typography>
-            </Stack>
+              </Button>
+            </Box>
+            <Typography sx={{ marginTop: '.5rem' }} variant="h6">
+              {payloadDate.monthId != 0 ? (
+                <span style={{ fontWeight: '600', display: 'inline-block', marginRight: '.4rem' }}>
+                  Month: {getMonthName(payloadDate.monthId)}
+                </span>
+              ) : null}
+              <span style={{ fontWeight: '600' }}>Year: </span>
+              {payloadDate.year}
+            </Typography>
           </Box>
-          <MonthlyBarChart />
-        </MainCard>
-      </Grid> */}
+        </Box>
+        {/* Popover for Date Selection */}
+        <Popover
+          open={isPopoverOpen}
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+        >
+          <Box sx={{ padding: 3, width: '320px' }}>
+            <Typography variant="h6" sx={{ marginBottom: 2, textAlign: 'center' }}>
+              choose <span sx={{ fontSize: '20px', fontWeight: '800' }}>Month/Year</span> or <span>Year</span>
+            </Typography>
 
-      {/* row 3 */}
-      {/* <Grid item xs={12} md={7} lg={8}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Recent Orders</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <OrdersTable />
-        </MainCard>
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Analytics Report</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <List sx={{ p: 0, '& .MuiListItemButton-root': { py: 2 } }}>
-            <ListItemButton divider>
-              <ListItemText primary="Company Finance Growth" />
-              <Typography variant="h5">+45.14%</Typography>
-            </ListItemButton>
-            <ListItemButton divider>
-              <ListItemText primary="Company Expenses Ratio" />
-              <Typography variant="h5">0.58%</Typography>
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemText primary="Business Risk Cases" />
-              <Typography variant="h5">Low</Typography>
-            </ListItemButton>
-          </List>
-          <ReportAreaChart />
-        </MainCard>
-      </Grid> */}
+            {/* Month and Year Picker */}
+            <Box sx={{ marginBottom: 3 }}>
+              <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
+                Month and Year
+              </Typography>
+              <MonthYearPicker
+                value={selectedDate}
+                onChange={(newValue) => {
+                  setSelectedDate(newValue);
+                  setSelectedYear(null); // Clear Year-only field
+                }}
+                label="Choose a Month and Year"
+                inputStyles={{
+                  width: '280px',
+                  color: '#555',
+                  fontSize: '16px'
+                }}
+                containerStyles={{
+                  margin: '0 auto'
+                }}
+              />
+            </Box>
 
-      {/* row 4 */}
-      {/* <Grid item xs={12} md={7} lg={8}>
-        <SaleReportCard />
-      </Grid> */}
-      {/* <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Transaction History</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <List
-            component="nav"
-            sx={{
-              px: 0,
-              py: 0,
-              '& .MuiListItemButton-root': {
-                py: 1.5,
-                '& .MuiAvatar-root': avatarSX,
-                '& .MuiListItemSecondaryAction-root': { ...actionSX, position: 'relative' }
-              }
-            }}
-          >
-            <ListItemButton divider>
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'success.main', bgcolor: 'success.lighter' }}>
-                  <GiftOutlined />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={<Typography variant="subtitle1">Order #002434</Typography>} secondary="Today, 2:00 AM" />
-              <ListItemSecondaryAction>
-                <Stack alignItems="flex-end">
-                  <Typography variant="subtitle1" noWrap>
-                    + $1,430
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    78%
-                  </Typography>
-                </Stack>
-              </ListItemSecondaryAction>
-            </ListItemButton>
-            <ListItemButton divider>
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'primary.main', bgcolor: 'primary.lighter' }}>
-                  <MessageOutlined />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={<Typography variant="subtitle1">Order #984947</Typography>} secondary="5 August, 1:45 PM" />
-              <ListItemSecondaryAction>
-                <Stack alignItems="flex-end">
-                  <Typography variant="subtitle1" noWrap>
-                    + $302
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    8%
-                  </Typography>
-                </Stack>
-              </ListItemSecondaryAction>
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemAvatar>
-                <Avatar sx={{ color: 'error.main', bgcolor: 'error.lighter' }}>
-                  <SettingOutlined />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={<Typography variant="subtitle1">Order #988784</Typography>} secondary="7 hours ago" />
-              <ListItemSecondaryAction>
-                <Stack alignItems="flex-end">
-                  <Typography variant="subtitle1" noWrap>
-                    + $682
-                  </Typography>
-                  <Typography variant="h6" color="secondary" noWrap>
-                    16%
-                  </Typography>
-                </Stack>
-              </ListItemSecondaryAction>
-            </ListItemButton>
-          </List>
-        </MainCard>
-        <MainCard sx={{ mt: 2 }}>
-          <Stack spacing={3}>
-            <Grid container justifyContent="space-between" alignItems="center">
-              <Grid item>
-                <Stack>
-                  <Typography variant="h5" noWrap>
-                    Help & Support Chat
-                  </Typography>
-                  <Typography variant="caption" color="secondary" noWrap>
-                    Typical replay within 5 min
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid item>
-                <AvatarGroup sx={{ '& .MuiAvatar-root': { width: 32, height: 32 } }}>
-                  <Avatar alt="Remy Sharp" src={avatar1} />
-                  <Avatar alt="Travis Howard" src={avatar2} />
-                  <Avatar alt="Cindy Baker" src={avatar3} />
-                  <Avatar alt="Agnes Walker" src={avatar4} />
-                </AvatarGroup>
-              </Grid>
+            {/* Horizontal Separator */}
+            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
+              <Box sx={{ flex: 1, height: '1px', backgroundColor: '#ccc' }}></Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  padding: '0 10px',
+                  color: '#888',
+                  fontSize: '14px',
+                  fontWeight: 'bold'
+                }}
+              >
+                OR
+              </Typography>
+              <Box sx={{ flex: 1, height: '1px', backgroundColor: '#ccc' }}></Box>
+            </Box>
+
+            {/* Year Picker */}
+            <Box>
+              <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
+                Year
+              </Typography>
+              <YearPicker
+                value={selectedYear}
+                onChange={(newYear) => {
+                  setSelectedYear(newYear);
+                  setSelectedDate(null); // Clear Month-Year field
+                }}
+                label="Choose a Year"
+                inputStyles={{
+                  width: '280px',
+                  color: '#555',
+                  fontSize: '16px'
+                }}
+                containerStyles={{
+                  margin: '0 auto'
+                }}
+              />
+            </Box>
+
+            {/* Cancel and Apply Buttons */}
+            <Box sx={{ marginTop: 3, display: 'flex', justifyContent: 'space-between' }}>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  handlePopoverClose();
+                  setActiveTab('last30days'); // Reset active tab
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  console.log(selectedYear, 'inside the apply');
+                  if (selectedDate) {
+                    const monthId = selectedDate.month() + 1; // 1-based month
+                    const year = selectedDate.year();
+                    dispatch(updatePayloadDate({ monthId, year }));
+                  } else if (selectedYear) {
+                    const year = selectedYear;
+                    dispatch(updatePayloadDate({ monthId: 0, year }));
+                  }
+                  handlePopoverClose();
+                }}
+                sx={{ backgroundColor: '#3A63D2', color: 'white' }}
+              >
+                Apply
+              </Button>
+            </Box>
+          </Box>
+        </Popover>
+
+        <Box sx={{ padding: '20px' }}>
+          <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+            {/* row 1 */}
+            <Grid item xs={9}>
+              <Typography variant="h5" sx={{ margin: '1rem 4px', fontSize: '1.2rem' }}>
+                Overall Metrics
+              </Typography>
             </Grid>
-            <Button size="small" variant="contained" sx={{ textTransform: 'capitalize' }}>
-              Need Help?
-            </Button>
-          </Stack>
-        </MainCard>
-      </Grid> */}
-    </Grid>
+            
+            <Grid container rowSpacing={2} columnSpacing={2} ml={"1rem"} sx={{ marginBottom: '1.5rem' }}>
+              {!kpiWidgetLoading &&
+                kpiWidgetsData &&
+                kpiWidgetsData.widgetsList.length > 0 &&
+                kpiWidgetsData.widgetsList.filter(item=>(item.name)).map((item) => (
+
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <KpiCard title={item.name} count={formatValue(item.value)} percentage={1212} payor={item.payor || ""} extra="#0" />
+                  </Grid>
+                ))}
+
+              {kpiWidgetLoading &&<Box width={'100%'} height={'40vh'} sx={{display:'flex',alignItems:"center",justifyContent:"center"}}>
+                <CircularProgress width={"100%"}/>
+              </Box> }
+              {kpiWidgetsData?.length == 0 && <h6>No Data Available</h6>}
+            </Grid>
+
+            {/* <Grid container columnSpacing={2} ml={3} sx={{ marginBottom: '1.5rem' }}>
+              <div className="slider-container caurosel-width" style={{width:"100%"}}>
+                <Slider  >
+                  {kpiWidgetsData.widgetsList.map((item, index) => (
+                    <div key={index}  className="carousel-slide">
+                      <KpiCard
+                        title={item.name}
+                        count={formatValue(item.value)}
+                        // percentage={1212}
+                        extra="#0"
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            </Grid> */}
+            <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+            <Grid container mt={1} ml={3} style={{ backgroundColor: '#fff' }}>
+              <KpiTabs />
+            </Grid>
+          </Grid>
+        </Box>
+      </div>
     </>
   );
 }
