@@ -42,6 +42,7 @@ import { useSelector } from 'react-redux';
 import { updatePayloadDate } from 'store/reducers/kpiSlice';
 import { useDispatch } from 'react-redux';
 import {CircularProgress} from '@mui/material';
+import Slider from "react-slick";
 
 // avatar style
 const avatarSX = {
