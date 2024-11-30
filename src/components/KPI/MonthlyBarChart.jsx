@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { PieChart } from '@mui/x-charts';
 import { Stack, Typography, Tooltip } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { KPI_ENDPOINTS} from 'pages/rest/api';
+import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import ReUsableTable from 'components/correspndence/ReUsableTable';
 import { claimStatusColumns } from 'pages/KPIs/kpiTableHeaderData';
@@ -32,14 +32,21 @@ export const LegendItem = ({ color, label }) => {
 // ==============================|| MONTHLY PIE CHART ||============================== //
 
 export default function MonthlyBarChart() {
-  const {showTable,payloadDate} = useSelector(state=>state.kpi);
-    // const remmitanceConfig = useMemo(() => ({
-    //     url: `${KPI_ENDPOINTS.GET_REMMITTANCE_SUMMARY}?year=2024`,
-    //     method: "GET",
-    //   }), [payloadDate])
-    // const { data:kpiWidgetsData, loading:kpiWidgetLoading, error:kpiWidgetError } = useAxios(remmitanceConfig, true); 
-    // console.log(kpiWidgetsData,"inside the remmitance summary")
-    // const remittanceSummaryBarChart = kpiWidgetsData?.kpiResponse?.monthlyData;
+  const { showTable, payloadDate } = useSelector((state) => state.kpi);
+  const claimsStatusConfig = useMemo(
+    () => ({
+      url: KPI_ENDPOINTS.GET_CLAIMS_STATUS,
+      method: 'POST',
+      data: payloadDate
+    }),
+    [payloadDate]
+  );
+  const { data: claimsStatusData, loading: claimsStatusLoading, error: claimsStatusError } = useAxios(claimsStatusConfig, true);
+  console.log(claimsStatusData, 'inside the claimsStatus');
+  const claimsStatusPieChart = claimsStatusData?.kpiResponse
+  // const claimsStatusPieChart = claimsStatusData?.kpiResponse.map((item,index)=>{
+  //   return {...item,color:generateColor(index,claimsStatusData?.kpiResponse.length)};
+  // })
   const theme = useTheme();
   const axisFontStyle = { fontSize: 10, fill: theme.palette.text.secondary };
   const [radius, setRadius] = React.useState(120);
@@ -52,77 +59,84 @@ export default function MonthlyBarChart() {
     { label: 'In Progress', value: 100, percentage: 20, color: '#FFC107' }, // Yellow for in progress
     { label: 'Pending', value: 70, percentage: 14, color: '#FF9800' }, // Orange for pending
     { label: 'Resubmitted', value: 60, percentage: 12, color: '#2196F3' }, // Blue for resubmitted
-    { label: 'Partially Paid', value: 70, percentage: 14, color: '#9C27B0' }, // Purple for partially paid
+    { label: 'Partially Paid', value: 70, percentage: 14, color: '#9C27B0' } // Purple for partially paid
   ];
 
-  const totalValue=useMemo(()=>{
-    let sum=statusData.reduce((acc,item)=>{
-      return acc+item.value
-    },0)
+  const totalValue = useMemo(() => {
+    let sum = claimsStatusPieChart?.reduce((acc, item) => {
+      return acc + item.count;
+    }, 0);
     return sum;
-  },[])
+  }, [claimsStatusPieChart]);
 
-  return (<>
-    {!showTable?<Stack
-      direction={{ xs: 'column', md: 'row' }}
-      spacing={{ xs: 0, md: 4 }}
-      sx={{ width: '100%' }}
-    >
-      <Stack direction="column" sx={{ width: { xs: '100%', md: '50%' } }}>
-        <span
-          style={{
-            position: 'relative',
-            top: 190,
-            textAlign: 'center',
-            left: -50,
-          }}
-        >
-          <Typography color={'#656565'} fontSize={16} fontWeight={600}>
-            Total
-          </Typography>
-          <Typography color={'#2F2F2F'} fontSize={32} fontWeight={700}>
-            {totalValue}
-          </Typography>
-        </span>
-        <PieChart
-          height={300}
-          series={[
-            {
-              data: statusData.map(({ label, percentage, color }) => ({
-                label,
-                value: percentage,
-                color,
-              })),
-              innerRadius: radius,
-              valueFormatter: (v, { dataIndex }) => {
-                const { label,value,percentage } = statusData[dataIndex];
-                return `${percentage}% (${value})`;
-              },
-            },
-          ]}
-          skipAnimation={skipAnimation}
-          slotProps={{
-            legend: {
-              hidden: true,
-            },
-          }}
-        />
+  return (
+    <>
+      {!showTable ? (
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 4 }} sx={{ width: '100%' }}>
+          <Stack direction="column" sx={{ width: { xs: '100%', md: '50%' } }}>
+            <span
+              style={{
+                position: 'relative',
+                top: 190,
+                textAlign: 'center',
+                left: -50
+              }}
+            >
+              <Typography color={'#656565'} fontSize={16} fontWeight={600}>
+                Total
+              </Typography>
+              <Typography color={'#2F2F2F'} fontSize={32} fontWeight={700}>
+                {totalValue}
+              </Typography>
+            </span>
+            {claimsStatusData && (
+              <PieChart
+                sx={{border:"2px solid yellow"}}
+                height={300}
+                series={[
+                  {
+                    data: claimsStatusPieChart?.map(({ status, percentage }) => ({
+                      label: status,
+                      value: percentage,
+                    })),
+                    innerRadius: radius,
+                    valueFormatter: (v, { dataIndex }) => {
 
-        <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          spacing={{ xs: 0, md: 4 }}
-          sx={{
-            width: '100%',
-            marginTop: 1,
-            textAlign: 'center',
-            display: 'block',
-          }}
-        >
-          {statusData.map((series) => (
-            <LegendItem color={series.color} label={series.label} />
-          ))}
+                      const { status, count, percentage } = claimsStatusPieChart[dataIndex];
+                      return `${percentage}% (${count})`;
+                    }
+                  }
+                ]}
+                //skipAnimation={skipAnimation}
+                slotProps={{
+                  legend: {
+                    direction: 'column',
+                    position: { vertical: 'middle', horizontal: 'right' },
+                    //padding:20,
+                  },
+                }}
+              />
+            )}
+
+            {/* <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={{ xs: 0, md: 4 }}
+              sx={{
+                width: '100%',
+                marginTop: 1,
+                textAlign: 'center',
+                display: 'block'
+              }}
+            >
+              {claimsStatusPieChart?.map((series) => (
+                <LegendItem color={series.color} label={series.status} />
+              ))}
+            </Stack> */}
+          </Stack>
         </Stack>
-      </Stack>
-    </Stack>:<ReUsableTable columns={claimStatusColumns} rows={statusData}/>}
-    </>);
+      ) : (
+        <ReUsableTable columns={claimStatusColumns} rows={claimsStatusPieChart} />
+      )}
+    </>
+  );
 }

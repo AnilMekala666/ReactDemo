@@ -12,7 +12,7 @@ export const DEMO_URL = 'https://ican-manage-chit-dem.cognitivehealthit.com/Corr
 
 export const IP_URL = 'https://ican-manage-mindpath-tst.cognitivehealthit.com/CorrespondenceServices';
 
-export const KPI_URL = 'http://10.0.1.216:8181/KPIServices'
+export const KPI_URL = 'http://10.0.1.216:8181/ClaimReconServices'
 
 export const ENDPOINTS = {
   GET_STATE_LIST: `${IP_URL}/getStateList`,
@@ -59,4 +59,5 @@ export const KPI_ENDPOINTS = {
   GET_RECONCILIATION_STATUS_KPI:`${KPI_URL}/getReconciliationStatusKPI`,
   GET_AGING_ANALYSIS:`${KPI_URL}/getAgingKPI`,
   GET_REVENUE_CYCLE_KPI:`${KPI_URL}/getRevenueCycleKpi`,
+  GET_CLAIMS_STATUS:`${KPI_URL}/getClaimStatus`,
 }

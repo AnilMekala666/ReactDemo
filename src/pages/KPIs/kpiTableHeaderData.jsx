@@ -18,13 +18,13 @@ export const remittanceSummaryColumns = [
 
 
   export const claimStatusColumns = [
-    { id: 'label', label: 'Status' },
-    { id: 'value', label: 'Count' },
+    { id: 'status', label: 'Status' },
+    { id: 'count', label: 'Count' },
     {
       id: 'percentage',
       label: 'Percentage %',
      // align: 'right',
-      format: (value) => value.toLocaleString(),
+      format: (value) => `${value.toLocaleString()} %`,
     },
   ];
 

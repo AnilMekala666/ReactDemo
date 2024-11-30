@@ -1,43 +1,63 @@
 
 import * as React from 'react';
-import { Grid, Switch, Typography } from '@mui/material';
+import { Grid, Switch, Typography, Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { updateShowTable } from 'store/reducers/kpiSlice';
 import { useSelector } from 'react-redux';
-// import { Target } from 'assets/images/analytics/target.svg';
+import CustomDialog from 'components/correspndence/CustomDialog';
 
 
 export default function Download() {
+  const [dialogOpen, setDialogOpen] = React.useState(false);
   const showTable = useSelector(state=>state.kpi.showTable);
   const dispatch = useDispatch();
 
   const handleChange = (event) =>{
     dispatch(updateShowTable(event.target.checked))
   }
-  
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
 
   return (
-        <Grid container alignItems="center" justifyContent="flex-start">
-          <Grid item xs={0.5}>
+    <Grid container>
+      <Grid item md={6} alignItems="center" justifyContent="flex-start">
+        <Grid display="flex" alignItems="center" justifyContent="flex-start">
+          <Grid item >
             <Typography variant="h5">Chart</Typography>
           </Grid>
-          <Grid item xs={0.5}>
+          <Grid item >
             <Typography variant="h5">
-            <Switch
-            checked={showTable}
-            onChange={handleChange}	
-            />
-           </Typography>
+              <Switch
+                checked={showTable}
+                onChange={handleChange}
+              />
+            </Typography>
           </Grid>
-          <Grid item xs={9}>
+          <Grid item >
             <Typography variant="h5">Table</Typography>
           </Grid>
-          {/* <Grid item xs={1}>
-            <Typography style={{ border: 1, borderColor: '#c5c5c5', borderStyle: 'solid', textAlign: 'center', padding: 5, marginRight: 10, borderRadius: 5, color: '#656565' }} variant="h5">Export</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography style={{ border: 1, borderColor: '#c5c5c5', borderStyle: 'solid', textAlign: 'center', padding: 5, borderRadius: 5, color: '#656565' }} variant="h5">Settings</Typography>
-          </Grid> */}
         </Grid>
+      </Grid>
+      <Grid item md={6} display="flex" justifyContent="flex-end">
+        <Button onClick={handleClickOpen} variant='contained' style={{marginRight:"10px"}}>Actionable Insights</Button>
+      </Grid>
+
+      <CustomDialog
+        open={dialogOpen}
+        onClose={handleClose}
+        title='Actionable Insights'
+        maxWidth="sm" 
+        fullWidth={false} 
+      >
+        <Typography>
+          Increase focus on reducing eligibility denials, which represent 30% of total denials.
+        </Typography>
+      </CustomDialog>
+    </Grid>
+
   );
 }

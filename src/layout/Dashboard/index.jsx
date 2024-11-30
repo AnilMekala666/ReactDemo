@@ -58,7 +58,8 @@ export default function DashboardLayout() {
               position: 'relative',
               minHeight: 'calc(100vh - 110px)',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              maxWidth:`${container ? '1920px' : null}`
             }}
           >
             {pathname !== '/apps/profiles/account/my-account'}

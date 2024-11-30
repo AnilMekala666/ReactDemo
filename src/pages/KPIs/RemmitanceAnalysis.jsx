@@ -8,6 +8,7 @@ import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import HeatMap from '../KPIs/Charts/HeatMap';
 import { remmitanceAnalysisColumns } from './kpiTableHeaderData';
+import RemittanceAnalysisChart from './Charts/RemittanceAnalysisChart';
 
 const RemmitanceAnalysis = () => {
     const {showTable,payloadDate} = useSelector(state=>state.kpi);
@@ -23,7 +24,7 @@ const RemmitanceAnalysis = () => {
     //     "avgProcessingTime": 295,
     //     "payer": "aarp supplemental health plans from unitedhealthcare"
     // }
-   const heatMapdata = remittanceAnalysisData?.slice(0,20);
+   const heatMapdata = remittanceAnalysisData?.slice(0,150);
    const heatMapdataTable=remittanceAnalysisData;
     // const heatMapdata = [
     //     { payer: 'Medicare', processingTime: 15, totalAmount: 2500000 },
@@ -37,15 +38,14 @@ const RemmitanceAnalysis = () => {
 
     //   const xCategories = heatMapdata?.map(item => item.processingTime);
     //   const yCategories = [...new Set(heatMapdata?.map(item => item.totalAmount))].sort((a, b) => a - b);
-    
-      const xCategories = heatMapdata?.map(item => item.avgProcessingTime);
+     const xCategories =[...new Set(heatMapdata?.map(item => item.avgProcessingTime))].sort((a, b) => a - b);
       const yCategories = [...new Set(heatMapdata?.map(item => item.totalRemittanceAmount))].sort((a, b) => a - b);
     //onst remittanceSummaryBarChart = kpiWidgetsData?.kpiResponse?.monthlyData;
 
   return (
     <Box>
   <Download />
-  {!showTable && heatMapdata ? <HeatMap data={heatMapdata} xCategories={xCategories} yCategories={yCategories} />: showTable && heatMapdata ?
+  {!showTable && heatMapdata ? <RemittanceAnalysisChart data={heatMapdata}/>: showTable && heatMapdata ?
   <ReUsableTable columns={remmitanceAnalysisColumns} rows={heatMapdataTable}/>: <h5>Loading....</h5>
   }
     </Box>
