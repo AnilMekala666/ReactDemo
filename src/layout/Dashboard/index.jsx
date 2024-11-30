@@ -54,7 +54,7 @@ export default function DashboardLayout() {
           <Container
             maxWidth={container ? '1920px' : false}
             sx={{
-              ...(container && { px: { xs: 0, sm: 0 } }),
+              ...(container && { px: { xs: 0, sm: 1 } }),
               position: 'relative',
               minHeight: 'calc(100vh - 110px)',
               display: 'flex',
