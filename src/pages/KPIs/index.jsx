@@ -15,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import dayjs from 'dayjs';
 import Typography from '@mui/material/Typography';
 import MonthYearPicker from 'components/KPI/MonthYearPicker';
+import YearPicker from 'components/KPI/YearPicker';
 
 // project import
 import MainCard from 'components/MainCard';
@@ -81,6 +82,7 @@ export default function DashboardDefault() {
   const {payloadDate} = useSelector(state=>state.kpi)
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [selectedYear, setSelectedYear] = useState(null); // For Year-only picker
   const [activeTab, setActiveTab] = useState('last30days'); // Manage active state
   const [anchorEl, setAnchorEl] = useState(null); // Manage popover state
   const config = useMemo(() => ({
@@ -125,18 +127,26 @@ export default function DashboardDefault() {
           <Box>
             <Box sx={{ padding: '4px', border: '1px solid #ECECEC', borderRadius: '.5rem' }}>
               <Button
+                disableRipple
                 onClick={() => handleTabClick('last30days')}
                 sx={{
                   padding: '.75rem 1.5rem',
+
                   borderRadius: '6px',
                   marginRight: '8px',
                   backgroundColor: activeTab === 'last30days' ? '#3A63D2' : 'transparent',
-                  color: activeTab === 'last30days' ? 'white' : '#656565'
+                  color: activeTab === 'last30days' ? 'white' : '#656565',
+                  '&:hover': {
+                    backgroundColor: activeTab === 'last30days' ? '#3A63D2' : 'transparent', // Keep the same background color on hover
+                    color: activeTab === 'last30days' ? 'white' : '#656565',
+                    cursor: 'pointer' // Keep the same text color on hover
+                  }
                 }}
               >
                 Current Month
               </Button>
               <Button
+                disableRipple
                 onClick={(event) => {
                   handleTabClick('custom');
                   handlePopoverOpen(event);
@@ -145,15 +155,24 @@ export default function DashboardDefault() {
                   padding: '.75rem 1.5rem',
                   borderRadius: '6px',
                   backgroundColor: activeTab === 'custom' ? '#3A63D2' : 'transparent',
-                  color: activeTab === 'custom' ? 'white' : '#656565'
+                  color: activeTab === 'custom' ? 'white' : '#656565',
+                  '&:hover': {
+                    backgroundColor: activeTab === 'custom' ? '#3A63D2' : 'transparent', // Keep the same background color on hover
+                    color: activeTab === 'custom' ? 'white' : '#656565',
+                    cursor: 'pointer' // Keep the same text color on hover
+                  }
                 }}
               >
                 Custom
               </Button>
             </Box>
             <Typography sx={{ marginTop: '.5rem' }} variant="h6">
-              <span style={{ fontWeight: '600', display: 'inline-block', merginRight: '.4rem' }}>Month: </span>
-              {getMonthName(payloadDate.monthId)} <span style={{ fontWeight: '600' }}>Year: </span>
+              {payloadDate.monthId != 0 ? (
+                <span style={{ fontWeight: '600', display: 'inline-block', marginRight: '.4rem' }}>
+                  Month: {getMonthName(payloadDate.monthId)}
+                </span>
+              ) : null}
+              <span style={{ fontWeight: '600' }}>Year: </span>
               {payloadDate.year}
             </Typography>
           </Box>
@@ -168,28 +187,76 @@ export default function DashboardDefault() {
             horizontal: 'left'
           }}
         >
-          <Box sx={{ padding: 2, width: '300px' }}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
-              Select Year and Month
+          <Box sx={{ padding: 3, width: '320px' }}>
+            <Typography variant="h6" sx={{ marginBottom: 2, textAlign: 'center' }}>
+              choose <span sx={{ fontSize: '20px', fontWeight: '800' }}>Month/Year</span> or <span>Year</span>
             </Typography>
-            <MonthYearPicker
-              //value={selectedDate}
-              onChange={(newValue) => {
-                setSelectedDate(newValue);
-              }}
-              label="Choose a Month and Year"
-              inputStyles={{
-                width: '200px',
-                color: '#555',
-                fontSize: '16px'
-              }}
-              containerStyles={{
-                margin: '20px 0'
-              }}
-            />
+
+            {/* Month and Year Picker */}
+            <Box sx={{ marginBottom: 3 }}>
+              <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
+                Month and Year
+              </Typography>
+              <MonthYearPicker
+                value={selectedDate}
+                onChange={(newValue) => {
+                  setSelectedDate(newValue);
+                  setSelectedYear(null); // Clear Year-only field
+                }}
+                label="Choose a Month and Year"
+                inputStyles={{
+                  width: '280px',
+                  color: '#555',
+                  fontSize: '16px'
+                }}
+                containerStyles={{
+                  margin: '0 auto'
+                }}
+              />
+            </Box>
+
+            {/* Horizontal Separator */}
+            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
+              <Box sx={{ flex: 1, height: '1px', backgroundColor: '#ccc' }}></Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  padding: '0 10px',
+                  color: '#888',
+                  fontSize: '14px',
+                  fontWeight: 'bold'
+                }}
+              >
+                OR
+              </Typography>
+              <Box sx={{ flex: 1, height: '1px', backgroundColor: '#ccc' }}></Box>
+            </Box>
+
+            {/* Year Picker */}
+            <Box>
+              <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
+                Year
+              </Typography>
+              <YearPicker
+                value={selectedYear}
+                onChange={(newYear) => {
+                  setSelectedYear(newYear);
+                  setSelectedDate(null); // Clear Month-Year field
+                }}
+                label="Choose a Year"
+                inputStyles={{
+                  width: '280px',
+                  color: '#555',
+                  fontSize: '16px'
+                }}
+                containerStyles={{
+                  margin: '0 auto'
+                }}
+              />
+            </Box>
 
             {/* Cancel and Apply Buttons */}
-            <Box sx={{ marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={{ marginTop: 3, display: 'flex', justifyContent: 'space-between' }}>
               <Button
                 variant="outlined"
                 onClick={() => {
@@ -202,9 +269,15 @@ export default function DashboardDefault() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  const monthId = selectedDate.month() + 1; // 1-based month
-                  const year = selectedDate.year();
-                  dispatch(updatePayloadDate({ monthId, year }));
+                  console.log(selectedYear, 'inside the apply');
+                  if (selectedDate) {
+                    const monthId = selectedDate.month() + 1; // 1-based month
+                    const year = selectedDate.year();
+                    dispatch(updatePayloadDate({ monthId, year }));
+                  } else if (selectedYear) {
+                    const year = selectedYear;
+                    dispatch(updatePayloadDate({ monthId: 0, year }));
+                  }
                   handlePopoverClose();
                 }}
                 sx={{ backgroundColor: '#3A63D2', color: 'white' }}
@@ -214,6 +287,7 @@ export default function DashboardDefault() {
             </Box>
           </Box>
         </Popover>
+
         <Box sx={{ padding: '20px' }}>
           <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             {/* row 1 */}

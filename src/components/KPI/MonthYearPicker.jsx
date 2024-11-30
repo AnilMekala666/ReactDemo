@@ -18,6 +18,7 @@ const MonthYearPicker = ({
           views={["year", "month"]}
           value={value}
           onChange={onChange}
+          sx={inputStyles}
           renderInput={(params) => (
             <input
               {...params}
