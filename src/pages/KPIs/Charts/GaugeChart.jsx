@@ -4,12 +4,13 @@ import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 
 const GaugeChart = ({ gaugeData }) => {
   const { value, kpi } = gaugeData;
+  const formattedValue= value<=100 ? value : 100;
   return (
     <Box sx={{ width: '200px' }}>
       <Gauge
         width={200}
         height={150}
-        value={Number(value.toFixed(2))}
+        value={Number(formattedValue.toFixed(2))}
         startAngle={-110}
         endAngle={110}
         sx={{

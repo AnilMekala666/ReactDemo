@@ -9,6 +9,9 @@ import CloseOutlined from '@ant-design/icons/CloseOutlined';
 
 // Custom styled dialog
 const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: theme.shape.borderRadius * 4, // Adjust the multiplier for more/less rounded edges
+  },
   '& .MuiDialogContent-root': {
     padding: theme.spacing(3)
   },
