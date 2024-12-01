@@ -4,14 +4,12 @@ export const remittanceSummaryColumns = [
     {
       id: 'totalRemittances',
       label: 'Total Remittances',
-      align: 'right',
       format: (value) => value.toLocaleString(),
     },
     {
       id: 'reconciliationRate',
       label: 'Reconciliation Rate',
-      align: 'right',
-      format: (value) => value.toLocaleString(),
+      format: (value) => value.toFixed(2)
     },
   ];
 
@@ -24,7 +22,7 @@ export const remittanceSummaryColumns = [
       id: 'percentage',
       label: 'Percentage %',
      // align: 'right',
-      format: (value) => `${value.toLocaleString()} %`,
+     format: (value) => value.toFixed(2)
     },
   ];
 
@@ -36,7 +34,7 @@ export const remittanceSummaryColumns = [
       id: 'totalRemittanceAmount',
       label: 'Total Remittance Amount',
      // align: 'right',
-      format: (value) => value.toLocaleString(),
+     format: (value) => value.toFixed(2)
     },
   ];
 
@@ -48,7 +46,7 @@ export const denialKpiColumns = [
     id: 'percentage',
     label: 'Percentage %',
     align: 'center',
-    format: (value) => value.toLocaleString(),
+    format: (value) => value.toFixed(2)
   },
   { id: 'potentialRevenueLoss', label: 'Potential Revenue Loss',align:"center" },
 ];
@@ -57,20 +55,20 @@ export const denialKpiColumns = [
 
 export const kpiReconciliationColumns = [
   { id: 'reconciliationStatus', label: 'Reconciliation Status' },
-  { id: 'percentage', label: 'Percentage %' },
+  { id: 'percentage', label: 'Percentage %',format: (value) => value.toFixed(2) },
 ];
 
 
 export const ageBucketColumns = [
   { id: 'ageBucket', label: 'Age Bucket' },
   { id: 'claimCount', label: 'Claims Count' },
-  { id: 'remittanceAmount', label: 'Remittance Amount' },
+  { id: 'remittanceAmount', label: 'Remittance Amount',format: (value) => value.toFixed(2) },
 ];
 
 
 
 export const revenueCycleKpiColumns = [
   { id: 'kpi', label: 'KPI' },
-  { id: 'value', label: 'Value' },
+  { id: 'value', label: 'Value',format: (value) => value.toFixed(2), },
   { id: 'target', label: 'Target' },
 ];

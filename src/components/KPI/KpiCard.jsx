@@ -20,31 +20,19 @@ export default function KpiCard({ color = 'primary', title, count, percentage, i
   return (
     <MainCard contentSX={{ p: 2 }} sx={{maxWidth:"390px",borderRadius:"1.5rem"}}>
       <Stack >
-        <Typography mb={3} variant="h6" color="#656565">
-          {title} {payor && <span style={{fontWeight:"900"}}>({payor})</span>}
+        <Typography mb={payor ? 0 : 3} variant="h6" color="#656565">
+          {title} 
         </Typography>
+        <Typography>{payor && <span style={{fontWeight:"900"}}>{payor.toUpperCase()}</span>}</Typography>
         <Grid container alignItems="center">
           <Grid item>
             <Typography mb={2} variant="h4" color="#252525">
-              {count}
+              {count}{title.toLowerCase().includes('rate') ? "%" : null}
             </Typography>
           </Grid>
           
         </Grid>
       </Stack>
-      {/* <Grid container columnSpacing={0} p={0.5} style={{border:1, borderColor:'#ececec',borderStyle:'solid', backgroundColor:'#fdfdfd', borderRadius:5}}>
-            <Grid item xs={10}  >
-            <Typography style={{fontWeight:'bold'}}>
-            {percentage}
-            </Typography>
-            </Grid>
-            <Grid item xs={1}  >
-              <Typography style={{textAlign:'right', fontWeight:'bold'}}>
-            {extra}
-            </Typography>
-            </Grid>
-        
-      </Grid> */}
     </MainCard>
   );
 }

@@ -124,7 +124,7 @@ export default function UniqueVisitorCard() {
 
     {/* CLAIMS OVERVIEW */}
       <CustomTabPanel value={value} index={1}>
-        <Download />
+        <Download hideSwitch={true}/>
         <MonthlyBarChart />
       </CustomTabPanel>
       {/* REMITTANCE ANALYSIS */}

@@ -81,34 +81,24 @@ export default function MonthlyBarChart() {
           </Box>
         )}
         {!claimsStatusLoading && !showTable && (
-          <Box sx={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-            <Box direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 0, md: 4 }} sx={{ width: '100%'}}>
-              <Box direction="column" sx={{ width: { xs: '100%', md: '50%' } }}>
-                <span
-                  style={{
-                    position: 'relative',
-                    top: 190,
-                    textAlign: 'center',
-                    left: -50
-                  }}
-                >
-                  <Typography color={'#656565'} fontSize={16} fontWeight={600}>
-                    Total
-                  </Typography>
-                  <Typography color={'#2F2F2F'} fontSize={32} fontWeight={700}>
-                    {totalValue}
-                  </Typography>
-                </span>
+          <Box sx={{display:"flex",alignItems:"flex-start"}}>
+            <Box sx={{marginRight:"4rem"}}>
+              <Box>
                 {claimsStatusData && (
                   <PieChart
                     height={300}
+                    width={600}
                     series={[
                       {
                         data: claimsStatusPieChart?.map(({ status, percentage }) => ({
                           label: status,
                           value: percentage
                         })),
-                        innerRadius: radius,
+                        arcLabelMinAngle: 35,
+                        arcLabel: (item) =>{
+                          console.log(item,"inside the arc label");
+                          return`${item.label}`
+                        },
                         valueFormatter: (v, { dataIndex }) => {
                           const { status, count, percentage } = claimsStatusPieChart[dataIndex];
                           return `${percentage}% (${count})`;
@@ -127,6 +117,7 @@ export default function MonthlyBarChart() {
                 )}
               </Box>
             </Box>
+            <Box sx={{display:"flex",justifyContent:"center",alignItems:"center"}}><ReUsableTable columns={claimStatusColumns} rows={claimsStatusPieChart || []} /></Box>
           </Box>
         )}
         {showTable && <Box sx={{maxWidth:"40%",margin:"auto",display:"flex",justifyContent:"center",alignItems:"center"}}><ReUsableTable columns={claimStatusColumns} rows={claimsStatusPieChart || []} /></Box>}
