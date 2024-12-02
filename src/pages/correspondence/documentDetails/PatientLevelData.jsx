@@ -575,7 +575,16 @@ export const PatientLevelData = ({ patients,
               <TableBody>
                 {Array.isArray(patientLevelTable) && patientLevelTable.map((patient, index) => (
                   <TableRow key={index}>
-                    <TableCell>{patient.id}</TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.id}
+                          onChange={(e) => handleInputChange(index, 'id', e.target.value)}
+                        />
+                      ) : (
+                        `${patient.id}`
+                      )}
+                    </TableCell>
                     <TableCell>
                       {isEditing ? (
                         <TextField
@@ -590,14 +599,24 @@ export const PatientLevelData = ({ patients,
                     <TableCell>
                       {isEditing ? (
                         <TextField
-                          value={patient.payerName}
-                          onChange={(e) => handleInputChange(index, 'payerName', e.target.value)}
+                          value={patient.insuranceName}
+                          onChange={(e) => handleInputChange(index, 'insuranceName', e.target.value)}
                         />
                       ) : (
-                        patient.payerName
+                        patient.insuranceName
                       )}
                     </TableCell>
-                    <TableCell>{patient.patientLevelServiceDate}</TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          type="date"
+                          value={patient.patientLevelServiceDate}
+                          onChange={(e) => lineLevelInputChange(index, 'patientLevelServiceDate', e.target.value)}
+                        />
+                      ) : (
+                     `${patient.patientLevelServiceDate || ""}`
+                      )}
+                    </TableCell>
                     <TableCell>
                       {isEditing ? (
                         <TextField
@@ -628,7 +647,17 @@ export const PatientLevelData = ({ patients,
                         patient.patientName
                       )}
                     </TableCell>
-                    <TableCell>{patient.checkDate}</TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          type="date"
+                          value={patient.checkDate}
+                          onChange={(e) => lineLevelInputChange(index, 'checkDate', e.target.value)}
+                        />
+                      ) : (
+                     `${patient.checkDate || ""}`
+                      )}
+                    </TableCell>
                     {index  == 0 &&
                       <TableCell sx={{ color: "#e55" }}>
                       </TableCell>
@@ -678,23 +707,178 @@ export const PatientLevelData = ({ patients,
               <TableBody>
                 {lineLevelTable?.map((patient, index) => (
                   <TableRow key={index}>
-                    <TableCell>{patient.lineLevelServiceDate}</TableCell>
-                    <TableCell>{patient.lineLevelServiceEndDate}</TableCell>
-                    <TableCell>{patient.procedureCode}</TableCell>
-                    <TableCell>{patient.billedAmount}</TableCell>
-                    <TableCell>{patient.allowedAmount}</TableCell>
-                    <TableCell>{patient.coveredAmount}</TableCell>
-                    <TableCell>{patient.notCoveredAmount}</TableCell>
-                    <TableCell>{patient.discountAmount}</TableCell>
-                    <TableCell>{patient.adjustmentAmount}</TableCell>
-                    <TableCell>{patient.coPay}</TableCell>
-                    <TableCell>{patient.coInsurance}</TableCell>
-                    <TableCell>{patient.deductibleAmount}</TableCell>
-                    <TableCell>{patient.patientResponsibility}</TableCell>
-                    <TableCell>{patient.deniedAmount}</TableCell>
-                    <TableCell>{patient.reasonCodes}</TableCell>
-                    <TableCell>{patient.remarkCodes}</TableCell>
-                    <TableCell>{patient.description}</TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          type="date"
+                          value={patient.lineLevelServiceDate}
+                          onChange={(e) => lineLevelInputChange(index, 'lineLevelServiceDate', e.target.value)}
+                        />
+                      ) : (
+                     `${patient.lineLevelServiceDate || ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          type="date"
+                          value={patient.lineLevelServiceEndDate}
+                          onChange={(e) => lineLevelInputChange(index, 'lineLevelServiceEndDate', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.lineLevelServiceEndDate || ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.procedureCode}
+                          onChange={(e) => lineLevelInputChange(index, 'procedureCode', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.procedureCode || ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.billedAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'billedAmount', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.billedAmount ? "$" + patient.billedAmount : ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.allowedAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'allowedAmount', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.allowedAmount ? "$" + patient.allowedAmount : ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.coveredAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'coveredAmount', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.coveredAmount ? "$" + patient.coveredAmount : ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.notCoveredAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'notCoveredAmount', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.notCoveredAmount ? "$" + patient.notCoveredAmount : ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.discountAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'discountAmount', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.discountAmount ? "$" + patient.discountAmount : ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.adjustmentAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'adjustmentAmount', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.adjustmentAmount ? "$" + patient.adjustmentAmount : ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.coPay}
+                          onChange={(e) => lineLevelInputChange(index, 'coPay', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.coPay || ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.coInsurance}
+                          onChange={(e) => lineLevelInputChange(index, 'coInsurance', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.coInsurance || ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.deductibleAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'deductibleAmount', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.deductibleAmount ? "$" + patient.deductibleAmount : ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.patientResponsibility}
+                          onChange={(e) => lineLevelInputChange(index, 'patientResponsibility', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.patientResponsibility || ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.deniedAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'deniedAmount', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.deniedAmount ? "$" + patient.deniedAmount : ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.reasonCodes}
+                          onChange={(e) => lineLevelInputChange(index, 'reasonCodes', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.reasonCodes || ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.remarkCodes}
+                          onChange={(e) => lineLevelInputChange(index, 'remarkCodes', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.remarkCodes || ""}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {isEditing ? (
+                        <TextField
+                          value={patient.description}
+                          onChange={(e) => lineLevelInputChange(index, 'description', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.description || ""}`
+                      )}
+                    </TableCell>
                     {index  == 0 &&
                       <TableCell sx={{ color: "#e55" }}>
                       </TableCell>
