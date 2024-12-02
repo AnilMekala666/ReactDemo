@@ -652,7 +652,7 @@ export const PatientLevelData = ({ patients,
             {/* <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={addLineItem} /> */}
           </Stack>
           <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-            <Table sx={{ display: 'block' }}>
+            <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Service Date</TableCell>
