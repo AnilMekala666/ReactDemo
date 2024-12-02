@@ -821,6 +821,8 @@ function MindPathPage() {
       case "deposit": videosUrl = new URL('/data/Demo_Videos/eft_secondary_posting_amd.mp4', import.meta.url).href; break;
       case "patient": videosUrl = new URL('/data/Demo_Videos/PatientPosting_AMD.mp4', import.meta.url).href; break;
       case "payment": videosUrl = new URL('/data/Demo_Videos/ZeroPosting_AMD.mp4', import.meta.url).href; break;
+      case "epic": videosUrl = new URL('/data/Demo_Videos/epic_posting.mp4', import.meta.url).href; break;
+      case "nextgen": videosUrl = new URL('/data/Demo_Videos/nextgen.mp4', import.meta.url).href; break;
     }
     setVideoUrl(videosUrl);
     setVideoModalOpen(true);
@@ -1009,10 +1011,14 @@ function MindPathPage() {
                 <CaretUpOutlined style={{ fontSize: '18px', marginLeft: '20px', color: 'rgb(119 171 73)' }} />
               </div>
               <div class="popover_in">
-                <Button onClick={() => videoModal("deposit")}>Deposit Posting</Button>
-                <Button onClick={() => videoModal('patient')}>Patient Posting</Button>
+                {popType !== "epic" &&
+                  <>
+                    <Button onClick={() => videoModal(popType == "advanced" ? "deposit" : "nextgen")}>{popType == "advanced" ? "Deposit" : "EFT"} Posting</Button>
+                    <Button onClick={() => videoModal('patient')}>Patient Posting</Button>
+                  </>
+                }
                 {(popType == "advanced" || popType == "epic") &&
-                  <Button onClick={() => videoModal('payment')}>Zero Payment Posting</Button>
+                  <Button onClick={() => videoModal(popType == "advanced" ? "payment" : "epic")}>Zero Payment Posting</Button>
                 }
               </div>
             </Popover>
