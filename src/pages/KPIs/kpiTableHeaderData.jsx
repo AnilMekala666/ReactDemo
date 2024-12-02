@@ -22,7 +22,7 @@ export const remittanceSummaryColumns = [
       id: 'percentage',
       label: 'Percentage %',
      // align: 'right',
-     format: (value) => value.toFixed(2)
+     format: (value) => `${value.toFixed(2)}%`
     },
   ];
 

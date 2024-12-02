@@ -6,6 +6,8 @@ import ReUsableTable from 'components/correspndence/ReUsableTable';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { denialKpiColumns } from '../kpiTableHeaderData';
+import { formatAmount } from '../kpiHelpers';
+
 
 export default function ApexBarChart() {
   const { showTable, payloadDate } = useSelector((state) => state.kpi);
@@ -31,6 +33,7 @@ export default function ApexBarChart() {
     chart: {
       type: 'bar',
       height: 500,
+      toolbar: { show: false,tools:{download:false} }
     },
     plotOptions: {
       bar: {
@@ -40,28 +43,49 @@ export default function ApexBarChart() {
     xaxis: {
       categories: denialChartData?.map((item) => item.denialReason), // Setting x-axis labels
       title: {
-        text: 'Revenue Loss',
+        text: 'Reasons',
+        style:{
+          fontWeight:"600",
+          fontSize:"1rem"
+        }
       },
       labels: {
         rotate: -45, // Rotate labels by -45 degrees for better readability
+        fontSize:"2rem"
       },
     },
+    colors: ["#008FFB", "#FF5733"],
     yaxis: [
       {
         title: {
           text: 'Revenue Loss',
+          style:{
+            fontWeight:"600",
+            fontSize:"0.7rem"
+          }
         },
         labels: {
-          formatter: (value) => Math.round(value), // Round off y-axis labels
+          formatter: (value) => formatAmount(value), // Round off y-axis labels
+          style:{
+            fontSize:"0.8rem"
+          }
         },
+
       },
       {
         opposite: true,
         title: {
           text: 'Percentage %',
+          style:{
+            fontWeight:"600",
+            fontSize:".7rem"
+          }
         },
         labels: {
           formatter: (value) => value.toFixed(2), // Limit to 2 decimal places
+          style:{
+            fontSize:"0.8rem"
+          }
         },
       },
     ],
@@ -76,6 +100,14 @@ export default function ApexBarChart() {
     title: {
       text: 'Revenue Loss by Reason and its Percentage',
       align: 'center',
+    },
+    legend: {
+      position: "top", // Places the legend at the top
+      horizontalAlign: "center", // Aligns legend horizontally (center, left, or right)
+      labels: {
+        colors: "#333", // Customize legend text color
+        fontSize: "14px", // Optional: adjust font size
+      },
     },
   };
 
@@ -93,7 +125,7 @@ export default function ApexBarChart() {
   ];
 
   return (
-    <div style={{ padding: '10px', minHeight: '20rem',width:`${!showTable?"80%":"60%"}`,margin:"auto" }}>
+    <div style={{ padding: '10px', minHeight: '20rem',width:`${!showTable?"100%":"60%"}`,margin:"auto" }}>
       {denialKpiLoading && (
         <Box
           width={'100%'}

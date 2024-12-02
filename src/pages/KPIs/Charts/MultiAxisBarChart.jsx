@@ -7,7 +7,7 @@ const MultiAxisBarLineChart = ({ data }) => {
       height: 350,
       type: "line",
       toolbar: {
-        show: true,
+        show: false,
       },
     },
     plotOptions: {
@@ -30,15 +30,38 @@ const MultiAxisBarLineChart = ({ data }) => {
       categories: data.map((item) => item.month),
       title: {
         text: "Months",
+        style: {
+          fontSize: "1rem", // Increase this value to make labels larger
+          fontWeight: "bold", // Optional, for making labels bold
+          colors: ["#333"], // Customize label color if needed
+        },
       },
+      labels:{
+        style: {
+          fontSize: "0.8rem", // Increase this value to make labels larger
+          fontWeight: "bold", // Optional, for making labels bold
+          colors: ["#333"], // Customize label color if needed
+        },
+      }
     },
+    colors: ["#008FFB", "#00E396", "#FF5733"],
     yaxis: [
       {
         seriesName: "Total Claims",
         title: {
           text: "Total Claims",
+          style: {
+            fontSize: "1rem", // Increase this value to make labels larger
+            fontWeight: "bold", // Optional, for making labels bold
+            colors: ["#333"], // Customize label color if needed
+          },
         },
         labels: {
+          style: {
+            fontSize: "0.8rem", // Increase this value to make labels larger
+            fontWeight: "bold", // Optional, for making labels bold
+            colors: ["#333"], // Customize label color if needed
+          },
           formatter: (val) => formatLargeNumber(val),
         },
       },
@@ -47,8 +70,18 @@ const MultiAxisBarLineChart = ({ data }) => {
         opposite: true,
         title: {
           text: "Total Remittances",
+          style: {
+            fontSize: "1rem", // Increase this value to make labels larger
+            fontWeight: "bold", // Optional, for making labels bold
+            colors: ["#333"], // Customize label color if needed
+          },
         },
         labels: {
+          style: {
+            fontSize: "0.8rem", // Increase this value to make labels larger
+            fontWeight: "bold", // Optional, for making labels bold
+            colors: ["#333"], // Customize label color if needed
+          },
           formatter: (val) => formatLargeNumber(val),
         },
       },
@@ -57,8 +90,18 @@ const MultiAxisBarLineChart = ({ data }) => {
         opposite: true,
         title: {
           text: "Reconciliation Rate (%)",
+          style: {
+            fontSize: "1rem", // Increase this value to make labels larger
+            fontWeight: "bold", // Optional, for making labels bold
+            colors: ["#333"], // Customize label color if needed
+          },
         },
         labels: {
+          style: {
+            fontSize: "0.8rem", // Increase this value to make labels larger
+            fontWeight: "bold", // Optional, for making labels bold
+            colors: ["#333"], // Customize label color if needed
+          },
           formatter: (val) => val.toFixed(2),
         },
         max: 100, // Optional: Adjust max value based on your dataset

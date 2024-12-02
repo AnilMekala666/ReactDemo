@@ -28,8 +28,13 @@ const LinearProgressBar = ({ title, value, maxValue = 100, ...others }) => {
                 >
                     {title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    {`${value}/${maxValue}`}
+                <Typography variant="body1"  sx={{
+                        fontWeight: 'bold',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                    }}>
+                    {`${value.toFixed(2)}%`}
                 </Typography>
             </Box>
 

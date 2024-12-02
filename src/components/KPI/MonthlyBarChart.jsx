@@ -96,7 +96,6 @@ export default function MonthlyBarChart() {
                         })),
                         arcLabelMinAngle: 35,
                         arcLabel: (item) =>{
-                          console.log(item,"inside the arc label");
                           return`${item.label}`
                         },
                         valueFormatter: (v, { dataIndex }) => {
