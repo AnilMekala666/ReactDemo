@@ -555,7 +555,9 @@ export const PatientLevelData = ({ patients,
             <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
               Patient-Level Data
             </Typography>
-            <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={addPatientItem} />
+            {statusId == 2  &&
+              <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={addPatientItem} />
+            }
           </Stack>
           <TableContainer component={Paper} sx={{ marginTop: 2, marginBottom: 2 }}>
             <Table>
@@ -678,7 +680,9 @@ export const PatientLevelData = ({ patients,
             <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
               Line-Level Data
             </Typography>
-            <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={addLineItem} />
+            {statusId == 2  &&
+              <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={addLineItem} />
+            }
           </Stack>
           <TableContainer component={Paper} sx={{ marginTop: 2 }}>
             <Table sx={{ display: 'block' }}>
