@@ -20,14 +20,13 @@ export default function KpiCard({ color = 'primary', title, count, percentage, i
   return (
     <MainCard contentSX={{ p: 2 }} sx={{maxWidth:"390px",borderRadius:"1.5rem"}}>
       <Stack >
-        <Typography mb={payor ? 0 : 3} variant="h6" color="#656565">
+        <Typography mb={3} variant="h6" color="#656565" sx={{fontSize:"20px"}}>
           {title} 
         </Typography>
-        <Typography>{payor && <span style={{fontWeight:"900"}}>{payor.toUpperCase()}</span>}</Typography>
         <Grid container alignItems="center">
           <Grid item>
             <Typography mb={2} variant="h4" color="#252525">
-              {count}{title.toLowerCase().includes('rate') ? "%" : null}
+            {payor && <span style={{fontWeight:"900"}}>{payor.toUpperCase()}-</span>} {count}{title.toLowerCase().includes('rate') ? "%" : null}
             </Typography>
           </Grid>
           

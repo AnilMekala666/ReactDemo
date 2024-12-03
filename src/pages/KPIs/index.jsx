@@ -117,12 +117,28 @@ export default function DashboardDefault() {
 
   const isPopoverOpen = Boolean(anchorEl);
 
-  const formatValue = (value) => {
+  const usCurrencyFormat = (value)=>{
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
+  }
+
+  const formatValue = (item) => {
+    const { value, name } = item;
+    if (name == 'Total Claims Submitted' || name == 'Total Pending Claims') {
+      return value;
+    } else if (name == 'Days in Accounts Receivable' || name == 'Average Remittance Processing Time') {
+      let formattedValue = value.toFixed(0);
+      return `${formattedValue} ${formattedValue > 1 ? 'days' : formattedValue == 0 ? '' : 'day'}`;
+    } else if (name == 'Total Remittance Amount' || name == 'Top Payer') {
+      return `$${usCurrencyFormat(item.value)}`;
+    } else {
+      return value.toFixed(2);
+    }
   };
+
+  
 
   return (
     <>
@@ -276,7 +292,6 @@ export default function DashboardDefault() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  console.log(selectedYear, 'inside the apply');
                   if (selectedDate) {
                     const monthId = selectedDate.month() + 1; // 1-based month
                     const year = selectedDate.year();
@@ -311,7 +326,7 @@ export default function DashboardDefault() {
                 kpiWidgetsData.widgetsList.filter(item=>(item.name)).map((item) => (
 
                   <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <KpiCard title={item.name} count={formatValue(item.value)} percentage={1212} payor={item.payor || ""} extra="#0" />
+                    <KpiCard title={item.name} count={formatValue(item)} percentage={1212} payor={item.payor || ""} extra="#0" />
                   </Grid>
                 ))}
 

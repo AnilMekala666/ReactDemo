@@ -1,3 +1,4 @@
+import { fontWeight } from "@mui/system";
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 
@@ -23,7 +24,7 @@ const GroupedBarChart = ({ data }) => {
         chart: {
             type: "bar",
             height: 400,
-            toolbar: { show: true }
+            toolbar: { show: false,tools:{download:false} }
         },
         xaxis: {
             categories: categories.map((payer) =>
@@ -32,7 +33,8 @@ const GroupedBarChart = ({ data }) => {
             labels: {
                 rotate: -45,
                 style: {
-                    fontSize: "12px"
+                    fontSize: "0.8rem",
+                    fontWeight:"600"
                 },
                 tooltip: { enabled: true } // Enable tooltip for truncated names
             },
@@ -57,10 +59,16 @@ const GroupedBarChart = ({ data }) => {
         },
         yaxis: [
             {
-                title: { text: "Total Remittance Amount" },
+                title: { text: "Total Remittance Amount",style: {
+                    fontSize: "0.8rem",
+                    fontWeight:"600"
+                }, },
                 labels: {
                     formatter: (value) => formatAmount(value), // Format as K/M
-                    style: { fontSize: "12px" }
+                    style: {
+                        fontSize: "0.8rem",
+                        fontWeight:"600"
+                    },
                 },
                 min: 0,
                 max: Math.max(...totalRemittanceAmounts),
@@ -68,10 +76,16 @@ const GroupedBarChart = ({ data }) => {
             },
             {
                 opposite: true,
-                title: { text: "Processing Time (Days)" },
+                title: { text: "Processing Time (Days)",style: {
+                    fontSize: "0.8rem",
+                    fontWeight:"600"
+                }, },
                 labels: {
                     formatter: (value) => `${value}`, // No decimals for days
-                    style: { fontSize: "12px" }
+                    style: {
+                        fontSize: "0.8rem",
+                        fontWeight:"600"
+                    },
                 },
                 min: 0,
                 max: Math.max(...processingTimes),
@@ -108,7 +122,7 @@ const GroupedBarChart = ({ data }) => {
     return (
         <div>
             <h3>Top 10 Payers by Total Remittance Amount</h3>
-            <div style={{ overflowX: top10Data.length > 10 ? "scroll" : "hidden" }}>
+            <div>
                 <ReactApexChart options={options} series={series} type="bar" height={400} />
             </div>
         </div>

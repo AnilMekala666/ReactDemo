@@ -8,13 +8,12 @@ import useAxios from 'hooks/useAxios';
 import { remittanceSummaryColumns } from './kpiTableHeaderData';
 import MultiAxisChart from './Charts/MultiAxisBarChart';
 import {Skeleton,CircularProgress} from '@mui/material';
-import { height, minHeight } from '@mui/system';
 
 const RemmitanceSummary = () => {
   const { showTable, payloadDate } = useSelector((state) => state.kpi);
   const remmitanceConfig = useMemo(
     () => ({
-      url: `${KPI_ENDPOINTS.GET_REMMITTANCE_SUMMARY}?year=2024`,
+      url: `${KPI_ENDPOINTS.GET_REMMITTANCE_SUMMARY}?year=${payloadDate.year}`,
       method: 'GET'
     }),
     [payloadDate]
@@ -22,6 +21,28 @@ const RemmitanceSummary = () => {
   const { data: kpiWidgetsData, loading: kpiWidgetLoading, error: kpiWidgetError } = useAxios(remmitanceConfig, true);
   console.log(kpiWidgetsData, 'inside the remmitance summary');
   const remittanceSummaryBarChart = kpiWidgetsData?.kpiResponse?.monthlyData;
+
+  function addSummaryRow(data) {
+    // Calculate the total claims, total remittances, and average reconciliation rate
+    if(data){
+    const totalClaims = data.reduce((sum, row) => sum + row.totalClaims, 0);
+    const totalRemittances = data.reduce((sum, row) => sum + row.totalRemittances, 0);
+    const avgReconciliationRate = 
+        data.reduce((sum, row) => sum + row.reconciliationRate, 0) / data.length;
+
+    // Create the summary object
+    const summaryRow = {
+        additionalStyles:{fontWeight:"900"},
+        type: "summary",
+        totalClaims,
+        totalRemittances,
+        reconciliationRate: parseFloat(avgReconciliationRate.toFixed(4)), // Ensures consistent decimal places
+    };
+
+    // Return a new array with the summary row appended
+    return [...data, summaryRow];
+  }
+}
 
   // const remittanceSummaryBarChart = [
   //     { month: 'Jan', totalClaims: 150, totalRemittances: 120, reconciliationRate: 80 },
@@ -90,7 +111,7 @@ const RemmitanceSummary = () => {
           <CircularProgress width={'100%'} />
         </Box>
       )}
-      {!kpiWidgetLoading&&<Box style={{ width: `${!showTable ? '90%' : '50%'}`, margin: 'auto', minHeight: '20rem' }}>
+      {!kpiWidgetLoading&&<Box style={{ width: `${!showTable ? '100%' : '50%'}`, margin: 'auto', minHeight: '20rem' }}>
         {!showTable && remittanceSummaryBarChart?.length > 0 ? (
           <div>
             <MultiAxisChart data={remittanceSummaryBarChart} />

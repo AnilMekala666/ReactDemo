@@ -169,7 +169,7 @@ export default function RevenueCycleKpi() {
       )}
       <Box>
         {!revenueCycleKpiIsLoading && gaugeChartGraph && (
-          <Box sx={{ display: 'flex', justifyContent:"space-between",alignItems:'flex-start' }}>
+          <Box sx={{ display: 'flex', justifyContent:"space-between",alignItems:'center' }}>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
             {gaugeChartGraph?.map((gaugeData) => (
               <GaugeChart gaugeData={gaugeData} />

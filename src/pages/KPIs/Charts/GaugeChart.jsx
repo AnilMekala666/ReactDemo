@@ -8,6 +8,7 @@ const GaugeChart = ({ gaugeData }) => {
   return (
     <Box sx={{ width: '200px' }}>
       <Gauge
+        valueMax={kpi=='Days in A/R'?35:100}
         width={200}
         height={150}
         value={Number(formattedValue.toFixed(2))}
