@@ -49,7 +49,7 @@ export default function DashboardLayout() {
         <Header />
         {!isHorizontal ? <Drawer /> : <HorizontalBar />}
 
-        <Box component="main" sx={{ width: '100%', flexGrow: 1}}>
+        <Box component="main" sx={{ width: '0%', flexGrow: 1}}>
           <Toolbar sx={{ mt: isHorizontal ? 8 : 'inherit' }} />
           <Container
             maxWidth={container ? '1920px' : false}
