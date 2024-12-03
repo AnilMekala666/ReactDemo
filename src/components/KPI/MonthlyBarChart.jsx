@@ -6,7 +6,7 @@ import { Stack, Typography, Tooltip,Box, Skeleton,CircularProgress } from '@mui/
 import { useSelector } from 'react-redux';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
-import ReUsableTable from 'components/correspndence/ReUsableTable';
+import ReUsableTable from 'pages/KPIs/Charts/KpiTable';
 import { claimStatusColumns } from 'pages/KPIs/kpiTableHeaderData';
 const valueFormatter = (item) => `${item.value}%`;
 
@@ -87,7 +87,7 @@ export default function MonthlyBarChart() {
                 {claimsStatusData && (
                   <PieChart
                     height={300}
-                    width={600}
+                    width={500}
                     series={[
                       {
                         data: claimsStatusPieChart?.map(({ status, percentage }) => ({
@@ -116,10 +116,9 @@ export default function MonthlyBarChart() {
                 )}
               </Box>
             </Box>
-            <Box sx={{display:"flex",justifyContent:"center",alignItems:"center"}}><ReUsableTable columns={claimStatusColumns} rows={claimsStatusPieChart || []} /></Box>
+            <Box sx={{width:"50%"}}><ReUsableTable columns={claimStatusColumns} rows={claimsStatusPieChart || []} /></Box>
           </Box>
         )}
-        {showTable && <Box sx={{maxWidth:"40%",margin:"auto",display:"flex",justifyContent:"center",alignItems:"center"}}><ReUsableTable columns={claimStatusColumns} rows={claimsStatusPieChart || []} /></Box>}
       </Box>
     </>
   );

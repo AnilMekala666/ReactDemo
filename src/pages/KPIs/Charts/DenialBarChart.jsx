@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { Box, CircularProgress } from '@mui/material';
 import { useSelector } from 'react-redux';
-import ReUsableTable from 'components/correspndence/ReUsableTable';
+import ReUsableTable from './KpiTable';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { denialKpiColumns } from '../kpiTableHeaderData';
@@ -65,7 +65,7 @@ export default function ApexBarChart() {
           }
         },
         labels: {
-          formatter: (value) => formatAmount(value), // Round off y-axis labels
+          formatter: (value) => formatAmount(value,0), // Round off y-axis labels
           style:{
             fontSize:"0.8rem"
           }
@@ -125,7 +125,7 @@ export default function ApexBarChart() {
   ];
 
   return (
-    <div style={{ padding: '10px', minHeight: '20rem',width:`${!showTable?"100%":"60%"}`,margin:"auto" }}>
+    <div style={{ padding: '10px', minHeight: '20rem',width:`100%`,margin:"auto" }}>
       {denialKpiLoading && (
         <Box
           width={'100%'}

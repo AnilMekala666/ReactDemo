@@ -145,7 +145,7 @@ export default function DashboardDefault() {
       <div style={{ backgroundColor: '#F5F5F5' }}>
         <Box sx={{ padding: '20px', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant="h4" fontWeight={600}>
-            Cognitive Health Claim Reconciliation Dashboard
+            Claim Reconciliation Dashboard
           </Typography>
           <Box>
             <Box sx={{ padding: '4px', border: '1px solid #ECECEC', borderRadius: '.5rem' }}>

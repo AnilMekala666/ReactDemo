@@ -59,15 +59,13 @@ const RemmitanceAnalysis = () => {
           <CircularProgress width={'100%'} />
         </Box>
       )}
-      <Box sx={{ width: `${!showTable ? '100%' : '100%'}`,  }}>
+      <Box sx={{ width: `100%`,  }}>
         {!showTable && heatMapdata ? (
           <RemittanceAnalysisChart data={heatMapdata} />
         ) : showTable && heatMapdata ? (
           <KpiTable
             columns={remittanceAnalysisColumns}
-            rows={heatMapdataTable.splice(0,10)}
-            title="Remittance Analysis"
-            exportFilename="remittance-analysis.csv"
+            rows={heatMapdataTable}
           />
         ) : null}
       </Box>

@@ -1,13 +1,13 @@
 import { Box } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import ReUsableTable from 'components/correspndence/ReUsableTable';
 import Download from 'components/KPI/Download';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { remittanceSummaryColumns } from './kpiTableHeaderData';
 import MultiAxisChart from './Charts/MultiAxisBarChart';
 import {Skeleton,CircularProgress} from '@mui/material';
+import ReUsableTable from './Charts/KpiTable';
 
 const RemmitanceSummary = () => {
   const { showTable, payloadDate } = useSelector((state) => state.kpi);
@@ -19,7 +19,6 @@ const RemmitanceSummary = () => {
     [payloadDate]
   );
   const { data: kpiWidgetsData, loading: kpiWidgetLoading, error: kpiWidgetError } = useAxios(remmitanceConfig, true);
-  console.log(kpiWidgetsData, 'inside the remmitance summary');
   const remittanceSummaryBarChart = kpiWidgetsData?.kpiResponse?.monthlyData;
 
   function addSummaryRow(data) {
@@ -111,7 +110,7 @@ const RemmitanceSummary = () => {
           <CircularProgress width={'100%'} />
         </Box>
       )}
-      {!kpiWidgetLoading&&<Box style={{ width: `${!showTable ? '100%' : '50%'}`, margin: 'auto', minHeight: '20rem' }}>
+      {!kpiWidgetLoading&&<Box style={{ width: `100%`, margin: 'auto', minHeight: '20rem' }}>
         {!showTable && remittanceSummaryBarChart?.length > 0 ? (
           <div>
             <MultiAxisChart data={remittanceSummaryBarChart} />
