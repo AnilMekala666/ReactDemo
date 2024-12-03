@@ -27,14 +27,15 @@ export const remittanceSummaryColumns = [
   ];
 
 
-  export const remmitanceAnalysisColumns = [
-    { id: 'payer', label: 'Payer' },
-    { id: 'avgProcessingTime', label: 'Avg.Processing Time' },
+  export const remittanceAnalysisColumns = [
+    { id: 'payer', label: 'Payer', headerStyle: { fontWeight: 'bold' } },
+    { id: 'avgProcessingTime', label: 'Avg. Processing Time', align: 'right' },
     {
       id: 'totalRemittanceAmount',
       label: 'Total Remittance Amount',
-     // align: 'right',
-     format: (value) => value.toFixed(2)
+      align: 'right',
+      format: (value) => `$${value.toFixed(2)}`,
+      cellStyle: { color: 'green', fontWeight: 'bold' },
     },
   ];
 

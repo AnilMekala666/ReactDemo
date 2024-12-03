@@ -20,7 +20,7 @@ const RemmitanceSummary = () => {
   );
   const { data: kpiWidgetsData, loading: kpiWidgetLoading, error: kpiWidgetError } = useAxios(remmitanceConfig, true);
   console.log(kpiWidgetsData, 'inside the remmitance summary');
-  const remittanceSummaryBarChart = addSummaryRow(kpiWidgetsData?.kpiResponse?.monthlyData);
+  const remittanceSummaryBarChart = kpiWidgetsData?.kpiResponse?.monthlyData;
 
   function addSummaryRow(data) {
     // Calculate the total claims, total remittances, and average reconciliation rate

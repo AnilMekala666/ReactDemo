@@ -8,8 +8,9 @@ import Download from 'components/KPI/Download';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import HeatMap from '../KPIs/Charts/HeatMap';
-import { remmitanceAnalysisColumns } from './kpiTableHeaderData';
+import { remittanceAnalysisColumns } from './kpiTableHeaderData';
 import RemittanceAnalysisChart from './Charts/RemittanceAnalysisChart';
+import KpiTable from './Charts/KpiTable'
 
 const RemmitanceAnalysis = () => {
   const { showTable, payloadDate } = useSelector((state) => state.kpi);
@@ -58,17 +59,21 @@ const RemmitanceAnalysis = () => {
           <CircularProgress width={'100%'} />
         </Box>
       )}
-      <Box sx={{width:`${!showTable?"90%":"60%"}`,margin:"auto"}}>
-      {!showTable && heatMapdata  ? (
-        <RemittanceAnalysisChart data={heatMapdata} />
-      ) : showTable && heatMapdata ? (
-        <ReUsableTable columns={remmitanceAnalysisColumns} rows={heatMapdataTable} />
-      ) : (
-        null
-      )}
+      <Box sx={{ width: `${!showTable ? '100%' : '100%'}`,  }}>
+        {!showTable && heatMapdata ? (
+          <RemittanceAnalysisChart data={heatMapdata} />
+        ) : showTable && heatMapdata ? (
+          <KpiTable
+            columns={remittanceAnalysisColumns}
+            rows={heatMapdataTable.splice(0,10)}
+            title="Remittance Analysis"
+            exportFilename="remittance-analysis.csv"
+          />
+        ) : null}
       </Box>
     </Box>
   );
 };
+
 
 export default RemmitanceAnalysis;
