@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
 import PropTypes from 'prop-types';
 import MainCard from 'components/MainCard';
 import { CSVExport } from 'components/third-party/react-table';
 
 const ReusableTable = ({ columns, rows, title, exportFilename }) => {
+  const [page, setPage] = useState(0); // Current page
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Number of rows per page
+
+  // Handle page change
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page
+  };
+
+  // Slice rows for pagination
+  const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
   return (
     <MainCard
       content={false}
@@ -17,7 +35,7 @@ const ReusableTable = ({ columns, rows, title, exportFilename }) => {
       secondary={<CSVExport data={rows} headers={columns.map((col) => col.label)} filename={exportFilename} />}
     >
       <TableContainer>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label={title}>
+        <Table sx={{ minWidth: 400 }} size="small" aria-label={title}>
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -32,7 +50,7 @@ const ReusableTable = ({ columns, rows, title, exportFilename }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, rowIndex) => (
+            {paginatedRows.map((row, rowIndex) => (
               <TableRow hover key={rowIndex}>
                 {columns.map((column) => (
                   <TableCell
@@ -48,6 +66,15 @@ const ReusableTable = ({ columns, rows, title, exportFilename }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 15]} // Options for rows per page
+        component="div"
+        count={rows.length} // Total number of rows
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </MainCard>
   );
 };

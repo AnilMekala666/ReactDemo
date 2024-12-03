@@ -57,7 +57,7 @@ const widget = {
     },
     {
       id: 'kpi',
-      title: <FormattedMessage id="KPI" />,
+      title: <FormattedMessage id="Claim Reconciliation" />,
       type: 'item',
       url: '/kpi/dashboard',
       icon: icons.DatabaseOutlined

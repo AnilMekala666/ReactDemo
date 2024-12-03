@@ -4,10 +4,10 @@ import ReactApexChart from "react-apexcharts";
 
 const GroupedBarChart = ({ data }) => {
     // Helper to format large numbers (K/M)
-    const formatAmount = (value) => {
-        if (value >= 1e6) return (value / 1e6).toFixed(2) + "M";
-        if (value >= 1e3) return (value / 1e3).toFixed(2) + "K";
-        return value.toFixed(2);
+    const formatAmount = (value,fixed=2) => {
+        if (value >= 1e6) return (value / 1e6).toFixed(fixed) + "M";
+        if (value >= 1e3) return (value / 1e3).toFixed(fixed) + "K";
+        return value.toFixed(fixed);
     };
 
     // Sort data by remittance amount and get the top 10
@@ -17,7 +17,7 @@ const GroupedBarChart = ({ data }) => {
     // Prepare chart data
     const categories = top10Data.map((item) => item.payer); // Full payer names for hover tooltip
     const totalRemittanceAmounts = top10Data.map((item) => parseFloat(item.totalRemittanceAmount.toFixed(2)));
-    const processingTimes = top10Data.map((item) => Math.round(item.avgProcessingTime / 24)); // Convert hours to days
+    const processingTimes = top10Data.map((item) => Math.round(item.avgProcessingTime)); // Convert hours to days
 
     // Chart options
     const options = {
@@ -52,7 +52,7 @@ const GroupedBarChart = ({ data }) => {
                 return `
                     <div style="padding: 8px; font-size: 12px;">
                         <strong>Payer:</strong> ${payerName}<br/>
-                        <strong>Total Remittance Amount:</strong> ${formatAmount(remittanceAmount)}<br/>
+                        <strong>Total Remittance Amount:</strong> ${formatAmount(remittanceAmount,2)}<br/>
                         <strong>Processing Time:</strong> ${processingTime} days
                     </div>`;
             }
@@ -64,7 +64,7 @@ const GroupedBarChart = ({ data }) => {
                     fontWeight:"600"
                 }, },
                 labels: {
-                    formatter: (value) => formatAmount(value), // Format as K/M
+                    formatter: (value) => formatAmount(value,0), // Format as K/M
                     style: {
                         fontSize: "0.8rem",
                         fontWeight:"600"
@@ -81,7 +81,7 @@ const GroupedBarChart = ({ data }) => {
                     fontWeight:"600"
                 }, },
                 labels: {
-                    formatter: (value) => `${value}`, // No decimals for days
+                    formatter: (value) => `${value.toFixed(0)}`, // No decimals for days
                     style: {
                         fontSize: "0.8rem",
                         fontWeight:"600"

@@ -13,7 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import LinearProgressBar from '../../pages/KPIs/Charts/LinearProgessBar';
 import { useSelector } from 'react-redux';
-import ReUsableTable from 'components/correspndence/ReUsableTable';
+import ReUsableTable from 'pages/KPIs/Charts/KpiTable';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { kpiReconciliationColumns } from 'pages/KPIs/kpiTableHeaderData';
@@ -186,13 +186,13 @@ export default function NonPaymentPosting() {
         </Box>
       )}
       {!reconciliationLoading && progressData && (
-        <Box sx={{ width: '90%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box sx={{ width: '45%', marginRight: '1rem' }}>
+        <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',gap:"2rem" }}>
+          <Box sx={{ width: '50%', marginRight: '1rem' }}>
             {progressData?.map((data, index) => (
               <LinearProgressBar key={index} value={data.percentage} title={data.reconciliationStatus} />
             ))}
           </Box>
-          <Box sx={{ width: '45%' }}>
+          <Box sx={{ width: '50%' }}>
             <ReUsableTable columns={kpiReconciliationColumns} rows={progressData} />
           </Box>
         </Box>

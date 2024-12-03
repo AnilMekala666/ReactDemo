@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { Box, CircularProgress } from '@mui/material';
 import { useSelector } from 'react-redux';
-import ReUsableTable from 'components/correspndence/ReUsableTable';
+import ReUsableTable from './KpiTable';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { ageBucketColumns } from '../kpiTableHeaderData';
@@ -60,7 +60,7 @@ export default function ApexBarChart() {
           }
         },
         labels: {
-          formatter: (val) => formatAmount(val),
+          formatter: (val) => formatAmount(val,0),
           style:{
             fontSize:"0.8rem",
             fontWeight:"600"
@@ -77,7 +77,7 @@ export default function ApexBarChart() {
           }
         },
         labels: {
-          formatter: (val) => formatAmount(val), // Round off values on y-axis
+          formatter: (val) => formatAmount(val,0), // Round off values on y-axis
           style:{
             fontSize:"0.8rem",
             fontWeight:"600"
@@ -116,7 +116,7 @@ export default function ApexBarChart() {
   ];
 
   return (
-    <div style={{ padding: '10px', minHeight: "20rem", width: `${!showTable ? "100%" : "50%"}`, margin: "auto" }}>
+    <div style={{ padding: '10px', minHeight: "20rem", width: `100%`, margin: "auto" }}>
       {ageBucketLoading && (
         <Box width={'100%'} sx={{ display: 'flex', alignItems: "center", justifyContent: "center" }}>
           <CircularProgress />

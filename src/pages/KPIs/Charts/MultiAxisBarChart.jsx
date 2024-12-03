@@ -102,7 +102,7 @@ const MultiAxisBarLineChart = ({ data }) => {
             fontWeight: "bold", // Optional, for making labels bold
             colors: ["#333"], // Customize label color if needed
           },
-          formatter: (val) => val.toFixed(2),
+          formatter: (val) => val.toFixed(0),
         },
         max: 100, // Optional: Adjust max value based on your dataset
       },
@@ -112,10 +112,10 @@ const MultiAxisBarLineChart = ({ data }) => {
       intersect: false,
       y: [
         {
-          formatter: (val) => formatLargeNumber(val),
+          formatter: (val) => formatLargeNumber(val,2),
         },
         {
-          formatter: (val) => formatLargeNumber(val),
+          formatter: (val) => formatLargeNumber(val,2),
         },
         {
           formatter: (val) => val.toFixed(2) + "%",
@@ -146,14 +146,14 @@ const MultiAxisBarLineChart = ({ data }) => {
   ];
 
   // Function to format large numbers (e.g., K, M)
-  const formatLargeNumber = (num) => {
+  const formatLargeNumber = (num,fixed=0) => {
     if (num >= 1e6) {
-      return (num / 1e6).toFixed(2) + "M";
+      return (num / 1e6).toFixed(fixed) + "M";
     }
     if (num >= 1e3) {
-      return (num / 1e3).toFixed(2) + "K";
+      return (num / 1e3).toFixed(fixed) + "K";
     }
-    return num.toFixed(2);
+    return num.toFixed(fixed);
   };
 
   return (
