@@ -151,7 +151,7 @@ export const revenueCycleKpiColumns = [
     label: 'KPI',
     align: 'left', // Default alignment for text
     headerStyle: { fontWeight: 'bold', color: '#555' }, // Optional header styling
-    cellStyle: { color: '#333' }, // Optional cell styling
+    cellStyle: { color: '#333', }, // Optional cell styling
   },
   {
     id: 'value',

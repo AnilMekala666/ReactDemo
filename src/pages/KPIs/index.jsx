@@ -41,7 +41,7 @@ import { KPI_ENDPOINTS } from 'pages/rest/api';
 import { useSelector } from 'react-redux';
 import { updatePayloadDate } from 'store/reducers/kpiSlice';
 import { useDispatch } from 'react-redux';
-import {CircularProgress} from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import Slider from "react-slick";
 
 // avatar style
@@ -63,13 +63,13 @@ const actionSX = {
 
 function getMonthName(monthId) {
   const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ];
 
   // Ensure the monthId is valid (1 to 12)
   if (monthId < 1 || monthId > 12) {
-      return "Invalid month ID. Please provide a number between 1 and 12.";
+    return "Invalid month ID. Please provide a number between 1 and 12.";
   }
 
   // Return the month name (monthId - 1 because array indices start at 0)
@@ -79,31 +79,55 @@ function getMonthName(monthId) {
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export default function DashboardDefault() {
-  const {payloadDate} = useSelector(state=>state.kpi)
+  const { payloadDate } = useSelector(state => state.kpi)
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [selectedYear, setSelectedYear] = useState(null); // For Year-only picker
   const [activeTab, setActiveTab] = useState('last30days'); // Manage active state
   const [anchorEl, setAnchorEl] = useState(null); // Manage popover state
+  const [isExpand, setISExpand] = useState(false)
   const config = useMemo(() => ({
     url: KPI_ENDPOINTS.GET_WIDGET_DATA,
     method: "POST",
     data: payloadDate,
   }), [payloadDate])
-  const { data:kpiWidgetsData, loading:kpiWidgetLoading, error:kpiWidgetError } = useAxios(config, true); 
+  const { data: kpiWidgetsData, loading: kpiWidgetLoading, error: kpiWidgetError } = useAxios(config, true);
+  console.log(kpiWidgetsData)
 
-
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,  // Shows 4 cards per row on large screens
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    responsive: [
+      {
+        breakpoint: 1200, // Large screens
+        settings: { slidesToShow: 3 },
+      },
+      {
+        breakpoint: 768, // Medium screens (tablets)
+        settings: { slidesToShow: 2 },
+      },
+      {
+        breakpoint: 480, // Small screens (phones)
+        settings: { slidesToShow: 1 },
+      },
+    ],
+  };
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
     if (tabName === 'custom') {
       setAnchorEl(anchorEl); // Open popover when "Custom" is clicked
     }
-    if(tabName === 'last30days'){
+    if (tabName === 'last30days') {
       const currentDate = dayjs();
       const initialMonthId = currentDate.month() + 1; // Day.js month is 0-based, so add 1
       const initialYear = currentDate.year();
-      dispatch(updatePayloadDate({monthId:initialMonthId,year:initialYear})) 
+      dispatch(updatePayloadDate({ monthId: initialMonthId, year: initialYear }))
     }
   };
 
@@ -117,7 +141,7 @@ export default function DashboardDefault() {
 
   const isPopoverOpen = Boolean(anchorEl);
 
-  const usCurrencyFormat = (value)=>{
+  const usCurrencyFormat = (value) => {
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
@@ -138,7 +162,7 @@ export default function DashboardDefault() {
     }
   };
 
-  
+console.log(kpiWidgetsData)
 
   return (
     <>
@@ -318,7 +342,7 @@ export default function DashboardDefault() {
                 Overall Metrics
               </Typography>
             </Grid>
-            
+            {/*             
             <Grid container rowSpacing={2} columnSpacing={2} ml={"1rem"} sx={{ marginBottom: '1.5rem' }}>
               {!kpiWidgetLoading &&
                 kpiWidgetsData &&
@@ -334,6 +358,38 @@ export default function DashboardDefault() {
                 <CircularProgress width={"100%"}/>
               </Box> }
               {kpiWidgetsData?.length == 0 && <h6>No Data Available</h6>}
+            </Grid> */}
+
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem', overflow: 'hidden' }}>
+              {!kpiWidgetLoading && kpiWidgetsData?.widgetsList?.length > 0 ? (
+                <Grid item xs={12}>
+                  <Box sx={{ overflow: 'hidden', padding: '0 16px' }}>
+                    <Slider {...settings}>
+                      {kpiWidgetsData.widgetsList.map((item) => (
+                        <Box key={item.id} px={1}>
+                          <KpiCard
+                            title={item.name}
+                            count={formatValue(item)} 
+                            percentage={1212}  // Example value
+                            payor={item.payor || ""}
+                            extra="#0"
+                          />
+                        </Box>
+                      ))}
+                    </Slider>
+                  </Box>
+                </Grid>
+              ) : kpiWidgetLoading ? (
+                <Box
+                  width="100%"
+                  height="40vh"
+                  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <h6>No Data Available</h6>
+              )}
             </Grid>
 
             {/* <Grid container columnSpacing={2} ml={3} sx={{ marginBottom: '1.5rem' }}>

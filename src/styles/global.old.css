@@ -86,7 +86,7 @@ display: flex; align-items: center; justify-content: center;}
 .back-btn {border-radius: 45px;padding: 2px 28px 1px 0px;float:right;margin-top: 20px;margin-right: 20px;  }
 .accordian-btn { font-size:12px; font-weight:400; background:#f7f7f8;}
 .input-height .css-1u40o6b-MuiInputBase-input-MuiOutlinedInput-input { height: 35px; padding: 0px 10px;font-size: 12px;}
-.MuiTableCell-head  { font-size: 12px;padding: 5px 12px; font-weight: 600;}
+.MuiTableCell-head  { font-size: 12px !important;padding: 5px 12px !important; font-weight: 600 !important;}
 .MuiTableCell-body { font-size: 13px;}
 .popover { background-color: none;}
 .popover Button { display: block; background: #f7f7f8; color: #000;border-radius: 10px;width: 100%;    font-size: 11px;

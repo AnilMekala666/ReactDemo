@@ -15,6 +15,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 // Global CSS
 import 'styles/global.css';
 
+//bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 // google-fonts
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';

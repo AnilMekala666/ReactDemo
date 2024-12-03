@@ -37,7 +37,7 @@ const ReusableTable = ({ columns, rows, title, exportFilename }) => {
       <TableContainer>
         <Table sx={{ minWidth: 400 }} size="small" aria-label={title}>
           <TableHead>
-            <TableRow>
+            <TableRow className='MuiTableCell-head '>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
