@@ -14,8 +14,8 @@ import Typography from '@mui/material/Typography';
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import React,{useMemo} from 'react';
 import { useSelector } from 'react-redux';
-import ReUsableTable from 'components/correspndence/ReUsableTable';
 import Download from 'components/KPI/Download';
+import ReUsableTable from 'pages/KPIs/Charts/KpiTable';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import GaugeChart from 'pages/KPIs/Charts/GaugeChart';
@@ -170,12 +170,14 @@ export default function RevenueCycleKpi() {
       <Box>
         {!revenueCycleKpiIsLoading && gaugeChartGraph && (
           <Box sx={{ display: 'flex', justifyContent:"space-between",alignItems:'flex-start' }}>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
+          <Box sx={{display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
             {gaugeChartGraph?.map((gaugeData) => (
               <GaugeChart gaugeData={gaugeData} />
             ))}
           </Box>
+          <Box sx={{width:"420px"}}>
           <ReUsableTable columns={revenueCycleKpiColumns} rows={gaugeChartGraph} />
+          </Box>
           </Box>
         )}
       </Box>

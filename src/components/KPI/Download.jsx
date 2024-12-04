@@ -42,7 +42,7 @@ export default function Download({hideSwitch=false}) {
         </Grid>}
       </Grid>
       <Grid item md={6} display="flex" justifyContent="flex-end" sx={{marginBottom:"1rem"}}>
-        <Button onClick={handleClickOpen} variant='contained' style={{marginRight:"10px"}}>Actionable Insights</Button>
+        <Button onClick={handleClickOpen} variant='contained' style={{marginRight:"10px",borderRadius:".75rem"}}>Actionable Insights</Button>
       </Grid>
 
       <CustomDialog
@@ -52,7 +52,7 @@ export default function Download({hideSwitch=false}) {
         maxWidth="sm" 
         fullWidth={false} 
       >
-        <Typography>
+        <Typography style={{fontSize:"20px"}}>
           Increase focus on reducing eligibility denials, which represent 30% of total denials.
         </Typography>
       </CustomDialog>

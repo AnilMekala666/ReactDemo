@@ -12,7 +12,7 @@ export const DEMO_URL = 'https://ican-manage-chit-dem.cognitivehealthit.com/Corr
 
 export const IP_URL = 'https://ican-manage-mindpath-tst.cognitivehealthit.com/CorrespondenceServices';
 
-export const KPI_URL = 'http://10.0.1.216:8181/ClaimReconServices'
+export const KPI_URL = 'https://ican-manage-mindpath-tst.cognitivehealthit.com//ClaimReconServices'
 
 export const ENDPOINTS = {
   GET_STATE_LIST: `${IP_URL}/getStateList`,

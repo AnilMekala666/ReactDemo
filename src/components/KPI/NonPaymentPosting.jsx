@@ -11,13 +11,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import LinearProgressBar from '../../pages/KPIs/Charts/LinearProgessBar'
+import LinearProgressBar from '../../pages/KPIs/Charts/LinearProgessBar';
 import { useSelector } from 'react-redux';
-import ReUsableTable from 'components/correspndence/ReUsableTable';
+import ReUsableTable from 'pages/KPIs/Charts/KpiTable';
 import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { kpiReconciliationColumns } from 'pages/KPIs/kpiTableHeaderData';
-import { Skeleton ,CircularProgress} from '@mui/material';
+import { Skeleton, CircularProgress } from '@mui/material';
 // import LinearProgressBar from 'pages/KPIs/Charts/LinearProgressBar';
 
 // third-party
@@ -26,7 +26,6 @@ import { NumericFormat } from 'react-number-format';
 // project import
 import Dot from 'components/@extended/Dot';
 import CustomTable from 'components/payments/CustomTable';
-
 
 const tableColumns = [
   {
@@ -171,7 +170,7 @@ export default function NonPaymentPosting() {
   //const denialChartData=denialKpiData?.kpiResponse;
   const order = 'asc';
   const orderBy = 'tracking_no';
-  const progressData = reconciliationData?.kpiResponse
+  const progressData = reconciliationData?.kpiResponse;
   // const progressData = [
   //   { title: 'Fully Reconciled', value: 92 },
   //   { title: 'Pending Reconciliation', value: 8 },
@@ -187,13 +186,15 @@ export default function NonPaymentPosting() {
         </Box>
       )}
       {!reconciliationLoading && progressData && (
-        <Box sx={{ width:"90%",display: 'flex', alignItems: 'center', justifyContent: 'space-between',}}>
-        <Box sx={{width:"45%",marginRight:"1rem"}}>
-        {progressData?.map((data, index) => <LinearProgressBar key={index} value={data.percentage} title={data.reconciliationStatus} />)}
-        </Box>
-        <Box sx={{width:"45%"}}>
-        <ReUsableTable columns={kpiReconciliationColumns} rows={progressData} />
-        </Box>
+        <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',gap:"2rem" }}>
+          <Box sx={{ width: '50%', marginRight: '1rem' }}>
+            {progressData?.map((data, index) => (
+              <LinearProgressBar key={index} value={data.percentage} title={data.reconciliationStatus} />
+            ))}
+          </Box>
+          <Box sx={{ width: '50%' }}>
+            <ReUsableTable columns={kpiReconciliationColumns} rows={progressData} />
+          </Box>
         </Box>
       )}
     </Box>

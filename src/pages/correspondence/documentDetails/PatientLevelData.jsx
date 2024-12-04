@@ -571,7 +571,7 @@ export const PatientLevelData = ({ patients,
                   <TableCell>Check No</TableCell>
                   <TableCell>Patient Name</TableCell>
                   <TableCell>Check Date</TableCell>
-                  <TableCell></TableCell>
+                  {/* <TableCell></TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -685,27 +685,18 @@ export const PatientLevelData = ({ patients,
             }
           </Stack>
           <TableContainer component={Paper} sx={{ marginTop: 2 }}>
-            <Table sx={{ display: 'block' }}>
+            <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Service Start Date</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Service End Date</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Procedure Code</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Billed Amount</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Allowed Amount</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Covered Amount</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Not Covered Amount</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Discount Amount</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Adjustment Amount</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Co-Pay</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Co-Insurance</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Deductible Amount</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Patient Responsibility</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Denied Amount</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Reason Codes</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Remark Codes</TableCell>
-                  <TableCell sx={{ width: 200, minWidth: 200 }}>Description</TableCell>
-                  <TableCell></TableCell>
+                  <TableCell>Service Date</TableCell>
+                  <TableCell>Procedure Code</TableCell>
+                  <TableCell>Service Description</TableCell>
+                  <TableCell>Charge Amount</TableCell>
+                  <TableCell>Allowed Amount</TableCell>
+                  <TableCell>Paid Amount</TableCell>
+                  <TableCell>Adjustment Amount</TableCell>
+                  <TableCell>Reason Codes</TableCell>
+                  {/* <TableCell></TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -853,16 +844,7 @@ export const PatientLevelData = ({ patients,
                       `${patient.deniedAmount ? "$" + patient.deniedAmount : ""}`
                       )}
                     </TableCell>
-                    <TableCell>
-                      {isEditing ? (
-                        <TextField
-                          value={patient.reasonCodes}
-                          onChange={(e) => lineLevelInputChange(index, 'reasonCodes', e.target.value)}
-                        />
-                      ) : (
-                      `${patient.reasonCodes || ""}`
-                      )}
-                    </TableCell>
+                    
                     <TableCell>
                       {isEditing ? (
                         <TextField
@@ -883,17 +865,7 @@ export const PatientLevelData = ({ patients,
                       `${patient.description || ""}`
                       )}
                     </TableCell>
-                    {index  == 0 &&
-                      <TableCell sx={{ color: "#e55" }}>
-                      </TableCell>
-                    }
-                    {index > 0 &&
-                      <TableCell sx={{ color: "#e55" }}>
-                        <MinusCircleFilled onClick={()=>removeLineItem(index)} />
-                      </TableCell>
-                    }
-                    {/* <TableCell>${patient.chargeAmount}</TableCell> */}
-                    {/* <TableCell>
+                    <TableCell>
                       {isEditing ? (
                         <TextField
                           value={patient.chargeAmount}
@@ -904,7 +876,7 @@ export const PatientLevelData = ({ patients,
                       )}
                     </TableCell>
                     <TableCell>
-                    {isEditing ? (
+                      {isEditing ? (
                         <TextField
                           value={patient.allowedAmount}
                           onChange={(e) => lineLevelInputChange(index, 'allowedAmount', e.target.value)}
@@ -912,23 +884,47 @@ export const PatientLevelData = ({ patients,
                       ) : (
                      ` $${patient.allowedAmount}`
                       )}
-                      </TableCell>
+                    </TableCell>
                     <TableCell>
-                      {/* ${patient.paidAmount} 
+                      {/* ${patient.paidAmount}  */}
+                      {isEditing ? (
+                        <TextField
+                          value={patient.paidAmount}
+                          onChange={(e) => lineLevelInputChange(index, 'paidAmount', e.target.value)}
+                        />
+                        ) : (
+                        ` $${patient.paidAmount}`
+                      )}
+                    </TableCell>
+                    <TableCell>
                       {isEditing ? (
                         <TextField
                           value={patient.paidAmount}
                           onChange={(e) => lineLevelInputChange(index, 'paidAmount', e.target.value)}
                         />
                       ) : (
-                     ` $${patient.paidAmount}`
+                        ` ${patient.adjustmentAmount}`
                       )}
-                      </TableCell>
+                    </TableCell>
                     <TableCell>
-                      ${patient.adjustmentAmount}
-                   
+                      {isEditing ? (
+                        <TextField
+                          value={patient.reasonCodes}
+                          onChange={(e) => lineLevelInputChange(index, 'reasonCodes', e.target.value)}
+                        />
+                      ) : (
+                      `${patient.reasonCodes || ""}`
+                      )}
+                    </TableCell>
+                    {index  == 0 &&
+                      <TableCell sx={{ color: "#e55" }}>
                       </TableCell>
-                    <TableCell>{patient.reasonCodes}</TableCell> */}
+                    }
+                    {index > 0 &&
+                      <TableCell sx={{ color: "#e55" }}>
+                        <MinusCircleFilled onClick={()=>removeLineItem(index)} />
+                      </TableCell>
+                    }
                   </TableRow>
                 ))}
               </TableBody>

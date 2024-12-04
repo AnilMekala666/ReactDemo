@@ -407,9 +407,10 @@ header .css-13n62e0-MuiToolbar-root {
 }
 
 .MuiTableCell-head {
-  font-size: 12px;
-  padding: 5px 12px;
-  font-weight: 600;
+  font-size: 12px !important;
+  padding: 5px 12px !important;
+  font-weight: 600 !important;
+  color: #262626 !important;
 }
 
 .MuiTableCell-body {

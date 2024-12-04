@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
+import Tabs ,{ tabsClasses }from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import SaleReportCard from './SaleReportCard';
@@ -106,12 +106,21 @@ export default function UniqueVisitorCard() {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs
+        variant="scrollable"
+        allowScrollButtonsMobile 
+        value={value} onChange={handleChange} aria-label="basic tabs example"
+        sx={{
+          [`& .${tabsClasses.scrollButtons}`]: {
+            '&.Mui-disabled': { opacity: 0.3 },
+          },
+        }}
+        >
           <Tab label="Overall Claims & Remittances Summary" {...a11yProps(0)} />
           <Tab label=" Claim Status Overview" {...a11yProps(1)} />
           <Tab label="Remittance Analysis" {...a11yProps(2)} />
           <Tab label="Denial Management" {...a11yProps(3)} />
-          <Tab label="Revenue Cycle KPIs" {...a11yProps(4)} />
+          <Tab label="Revenue Cycle KPI" {...a11yProps(4)} />
           <Tab label="Reconciliation Status" {...a11yProps(5)} />
           <Tab label="Aging Analysis" {...a11yProps(6)} />
 

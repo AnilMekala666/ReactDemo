@@ -24,7 +24,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 export default function CustomDialog({ open, onClose, title, children, actions }) {
   return (
     <StyledDialog onClose={onClose} open={open} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ m: 0, p: 2, backgroundColor:"#1677ff", color:"white" }}>
+      <DialogTitle sx={{ m: 0, p: 2, backgroundColor:"#1677ff", color:"white",fontSize:"20px" }}>
         {title}
         {onClose && (
           <IconButton

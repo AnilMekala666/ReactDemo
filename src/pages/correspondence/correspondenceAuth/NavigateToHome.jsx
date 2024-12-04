@@ -11,7 +11,7 @@ const NavigateToHome = () => {
       startIcon={<HomeIcon />}
       onClick={() =>
         (window.location.href =
-          `http://10.0.1.109:8181/GlobalCommandCenter/users/gccDashboard?sessionId=${token}`)
+          `https://ican-manage-dem.cognitivehealthit.com/GlobalCommandCenter/iCAN/validateUserDetails?sessionId=${token}`)
       }
       sx={{ marginRight: '8px' }}
     >
