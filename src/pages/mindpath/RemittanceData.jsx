@@ -220,7 +220,6 @@ function RemittanceData() {
   const fetchInitial = async () => {
     console.log("Fetch Called");
     const data = await fetch(`${BASE_PATH}/getRemitDataForLastWeek/1`);
-    console.log("Data API", await data.text());
     const staticData = await data.json();
     setParsedData(staticData);
     staticData.map((s, i) => {
@@ -245,7 +244,6 @@ function RemittanceData() {
         return o;
       }
     }).filter((key) => key != "subRows" && key != undefined)
-    console.log("Columns", columns);
     setTableColumns(columns);
     setOpenAlert(true);
   }
