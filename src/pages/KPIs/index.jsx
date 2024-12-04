@@ -5,7 +5,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { Popover, Skeleton } from '@mui/material';
+import { Popover, Skeleton,TextField,MenuItem } from '@mui/material';
 import List from '@mui/material/List';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -16,9 +16,6 @@ import dayjs from 'dayjs';
 import Typography from '@mui/material/Typography';
 import MonthYearPicker from 'components/KPI/MonthYearPicker';
 import YearPicker from 'components/KPI/YearPicker';
-import {
-  FilterOutlined,
-} from '@ant-design/icons';
 
 // project import
 import MainCard from 'components/MainCard';
@@ -44,10 +41,15 @@ import { KPI_ENDPOINTS } from 'pages/rest/api';
 import { useSelector } from 'react-redux';
 import { updatePayloadDate } from 'store/reducers/kpiSlice';
 import { useDispatch } from 'react-redux';
-import { CircularProgress, TextField, MenuItem } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import Slider from "react-slick";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+// import dayjs from 'dayjs';
+import {
+  FilterOutlined,
+} from '@ant-design/icons';
+
 
 import CustomCalendar from './CustomCalendar';
 // avatar style
@@ -104,10 +106,9 @@ export default function DashboardDefault() {
   const [activeTab, setActiveTab] = useState('last30days'); // Manage active state
   const [anchorEl, setAnchorEl] = useState(null); // Manage popover state
   const [isExpand, setISExpand] = useState(false)
-
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState(''); 
   const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [toDate, setToDate] = useState(''); 
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedQOption, setSelectedQOption] = useState('')
 
@@ -132,6 +133,7 @@ export default function DashboardDefault() {
   const handleQuartelyDropdownChange = (e) => {
     setSelectedQOption(e.target.value)
   }
+
   const config = useMemo(() => ({
     url: KPI_ENDPOINTS.GET_WIDGET_DATA,
     method: "POST",
@@ -208,7 +210,7 @@ export default function DashboardDefault() {
     }
   };
 
-  console.log(kpiWidgetsData)
+console.log(kpiWidgetsData)
 
   return (
     <>
@@ -217,8 +219,18 @@ export default function DashboardDefault() {
           <Typography variant="h4" fontWeight={600}>
             Claim Reconciliation Dashboard
           </Typography>
-          <Box>
-            {/* <Box sx={{ padding: '4px', border: '1px solid #ECECEC', borderRadius: '.5rem' }}>
+          <Button
+            variant="outlined"
+            onClick={(event) => {
+              handleTabClick('custom');
+              handlePopoverOpen(event);
+            }}
+          >
+            <FilterOutlined />
+            <span style={{ marginLeft: 5 }}>Filter</span>
+          </Button>
+          {/* <Box>
+            <Box sx={{ padding: '4px', border: '1px solid #ECECEC', borderRadius: '.5rem' }}>
               <Button
                 disableRipple
                 onClick={() => handleTabClick('last30days')}
@@ -258,8 +270,8 @@ export default function DashboardDefault() {
               >
                 Custom
               </Button>
-            </Box> */}
-            {/* <Typography sx={{ marginTop: '.5rem' }} variant="h6">
+            </Box>
+            <Typography sx={{ marginTop: '.5rem' }} variant="h6">
               {payloadDate.monthId != 0 ? (
                 <span style={{ fontWeight: '600', display: 'inline-block', marginRight: '.4rem' }}>
                   Month: {getMonthName(payloadDate.monthId)}
@@ -267,18 +279,10 @@ export default function DashboardDefault() {
               ) : null}
               <span style={{ fontWeight: '600' }}>Year: </span>
               {payloadDate.year}
-            </Typography> */}
-            <Button variant="outlined"
-              onClick={(event) => {
-                handleTabClick('custom');
-                handlePopoverOpen(event);
-              }}
-            >
-              <FilterOutlined />
-              <span style={{ marginLeft: 5 }}>Filter</span>
-            </Button>
-          </Box>
+            </Typography>
+          </Box> */}
         </Box>
+        {/* Popover for Date Selection */}
         <Popover
           open={isPopoverOpen}
           anchorEl={anchorEl}
@@ -289,105 +293,7 @@ export default function DashboardDefault() {
           }}
         >
           <Box sx={{ padding: 3, width: '350px' }}>
-            {/* <Typography variant="h6" sx={{ marginBottom: 2, textAlign: 'center' }}>
-              choose <span sx={{ fontSize: '20px', fontWeight: '800' }}>Month/Year</span> or <span>Year</span>
-            </Typography>
-
-           
-            <Box sx={{ marginBottom: 3 }}>
-              <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
-                Month and Year
-              </Typography>
-              <MonthYearPicker
-                value={selectedDate}
-                onChange={(newValue) => {
-                  setSelectedDate(newValue);
-                  setSelectedYear(null); // Clear Year-only field
-                }}
-                label="Choose a Month and Year"
-                inputStyles={{
-                  width: '280px',
-                  color: '#555',
-                  fontSize: '16px'
-                }}
-                containerStyles={{
-                  margin: '0 auto'
-                }}
-              />
-            </Box>
-
-           
-            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
-              <Box sx={{ flex: 1, height: '1px', backgroundColor: '#ccc' }}></Box>
-              <Typography
-                variant="body2"
-                sx={{
-                  padding: '0 10px',
-                  color: '#888',
-                  fontSize: '14px',
-                  fontWeight: 'bold'
-                }}
-              >
-                OR
-              </Typography>
-              <Box sx={{ flex: 1, height: '1px', backgroundColor: '#ccc' }}></Box>
-            </Box>
-
-        
-            <Box>
-              <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
-                Year
-              </Typography>
-              <YearPicker
-                value={selectedYear}
-                onChange={(newYear) => {
-                  setSelectedYear(newYear);
-                  setSelectedDate(null); // Clear Month-Year field
-                }}
-                label="Choose a Year"
-                inputStyles={{
-                  width: '280px',
-                  color: '#555',
-                  fontSize: '16px'
-                }}
-                containerStyles={{
-                  margin: '0 auto'
-                }}
-              />
-            </Box>
-
-           
-            <Box sx={{ marginTop: 3, display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  handlePopoverClose();
-                  setActiveTab('last30days'); // Reset active tab
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  if (selectedDate) {
-                    const monthId = selectedDate.month() + 1; // 1-based month
-                    const year = selectedDate.year();
-                    dispatch(updatePayloadDate({ monthId, year }));
-                  } else if (selectedYear) {
-                    const year = selectedYear;
-                    dispatch(updatePayloadDate({ monthId: 0, year }));
-                  }
-                  handlePopoverClose();
-                }}
-                sx={{ backgroundColor: '#3A63D2', color: 'white' }}
-              >
-                Apply
-              </Button>
-            </Box> */}
-
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-
               <TextField
                 select
                 label="Select Calendar"
@@ -395,8 +301,7 @@ export default function DashboardDefault() {
                 onChange={handleCalendarDropdownChange}
                 fullWidth
                 margin="normal"
-              // className='header-input-border custom-select'
-
+                // className='header-input-border custom-select'
               >
                 <MenuItem value="month">Month</MenuItem>
                 <MenuItem value="quarterly">Quarterly</MenuItem>
@@ -412,10 +317,13 @@ export default function DashboardDefault() {
                   label="Select Month"
                   value={selectedMonth}
                   fullWidth
-                  sx={{ marginTop: "5px" }}
-                  onChange={(newValue) => setSelectedMonth(newValue)}
+                  sx={{ marginTop: '5px' }}
+                  onChange={(newValue) => {
+                    setSelectedMonth(newValue);
+                    setSelectedYear(null);
+                  }}
                   renderInput={(params) => <TextField {...params} margin="normal" />}
-                // className='header-input-border custom-select'
+                  // className='header-input-border custom-select'
                 />
 
 
@@ -429,7 +337,7 @@ export default function DashboardDefault() {
                   onChange={handleQuartelyDropdownChange}
                   fullWidth
                   margin="normal"
-                // className='header-input-border  custom-select'
+                  // className='header-input-border  custom-select'
                 >
                   <MenuItem value="q1">Q1</MenuItem>
                   <MenuItem value="q2">Q2</MenuItem>
@@ -439,14 +347,15 @@ export default function DashboardDefault() {
               )}
 
               {(selectedOption === 'year' || selectedOption === 'quarterly') && (
-                <Box >
+                <Box>
                   {/* <TextField label="Year" sx={{ width: "150px" }} margin="normal" /> */}
                   <YearPicker
                     fullWidth
                     value={selectedYear}
                     onChange={(newYear) => {
                       setSelectedYear(newYear);
-                      setSelectedDate(null); // Clear Month-Year field
+                      setSelectedDate(null);
+                      setSelectedMonth(null); // Clear Month-Year field
                     }}
                     label="Choose a Year"
                   />
@@ -454,7 +363,7 @@ export default function DashboardDefault() {
               )}
 
               {selectedOption === 'customDate' && (
-                <Box sx={{ display: "flex", gap: "5px" }}>
+                <Box sx={{ display: 'flex', gap: '5px' }}>
                   <TextField
                     // className='header-input-border custom-select'
                     fullWidth
@@ -464,7 +373,7 @@ export default function DashboardDefault() {
                     onChange={(e) => setFromDate(e.target.value)}
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true,
+                      shrink: true
                     }}
                   />
                   <TextField
@@ -474,33 +383,39 @@ export default function DashboardDefault() {
                     type="date"
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
-
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true,
+                      shrink: true
                     }}
-
                   />
-
-
                 </Box>
               )}
 
               <Button
-                sx={{ margin: "10px 0px", float: "right" }}
+                sx={{ margin: '10px 0px', float: 'right' }}
                 variant="contained"
-              // onClick={() => {
-              //   if (selectedDate) {
-              //     const monthId = selectedDate.month() + 1; // 1-based month
-              //     const year = selectedDate.year();
-              //     dispatch(updatePayloadDate({ monthId, year }));
-              //   } else if (selectedYear) {
-              //     const year = selectedYear;
-              //     dispatch(updatePayloadDate({ monthId: 0, year }));
-              //   }
-              //   handlePopoverClose();
-              // }}
+                onClick={() => {
+                  if (selectedMonth) {
+                    let date = new Date(selectedMonth);
+                    let monthId = date.getMonth() + 1;
+                    let year = date.getFullYear();
+                    dispatch(updatePayloadDate({ monthId, year }));
+                  }
+                  if (selectedYear) {
+                    let year = selectedYear;
+                    dispatch(updatePayloadDate({ monthId: 0, year }));
+                  }
 
+                  // if (selectedDate) {
+                  //   const monthId = selectedDate.month() + 1; // 1-based month
+                  //   const year = selectedDate.year();
+                  //   dispatch(updatePayloadDate({ monthId, year }));
+                  // } else if (selectedYear) {
+                  //   const year = selectedYear;
+                  //   dispatch(updatePayloadDate({ monthId: 0, year }));
+                  // }
+                  handlePopoverClose();
+                }}
               >
                 Apply
               </Button>
