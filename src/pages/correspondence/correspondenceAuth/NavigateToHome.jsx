@@ -11,7 +11,7 @@ const NavigateToHome = () => {
       startIcon={<HomeIcon />}
       onClick={() =>
         (window.location.href =
-          `https://ican-manage-dem.cognitivehealthit.com/GlobalCommandCenter/iCAN/validateUserDetails?sessionId=${token}`)
+          `https://ican-manage-dem.cognitivehealthit.com/GlobalCommandCenter/users/gccDashboard?sessionId=${token}`)
       }
       sx={{ marginRight: '8px' }}
     >
@@ -19,5 +19,6 @@ const NavigateToHome = () => {
     </Button>
   );
 };
+
 
 export default NavigateToHome;
