@@ -14,7 +14,6 @@ import RevenueCycleKpi from './RevenueCycleKpi';
 import NonPaymentPosting from './NonPaymentPosting';
 import CashReconciliationTable from './CashReconciliationTable';
 import HeatMap from 'pages/KPIs/Charts/HeatMap';
-import ReusableBarChart from 'pages/KPIs/Charts/barChart';
 import DenialBarChart from 'pages/KPIs/Charts/DenialBarChart';
 import AgeBucketChart from 'pages/KPIs/Charts/AgeBucketChart';
 import { useSelector } from 'react-redux';
