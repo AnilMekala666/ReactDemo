@@ -484,15 +484,15 @@ header .css-13n62e0-MuiToolbar-root {
   text-transform: none;
   padding-top: 15px;
   padding-bottom: 15px;
-  
+
 }
 
-.table-head-cell > p {
+.table-head-cell>p {
   font-weight: 600;
   color: #717680;
 }
 
-.table-head-cell > .amount {
+.table-head-cell>.amount {
   color: #EB7724;
 }
 
@@ -501,12 +501,15 @@ header .css-13n62e0-MuiToolbar-root {
   padding-top: 15px;
   padding-bottom: 15px;
 }
-.table-body-cell > p {
+
+.table-body-cell>p {
   color: #535862;
   font-weight: 400;
 }
 
-.filter-btn, .filter-btn:hover, .filter-btn:focus-visible {
+.filter-btn,
+.filter-btn:hover,
+.filter-btn:focus-visible {
   border: 0px;
   border-radius: 10px !important;
   outline: 0px;
@@ -519,4 +522,17 @@ header .css-13n62e0-MuiToolbar-root {
   background-color: #3A63D2;
   color: #fff;
   font-weight: 500;
+}
+
+.header-input-border {
+  width: 150px;
+  border: 1px solid #1677ff;
+  border-radius: 6px;
+}
+
+.custom-select .MuiInputBase-input {
+  color: #1677ff !important; /* Change to your desired color */
+}
+.custom-select .Mui-focused .MuiInputBase-input {
+  color: #1677ff !important; /* Ensure consistency when focused */
 }
