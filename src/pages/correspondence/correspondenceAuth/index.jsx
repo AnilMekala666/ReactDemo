@@ -15,7 +15,7 @@ const CorrespondanceAuth = () => {
   const validateUser = async () => {
     try {
       setLoader(true);
-      const response = await axios.post('http://10.0.1.109:8181/GlobalCommandCenter/iCAN/validateUserDetails', {
+      const response = await axios.post('https://ican-manage-dem.cognitivehealthit.com/GlobalCommandCenter/iCAN/validateUserDetails', {
         sessionId: token
       });
       if (response.status == 200) {
