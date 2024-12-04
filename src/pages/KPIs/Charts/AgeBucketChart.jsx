@@ -26,15 +26,18 @@ export default function ApexBarChart() {
   const chartOptions = {
     chart: {
       type: 'bar',
-      height: 500,
+      height: 350,
       toolbar: {
         show: false,
       },
     },
     colors: ["#008FFB", "#FF5733"],
     plotOptions: {
+      
       bar: {
         vertical: true,
+        columnWidth: '50%', // Adjust this to control the width of the bars
+        barHeight: '50%',  
       },
     },
     xaxis: {
@@ -129,7 +132,7 @@ export default function ApexBarChart() {
         </Box>
       )}
       {!showTable && ageBucketChartData.length > 0 ? (
-        <Chart options={chartOptions} series={chartSeries} height={500} />
+        <Chart options={chartOptions} series={chartSeries} height={350} />
       ) : showTable && ageBucketChartData.length > 0 ? (
         <ReUsableTable columns={ageBucketColumns} rows={ageBucketChartData} />
       ) : null}

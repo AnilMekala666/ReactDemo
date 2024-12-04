@@ -23,7 +23,7 @@ const GroupedBarChart = ({ data }) => {
     const options = {
         chart: {
             type: "bar",
-            height: 400,
+            height: 300,
             toolbar: { show: false,tools:{download:false} }
         },
         xaxis: {
@@ -123,7 +123,7 @@ const GroupedBarChart = ({ data }) => {
         <div>
             <h3>Top 10 Payers by Total Remittance Amount</h3>
             <div>
-                <ReactApexChart options={options} series={series} type="bar" height={400} />
+                <ReactApexChart options={options} series={series} type="bar" height={300} />
             </div>
         </div>
     );

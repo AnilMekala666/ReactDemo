@@ -32,12 +32,14 @@ export default function ApexBarChart() {
   const chartOptions = {
     chart: {
       type: 'bar',
-      height: 500,
+      height: 350,
       toolbar: { show: false,tools:{download:false} }
     },
     plotOptions: {
       bar: {
         vertical: true,
+        columnWidth: '30%', // Adjust this to control the width of the bars
+        barHeight: '50%',  
       },
     },
     xaxis: {
@@ -135,7 +137,7 @@ export default function ApexBarChart() {
         </Box>
       )}
       {!showTable && denialChartData ? (
-        <Chart options={chartOptions} series={chartSeries} height={500} />
+        <Chart options={chartOptions} series={chartSeries} height={350} />
       ) : showTable && denialChartData ? (
         <ReUsableTable columns={denialKpiColumns} rows={denialChartData} />
       ) : (
