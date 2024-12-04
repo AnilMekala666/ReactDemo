@@ -413,7 +413,7 @@ const DocumentsList = () => {
         prediction: originalDocName
       });
       console.log("EOB data", response)
-      let processedData = response.data.map((item, index) => {
+      let processedData = response.data.data.map((item, index) => {
         // let sID= item.statusId
         // setStatusId(sID)
         // console.log("statusId", statusId)

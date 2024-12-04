@@ -7,6 +7,8 @@ import { KPI_ENDPOINTS } from 'pages/rest/api';
 import useAxios from 'hooks/useAxios';
 import { ageBucketColumns } from '../kpiTableHeaderData';
 import { formatAmount } from '../kpiHelpers';
+import { positions } from '@mui/system';
+
 
 export default function ApexBarChart() {
   const { showTable, payloadDate } = useSelector((state) => state.kpi);
@@ -97,6 +99,10 @@ export default function ApexBarChart() {
       text: 'Age Bucket Analysis',
       align: 'center',
     },
+    legend : {
+      show: true,
+      position:'top'
+    }
   };
 
   // Chart series

@@ -48,13 +48,13 @@ const widget = {
       url: '/correspndence/dashboard',
       icon: icons.Mail
     },
-    {
-      id: 'qa',
-      title: <FormattedMessage id="QA" />,
-      type: 'item',
-      url: '/patient/mindpath',
-      icon: icons.LineChartOutlined
-    },
+    // {
+    //   id: 'qa',
+    //   title: <FormattedMessage id="QA" />,
+    //   type: 'item',
+    //   url: '/patient/mindpath',
+    //   icon: icons.LineChartOutlined
+    // },
     {
       id: 'kpi',
       title: <FormattedMessage id="Claim Reconciliation" />,

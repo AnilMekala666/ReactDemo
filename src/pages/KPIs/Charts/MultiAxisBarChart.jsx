@@ -85,27 +85,27 @@ const MultiAxisBarLineChart = ({ data }) => {
           formatter: (val) => formatLargeNumber(val),
         },
       },
-      {
-        seriesName: "Reconciliation Rate",
-        opposite: true,
-        title: {
-          text: "Reconciliation Rate (%)",
-          style: {
-            fontSize: "1rem", // Increase this value to make labels larger
-            fontWeight: "bold", // Optional, for making labels bold
-            colors: ["#333"], // Customize label color if needed
-          },
-        },
-        labels: {
-          style: {
-            fontSize: "0.8rem", // Increase this value to make labels larger
-            fontWeight: "bold", // Optional, for making labels bold
-            colors: ["#333"], // Customize label color if needed
-          },
-          formatter: (val) => val.toFixed(0),
-        },
-        max: 100, // Optional: Adjust max value based on your dataset
-      },
+      // {
+      //   seriesName: "Reconciliation Rate",
+      //   opposite: true,
+      //   title: {
+      //     text: "Reconciliation Rate (%)",
+      //     style: {
+      //       fontSize: "1rem", // Increase this value to make labels larger
+      //       fontWeight: "bold", // Optional, for making labels bold
+      //       colors: ["#333"], // Customize label color if needed
+      //     },
+      //   },
+      //   labels: {
+      //     style: {
+      //       fontSize: "0.8rem", // Increase this value to make labels larger
+      //       fontWeight: "bold", // Optional, for making labels bold
+      //       colors: ["#333"], // Customize label color if needed
+      //     },
+      //     formatter: (val) => val.toFixed(0),
+      //   },
+      //   max: 100, // Optional: Adjust max value based on your dataset
+      // },
     ],
     tooltip: {
       shared: true,
