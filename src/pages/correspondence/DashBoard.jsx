@@ -12,13 +12,15 @@ import {
   TableRow,
   Paper,
   TablePagination,
-  IconButton
+  IconButton,
+  Popover
 } from '@mui/material';
 // import LinearProgress from '@mui/material';
 import LinearWithLabel from 'components/correspndence/LinearWithLabel';
 import axios from 'axios';
 
-
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { useTheme } from '@mui/material/styles';
 
 
@@ -27,6 +29,8 @@ import ReUsableTable from 'components/correspndence/ReUsableTable';
 import CustomDialog from 'components/correspndence/CustomDialog';
 import NavigateToHome from './correspondenceAuth/NavigateToHome';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
+import YearPicker from 'components/KPI/YearPicker';
+import dayjs from 'dayjs';
 
 
 import MainCard from 'components/MainCard';
@@ -41,9 +45,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CORRESPONDENCE_ENDPOINTS } from 'pages/rest/api';
 import { setIsCDAdataCleared, setIsRCMdataCleared } from 'store/reducers/userSlice';
+import { format } from 'date-fns';
+
 const DashBoard = () => {
-  const isCDAdataCleared = useSelector((state)=>state.user.isCDAdataCleared);
-  const isRCMdataCleared = useSelector((state)=>state.user.isRCMdataCleared);
+  const isCDAdataCleared = useSelector((state) => state.user.isCDAdataCleared);
+  const isRCMdataCleared = useSelector((state) => state.user.isRCMdataCleared);
   const token = localStorage.getItem("correspondenceAutToken");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -71,6 +77,23 @@ const DashBoard = () => {
   const [fileNames, setFileNames] = useState([]);
 
 
+  //calendar
+  const [selectedOption, setSelectedOption] = useState(''); // Tracks the dropdown value
+  const [fromDate, setFromDate] = useState(''); // Tracks From Date
+  const [toDate, setToDate] = useState(''); // Tracks To Date
+  const [selectedMonth, setSelectedMonth] = React.useState(null);
+  const [selectedYear, setSelectedYear] = React.useState(null)
+  const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [selectedQOption, setSelectedQOption] = useState('')
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleCalendarDropdownChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const handleQuartelyDropdownChange = (e) => {
+    setSelectedQOption(e.target.value)
+  }
   // const handleFileChange = (event) => {
   //   const selectedFiles = Array.from(event.target.files);
   //   setFiles(selectedFiles);
@@ -169,14 +192,14 @@ const DashBoard = () => {
   };
 
   useEffect(() => {
-    if(isCDAdataCleared || isRCMdataCleared){
+    if (isCDAdataCleared || isRCMdataCleared) {
       fetchData();
     }
-  }, [isCDAdataCleared,isRCMdataCleared]);
+  }, [isCDAdataCleared, isRCMdataCleared]);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchData()
-  },[])
+  }, [])
 
   const fetchData = async () => {
     try {
@@ -264,27 +287,36 @@ const DashBoard = () => {
     console.log("clcik")
   }
 
+  const formattedDate = format(new Date(), 'yyyy-MM-dd');
 
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const isPopoverOpen = Boolean(anchorEl);
 
   return (
     <>
       <Grid container style={{ marginBottom: '20px', padding: '0px' }}  >
-        <Grid xs={12} sx={{ bgcolor: "#ffffff", display: "flex", padding: 2, mt: 1 }} alignItems="center">
-          <Grid item xs={6}  sx={{display:"flex"}}>
-            {token && <NavigateToHome/>}
+        <Grid xs={12} sx={{ bgcolor: "#ffffff", display: "flex", padding: 1, mt: 1 }} alignItems="center">
+          <Grid item xs={4} sx={{ display: "flex" }}>
+            {token && <NavigateToHome />}
             <Typography variant="h3">Overview</Typography>
           </Grid>
 
           {/* Button Group Section */}
-          <Grid item xs={12} sm={6}
+          <Grid item xs={8} sm={12}
             sx={{
               display: 'flex',
-              justifyContent: { xs: 'center', sm: 'flex-end' },
+              justifyContent: { xs: 'center', sm: 'flex-end', gap: 3 },
               alignItems: 'center',
-              mt: { xs: 2, sm: 0 },
+              // mt: { xs: 2, sm: 0 },
             }}
           >
-            <ButtonGroup
+            {/* <ButtonGroup
               variant="outlined"
               aria-label="Basic button group"
               sx={{ mr: 2, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}
@@ -293,14 +325,249 @@ const DashBoard = () => {
               <Button>Month</Button>
               <Button>3 Months</Button>
               <Button>Custom</Button>
-            </ButtonGroup>
-            <Button variant="outlined" sx={{ display: 'flex', alignItems: 'center' }}>
+            </ButtonGroup> */}
+          <Button variant="outlined"
+              onClick={(event) => {
+                handlePopoverOpen(event);
+              }}
+            >
               <FilterOutlined />
               <span style={{ marginLeft: 5 }}>Filter</span>
             </Button>
           </Grid>
+          <Popover
+          open={isPopoverOpen}
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+        >
+          <Box sx={{ padding: 3, width: '350px' }}>
+            {/* <Typography variant="h6" sx={{ marginBottom: 2, textAlign: 'center' }}>
+              choose <span sx={{ fontSize: '20px', fontWeight: '800' }}>Month/Year</span> or <span>Year</span>
+            </Typography>
+
+           
+            <Box sx={{ marginBottom: 3 }}>
+              <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
+                Month and Year
+              </Typography>
+              <MonthYearPicker
+                value={selectedDate}
+                onChange={(newValue) => {
+                  setSelectedDate(newValue);
+                  setSelectedYear(null); // Clear Year-only field
+                }}
+                label="Choose a Month and Year"
+                inputStyles={{
+                  width: '280px',
+                  color: '#555',
+                  fontSize: '16px'
+                }}
+                containerStyles={{
+                  margin: '0 auto'
+                }}
+              />
+            </Box>
+
+           
+            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
+              <Box sx={{ flex: 1, height: '1px', backgroundColor: '#ccc' }}></Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  padding: '0 10px',
+                  color: '#888',
+                  fontSize: '14px',
+                  fontWeight: 'bold'
+                }}
+              >
+                OR
+              </Typography>
+              <Box sx={{ flex: 1, height: '1px', backgroundColor: '#ccc' }}></Box>
+            </Box>
+
+        
+            <Box>
+              <Typography variant="subtitle2" sx={{ marginBottom: 1 }}>
+                Year
+              </Typography>
+              <YearPicker
+                value={selectedYear}
+                onChange={(newYear) => {
+                  setSelectedYear(newYear);
+                  setSelectedDate(null); // Clear Month-Year field
+                }}
+                label="Choose a Year"
+                inputStyles={{
+                  width: '280px',
+                  color: '#555',
+                  fontSize: '16px'
+                }}
+                containerStyles={{
+                  margin: '0 auto'
+                }}
+              />
+            </Box>
+
+           
+            <Box sx={{ marginTop: 3, display: 'flex', justifyContent: 'space-between' }}>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  handlePopoverClose();
+                  setActiveTab('last30days'); // Reset active tab
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  if (selectedDate) {
+                    const monthId = selectedDate.month() + 1; // 1-based month
+                    const year = selectedDate.year();
+                    dispatch(updatePayloadDate({ monthId, year }));
+                  } else if (selectedYear) {
+                    const year = selectedYear;
+                    dispatch(updatePayloadDate({ monthId: 0, year }));
+                  }
+                  handlePopoverClose();
+                }}
+                sx={{ backgroundColor: '#3A63D2', color: 'white' }}
+              >
+                Apply
+              </Button>
+            </Box> */}
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+
+              <TextField
+                select
+                label="Select Calendar"
+                value={selectedOption}
+                onChange={handleCalendarDropdownChange}
+                fullWidth
+                margin="normal"
+              // className='header-input-border custom-select'
+
+              >
+                <MenuItem value="month">Month</MenuItem>
+                <MenuItem value="quarterly">Quarterly</MenuItem>
+                <MenuItem value="year">Year</MenuItem>
+                <MenuItem value="customDate">Custom Date</MenuItem>
+              </TextField>
+
+
+
+              {selectedOption === 'month' && (
+                <DatePicker
+                  views={['year', 'month']} // Show only year and month selection
+                  label="Select Month"
+                  value={selectedMonth}
+                  fullWidth
+                  sx={{ marginTop: "5px" }}
+                  onChange={(newValue) => setSelectedMonth(newValue)}
+                  renderInput={(params) => <TextField {...params} margin="normal" />}
+                // className='header-input-border custom-select'
+                />
+
+
+              )}
+
+              {selectedOption === 'quarterly' && (
+                <TextField
+                  select
+                  label="Select Months"
+                  value={selectedQOption}
+                  onChange={handleQuartelyDropdownChange}
+                  fullWidth
+                  margin="normal"
+                // className='header-input-border  custom-select'
+                >
+                  <MenuItem value="q1">Q1</MenuItem>
+                  <MenuItem value="q2">Q2</MenuItem>
+                  <MenuItem value="q3">Q3</MenuItem>
+                  <MenuItem value="q4">Q4 </MenuItem>
+                </TextField>
+              )}
+
+              {(selectedOption === 'year' || selectedOption === 'quarterly') && (
+                <Box >
+                  {/* <TextField label="Year" sx={{ width: "150px" }} margin="normal" /> */}
+                  <YearPicker
+                    fullWidth
+                    value={selectedYear}
+                    onChange={(newYear) => {
+                      setSelectedYear(newYear);
+                      setSelectedDate(null); // Clear Month-Year field
+                    }}
+                    label="Choose a Year"
+                  />
+                </Box>
+              )}
+
+              {selectedOption === 'customDate' && (
+                <Box sx={{ display: "flex", gap: "5px" }}>
+                  <TextField
+                    // className='header-input-border custom-select'
+                    fullWidth
+                    label="From Date"
+                    type="date"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    // className='header-input-border custom-select'
+                    label="To Date"
+                    type="date"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+
+                  />
+
+
+                </Box>
+              )}
+
+              <Button
+                sx={{ margin: "10px 0px", float: "right" }}
+                variant="contained"
+              // onClick={() => {
+              //   if (selectedDate) {
+              //     const monthId = selectedDate.month() + 1; // 1-based month
+              //     const year = selectedDate.year();
+              //     dispatch(updatePayloadDate({ monthId, year }));
+              //   } else if (selectedYear) {
+              //     const year = selectedYear;
+              //     dispatch(updatePayloadDate({ monthId: 0, year }));
+              //   }
+              //   handlePopoverClose();
+              // }}
+
+              >
+                Apply
+              </Button>
+            </LocalizationProvider>
+          </Box>
+        </Popover>
         </Grid>
       </Grid>
+
+
+
       {loader ? (
         <div className='loading'>
           <span className="loading-text">Loading</span>
@@ -397,7 +664,7 @@ const DashBoard = () => {
               <Typography variant="body1" style={{ color: '#1677ff' }}>Choose Files:</Typography>
               <input type="file" multiple onChange={handleFileChange} />
             </Grid>
-          
+
             <Grid item xs={12} sm={4}>
               <Typography variant="body1" style={{ color: '#1677ff' }}>Select Option:</Typography>
               <Select

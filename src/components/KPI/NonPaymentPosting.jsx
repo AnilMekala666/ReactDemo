@@ -178,6 +178,17 @@ export default function NonPaymentPosting() {
   //   { title: 'Automated Reconciliation', value: 85 },
   //   { title: 'Unreconciled', value: 10 },
   // ];
+  
+ console.log(progressData)
+ const filteredData = progressData?.filter(
+  (item) =>
+    ![
+      "Manual Intervention Required",
+      "Automated Reconciliation",
+      "iCAN Reconcilied",
+    ].includes(item.reconciliationStatus)
+);
+
   return (
     <Box mt={2} mb={6} sx={{ minHeight: '10rem' }}>
       {reconciliationLoading && (
@@ -188,12 +199,12 @@ export default function NonPaymentPosting() {
       {!reconciliationLoading && progressData && (
         <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',gap:"2rem" }}>
           <Box sx={{ width: '50%', marginRight: '1rem' }}>
-            {progressData?.map((data, index) => (
+            {filteredData?.map((data, index) => (
               <LinearProgressBar key={index} value={data.percentage} title={data.reconciliationStatus} />
             ))}
           </Box>
           <Box sx={{ width: '50%' }}>
-            <ReUsableTable columns={kpiReconciliationColumns} rows={progressData} />
+            <ReUsableTable columns={kpiReconciliationColumns} rows={filteredData} />
           </Box>
         </Box>
       )}
