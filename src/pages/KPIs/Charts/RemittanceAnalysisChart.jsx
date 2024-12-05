@@ -52,7 +52,7 @@ const GroupedBarChart = ({ data }) => {
                 return `
                     <div style="padding: 8px; font-size: 12px;">
                         <strong>Payer:</strong> ${payerName}<br/>
-                        <strong>Total Remittance Amount:</strong> ${formatAmount(remittanceAmount,2)}<br/>
+                        <strong>Total Remittance Amount:</strong> $${formatAmount(remittanceAmount,2)}<br/>
                         <strong>Processing Time:</strong> ${processingTime} days
                     </div>`;
             }
