@@ -140,7 +140,6 @@ export default function DashboardDefault() {
     data: payloadDate,
   }), [payloadDate])
   const { data: kpiWidgetsData, loading: kpiWidgetLoading, error: kpiWidgetError } = useAxios(config, true);
-  console.log(kpiWidgetsData)
 
   const settings = {
     dots: true,
@@ -148,7 +147,7 @@ export default function DashboardDefault() {
     speed: 500,
     slidesToShow: 3,  // Shows 4 cards per row on large screens
     slidesToScroll: 1,
-    autoplay: true,
+    //autoplay: true,
     autoplaySpeed: 2000,
     responsive: [
       {

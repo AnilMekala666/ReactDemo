@@ -95,7 +95,14 @@ export default function ApexBarChart() {
     },
     tooltip: {
       y: {
-        formatter: (val) => val.toFixed(0), // Format tooltip value
+        formatter: (val,{seriesIndex})=>{
+          console.log(seriesIndex);
+          if(seriesIndex==0){
+            return `$${val.toFixed(0)}`;
+          }else{
+            return val.toFixed(0)
+          }
+        } , // Format tooltip value
       },
     },
     title: {
