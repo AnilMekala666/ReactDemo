@@ -183,7 +183,7 @@ export default function NonPaymentPosting() {
  const filteredData = progressData?.filter(
   (item) =>
     ![
-      "Manual Intervention Required",
+      "Unreconciled",
       "Automated Reconciliation",
       "iCAN Reconcilied",
     ].includes(item.reconciliationStatus)
