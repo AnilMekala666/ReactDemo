@@ -280,11 +280,15 @@ import AnimateButton from 'components/@extended/AnimateButton';
 
 export const PatientLevelData = ({ patients,
   patientsData, docName, receivedStatus, setUserValidation, setUserProcess,
-  userProcess, userValidation, statusId, status, setStatus, uId, isEditing
+  userProcess, userValidation, statusId, status, setStatus, uId, isEditing, fetchPatientData
 }) => {
   console.log("receivedStatus", receivedStatus)
   console.log("patientsData", patientsData)
   const [patientLevelTable, setPatientLevelTable] = useState([]);
+  const [newPatient, setNewPatient] = useState(null);
+  const [newLineLevel, setNewLineLevel] = useState(null);
+  const [newPatientError, setNewPatientError] = useState({});
+  const [newLineLevelError, setNewLineLevelError] = useState({});
   const [lineLevelTable, setLineLevelTable] = useState([]);
   const [patient, setPatient] = useState(null);
   // const [isEditing, setIsEditing] = useState(false);
@@ -356,7 +360,16 @@ export const PatientLevelData = ({ patients,
   //   setIsEditing(true);
   // };
 
-
+  const handleAddInputChange = (field, value) => {
+    const addedData = [...newPatient];
+    addedData[field] = value;
+    setNewPatient(addedData);
+  }
+  const handleAddLineInputChange = (field, value) => {
+    const addedData = [...newPatient];
+    addedData[field] = value;
+    setNewLineLevel(addedData);
+  }
   const handleInputChange = (index, field, value) => {
     const updatedData = [...patientLevelTable];
     updatedData[index][field] = value;
@@ -457,22 +470,401 @@ export const PatientLevelData = ({ patients,
 
   const handleAddDrawer = (type) => {
     setDrawerType(type);
-    
+
   }
 
-  const renderAddPatient = () => {
+  const handleAddLineLevelSubmit = async () => {
+    try {
+      if (docName == 'EOB') {
+        let err = {}
+        if(newLineLevel.serviceStartDate == null || newLineLevel.serviceStartDate == "") {
+          err.serviceStartDate = "Service start date is required.";
+        }
+        if(newLineLevel.serviceEndDate == null || newLineLevel.serviceEndDate == "") {
+          err.serviceStartDate = "Service end date is required.";
+        }
+        if(newLineLevel.procedureCode == null || newLineLevel.procedureCode == "") {
+          err.procedureCode = "Procedure code is required.";
+        }
+        if(newLineLevel.billedAmount == null || newLineLevel.billedAmount == "") {
+          err.billedAmount = "Billed amount is required.";
+        }
+        if(newLineLevel.allowedAmount == null || newLineLevel.allowedAmount == "") {
+          err.allowedAmount = "Allowed amount is required.";
+        }
+        if(newLineLevel.allowedAmount == null || newLineLevel.allowedAmount == "") {
+          err.allowedAmount = "Allowed amount is required.";
+        }
+        if(newLineLevel.coveredAmount == null || newLineLevel.coveredAmount == "") {
+          err.coveredAmount = "Covered amount is required.";
+        }
+        if(newLineLevel.notCoveredAmount == null || newLineLevel.notCoveredAmount == "") {
+          err.notCoveredAmount = "Not covered amount is required.";
+        }
+        if(newLineLevel.discountAmount == null || newLineLevel.discountAmount == "") {
+          err.discountAmount = "Discount amount is required.";
+        }
+        if(newLineLevel.adjustmentAmount == null || newLineLevel.adjustmentAmount == "") {
+          err.discountAmount = "Adjustment amount is required.";
+        }
+        if(newLineLevel.coPay == null || newLineLevel.coPay == "") {
+          err.coPay = "Co pay is required.";
+        }
+        if(newLineLevel.coInsurance == null || newLineLevel.coInsurance == "") {
+          err.coInsurance = "Co insurance is required.";
+        }
+        if(newLineLevel.deductibleAmount == null || newLineLevel.deductibleAmount == "") {
+          err.deductibleAmount = "Deductible amount is required.";
+        }
+        if(newLineLevel.patientResponsibility == null || newLineLevel.patientResponsibility == "") {
+          err.patientResponsibility = "Patient responsibility is required.";
+        }
+        if(newLineLevel.deniedAmount == null || newLineLevel.deniedAmount == "") {
+          err.deniedAmount = "Denied amount is required.";
+        }
+        if(newLineLevel.reasonCodes == null || newLineLevel.reasonCodes == "") {
+          err.reasonCodes = "Reason codes is required.";
+        }
+        if(newLineLevel.remarksCodes == null || newLineLevel.remarksCodes == "") {
+          err.reasonCodes = "Remarks codes is required.";
+        }
+        if(newLineLevel.description == null || newLineLevel.description == "") {
+          err.description = "Description is required.";
+        }
+        if(Object.keys(err).length > 0) {
+          setNewLineLevelError(err);
+          return;
+        }
+        const lineLevelPayload = {
+          checkPatientLevelDataId: patientLevelTable?.[0]?.id,
+          serviceStartDate: newLineLevel.serviceStartDate,
+          serviceEndDate: newLineLevel.serviceEndDate,
+          procedureCode: newLineLevel.procedureCode,
+          billedAmount: newLineLevel.billedAmount,
+          allowedAmount: newLineLevel.allowedAmount,
+          coveredAmount: newLineLevel.coveredAmount,
+          notCoveredAmount: newLineLevel.notCoveredAmount,
+          discountAmount: newLineLevel.discountAmount,
+          adjustmentAmount: newLineLevel.adjustmentAmount,
+          coPay: newLineLevel.coPay,
+          coInsurance: newLineLevel.coInsurance,
+          deductibleAmount: newLineLevel.deductibleAmount,
+          patientResponsibility: newLineLevel.patientResponsibility,
+          deniedAmount: newLineLevel.deniedAmount,
+          reasonCodes: newLineLevel.reasonCodes,
+          remarksCodes: newLineLevel.remarksCodes,
+          description: newLineLevel.description
+        };
+        const response = await axios.post(CORRESPONDENCE_ENDPOINTS.ADD_EOB_PATIENT_LINE_LEVEL_DATA, lineLevelPayload);
+        if (response.data.statusCode == 200) {
+          setMessage(response.data.message);
+          fetchPatientData();
+          setIsPatientLevelEditMode(false);
+        } else {
+          setMessage(response.data.message);
+          fetchPatientData();
+        }
+      }
+    } catch (error) {
+      console.error('Update failed:', error);
+    }
+  }
+
+  const handleAddPatientSubmit = async () => {
+    try {
+      if (docName == 'EOB') {
+        let err = {}
+        if(newLineLevel.visitId == null || newLineLevel.visitId == "") {
+          err.visitId = "Visit id is required.";
+        }
+        if(newLineLevel.paidAmount == null || newLineLevel.paidAmount == "") {
+          err.paidAmount = "Paid amount is required.";
+        }
+        if(newLineLevel.payerName == null || newLineLevel.payerName == "") {
+          err.payerName = "Payer name is required.";
+        }
+        if(newLineLevel.serviceDate == null || newLineLevel.serviceDate == "") {
+          err.serviceDate = "Service date is required.";
+        }
+        if(newLineLevel.claimNo == null || newLineLevel.claimNo == "") {
+          err.claimNo = "Claim number is required.";
+        }
+        if(newLineLevel.checkNo == null || newLineLevel.checkNo == "") {
+          err.checkNo = "Check number is required.";
+        }
+        if(newLineLevel.patientName == null || newLineLevel.patientName == "") {
+          err.patientName = "Patient name is required.";
+        }
+        if(newLineLevel.checkDate == null || newLineLevel.checkDate == "") {
+          err.checkDate = "Check date is required.";
+        }
+        if(Object.keys(err).length > 0) {
+          setNewPatientError(err);
+          return;
+        }
+        const patientLevelPayload = {
+          visitId: newPatient.visitId,
+          paidAmount: newPatient.paidAmount,
+          payerName: newPatient.payerName,
+          serviceDate: newPatient.serviceDate,
+          claimNumber: newPatient.claimNo,
+          checkNumber: newPatient.checkNo,
+          patientName: newPatient.patientName,
+          checkDate: newPatient.checkDate,
+        };
+        const response = await axios.post(CORRESPONDENCE_ENDPOINTS.ADD_EOB_PATIENT_LEVEL_DATA, patientLevelPayload);
+        if (response.data.statusCode == 200) {
+          setMessage(response.data.message);
+          fetchPatientData();
+          setIsPatientLevelEditMode(false);
+        } else {
+          setMessage(response.data.message);
+          fetchPatientData();
+        }
+      }
+    } catch (error) {
+      console.error('Update failed:', error);
+    }
+  }
+
+  const RenderAddPatient = () => {
     return (
-      <Typography>
-        
-      </Typography>
-      <TableCell>Visit Id</TableCell>
-      <TableCell>Paid Amount</TableCell>
-      <TableCell>Payer Name</TableCell>
-      <TableCell>Service Date</TableCell>
-      <TableCell>Claim No</TableCell>
-      <TableCell>Check No</TableCell>
-      <TableCell>Patient Name</TableCell>
-      <TableCell>Check Date</TableCell>
+      <Stack direction="column" width="100%">
+        <Stack className='drawer-field'>
+          <Typography fontWeight={700}>
+            Visit Id
+          </Typography>
+          <TextField
+            value={newPatient?.id}
+            onChange={(e) => handleAddInputChange('visitId', e.target.value)}
+          />
+        </Stack>
+        <Stack className='drawer-field'>
+          <Typography>
+            Paid Amount
+          </Typography>
+          <TextField
+            value={newPatient?.paidAmount}
+            onChange={(e) => handleAddInputChange('paidAmount', e.target.value)}
+          />
+        </Stack>
+        <Stack className='drawer-field'>
+          <Typography>
+            Payer Name
+          </Typography>
+          <TextField
+            value={newPatient?.payerName}
+            onChange={(e) => handleAddInputChange('payerName', e.target.value)}
+          />
+        </Stack>
+        <Stack className='drawer-field'>
+          <Typography>
+            Service Date
+          </Typography>
+          <TextField
+            type="date"
+            value={newPatient?.serviceDate}
+            onChange={(e) => handleAddInputChange('serviceDate', e.target.value)}
+          />
+        </Stack>
+        <Stack className='drawer-field'>
+          <Typography>
+            Claim No
+          </Typography>
+          <TextField
+            value={newPatient?.claimNo}
+            onChange={(e) => handleAddInputChange('claimNo', e.target.value)}
+          />
+        </Stack>
+        <Stack className='drawer-field'>
+          <Typography>
+            Patient Name
+          </Typography>
+          <TextField
+            value={newPatient?.patientName}
+            onChange={(e) => handleAddInputChange('patientName', e.target.value)}
+          />
+        </Stack>
+        <Stack className='drawer-field'>
+          <Typography>
+            Check Date
+          </Typography>
+          <TextField
+            type="date"
+            value={newPatient?.checkDate}
+            onChange={(e) => handleAddInputChange('checkDate', e.target.value)}
+          />
+        </Stack>
+      </Stack>
+    )
+  }
+
+  const RenderAddLine = () => {
+    return (
+      <Stack direction="column" width="100%">
+        <Stack direction="row" justifyContent="space-between" gap={1}>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Service Start Date
+            </Typography>
+            <TextField
+              type="date"
+              value={newLineLevel?.lineLevelServiceDate}
+              onChange={(e) => handleAddLineInputChange('lineLevelServiceDate', e.target.value)}
+            />
+          </Stack>
+          <Stack className='drawer-field' sx={{ width: "50%" }}>
+            <Typography>
+              Service End Date
+            </Typography>
+            <TextField
+              type="date"
+              value={newLineLevel?.lineLevelServiceEndDate}
+              onChange={(e) => handleAddLineInputChange('lineLevelServiceEndDate', e.target.value)}
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" gap={1}>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Procedure Code
+            </Typography>
+            <TextField
+              value={newLineLevel?.procedureCode}
+              onChange={(e) => handleAddLineInputChange('procedureCode', e.target.value)}
+            />
+          </Stack>
+          <Stack className='drawer-field' sx={{ width: "50%" }}>
+            <Typography>
+              Billed Amount
+            </Typography>
+            <TextField
+              value={newLineLevel?.billedAmount}
+              onChange={(e) => handleAddLineInputChange('billedAmount', e.target.value)}
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" gap={1}>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Allowed Amount
+            </Typography>
+            <TextField
+              value={newLineLevel?.allowedAmount}
+              onChange={(e) => handleAddLineInputChange('allowedAmount', e.target.value)}
+            />
+          </Stack>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Covered Amount
+            </Typography>
+            <TextField
+              value={newLineLevel?.coveredAmount}
+              onChange={(e) => handleAddLineInputChange('coveredAmount', e.target.value)}
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" gap={1}>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Discount Amount
+            </Typography>
+            <TextField
+              value={newLineLevel?.discountAmount}
+              onChange={(e) => handleAddLineInputChange('discountAmount', e.target.value)}
+            />
+          </Stack>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Adjustment Amount
+            </Typography>
+            <TextField
+              value={newLineLevel?.adjustmentAmount}
+              onChange={(e) => handleAddLineInputChange('adjustmentAmount', e.target.value)}
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" gap={1}>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Co Pay
+            </Typography>
+            <TextField
+              value={newLineLevel?.coPay}
+              onChange={(e) => handleAddLineInputChange('coPay', e.target.value)}
+            />
+          </Stack>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Co Insurance
+            </Typography>
+            <TextField
+              value={newLineLevel?.coInsurance}
+              onChange={(e) => handleAddLineInputChange('coInsurance', e.target.value)}
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" gap={1}>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Deductible Amount
+            </Typography>
+            <TextField
+              value={newLineLevel?.deductibleAmount}
+              onChange={(e) => handleAddLineInputChange('deductibleAmount', e.target.value)}
+            />
+          </Stack>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Patient Responsibility
+            </Typography>
+            <TextField
+              value={newLineLevel?.patientResponsibility}
+              onChange={(e) => handleAddLineInputChange('patientResponsibility', e.target.value)}
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" gap={1}>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Denied Amount
+            </Typography>
+            <TextField
+              value={newLineLevel?.deniedAmount}
+              onChange={(e) => handleAddLineInputChange('deniedAmount', e.target.value)}
+            />
+          </Stack>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Reason Codes
+            </Typography>
+            <TextField
+              value={newLineLevel?.reasonCodes}
+              onChange={(e) => handleAddLineInputChange('reasonCodes', e.target.value)}
+            />
+          </Stack>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" gap={1}>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Remark Codes
+            </Typography>
+            <TextField
+              value={newLineLevel?.remarkCodes}
+              onChange={(e) => handleAddLineInputChange('remarkCodes', e.target.value)}
+            />
+          </Stack>
+          <Stack className='drawer-field' sx={{ width: "50%", mt: "10px !important" }}>
+            <Typography>
+              Description
+            </Typography>
+            <TextField
+              value={newLineLevel?.description}
+              onChange={(e) => handleAddLineInputChange('description', e.target.value)}
+            />
+          </Stack>
+        </Stack>
+      </Stack>
     )
   }
 
@@ -493,12 +885,12 @@ export const PatientLevelData = ({ patients,
       >
         {/* Previous and Next buttons */}
         <Box sx={{ width: '30%' }}>
-          <Stack direction="row" justifyContent="space-between">
+          <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
             <InputLabel id="demo-simple-select-helper-label" style={{ fontWeight: '600', fontSize: '16px' }}>
               Choose Patient
             </InputLabel>
-            {statusId == 2  &&
-              <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={()=>handleAddDrawer("Add Patient")} />
+            {statusId == 2 &&
+              <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={() => handleAddDrawer("Add Patient")} />
             }
           </Stack>
           <Select
@@ -589,7 +981,7 @@ export const PatientLevelData = ({ patients,
             } */}
           </Stack>
           <TableContainer component={Paper} sx={{ marginTop: 2, marginBottom: 2 }}>
-          <Table>
+            <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Visit Id</TableCell>
@@ -645,24 +1037,24 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'patientLevelServiceDate', e.target.value)}
                         />
                       ) : (
-                     `${patient.patientLevelServiceDate || ""}`
+                        `${patient.patientLevelServiceDate || ""}`
                       )}
                     </TableCell>
                     <TableCell>
                       {isEditing ? (
                         <TextField
-                          value={patient.claimNumber}
+                          value={patient.checkNumber}
                           onChange={(e) => handleInputChange(index, 'checkNo', e.target.value)}
                         />
                       ) : (
-                        patient.claimNumber
+                        patient.checkNumber
                       )}
                     </TableCell>
                     <TableCell>
                       {isEditing ? (
                         <TextField
                           value={patient.claimNumber}
-                          onChange={(e) => handleInputChange(index, 'checkNo', e.target.value)}
+                          onChange={(e) => handleInputChange(index, 'claimNo', e.target.value)}
                         />
                       ) : (
                         patient.claimNumber
@@ -686,16 +1078,16 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'checkDate', e.target.value)}
                         />
                       ) : (
-                     `${patient.checkDate || ""}`
+                        `${patient.checkDate || ""}`
                       )}
                     </TableCell>
-                    {index  == 0 &&
+                    {index == 0 &&
                       <TableCell sx={{ color: "#e55" }}>
                       </TableCell>
                     }
                     {index > 0 &&
                       <TableCell sx={{ color: "#e55" }}>
-                        <MinusCircleFilled onClick={()=>removePatientItem(index)} />
+                        <MinusCircleFilled onClick={() => removePatientItem(index)} />
                       </TableCell>
                     }
                   </TableRow>
@@ -705,19 +1097,19 @@ export const PatientLevelData = ({ patients,
           </TableContainer>
 
           {/* <label style={{ fontWeight: '600', fontSize: '16px' }}>Line-Level Data</label> */}
-          <Stack direction="row" justifyContent="space-between">
+          <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
             <Typography variant="h6" style={{ fontWeight: '600', fontSize: '16px' }}>
               Line-Level Data
             </Typography>
-            {statusId == 2  &&
-              <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={addLineItem} />
+            {statusId == 2 &&
+              <AddCircleOutlined sx={{ cursor: 'pointer', color: "#585" }} onClick={() => handleAddDrawer("Add Patient Line Level Data")} />
             }
           </Stack>
           <TableContainer component={Paper} sx={{ marginTop: 2 }}>
             <Table>
               <TableHead>
                 <TableRow>
-                <TableCell sx={{ width: 200, minWidth: 200 }}>Service Start Date</TableCell>
+                  <TableCell sx={{ width: 200, minWidth: 200 }}>Service Start Date</TableCell>
                   <TableCell sx={{ width: 200, minWidth: 200 }}>Service End Date</TableCell>
                   <TableCell sx={{ width: 200, minWidth: 200 }}>Procedure Code</TableCell>
                   <TableCell sx={{ width: 200, minWidth: 200 }}>Billed Amount</TableCell>
@@ -748,7 +1140,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'lineLevelServiceDate', e.target.value)}
                         />
                       ) : (
-                     `${patient.lineLevelServiceDate || ""}`
+                        `${patient.lineLevelServiceDate || ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -759,7 +1151,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'lineLevelServiceEndDate', e.target.value)}
                         />
                       ) : (
-                      `${patient.lineLevelServiceEndDate || ""}`
+                        `${patient.lineLevelServiceEndDate || ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -769,7 +1161,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'procedureCode', e.target.value)}
                         />
                       ) : (
-                      `${patient.procedureCode || ""}`
+                        `${patient.procedureCode || ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -779,7 +1171,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'billedAmount', e.target.value)}
                         />
                       ) : (
-                      `${patient.billedAmount ? "$" + patient.billedAmount : ""}`
+                        `${patient.billedAmount ? "$" + patient.billedAmount : ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -789,7 +1181,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'allowedAmount', e.target.value)}
                         />
                       ) : (
-                      `${patient.allowedAmount ? "$" + patient.allowedAmount : ""}`
+                        `${patient.allowedAmount ? "$" + patient.allowedAmount : ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -799,7 +1191,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'coveredAmount', e.target.value)}
                         />
                       ) : (
-                      `${patient.coveredAmount ? "$" + patient.coveredAmount : ""}`
+                        `${patient.coveredAmount ? "$" + patient.coveredAmount : ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -809,7 +1201,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'notCoveredAmount', e.target.value)}
                         />
                       ) : (
-                      `${patient.notCoveredAmount ? "$" + patient.notCoveredAmount : ""}`
+                        `${patient.notCoveredAmount ? "$" + patient.notCoveredAmount : ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -819,7 +1211,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'discountAmount', e.target.value)}
                         />
                       ) : (
-                      `${patient.discountAmount ? "$" + patient.discountAmount : ""}`
+                        `${patient.discountAmount ? "$" + patient.discountAmount : ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -829,7 +1221,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'adjustmentAmount', e.target.value)}
                         />
                       ) : (
-                      `${patient.adjustmentAmount ? "$" + patient.adjustmentAmount : ""}`
+                        `${patient.adjustmentAmount ? "$" + patient.adjustmentAmount : ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -839,7 +1231,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'coPay', e.target.value)}
                         />
                       ) : (
-                      `${patient.coPay || ""}`
+                        `${patient.coPay || ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -849,7 +1241,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'coInsurance', e.target.value)}
                         />
                       ) : (
-                      `${patient.coInsurance || ""}`
+                        `${patient.coInsurance || ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -859,7 +1251,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'deductibleAmount', e.target.value)}
                         />
                       ) : (
-                      `${patient.deductibleAmount ? "$" + patient.deductibleAmount : ""}`
+                        `${patient.deductibleAmount ? "$" + patient.deductibleAmount : ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -869,7 +1261,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'patientResponsibility', e.target.value)}
                         />
                       ) : (
-                      `${patient.patientResponsibility || ""}`
+                        `${patient.patientResponsibility || ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -879,7 +1271,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'deniedAmount', e.target.value)}
                         />
                       ) : (
-                      `${patient.deniedAmount ? "$" + patient.deniedAmount : ""}`
+                        `${patient.deniedAmount ? "$" + patient.deniedAmount : ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -889,7 +1281,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'reasonCodes', e.target.value)}
                         />
                       ) : (
-                      `${patient.reasonCodes || ""}`
+                        `${patient.reasonCodes || ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -899,7 +1291,7 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'remarkCodes', e.target.value)}
                         />
                       ) : (
-                      `${patient.remarkCodes || ""}`
+                        `${patient.remarkCodes || ""}`
                       )}
                     </TableCell>
                     <TableCell>
@@ -909,16 +1301,16 @@ export const PatientLevelData = ({ patients,
                           onChange={(e) => lineLevelInputChange(index, 'description', e.target.value)}
                         />
                       ) : (
-                      `${patient.description || ""}`
+                        `${patient.description || ""}`
                       )}
                     </TableCell>
-                    {index  == 0 &&
+                    {index == 0 &&
                       <TableCell sx={{ color: "#e55" }}>
                       </TableCell>
                     }
                     {index > 0 &&
                       <TableCell sx={{ color: "#e55" }}>
-                        <MinusCircleFilled onClick={()=>removeLineItem(index)} />
+                        <MinusCircleFilled onClick={() => removeLineItem(index)} />
                       </TableCell>
                     }
                     {/* <TableCell>${patient.chargeAmount}</TableCell> */}
@@ -1005,23 +1397,33 @@ export const PatientLevelData = ({ patients,
       </BootstrapDialog> */}
       <CustomDrawer
         open={drawerType != null}
-        onClose={()=>setDrawerType(null)}
+        onClose={() => setDrawerType(null)}
         anchor="right"
         title={drawerType}
+        width={drawerType == "Add Patient" ? 400 : 600}
         content={
           <>
+            {drawerType == "Add Patient" &&
+              <RenderAddPatient />
+            }
 
-            <div>
-              
-            </div>
-
-            
+            {drawerType == "Add Patient Line Level Data" &&
+              <RenderAddLine />
+            }
 
 
-            {/* <CustomTable data={filteredPatinetPaymentData} /> */}
-            <AnimateButton type="slide">
-              <Button variant="contained" color="success" component="label" onClick={() => setDrawerType(null)} sx={{ borderRadius: '40px', marginTop: '20px', padding: '10px 30px', float: 'right' }}>Back</Button>
-            </AnimateButton>
+            <Stack direction="row" justifyContent="space-between">
+              <AnimateButton type="slide">
+                <Button variant="contained" color="success" component="label"
+                  onClick={() => drawerType == "Add Patient" ? handleAddPatientSubmit() : handleAddLineLevelSubmit()}
+                  sx={{ borderRadius: '40px', marginTop: '20px', padding: '10px 30px', float: 'right' }}>Submit</Button>
+              </AnimateButton>
+              <AnimateButton type="slide">
+                <Button variant="contained" color="error" component="label"
+                  onClick={() => setDrawerType(null)}
+                  sx={{ borderRadius: '40px', marginTop: '20px', padding: '10px 30px', float: 'right' }}>Back</Button>
+              </AnimateButton>
+            </Stack>
           </>
 
         }

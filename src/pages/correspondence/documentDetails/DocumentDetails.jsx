@@ -284,21 +284,38 @@ const DocumentPage = () => {
       if (docName == 'EOB') {
         const patientLevelPayload = patientsData.patient_level_data.map((patient) => ({
           id: patient.id,
-          claimNumber: patient.claimNumber,
-          claimedAmount: patient.claimAmount,
-          allowedAmount: patient.allowedAmount,
-          paidAmount: patient.paidAmount
+          visitId: patient.visitId,
+          paidAmount: patient.paidAmount,
+          payerName: patient.payerName,
+          serviceDate: patient.serviceDate,
+          claimNumber: patient.claimNo,
+          checkNumber: patient.checkNo,
+          patientName: patient.patientName,
+          checkDate: patient.checkDate,
         }))[0];
         const lineLevelPayload = patientsData.line_level_data.map((line) => ({
           id: line.id,
-          claimNumber: line.checkPatientLevelDataId,
-          claimedAmount: line.chargeAmount,
+          serviceStartDate: line.serviceStartDate,
+          serviceEndDate: line.serviceEndDate,
+          procedureCode: line.procedureCode,
+          billedAmount: line.billedAmount,
           allowedAmount: line.allowedAmount,
-          paidAmount: line.paidAmount
+          coveredAmount: line.coveredAmount,
+          notCoveredAmount: line.notCoveredAmount,
+          discountAmount: line.discountAmount,
+          adjustmentAmount: line.adjustmentAmount,
+          coPay: line.coPay,
+          coInsurance: line.coInsurance,
+          deductibleAmount: line.deductibleAmount,
+          patientResponsibility: line.patientResponsibility,
+          deniedAmount: line.deniedAmount,
+          reasonCodes: line.reasonCodes,
+          remarksCodes: line.remarksCodes,
+          description: line.description
         }));
         const payload = {
-          patientLevelData: patientLevelPayload,
-          lineLevelData: lineLevelPayload
+          eobPatientLevelDataDto: patientLevelPayload,
+          eobLineLevelList: lineLevelPayload
         };
         const response = await axios.post(CORRESPONDENCE_ENDPOINTS.UPDATE_EOB_PATIENT_LEVEL_DATA, payload);
         if (response.data.statusCode == 200) {
@@ -554,6 +571,7 @@ const DocumentPage = () => {
               isEditing={isPatientLevelEditMode}
               updatePatientLevelData={updatePatientLevelData}
               handleEditToggle={handleEditToggle}
+              fetchPatientData={fetchPatientData}
             />
           )}
 

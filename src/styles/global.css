@@ -520,3 +520,16 @@ header .css-13n62e0-MuiToolbar-root {
   color: #fff;
   font-weight: 500;
 }
+
+.drawer-field:first-of-type {
+  margin-top: 0px;
+}
+
+.drawer-field {
+  margin-top: 10px;
+}
+
+.drawer-field > p {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
