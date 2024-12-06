@@ -96,9 +96,8 @@ export default function ApexBarChart() {
     tooltip: {
       y: {
         formatter: (val,{seriesIndex})=>{
-          console.log(seriesIndex);
           if(seriesIndex==0){
-            return `$${val.toFixed(0)}`;
+            return `$${val.toFixed(2)}`;
           }else{
             return val.toFixed(0)
           }
