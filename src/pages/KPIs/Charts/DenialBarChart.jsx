@@ -96,7 +96,13 @@ export default function ApexBarChart() {
     },
     tooltip: {
       y: {
-        formatter: (val) => val.toFixed(2), // Format tooltip value to 2 decimal places
+        formatter: (val,{seriesIndex})=>{
+          if(seriesIndex==0){
+            return `$${val.toFixed(2)}`;
+          }else{
+            return val.toFixed(2)
+          }
+        } 
       },
     },
     title: {
