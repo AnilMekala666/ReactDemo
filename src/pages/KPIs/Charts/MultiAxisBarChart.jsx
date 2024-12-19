@@ -115,7 +115,7 @@ const MultiAxisBarLineChart = ({ data }) => {
           formatter: (val) => formatLargeNumber(val,2),
         },
         {
-          formatter: (val) => formatLargeNumber(val,2),
+          formatter: (val) => `$${formatLargeNumber(val,2)}`,
         },
         {
           formatter: (val) => val.toFixed(2) + "%",
