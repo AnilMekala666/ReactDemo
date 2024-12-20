@@ -31,8 +31,8 @@ import moment from 'moment';
 // const reconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-historical-page-work-queue';
 // const unreconciled = 'https://ican-manage-chit-dem.cognitivehealthit.com/CashManagement/demo-cash-management-work-queue';
 
-const reconciled = `/src/assets/data/newData/reconciled.csv`;
-const unreconciled = `/src/assets/data/newData/unreconciled.csv`;
+const reconciled = `/data/newData/reconciled.csv`;
+const unreconciled = `/data/newData/unreconciled.csv`;
 
 
 function PlusSquare(props) {
